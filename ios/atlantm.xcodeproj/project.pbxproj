@@ -11,16 +11,16 @@
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		272DD63D9D6548BDBE6DBD1E /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDFA1B60822D4E3D97E6FD9E /* rubicon-icon-font.ttf */; };
 		3A30975029A1215900508675 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3A30974F29A1215800508675 /* GoogleService-Info.plist */; };
 		3A5F20C229A8E01A005AFF2F /* NotificationService.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A5F20C129A8E01A005AFF2F /* NotificationService.m */; };
 		3A5F20C629A8E01A005AFF2F /* OneSignalNotificationServiceExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 3A5F20BE29A8E01A005AFF2F /* OneSignalNotificationServiceExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5C248222217D4959BC027C8A /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2A482E394B1C4783B38446C7 /* Roboto_medium.ttf */; };
 		65E3CB5C9C1DD4E122AACF6E /* libPods-atlantm-atlantmTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C05E66B4C068788AB9B128B5 /* libPods-atlantm-atlantmTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
-		E3BB2A59DAEC878C97901D01 /* libPods-atlantm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 652AF7B7FD218F65CAC4A1B7 /* libPods-atlantm.a */; };
 		AA4E766A84FA4A83ADC6AD9D /* Montserrat-Variable.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3708C19A6AA24327AA2DF32D /* Montserrat-Variable.ttf */; };
 		CD8B83D4339C4B4EBA7710D5 /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E48EFAAE304144E99D42D50B /* Roboto.ttf */; };
-		5C248222217D4959BC027C8A /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2A482E394B1C4783B38446C7 /* Roboto_medium.ttf */; };
-		272DD63D9D6548BDBE6DBD1E /* rubicon-icon-font.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EDFA1B60822D4E3D97E6FD9E /* rubicon-icon-font.ttf */; };
+		E3BB2A59DAEC878C97901D01 /* libPods-atlantm.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 652AF7B7FD218F65CAC4A1B7 /* libPods-atlantm.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +66,8 @@
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = atlantm/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = atlantm/main.m; sourceTree = "<group>"; };
 		251753961E46B29CD8C564F9 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
+		2A482E394B1C4783B38446C7 /* Roboto_medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto_medium.ttf; path = ../assets/fonts/Roboto_medium.ttf; sourceTree = "<group>"; };
+		3708C19A6AA24327AA2DF32D /* Montserrat-Variable.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Montserrat-Variable.ttf"; path = "../assets/fonts/Montserrat-Variable.ttf"; sourceTree = "<group>"; };
 		3A30974F29A1215800508675 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		3A5F20B929A8DFDB005AFF2F /* atlantm.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = atlantm.entitlements; path = atlantm/atlantm.entitlements; sourceTree = "<group>"; };
 		3A5F20BE29A8E01A005AFF2F /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -80,11 +82,9 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = atlantm/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B281E8C09D3A6A7C14D68826 /* Pods-atlantm-atlantmTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-atlantm-atlantmTests.release.xcconfig"; path = "Target Support Files/Pods-atlantm-atlantmTests/Pods-atlantm-atlantmTests.release.xcconfig"; sourceTree = "<group>"; };
 		C05E66B4C068788AB9B128B5 /* libPods-atlantm-atlantmTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-atlantm-atlantmTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		E48EFAAE304144E99D42D50B /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = ../assets/fonts/Roboto.ttf; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		3708C19A6AA24327AA2DF32D /* Montserrat-Variable.ttf */ = {isa = PBXFileReference; name = "Montserrat-Variable.ttf"; path = "../assets/fonts/Montserrat-Variable.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		E48EFAAE304144E99D42D50B /* Roboto.ttf */ = {isa = PBXFileReference; name = "Roboto.ttf"; path = "../assets/fonts/Roboto.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		2A482E394B1C4783B38446C7 /* Roboto_medium.ttf */ = {isa = PBXFileReference; name = "Roboto_medium.ttf"; path = "../assets/fonts/Roboto_medium.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		EDFA1B60822D4E3D97E6FD9E /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; name = "rubicon-icon-font.ttf"; path = "../assets/fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		EDFA1B60822D4E3D97E6FD9E /* rubicon-icon-font.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "rubicon-icon-font.ttf"; path = "../assets/fonts/rubicon-icon-font.ttf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -201,6 +201,17 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		AAF40AEEE6744B8AA9B37282 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3708C19A6AA24327AA2DF32D /* Montserrat-Variable.ttf */,
+				E48EFAAE304144E99D42D50B /* Roboto.ttf */,
+				2A482E394B1C4783B38446C7 /* Roboto_medium.ttf */,
+				EDFA1B60822D4E3D97E6FD9E /* rubicon-icon-font.ttf */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,18 +224,6 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
-		};
-		AAF40AEEE6744B8AA9B37282 /* Resources */ = {
-			isa = "PBXGroup";
-			children = (
-				3708C19A6AA24327AA2DF32D /* Montserrat-Variable.ttf */,
-				E48EFAAE304144E99D42D50B /* Roboto.ttf */,
-				2A482E394B1C4783B38446C7 /* Roboto_medium.ttf */,
-				EDFA1B60822D4E3D97E6FD9E /* rubicon-icon-font.ttf */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-			path = "";
 		};
 /* End PBXGroup section */
 

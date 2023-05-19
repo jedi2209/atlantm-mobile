@@ -1,3 +1,5 @@
+import {APP_REGION} from '../core/const';
+
 const getStatusWorktime = (dealer, checkType, returnTime = false) => {
   if (!dealer || !checkType || !dealer.locations) {
     return false;
@@ -7,7 +9,7 @@ const getStatusWorktime = (dealer, checkType, returnTime = false) => {
     ru: 'Europe/Moscow',
     ua: 'Europe/Kiev',
   };
-  let currentDealerLocale = 'by';
+  let currentDealerLocale = APP_REGION;
   if (dealer.region && locales[dealer.region]) {
     currentDealerLocale = locales[dealer.region];
   }
