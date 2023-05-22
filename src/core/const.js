@@ -43,6 +43,7 @@ switch (bundle) {
       chatPage: 'https://api.atlantm.com/v1/jivo/widget/ZUIy6YbzLa/',
       chatID: 'ZUIy6YbzLa',
       secret: '(H+MbQeThVmYq3t6w9z$C&F)J@NcRfUj',
+      socket: 'wss://livechat.atlantm.com/v1',
     };
     break;
   case 'ua.atlantm.app': // iOS UA + Android UA
@@ -65,6 +66,7 @@ switch (bundle) {
       chatPage: 'https://api.atlantm.com/v1/jivo/widget/ZUIy6YbzLa/',
       chatID: 'ZUIy6YbzLa',
       secret: '(H+MbQeThVmYq3t6w9z$C&F)J@NcRfUj',
+      socket: 'wss://livechat.atlantm.com/v1',
     };
     break;
 }
@@ -94,7 +96,6 @@ export const STORE_LINK = {
 };
 
 export const API_MAIN_URL = 'https://api.atlantm.com/v1';
-export const CHAT_MAIN_SOCKET = 'wss://livechat.atlantm.com/v1';
 
 export const SENTRY_DSN = sentryDSN;
 
