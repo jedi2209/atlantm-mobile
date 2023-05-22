@@ -3,6 +3,7 @@ import {View, ActivityIndicator, Text, StyleSheet} from 'react-native';
 import {Chat, defaultTheme} from '@flyerhq/react-native-chat-ui';
 import {connect} from 'react-redux';
 import PushNotifications from '../../core/components/PushNotifications';
+import LogoLoader from '../../core/components/LogoLoader';
 
 import {actionChatIDSave} from '../actions';
 
@@ -559,24 +560,7 @@ const ChatScreen = ({
   };
 
   if (!isConnected || loadingHistory || !user) {
-    return (
-      <View style={{marginTop: '30%'}}>
-        <ActivityIndicator
-          color={styleConst.color.blue}
-          style={styleConst.spinner}
-          size={'large'}
-        />
-        <View style={{alignItems: 'center', marginTop: 20}}>
-          <Text
-            style={{
-              fontFamily: styleConst.font.light,
-              color: styleConst.color.greyText3,
-            }}>
-            подключаемся к чату
-          </Text>
-        </View>
-      </View>
-    );
+    return <LogoLoader />;
   }
 
   return (
