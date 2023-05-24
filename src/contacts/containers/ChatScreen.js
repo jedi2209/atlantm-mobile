@@ -1,294 +1,66 @@
-import React, {useState, useEffect, useCallback} from 'react';
-import {View, ActivityIndicator, Text, StyleSheet} from 'react-native';
-import {Chat, defaultTheme} from '@flyerhq/react-native-chat-ui';
+import React, {useEffect, useState, useRef} from 'react';
+import {
+  StyleSheet,
+  Dimensions,
+  Platform,
+  KeyboardAvoidingView,
+  NativeModules,
+} from 'react-native';
+import {Button, View} from 'native-base';
 import {connect} from 'react-redux';
+import {sign} from 'react-native-pure-jwt';
+
 import PushNotifications from '../../core/components/PushNotifications';
+import {store} from '../../core/store';
+import WebView from 'react-native-webview';
 import LogoLoader from '../../core/components/LogoLoader';
 
-import {actionChatIDSave} from '../actions';
+import * as NavigationService from '../../navigation/NavigationService';
 
-import API from '../../utils/api';
+import {actionChatIDSave, saveCookies} from '../actions';
+
+import {get} from 'lodash';
 import md5 from '../../utils/md5';
-import {time} from '../../utils/date';
-import {putData} from '../../utils/aws';
+import styleConst from '../../core/style-const';
+import {strings} from '../../core/lang/const';
 import {JIVO_CHAT} from '../../core/const';
 
-import styleConst from '../../core/style-const';
-import {get} from 'lodash';
-
-const styles = StyleSheet.create({
-  textMessageView: {
-    padding: 10,
-  },
-  authorName: {
-    color: styleConst.color.blue,
-    fontSize: 14,
-    fontFamily: styleConst.font.medium,
-    marginBottom: 10,
-  },
-  userName: {
-    color: styleConst.color.white,
-    textAlign: 'right',
-  },
-  authorText: {
-    color: 'black',
-    fontSize: 16,
-  },
-  authorDateText: {
-    color: styleConst.color.greyText,
-  },
-  customText: {
-    color: styleConst.color.darkBg,
-    fontSize: 12,
-    fontStyle: 'italic',
-    fontFamily: styleConst.font.light,
-  },
-  messageText: {
-    color: 'white',
-    fontSize: 16,
-  },
-  dateText: {
-    color: 'white',
-    fontSize: 11,
-    marginTop: 5,
-    fontFamily: styleConst.font.light,
-    fontStyle: 'italic',
-    textAlign: 'right',
-  },
-  customMessageView: {
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-  },
-  customMessageViewStopChat: {
-    // paddingBottom: 8,
-  },
-});
+const deviceHeight = Dimensions.get('window').height;
+const isAndroid = Platform.OS === 'android';
 
 const mapStateToProps = ({dealer, profile, contacts}) => {
   return {
+    region: dealer.selected.region,
     profile,
-    dealerSelected: dealer.selected,
     session: contacts.chat.id,
   };
 };
 
 const mapDispatchToProps = {
   actionChatIDSave,
+  saveCookies,
 };
 
-const uuidv4 = () => {
-  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-    const r = Math.floor(Math.random() * 16);
-    const v = c === 'x' ? r : (r % 4) + 8;
-    return v.toString(16);
-  });
-};
+let template = `<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no"/>
+        <title>Чат</title>
+        <script src="https://code.jivo.ru/widget/${JIVO_CHAT.chatID}" async></script>
+        <script>
+          ##JScontent##
+        </script>
+    </head>
+    <body></body>
+</html>`;
 
-const removeDuplicates = (array, key) => {
-  return array.reduce((arr, item) => {
-    const removed = arr.filter(i => i[key] !== item[key]);
-    return [...removed, item];
-  }, []);
-};
-
-const intervalSecondsMini = 3;
-const intervalMiliSeconds = intervalSecondsMini * 1000;
-
-const reconnectingSocket = () => {
-  let client;
-  let isConnected = false;
-  let reconnectOnClose = true;
-  let messageListeners = [];
-  let stateChangeListeners = [];
-  let socketIDListeners = [];
-  let interval = null;
-  let socketID = null;
-
-  const userAtlantM = {
-    id: '06c33e8b-e835-4736-80f4-63f44b66666c',
-    firstName: 'Атлант-М',
-    name: 'Атлант-М',
-    imageUrl: 'https://cdn.atlantm.com/logo/Blue-square-256.png',
-  };
-
-  const on = fn => {
-    messageListeners.push(fn);
-  };
-
-  const off = fn => {
-    messageListeners = messageListeners.filter(l => l !== fn);
-  };
-
-  const onStateChange = fn => {
-    stateChangeListeners.push(fn);
-    return () => {
-      stateChangeListeners = stateChangeListeners.filter(l => l !== fn);
-    };
-  };
-
-  const onSocketID = fn => {
-    socketIDListeners.push(fn);
-    return () => {
-      socketIDListeners = socketIDListeners.filter(l => l !== fn);
-    };
-  };
-
-  const addMessageToList = message => {
-    // добавление сообщение в переписку
-    messageListeners.forEach(fn => fn(message));
-  };
-
-  const updateMessages = messages => {
-    // обновление истории чата из API
-    const filteredData = removeDuplicates(messages, 'id');
-    messageListeners.forEach(fn => fn(filteredData));
-  };
-
-  const start = () => {
-    client = new WebSocket(JIVO_CHAT.socket, 'AtlantMChat', {
-      headers: API.headers,
-    });
-
-    client.onopen = () => {
-      isConnected = true;
-      stateChangeListeners.forEach(fn => fn(true));
-      if (interval) {
-        clearInterval(interval);
-      }
-      interval = setInterval(() => {
-        client.send(
-          JSON.stringify({
-            action: 'statusPing',
-          }),
-        );
-      }, intervalMiliSeconds);
-    };
-
-    const close = client.close;
-
-    // Close without reconnecting;
-    client.close = () => {
-      // reconnectOnClose = false;
-      close.call(client);
-      if (interval) {
-        clearInterval(interval);
-      }
-    };
-
-    client.onmessage = e => {
-      const data = JSON.parse(e.data);
-      if (data && data.connectionId) {
-        socketID = data.connectionId;
-        socketIDListeners.forEach(fn => fn(data.connectionId));
-      }
-      if (data.body && data.body.Status) {
-        let messageText = '';
-        let type = 'text';
-        switch (data.body.Status) {
-          case 4: // Оператор закончил ввод сообщения
-            break;
-          case 3: // Оператор пишет сообщение
-            break;
-          case 5: // Оператор вышел из чата
-            messageText = data.body.Text;
-            userAtlantM.userEmail = data.body.UserEmail;
-            type = 'custom';
-            break;
-          case 2: // Сообщение
-            messageText = data.body.Text;
-            userAtlantM.userEmail = data.body.UserEmail;
-            break;
-        }
-        if (messageText) {
-          let message = {
-            author: userAtlantM,
-            createdAt: Date.now(),
-            id: uuidv4(),
-            text: messageText,
-            type,
-          };
-          if (type === 'custom') {
-            message.typeCustom = 'status' + data.body.Status;
-          }
-          addMessageToList(message);
-        }
-      }
-    };
-
-    client.onerror = e => console.error(e);
-
-    client.onclose = () => {
-      isConnected = false;
-      stateChangeListeners.forEach(fn => fn(false));
-      socketIDListeners.forEach(fn => fn(false));
-
-      if (!reconnectOnClose) {
-        return;
-      }
-
-      if (interval) {
-        clearInterval(interval);
-      }
-
-      setTimeout(start, intervalMiliSeconds);
-    };
-  };
-
-  start();
-
-  return {
-    on,
-    off,
-    onStateChange,
-    onSocketID,
-    close: () => client.close(),
-    getClient: () => client,
-    isConnected: () => isConnected,
-    socketID: () => socketID,
-    start: () => start(),
-    addMessageToList,
-    updateMessages,
-    userAtlantM,
-  };
-};
-
-const chatSocket = reconnectingSocket();
-
-const useMessages = () => {
-  const [messages, setMessages] = useState([]);
-
-  useEffect(() => {
-    function handleMessage(message) {
-      if (typeof message === 'object' && message.length) {
-        setMessages(message);
-      } else {
-        setMessages([message, ...messages]);
-      }
-    }
-    chatSocket.on(handleMessage);
-    return () => chatSocket.off(handleMessage);
-  }, [messages, setMessages]);
-
-  return messages;
-};
-
-const ChatScreen = ({
-  dealer,
-  profile,
-  session,
-  actionChatIDSave,
-  navigation,
-  route,
-}) => {
-  const messages = useMessages();
-  const [user, setUser] = useState({});
-  const [socketID, setSocketID] = useState(chatSocket.socketID());
-  const [loadingHistory, setLoadingHistory] = useState(true);
-  const [isConnected, setIsConnected] = useState(chatSocket.isConnected());
-
-  const chatType = get(route, 'params.chatType', null);
-  const carID = get(route, 'params.carID', null);
-  const pageName = get(route, 'params.prevScreen', null);
+const ChatScreen = ({route, SubmitButton, profile, session, saveCookies}) => {
+  const [data, setData] = useState(null);
+  const mainRef = useRef(null);
+  const [userToken, setUserToken] = useState('');
+  const [senderID, setSenderID] = useState(null);
+  const [cookies, setCookies] = useState('');
 
   const userTmp = {
     id: session,
@@ -297,110 +69,108 @@ const ChatScreen = ({
       get(profile, 'login.LAST_NAME', null),
     ].join(' '),
     avatarUrl: get(profile, 'login.UF_CRM_1639655792'),
-    // "URL": "https://www.yandex.ru/",
     phone: get(profile, 'login.PHONE[0].VALUE', get(profile, 'phone')),
     email: get(profile, 'login.EMAIL[0].VALUE', get(profile, 'email')),
   };
 
   useEffect(() => {
-    return chatSocket.onSocketID(setSocketID);
-  }, [setSocketID]);
+    console.info('== ChatScreen ==');
+    let userID = get(userTmp, 'id');
+    if (userID === null || userID === undefined) {
+      PushNotifications.deviceState().then(res => {
+        let senderIDNew = getUserID(res.userId);
+        setSenderID(senderIDNew);
+        actionChatIDSave(senderIDNew);
+        makeUserToken(senderIDNew);
+      });
+    } else {
+      makeUserToken(userID);
+    }
+    loadCookies();
+  }, []);
 
   useEffect(() => {
-    if (user.id && socketID) {
-      putData('jivochat', {
-        connectionid: 'AtlantAPI_' + user.id,
-        socketID: socketID,
-        TTL: Math.floor(new Date().getTime() / 1000) + 3600,
-      });
-    }
-  }, [socketID, user.id]);
+    setData({uri: route.params.uri});
+  }, [route?.params?.uri]);
 
-  const renderTextMessage = ({author, createdAt, id, text, type}) => {
-    const date = time(new Date(createdAt));
-    if (author.id === chatSocket.userAtlantM.id) {
-      // ответ Атлант-М
-      return (
-        <View style={styles.textMessageView}>
-          <Text style={styles.authorName}>{author?.firstName}</Text>
-          <Text style={styles.authorText}>{text}</Text>
-          <Text style={[styles.dateText, styles.authorDateText]}>{date}</Text>
-        </View>
-      );
+  useEffect(() => {
+    const userID = get(profile, 'login.ID', '');
+    const ebdk = get(profile, 'login.SAP.ID', '');
+    const pageName = get(route, 'params.prevScreen', '');
+    PushNotifications.deviceState().then(res => {
+      const urlJivo =
+        JIVO_CHAT.chatPage +
+        '?' +
+        new URLSearchParams({
+          userID,
+          ebdk,
+          userToken,
+          userDevice: res.userId,
+          utm_source: 'mobile',
+          utm_campaign: 'chat',
+          pageName,
+        });
+      setData({uri: urlJivo});
+    });
+  }, [profile, route, userToken]);
+
+  const loadCookies = async () => {
+    const cookie = await get(store.getState(), 'contacts.chat.cookies');
+    if (cookie) {
+      setCookies(cookie);
     }
-    return (
-      <View style={styles.textMessageView}>
-        <Text style={[styles.authorName, styles.userName]}>
-          {author?.firstName}
-        </Text>
-        <Text style={styles.messageText}>{text}</Text>
-        <Text style={styles.dateText}>{date}</Text>
-      </View>
-    );
   };
 
-  const renderCustomMessage = ({
-    author,
-    createdAt,
-    id,
-    text,
-    type,
-    typeCustom,
-  }) => {
-    switch (typeCustom) {
-      case 'status5': // Оператор вышел из чата
-      case 'AGENT_STOP_CHAT':
-        return (
-          <View
-            style={[
-              styles.customMessageView,
-              styles.customMessageViewStopChat,
-            ]}>
-            <Text style={styles.customText}>{text}</Text>
-          </View>
-        );
-      default:
+  const handleCookies = event => {
+    if (!event.nativeEvent?.data) {
+      return;
+    }
+    const data = JSON.parse(event.nativeEvent.data);
+    if (typeof data.type === 'undefined') {
+      return;
+    }
+    switch (data.type) {
+      case 'cookieData':
+        const cookiesArray = data.data.split(';');
+        const cookiesToSave = cookiesArray.reduce((acc, cookie) => {
+          const [name, value] = cookie.split('=');
+          if (!name || !value || value === 'undefined') {
+            return false;
+          }
+          acc += `${name}=${value};`;
+          return acc;
+        }, '');
+        if (cookiesToSave) {
+          saveCookies(cookiesToSave); // save cookies to ActiveStorage
+          setCookies(cookiesToSave); // set cookies to WebView
+        }
+        break;
+      case 'action':
+        if (data.data === 'close') {
+          NavigationService.goBack();
+        }
+        break;
+      case 'newMessage':
+        console.info('newMessage', data);
         break;
     }
+    return;
   };
 
-  const renderBubble = ({child, message, nextMessageInGroup}) => {
-    const borderRadius = 15;
-
-    switch (message?.typeCustom) {
-      case 'AGENT_STOP_CHAT':
-        return <View style={{overflow: 'hidden'}}>{child}</View>;
-      case 'USER_MESSAGE':
-      case 'AGENT_MESSAGE':
-      default:
-        return (
-          <View
-            style={{
-              backgroundColor:
-                user.id !== message.author.id
-                  ? '#ffffff'
-                  : styleConst.color.blue,
-              borderBottomLeftRadius:
-                !nextMessageInGroup && user.id !== message.author.id
-                  ? 0
-                  : borderRadius,
-              borderTopRightRadius: borderRadius,
-              borderTopLeftRadius: borderRadius,
-              borderBottomRightRadius:
-                !nextMessageInGroup && user.id === message.author.id
-                  ? 0
-                  : borderRadius,
-              borderColor: styleConst.color.accordeonGrey2,
-              borderWidth: 1,
-              overflow: 'hidden',
-            }}>
-            {child}
-          </View>
-        );
-    }
+  const makeUserToken = userID => {
+    sign(
+      {
+        id: userID,
+      }, // body
+      JIVO_CHAT.secret, // secret
+      {
+        alg: 'HS256',
+        typ: 'JWT',
+      },
+    )
+      .then(token => setUserToken(token))
+      .catch(message => console.error('JWT chat token sign error', message)); // possible errors
   };
-
-  // PushNotifications.showLocalMessage({title: 'Новое сообщение в чате', message: 'Наш оператор ответил вам'});
 
   const getUserID = userID => {
     let senderID = md5(JSON.stringify(userID));
@@ -415,179 +185,71 @@ const ChatScreen = ({
     return senderID;
   };
 
-  const updateChat = useCallback(
-    senderID => {
-      // история чата
-      PushNotifications.addTag('ChatID', 'AtlantAPI_' + senderID);
-      let isSubscribedInitChatData = true;
-
-      API.chatData(senderID).then(res => {
-        if (!isSubscribedInitChatData) {
-          return false;
-        }
-        let messagesTmp = [];
-        let historyMessages = get(res, 'data', false);
-        if (!historyMessages) {
-          historyMessages = [];
-        }
-        historyMessages.map(val => {
-          let userIDFinal,
-            userAvatar,
-            messageText = null;
-          let messageType = 'text';
-          switch (val.message.type) {
-            case 'USER_MESSAGE':
-              userIDFinal = senderID;
-              userAvatar = get(profile, 'login.UF_CRM_1639655792');
-              messageText = val.message.text;
-              break;
-            case 'AGENT_MESSAGE':
-              userIDFinal = chatSocket.userAtlantM.id;
-              userAvatar = chatSocket.userAtlantM.imageUrl;
-              messageText = val.message.text;
-              break;
-            case 'AGENT_STOP_CHAT':
-              userIDFinal = chatSocket.userAtlantM.id;
-              userAvatar = chatSocket.userAtlantM.imageUrl;
-              messageType = 'custom';
-              messageText = val.message.text;
-              break;
-          }
-          let textMessage = {
-            author: {
-              id: userIDFinal,
-              firstName: val.user.name,
-              email: val.user.email,
-              imageUrl: userAvatar,
-            },
-            createdAt: val.date * 1000,
-            id: val.message.id,
-            text: messageText,
-            type: messageType,
-            typeCustom: val.message.type,
-          };
-          if (textMessage.typeCustom !== 'AGENT_STOP_CHAT') {
-            // todo: Убрать когда включим служебные оповещения
-            messagesTmp.push(textMessage);
-          }
-          chatSocket.updateMessages(messagesTmp);
-        });
-        setLoadingHistory(false);
-      });
-      return () => {
-        isSubscribedInitChatData = false;
-        PushNotifications.removeTag('ChatID');
-        // chatSocket.close();
-      };
-    },
-    [profile],
-  );
-
-  useEffect(() => {
-    console.log('userID', session);
-    setLoadingHistory(true);
-    if (session === null) {
-      PushNotifications.deviceState().then(res => {
-        let senderIDNew = getUserID(res.userId);
-        console.log('senderIDNew', senderIDNew);
-        setUser({id: senderIDNew});
-        actionChatIDSave(senderIDNew);
-        updateChat(senderIDNew);
-      });
-    } else {
-      setUser({id: session});
-      updateChat(session);
-    }
-    return () => {
-      // закрытие экрана чата 2
-      // chatSocket.close();
-      // setIsConnected(false);
-    };
-  }, []);
-
-  useEffect(() => {
-    navigation.setParams({
-      status: {
-        connected: isConnected,
-        color: isConnected ? styleConst.color.green : styleConst.color.red,
-      },
-    });
-    const chatClient = chatSocket.getClient();
-    if (chatClient.readyState === 3) {
-      chatSocket.start();
-      setLoadingHistory(true);
-      PushNotifications.deviceState().then(res => {
-        const senderID = getUserID(res.userId);
-        setUser({id: senderID});
-        actionChatIDSave(senderID);
-        updateChat(senderID);
-      });
-    }
-  }, [isConnected, navigation]);
-
-  useEffect(() => {
-    chatSocket.onStateChange(setIsConnected);
-  }, [isConnected]);
-
-  const addUserMessage = message => {
-    let messageToSend = {
-      action: 'onMessage',
-      body: {
-        user: userTmp,
-        message: {
-          text: message.text,
-        },
-      },
-    };
-
-    chatSocket.addMessageToList(message);
-    chatSocket.getClient().send(JSON.stringify(messageToSend));
-  };
-
-  const handleSendPress = message => {
-    const userData = {
-      id: user.id,
-      firstName: userTmp.name,
-    };
-    const textMessage = {
-      author: userData,
-      createdAt: Date.now(),
-      id: uuidv4(),
-      text: message.text,
-      type: 'text',
-    };
-    addUserMessage(textMessage);
-  };
-
-  if (!isConnected || loadingHistory || !user) {
+  if (data) {
+    return (
+      <View
+        style={[
+          {backgroundColor: styleConst.color.white},
+          route.params?.mainViewStyle,
+        ]}
+        flex={1}>
+        <KeyboardAvoidingView
+          ref={mainRef}
+          behavior={'padding'}
+          enabled={!isAndroid}
+          style={[styles.mainView, route.params?.mainScrollViewStyle]}>
+          <WebView
+            style={[styles.webView, route.params?.webViewStyle]}
+            key={'session_' + session}
+            source={data}
+            thirdPartyCookiesEnabled={true}
+            allowsLinkPreview={true}
+            startInLoadingState={false}
+            onMessage={handleCookies}
+            injectedJavaScript="window.ReactNativeWebView.postMessage(JSON.stringify({type: 'cookieData', data: document.cookie}))"
+            sharedCookiesEnabled={true}
+            javaScriptEnabled={true}
+            minHeight={
+              route.params?.minHeight
+                ? route.params?.minHeight
+                : isAndroid
+                ? 'auto'
+                : deviceHeight - 170
+            }
+          />
+        </KeyboardAvoidingView>
+        <Button
+          style={styles.submitButton}
+          onPress={() => NavigationService.goBack()}>
+          {SubmitButton.text}
+        </Button>
+      </View>
+    );
+  } else {
     return <LogoLoader />;
   }
-
-  return (
-    // todo: Убрать когда включим служебные оповещения
-    <View style={{marginTop: 50, flex: 1}}>
-      <Chat
-        messages={messages}
-        onSendPress={handleSendPress}
-        user={user}
-        showUserAvatars={true}
-        showUserNames={true}
-        enableAnimation={false}
-        // renderBubble={renderBubble}
-        renderTextMessage={renderTextMessage}
-        renderCustomMessage={renderCustomMessage}
-        locale="ru"
-        theme={{
-          ...defaultTheme,
-          colors: {
-            ...defaultTheme.colors,
-            inputBackground: styleConst.color.darkBg,
-            primary: styleConst.color.blue,
-          },
-        }}
-      />
-    </View>
-  );
 };
+
+ChatScreen.defaultProps = {
+  SubmitButton: {
+    text: strings.ModalView.close,
+  },
+};
+
+const styles = StyleSheet.create({
+  submitButton: {
+    marginBottom: isAndroid ? 10 : 35,
+    marginHorizontal: 10,
+  },
+  mainView: {
+    paddingHorizontal: 0,
+    flex: 1,
+    paddingBottom: isAndroid ? 5 : 25,
+    backgroundColor: styleConst.color.white,
+  },
+  webView: {
+    backgroundColor: styleConst.color.white,
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatScreen);
