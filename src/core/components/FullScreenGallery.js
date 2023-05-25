@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, Dimensions} from 'react-native';
 import Orientation, {
-  useDeviceOrientationChange,
   useOrientationChange,
 } from 'react-native-orientation-locker';
 //import ImageView from 'react-native-image-viewing';

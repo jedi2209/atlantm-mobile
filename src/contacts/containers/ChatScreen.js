@@ -4,11 +4,11 @@ import {
   Dimensions,
   Platform,
   KeyboardAvoidingView,
-  NativeModules,
 } from 'react-native';
 import {Button, View} from 'native-base';
 import {connect} from 'react-redux';
 import {sign} from 'react-native-pure-jwt';
+import Orientation from 'react-native-orientation-locker';
 
 import PushNotifications from '../../core/components/PushNotifications';
 import {store} from '../../core/store';
@@ -74,6 +74,7 @@ const ChatScreen = ({route, SubmitButton, profile, session, saveCookies}) => {
   };
 
   useEffect(() => {
+    Orientation.lockToPortrait();
     console.info('== ChatScreen ==');
     let userID = get(userTmp, 'id');
     if (userID === null || userID === undefined) {
