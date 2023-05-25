@@ -29,7 +29,7 @@ import {INFO_LIST__FAIL} from '../actionTypes';
 
 // helpers
 import {get} from 'lodash';
-import {ERROR_NETWORK, JIVO_CHAT} from '../../core/const';
+import {ERROR_NETWORK} from '../../core/const';
 import styleConst from '../../core/style-const';
 import {verticalScale} from '../../utils/scale';
 import {strings} from '../../core/lang/const';

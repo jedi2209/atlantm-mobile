@@ -21,7 +21,6 @@ import {get} from 'lodash';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
 import styleConst from '../../core/style-const';
-import {JIVO_CHAT} from '../../core/const';
 
 const mapStateToProps = ({dealer, profile, tva, core}) => {
   return {

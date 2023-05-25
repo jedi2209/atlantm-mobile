@@ -20,7 +20,6 @@ import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import {EVENT_REFRESH} from '../../../core/actionTypes';
-import {JIVO_CHAT} from '../../../core/const';
 
 const styles = StyleSheet.create({
   content: {
