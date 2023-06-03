@@ -140,11 +140,11 @@ export const AUTH_DATA = {
 
 export const API_MAIN_KEY = {
   by: {
-    Android: 'XXXX',
-    iOS: 'XXXX',
+    android: 'XXXX',
+    ios: 'XXXX',
   },
   ua: {
-    Android: 'XXXX',
-    iOS: 'XXXX',
+    android: 'XXXX',
+    ios: 'XXXX',
   },
 };
