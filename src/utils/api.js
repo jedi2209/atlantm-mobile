@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {Platform, Linking, Alert, BackHandler} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import RNFetchBlob from 'rn-fetch-blob';
+import {sign as JWTSign} from 'react-native-pure-jwt';
 import {
   STORE_LINK,
   API_MAIN_URL,
@@ -12,13 +13,33 @@ import {
 import {strings} from '../core/lang/const';
 
 const isAndroid = Platform.OS === 'android';
-
-const headers = {
+const JWTToken = async () => {
+  return await JWTSign(
+    {
+      iss: 'MobileAPP',
+      exp: new Date().getTime() + 3600 * 1000, // expiration date, required, in ms, absolute to 1/1/1970
+      additional: DeviceInfo.getBundleId() + '__' + DeviceInfo.getVersion(), // com.atlantm.app__8.4.4
+    }, // body
+    API_MAIN_KEY[APP_REGION][Platform.OS] +
+      Math.floor(Date.now() / 1000) +
+      '__' +
+      DeviceInfo.getBundleId() +
+      '__' +
+      DeviceInfo.getVersion(), // secret
+    {
+      alg: 'HS256',
+      typ: 'JWT',
+    },
+  )
+    .then(token => {
+      return token;
+    }) // token as the only argument
+    .catch(console.error); // possible errors
+};
+let headers = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
-  'x-api-key': `${
-    isAndroid ? API_MAIN_KEY[APP_REGION].Android : API_MAIN_KEY[APP_REGION].iOS
-  }`,
+  'x-api-key': `${API_MAIN_KEY[APP_REGION][Platform.OS]}`,
   'App-Version': DeviceInfo.getVersion(),
   'App-Name': DeviceInfo.getApplicationName(),
 };
@@ -90,7 +111,7 @@ export default {
   },
 
   chatAvailable() {
-    return this.request(`/jivo/status/`, baseRequestParams);
+    return this.request('/jivo/status/', baseRequestParams);
   },
 
   chatData(session) {
@@ -1045,6 +1066,7 @@ export default {
   async apiGetData(url, requestParams) {
     const method = requestParams.method.toString().toLowerCase();
     let body = requestParams?.body;
+    requestParams.headers['x-auth'] = await JWTToken();
     if (body && typeof body === 'object') {
       if (
         requestParams?.headers['Content-Type'] !==
