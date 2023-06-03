@@ -13,22 +13,21 @@ import {
 import {strings} from '../core/lang/const';
 
 const isAndroid = Platform.OS === 'android';
+const secretKey = [
+  API_MAIN_KEY[APP_REGION][Platform.OS],
+  DeviceInfo.getBundleId(),
+  DeviceInfo.getVersion(),
+].join('__');
+
 const JWTToken = async () => {
   return await JWTSign(
     {
       iss: 'MobileAPP',
-      exp: new Date().getTime() + 3600 * 1000, // expiration date, required, in ms, absolute to 1/1/1970
-      additional: DeviceInfo.getBundleId() + '__' + DeviceInfo.getVersion(), // com.atlantm.app__8.4.4
+      exp: Math.floor(new Date().getTime() + 60 * 1000), // expiration date, required, in ms, absolute to 1/1/1970
     }, // body
-    API_MAIN_KEY[APP_REGION][Platform.OS] +
-      Math.floor(Date.now() / 1000) +
-      '__' +
-      DeviceInfo.getBundleId() +
-      '__' +
-      DeviceInfo.getVersion(), // secret
+    secretKey,
     {
-      alg: 'HS256',
-      typ: 'JWT',
+      alg: 'HS512',
     },
   )
     .then(token => {
@@ -36,7 +35,7 @@ const JWTToken = async () => {
     }) // token as the only argument
     .catch(console.error); // possible errors
 };
-let headers = {
+const headers = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
   'x-api-key': `${API_MAIN_KEY[APP_REGION][Platform.OS]}`,
@@ -1066,7 +1065,9 @@ export default {
   async apiGetData(url, requestParams) {
     const method = requestParams.method.toString().toLowerCase();
     let body = requestParams?.body;
-    requestParams.headers['x-auth'] = await JWTToken();
+    const jwtToken = await JWTToken();
+    requestParams.headers['x-auth'] = jwtToken;
+
     if (body && typeof body === 'object') {
       if (
         requestParams?.headers['Content-Type'] !==
