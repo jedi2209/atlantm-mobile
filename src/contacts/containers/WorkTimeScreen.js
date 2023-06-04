@@ -16,7 +16,6 @@ import {
 } from 'native-base';
 import {connect} from 'react-redux';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {get} from 'lodash';
 import styleConst from '../../core/style-const';
@@ -25,21 +24,12 @@ import {strings} from '../../core/lang/const';
 import Imager from '../../core/components/Imager';
 import ActionSheetMenu from '../../core/components/ActionSheetMenu';
 
-import {callMe} from '../actions';
-import {fetchInfoList, actionListReset} from '../../info/actions';
-
 import {API_LANG} from '../../core/const';
 
 const mapStateToProps = ({dealer}) => {
   return {
     dealerSelected: dealer.selected,
   };
-};
-
-const mapDispatchToProps = {
-  callMe,
-  fetchInfoList,
-  actionListReset,
 };
 
 const _renderDivision = divisions => {
@@ -278,4 +268,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(WorkTimeScreen);
+export default connect(mapStateToProps, null)(WorkTimeScreen);
