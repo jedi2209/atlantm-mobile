@@ -62,7 +62,7 @@ export default {
     return this.request('/brands/info/get/', baseRequestParams);
   },
 
-  fetchInfoList(region = 0, dealer = 0, type = null) {
+  fetchInfoList(region = APP_REGION, dealer = 0, type = null) {
     let url = `/info/actions/get/?region=${region}&dealer=${dealer}`;
     if (type) {
       url = url + `&type=${type}`;
