@@ -82,6 +82,8 @@ const styles = StyleSheet.create({
   },
 });
 
+const TVAMessagingEnabled = false;
+
 const processDate = date => dayMonthYearTime(date);
 
 const mapStateToProps = ({dealer, tva}) => {
@@ -286,41 +288,46 @@ const TvaResultsScreen = props => {
                 </VStack>
               </Box>
             ))}
-            <View mb={4}>
-              <TextInput
-                ref={messageField}
-                multiline={true}
-                numberOfLines={4}
-                style={{
-                  height: Platform.OS === 'ios' ? 90 : 'auto',
-                  color: '#222b45',
-                  paddingTop: 25,
-                  paddingLeft: 15,
-                  paddingBottom: 0,
-                  paddingHorizontal: 0,
-                  maxHeight: 150,
-                  backgroundColor: 'white',
-                  fontSize: 18,
-                }}
-                label={strings.TvaResultsScreen.messageToServiceMan}
-                value={comment}
-                onChangeText={setComment}
-              />
-            </View>
-            <View>
-              <Button
-                variant="solid"
-                onPress={loading ? undefined : onPressMessageButton}
-                isLoading={loading}
-                _text={styles.buttonText}
-                spinnerPlacement="start"
-                isLoadingText={strings.Form.button.sending}
-                size="lg"
-                shadow={loading ? 1 : 4}
-                style={styles.button}>
-                {strings.Form.button.send}
-              </Button>
-            </View>
+            {TVAMessagingEnabled ? (
+              <>
+                {' '}
+                <View mb={4}>
+                  <TextInput
+                    ref={messageField}
+                    multiline={true}
+                    numberOfLines={4}
+                    style={{
+                      height: Platform.OS === 'ios' ? 90 : 'auto',
+                      color: '#222b45',
+                      paddingTop: 25,
+                      paddingLeft: 15,
+                      paddingBottom: 0,
+                      paddingHorizontal: 0,
+                      maxHeight: 150,
+                      backgroundColor: 'white',
+                      fontSize: 18,
+                    }}
+                    label={strings.TvaResultsScreen.messageToServiceMan}
+                    value={comment}
+                    onChangeText={setComment}
+                  />
+                </View>
+                <View>
+                  <Button
+                    variant="solid"
+                    onPress={loading ? undefined : onPressMessageButton}
+                    isLoading={loading}
+                    _text={styles.buttonText}
+                    spinnerPlacement="start"
+                    isLoadingText={strings.Form.button.sending}
+                    size="lg"
+                    shadow={loading ? 1 : 4}
+                    style={styles.button}>
+                    {strings.Form.button.send}
+                  </Button>
+                </View>
+              </>
+            ) : null}
           </>
         )}
       </View>
