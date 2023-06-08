@@ -236,10 +236,11 @@ const _renderTechData = (title, data, carDetails) => {
       }
       return _renderItem(element.name + ':', name, element.postfix);
     });
-    let res = resRaw.filter(el => {
+    let res = [];
+    res = resRaw.filter(el => {
       return el != null;
     });
-    return res ? (
+    return res && res.length ? (
       <VStack style={styles.sectionOptions}>
         <Text
           style={styles.sectionTitle}
@@ -790,12 +791,12 @@ const NewCarItemScreen = ({
             [
               {
                 name: strings.NewCarItemScreen.techData.maxSpeed,
-                value: 'speed.max',
+                value: 'engine.speedmax',
                 postfix: 'км/ч.',
               },
               {
                 name: strings.NewCarItemScreen.techData.dispersal,
-                value: 'speed.dispersal',
+                value: 'engine.speed100',
                 postfix: 'сек.',
               },
               {
