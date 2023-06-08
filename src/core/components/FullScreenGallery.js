@@ -7,7 +7,8 @@ import Orientation, {
 import Gallery from 'react-native-awesome-gallery';
 import styleConst from '../style-const';
 import {strings} from '../lang/const';
-import {View, Text, Spinner} from 'native-base';
+import {View, Text} from 'native-base';
+import LogoLoader from './LogoLoader';
 
 const FullScreenGallery = ({
   route,
@@ -59,11 +60,7 @@ const FullScreenGallery = ({
   });
 
   if (loading) {
-    return (
-      <View justifyContent="center" alignItems="center" flex={1}>
-        <Spinner size="lg" color={styleConst.color.blue} />
-      </View>
-    );
+    return <LogoLoader />;
   }
 
   return (
