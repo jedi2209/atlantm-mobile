@@ -625,9 +625,9 @@ const styles = StyleSheet.create({
     borderColor: styleConst.color.white,
     borderWidth: 0.6,
     opacity: 0.95,
-    width: '70%',
+    width: '80%',
     marginVertical: 10,
-    marginHorizontal: '15%',
+    marginHorizontal: '10%',
   },
   BonusInfoButtonText: {
     fontFamily: styleConst.font.medium,

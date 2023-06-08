@@ -8,6 +8,7 @@ let appRegion,
   appleID,
   googleID,
   appName,
+  appEmail,
   sentryDSN,
   oneSignalKey,
   amplitudeKey,
@@ -30,6 +31,7 @@ switch (bundle) {
     apiLang = 'ru';
     countrySettings = ['by', 'ru'];
     countryList = require('./const.countries_by.json');
+    appEmail = 'atlant-m.corp@atlantm.com';
     phoneRestricted = 'ua';
     errorNetwork = 'Отсутствует интернет соединение';
     appleID = '1492492166';
@@ -53,6 +55,7 @@ switch (bundle) {
     countrySettings = ['ua'];
     phoneRestricted = ['ru', 'by'];
     countryList = require('./const.countries_ua.json');
+    appEmail = 'info@vw-atlant.com.ua';
     errorNetwork = "Відсутнє інтернет з'єднання";
     appleID = '1619839155';
     googleID = 'ua.atlantm.app';
@@ -101,7 +104,7 @@ export const SENTRY_DSN = sentryDSN;
 
 export const APP_NAME = appName;
 
-export const APP_EMAIL = 'atlant-m.corp@atlantm.com';
+export const APP_EMAIL = appEmail;
 
 export const ONESIGNAL = oneSignalKey;
 
