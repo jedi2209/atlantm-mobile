@@ -302,6 +302,7 @@ class OrderScreen extends Component {
     }
     const carId = get(this.props.route, 'params.carId');
     const isNewCar = get(this.props.route, 'params.isNewCar');
+    const actionID = get(this.props.route, 'params.actionID');
 
     const action = await this.props.actionOrderCar({
       firstName: get(data, 'NAME'),
@@ -313,6 +314,7 @@ class OrderScreen extends Component {
       credit: get(data, 'CREDIT', false),
       dealerId,
       carId,
+      actionID,
       comment: data.COMMENT || '',
       isNewCar,
     });
