@@ -4,7 +4,6 @@ import {useNavigation} from '@react-navigation/native';
 import PropTypes from 'prop-types';
 import {
   Text,
-  View,
   StyleSheet,
   Platform,
   Dimensions,
@@ -12,6 +11,7 @@ import {
   Linking,
   Pressable,
 } from 'react-native';
+import {View} from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
 import ImageCarousel from './ImageCarousel';
 
@@ -390,7 +390,7 @@ const CarListItem = ({
           height: itemScreen === 'NewCarItemScreen' ? 175 : 170,
           position: 'relative',
           marginTop:
-            itemScreen === 'NewCarItemScreen' ? (isSale ? 60 : 45) : 75,
+            itemScreen === 'NewCarItemScreen' ? (isSale ? 65 : 50) : 75,
           backgroundColor: styleConst.color.white,
         }}>
         <ImageCarousel
@@ -477,13 +477,14 @@ const CarListItem = ({
       testID={testID + '-' + key}
       accessibilityLabel={testID}
       accessibilityRole="button"
+      shadow={!ordered ? 1 : 0}
       style={[
         styles.container,
-        !ordered
-          ? styleConst.shadow.light
-          : {
+        ordered
+          ? {
               backgroundColor: styleConst.color.white,
-            },
+            }
+          : null,
         isSale ? styles.containerSpecial : null,
       ]}
       underlayColor={styleConst.color.select}>
@@ -652,29 +653,10 @@ const styles = StyleSheet.create({
     height: 300,
     zIndex: 10,
   },
-  titleBackgroundold: {
-    flex: 1,
-    position: 'absolute',
-    zIndex: 15,
-    backgroundColor: 'black',
-    opacity: 0.5,
-    height: 50,
-    width: '100%',
-  },
-  titleBackground: {
-    flex: 1,
-    zIndex: 15,
-    position: 'absolute',
-    backgroundColor: 'transparent',
-    opacity: 1,
-    height: 50,
-    width: '100%',
-  },
   titleContainer: {
-    flex: 1,
     zIndex: 20,
     position: 'absolute',
-    marginVertical: 5,
+    marginTop: 5,
     marginHorizontal: '5%',
   },
   priceContainer: {
@@ -752,7 +734,6 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   carTechContainer: {
-    flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginLeft: '5%',
@@ -761,11 +742,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   carBadgeContainer: {
-    flex: 1,
     flexDirection: 'row',
     flexWrap: 'wrap',
     marginHorizontal: '5%',
-    marginTop: 5,
+    marginTop: 10,
     height: 20,
     zIndex: 20,
     justifyContent: 'flex-start',
