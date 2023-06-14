@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
-import {FlatList, StyleSheet} from 'react-native';
+import BigList from 'react-native-big-list';
 
 // redux
 import {
@@ -16,15 +16,11 @@ import CarListItem from './CarListItem';
 import LogoLoader from '../../core/components/LogoLoader';
 
 // helpers
-import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
+import {ActivityIndicator} from 'react-native-paper';
+import styleConst from '../../core/style-const';
 
-const styles = StyleSheet.create({
-  footer: {
-    paddingTop: 10,
-    paddingBottom: 10,
-  },
-});
+const ITEM_HEIGHT = 280;
 
 const CarList = props => {
   const {
@@ -77,7 +73,7 @@ const CarList = props => {
       return null;
     }
 
-    return <LogoLoader />;
+    return <ActivityIndicator color={styleConst.color.blueNew} />;
   };
 
   const _onRefresh = () => {
@@ -98,34 +94,28 @@ const CarList = props => {
     });
   };
 
+  const _keyExtractor = item => {
+    if (item && item.hash) {
+      return item.hash.toString();
+    } else {
+      return (
+        new Date().getTime().toString() +
+        Math.floor(Math.random() * Math.floor(new Date().getTime())).toString()
+      );
+    }
+  };
+
   return (
-    <FlatList
-      onEndReached={handleLoadMore}
-      onEndReachedThreshold={0.7}
-      testID="CarList.Wrapper"
-      initialNumToRender={5}
-      maxToRenderPerBatch={5} // Increase time between renders
-      updateCellsBatchingPeriod={50}
-      windowSize={4}
-      removeClippedSubviews={false}
-      onRefresh={_onRefresh}
-      refreshing={isRefreshing}
-      ListEmptyComponent={_renderEmptyComponent}
-      ListFooterComponent={_renderFooter}
+    <BigList
+      data={data}
       renderItem={_renderItem}
-      keyExtractor={item => {
-        if (item && item.hash) {
-          return item.hash.toString();
-        } else {
-          return (
-            new Date().getTime().toString() +
-            Math.floor(
-              Math.random() * Math.floor(new Date().getTime()),
-            ).toString()
-          );
-        }
-      }}
-      {...props}
+      renderFooter={_renderFooter}
+      renderEmpty={_renderEmptyComponent}
+      onEndReached={handleLoadMore}
+      keyExtractor={_keyExtractor}
+      itemHeight={ITEM_HEIGHT}
+      footerHeight={100}
+      onEndReachedThreshold={0.7}
     />
   );
 };

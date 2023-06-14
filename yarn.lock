@@ -7973,6 +7973,13 @@ react-native-awesome-gallery@^0.3.0:
   dependencies:
     react-native-redash "^16.0.8"
 
+react-native-big-list@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/react-native-big-list/-/react-native-big-list-1.6.1.tgz#617da4adef83d21b1e35c7f07efc4dd0b73e3aed"
+  integrity sha512-ZPv2oJQ5jFHnOH4ibhqHiyIfJnGACOg2GnfIazgnJlK0nI9SX75Mh4NhD4xuNKbtxoBRL4nBdhxVreZosIfEQQ==
+  dependencies:
+    prop-types "^15.8.1"
+
 react-native-codegen@0.69.1:
   version "0.69.1"
   resolved "https://registry.yarnpkg.com/react-native-codegen/-/react-native-codegen-0.69.1.tgz#3632be2f24464e6fad8dd11a25d1b6f3bc2c7d0b"
