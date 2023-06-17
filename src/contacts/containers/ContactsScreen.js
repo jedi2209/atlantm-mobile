@@ -800,7 +800,12 @@ const ContactsScreen = ({
     <>
       <View style={styleConst.safearea.default} testID="ContactsScreen.Wrapper">
         <Pressable
-          onPress={() => navigation.navigate('ChooseDealerScreen')}
+          onPress={() =>
+            navigation.navigate('ChooseDealerScreen', {
+              goBack: true,
+              returnScreen: 'ContactsScreen',
+            })
+          }
           style={[styles.buttonPrimary]}>
           <DealerItemList
             key={'dealerSelect'}
