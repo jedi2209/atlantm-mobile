@@ -28,7 +28,6 @@ const CheckboxList = ({
   checkboxColor,
 }) => {
   let def = excludeValFromSelect(selectedItems);
-  const forceUpdate = useReducer(bool => !bool)[1];
 
   let itemsArr = {};
   items.map(item => {
@@ -50,7 +49,6 @@ const CheckboxList = ({
           <TouchableHighlight
             onPress={() => {
               _onSelect({id});
-              forceUpdate();
             }}
             key={'checkboxWrapper' + id}
             activeOpacity={0.7}
@@ -86,23 +84,16 @@ const CheckboxList = ({
                 </View>
               ) : null}
               <View style={{flex: 1}}>
-                <Pressable
-                  onPress={() => {
-                    _onSelect({id});
-                    forceUpdate();
-                  }}>
-                  <HStack justifyContent="space-between">
-                    <Text style={styles.text}>{text}</Text>
-                    <Checkbox
-                      color={checkboxColor}
-                      isChecked={def.includes(id) ? true : false}
-                      onChange={() => {
-                        _onSelect({id});
-                        forceUpdate();
-                      }}
-                    />
-                  </HStack>
-                </Pressable>
+                <HStack justifyContent="space-between">
+                  <Text style={styles.text}>{text}</Text>
+                  <Checkbox
+                    color={checkboxColor}
+                    isChecked={def.includes(id) ? true : false}
+                    onChange={() => {
+                      _onSelect({id});
+                    }}
+                  />
+                </HStack>
               </View>
             </View>
           </TouchableHighlight>
