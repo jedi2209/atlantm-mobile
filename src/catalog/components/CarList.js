@@ -20,7 +20,16 @@ import {strings} from '../../core/lang/const';
 import {ActivityIndicator} from 'react-native-paper';
 import styleConst from '../../core/style-const';
 
-const ITEM_HEIGHT = 280;
+const _keyExtractor = item => {
+  if (item && item.hash) {
+    return item.hash.toString();
+  } else {
+    return (
+      new Date().getTime().toString() +
+      Math.floor(Math.random() * Math.floor(new Date().getTime())).toString()
+    );
+  }
+};
 
 const CarList = props => {
   const {
@@ -32,6 +41,12 @@ const CarList = props => {
     prices,
     resizeMode,
   } = props;
+
+  let ITEM_HEIGHT = 280;
+
+  if (itemScreen === 'UsedCarItemScreen') {
+    ITEM_HEIGHT = 320;
+  }
   const [isRefreshing, setRefreshing] = useState(false);
   const [loadingNextPage, setLoadingNextPage] = useState(false);
 
@@ -73,7 +88,16 @@ const CarList = props => {
       return null;
     }
 
-    return <ActivityIndicator color={styleConst.color.blueNew} />;
+    return (
+      <ActivityIndicator
+        color={
+          styleConst.color.blueNew
+            ? styleConst.color.blueNew
+            : styleConst.color.blue
+        }
+        marginTop={15}
+      />
+    );
   };
 
   const _onRefresh = () => {
@@ -92,17 +116,6 @@ const CarList = props => {
     return dataHandler(EVENT_LOAD_MORE).then(() => {
       setLoadingNextPage(false);
     });
-  };
-
-  const _keyExtractor = item => {
-    if (item && item.hash) {
-      return item.hash.toString();
-    } else {
-      return (
-        new Date().getTime().toString() +
-        Math.floor(Math.random() * Math.floor(new Date().getTime())).toString()
-      );
-    }
   };
 
   return (
