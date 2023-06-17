@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {memo} from 'react';
 import {View, StyleSheet, ActivityIndicator} from 'react-native';
 import {HStack, Text} from 'native-base';
 import Imager from '../components/Imager';
@@ -104,21 +104,12 @@ const drawCity = cityArr => {
 };
 
 const DealerCard = props => {
-  const {item, loading} = props;
+  const {item} = props;
 
   const CarImg = get(item, 'img[0]');
   const hash = get(item, 'hash');
   const brands = get(item, 'brands', []);
   const name = get(item, 'name');
-
-  if (loading) {
-    return (
-      <ActivityIndicator
-        color={styleConst.color.blue}
-        style={styleConst.spinner}
-      />
-    );
-  }
 
   return (
     <HStack alignItems="flex-start" p="2" borderRadius="md">
@@ -147,4 +138,4 @@ const DealerCard = props => {
   );
 };
 
-export default DealerCard;
+export default memo(DealerCard);
