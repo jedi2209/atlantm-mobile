@@ -76,11 +76,9 @@ class CallMeBackScreen extends PureComponent {
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: strings.Form.group.dealer,
-                value: this.state.dealerSelectedLocal,
+                value: this.props.dealerSelected,
                 props: {
                   goBack: false,
-                  isLocal: true,
-                  returnScreen: this.props.navigation.state?.routeName,
                 },
               },
             ],
