@@ -353,7 +353,6 @@ const LoginScreen = props => {
     );
     const widthElement = (screenWidth / 100) * width;
     let buttonSpace = (screenWidth * 0.75) / (items + 1);
-    console.info('screenWidth', Dimensions.get('window'), screenWidth);
     let buttonSpaceAndroid = 1;
     //const buttonSpaceAndroid = parseFloat('1' + buttonSpace) / 100;
     switch (screenWidth) {

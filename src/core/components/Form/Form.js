@@ -266,22 +266,22 @@ class Form extends Component {
     };
     this.inputRefs = [];
     this.inputRefsNav = [];
-    let requredFields = [
-      {
-        name: 'AgreementCheckbox',
-        type: 'checkbox',
-        label: strings.Form.agreement.fieldName,
-      },
-    ];
-    this.allFields = [
-      {
-        name: 'AgreementCheckbox',
-        type: 'checkbox',
-        label: strings.Form.agreement.fieldName,
-      },
-    ];
+    let requredFields = [];
+    this.allFields = [];
 
-    this.state['AgreementCheckbox'] = false;
+    if (!this.props.SubmitButton.noAgreement) {
+      requredFields.push({
+        name: 'AgreementCheckbox',
+        type: 'checkbox',
+        label: strings.Form.agreement.fieldName,
+      });
+      this.allFields.push({
+        name: 'AgreementCheckbox',
+        type: 'checkbox',
+        label: strings.Form.agreement.fieldName,
+      });
+      this.state.AgreementCheckbox = false;
+    }
     this.state.showSubmitButton = true;
     this._animated = {
       SubmitButton: new Animated.Value(1),
