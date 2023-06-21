@@ -168,7 +168,7 @@ const reducerFilters = (state = initialStateFilters, field) => {
   if (!field) {
     return res;
   }
-  if (typeof field === 'object' && field && field?.length) {
+  if (typeof field === 'object' && get(field, 'length', false)) {
     field.map(val => {
       state[val.name] = val.value;
     });

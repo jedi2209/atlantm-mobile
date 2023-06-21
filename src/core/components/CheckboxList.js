@@ -1,11 +1,9 @@
-import React, {useReducer} from 'react';
+import React from 'react';
 import {View, StyleSheet, Text, TouchableHighlight} from 'react-native';
-import RNBounceable from '@freakycoder/react-native-bounceable';
-import {Checkbox, HStack, Pressable} from 'native-base';
+import {Checkbox, HStack} from 'native-base';
 import Imager from './Imager';
 import {get} from 'lodash';
 
-import PropTypes from 'prop-types';
 import styleConst from '../style-const';
 
 const excludeValFromSelect = list => {
@@ -89,6 +87,13 @@ const CheckboxList = ({
                   <Checkbox
                     color={checkboxColor}
                     isChecked={def.includes(id) ? true : false}
+                    isReadOnly={true}
+                    isDisabled={true}
+                    _disabled={{
+                      style: {
+                        opacity: 1,
+                      },
+                    }}
                     onChange={() => {
                       _onSelect({id});
                     }}
@@ -138,6 +143,9 @@ const styles = StyleSheet.create({
   },
 });
 
-CheckboxList.defaultProps = {};
+CheckboxList.defaultProps = {
+  selectedItems: {},
+  items: [],
+};
 
 export default CheckboxList;
