@@ -39,6 +39,7 @@ if (__DEV__) {
   LogBox.ignoreLogs([
     'NativeBase: The contrast ratio of',
     "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
+    "If you do not provide children, you must specify an aria-label for accessibility",
   ]);
   sentryParams = {
     dsn: SENTRY_DSN,
