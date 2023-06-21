@@ -228,7 +228,6 @@ class ServiceScreenNonAuth extends Component {
                 value: this.props.dealerSelected,
                 props: {
                   goBack: false,
-                  isLocal: false,
                 },
               },
               {

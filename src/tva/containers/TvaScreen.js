@@ -69,14 +69,9 @@ const TvaScreen = props => {
               name: 'DEALER',
               type: 'dealerSelect',
               label: strings.Form.field.label.dealer,
-              value:
-                dealerSelectedLocal && dealerSelectedLocal.id
-                  ? dealerSelectedLocal
-                  : dealerSelected,
+              value: dealerSelected,
               props: {
                 goBack: false,
-                isLocal: true,
-                returnScreen: navigation.state?.routeName,
               },
             },
           ],

@@ -1278,7 +1278,6 @@ class Form extends Component {
         <DealerItemList
           key={'field' + num + name}
           dealer={value}
-          isLocal={true}
           style={fieldStyle}
           {...data.props}
         />

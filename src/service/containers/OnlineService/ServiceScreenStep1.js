@@ -222,7 +222,6 @@ class ServiceScreenStep1 extends Component {
           value: this.props.dealerSelected,
           props: {
             goBack: false,
-            isLocal: false,
           },
         },
       ],
