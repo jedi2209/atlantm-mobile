@@ -266,9 +266,22 @@ class Form extends Component {
     };
     this.inputRefs = [];
     this.inputRefsNav = [];
-    let requredFields = [];
-    this.allFields = [];
+    let requredFields = [
+      {
+        name: 'AgreementCheckbox',
+        type: 'checkbox',
+        label: strings.Form.agreement.fieldName,
+      },
+    ];
+    this.allFields = [
+      {
+        name: 'AgreementCheckbox',
+        type: 'checkbox',
+        label: strings.Form.agreement.fieldName,
+      },
+    ];
 
+    this.state['AgreementCheckbox'] = false;
     this.state.showSubmitButton = true;
     this._animated = {
       SubmitButton: new Animated.Value(1),
@@ -387,6 +400,9 @@ class Form extends Component {
             break;
           case 'date':
             valid = this._validateDate(this.state[val.name]);
+            break;
+          case 'checkbox':
+            valid = this._validateCheckbox(this.state[val.name]);
             break;
           case 'component':
             valid = true;
@@ -522,6 +538,13 @@ class Form extends Component {
 
   _validateDate = date => {
     if (typeof date === 'undefined' || !date) {
+      return false;
+    }
+    return true;
+  };
+
+  _validateCheckbox = isChecked => {
+    if (typeof isChecked === 'undefined' || !isChecked) {
       return false;
     }
     return true;
@@ -1421,7 +1444,18 @@ class Form extends Component {
                   },
                 ]}>
                 {!this.props.SubmitButton.noAgreement ? (
-                  <View style={{marginBottom: 10}}>
+                  <HStack mb={1} w={'90%'}>
+                    <Checkbox
+                      onChange={isSelected => {
+                        this.onChangeField({name: 'AgreementCheckbox'})(
+                          isSelected,
+                        );
+                      }}
+                      isChecked={this.state['AgreementCheckbox'] ? true : false}
+                      defaultIsChecked={false}
+                      color={styleConst.color.blue}
+                      style={{marginRight: 10}}
+                    />
                     <Text style={styles.userAgreementText}>
                       {strings.Form.agreement.first}{' '}
                       <Text
@@ -1436,7 +1470,7 @@ class Form extends Component {
                       </Text>{' '}
                       {strings.Form.agreement.third}
                     </Text>
-                  </View>
+                  </HStack>
                 ) : null}
                 <Button
                   rightIcon={
