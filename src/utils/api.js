@@ -11,6 +11,7 @@ import {
   APP_REGION,
 } from '../core/const';
 import {strings} from '../core/lang/const';
+import {getTimestampInSeconds} from './date';
 
 const isAndroid = Platform.OS === 'android';
 const secretKey = [
@@ -23,7 +24,7 @@ const JWTToken = async () => {
   return await JWTSign(
     {
       iss: 'MobileAPP',
-      exp: Math.floor(new Date().getTime() + 60 * 1000), // expiration date, required, in ms, absolute to 1/1/1970
+      exp: (getTimestampInSeconds() + 60) * 1000, // expiration date, required, in ms, absolute to 1/1/1970
     }, // body
     secretKey,
     {
@@ -1065,8 +1066,7 @@ export default {
   async apiGetData(url, requestParams) {
     const method = requestParams.method.toString().toLowerCase();
     let body = requestParams?.body;
-    const jwtToken = await JWTToken();
-    requestParams.headers['x-auth'] = jwtToken;
+    requestParams.headers['x-auth'] = await JWTToken();
 
     if (body && typeof body === 'object') {
       if (

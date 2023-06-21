@@ -91,8 +91,15 @@ const renderTabBar = props => (
 );
 
 const _renderItem = ({item, props}) => {
-  const {isLocal, pushActionSubscribeState, goBack, navigation, selectDealer} =
-    props;
+  const {
+    isLocal,
+    pushActionSubscribeState,
+    goBack,
+    navigation,
+    selectDealer,
+    returnScreen,
+    returnState,
+  } = props;
   if (item.virtual !== false && item.id !== 177) {
     // фикс для НЕ вывода виртуальных КО в списке
     return true;
@@ -108,6 +115,8 @@ const _renderItem = ({item, props}) => {
           goBack,
           navigation,
           selectDealer,
+          returnScreen,
+          returnState,
         })
       }>
       {({isPressed}) => {
@@ -149,6 +158,8 @@ const _onPressDealerItem = ({
   goBack,
   navigation,
   selectDealer,
+  returnScreen,
+  returnState,
 }) => {
   selectDealer({
     dealerBaseData: dealerSelectedItem,
@@ -165,8 +176,21 @@ const _onPressDealerItem = ({
       } else {
         PushNotifications.unsubscribeFromTopic('actions');
       }
-      if (goBack) {
-        return navigation.goBack();
+      if (returnScreen) {
+        return navigation.navigate(
+          returnScreen,
+          returnState ? returnState : {},
+        );
+      } else {
+        if (goBack) {
+          return navigation.goBack();
+        }
+        if (!isLocal) {
+          return navigation.reset({
+            index: 0,
+            routes: [{name: 'BottomTabNavigation'}],
+          });
+        }
       }
     }
 
