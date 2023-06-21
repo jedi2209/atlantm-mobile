@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {SafeAreaView, StyleSheet, Image, View, Text} from 'react-native';
 import {Button} from 'native-base';
 
@@ -42,37 +42,38 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class IntroScreen extends Component {
-  onPressButton = () => this.props.navigation.navigate('ChooseDealerScreen');
+const IntroScreen = ({navigation}) => {
+  const onPressButton = () =>
+    navigation.navigate('ChooseDealerScreen', {goBack: false});
 
-  render() {
-    return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.logoContainer}>
-          <Image
-            style={styles.logo}
-            testID="IntroChooseDealerScreenLogo"
-            resizeMode="contain"
-            source={require('../../menu/assets/logo-horizontal-white.svg')}
-          />
-          <Button
-            size="md"
-            title={strings.IntroScreen.button}
-            testID="IntroChooseDealerButton"
-            onPress={this.onPressButton}
-            rounded={'md'}
-            style={[styleConst.shadow.default, styles.button]}
-            leftIcon={
-              <Image
-                style={styles.image}
-                resizeMode="contain"
-                source={require('../../menu/assets/Home.svg')}
-              />
-            }>
-            <Text style={styles.buttonText}>{strings.IntroScreen.button}</Text>
-          </Button>
-        </View>
-      </SafeAreaView>
-    );
-  }
-}
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image
+          style={styles.logo}
+          testID="IntroChooseDealerScreenLogo"
+          resizeMode="contain"
+          source={require('../../menu/assets/logo-horizontal-white.svg')}
+        />
+        <Button
+          size="md"
+          title={strings.IntroScreen.button}
+          testID="IntroChooseDealerButton"
+          onPress={onPressButton}
+          rounded={'md'}
+          style={[styleConst.shadow.default, styles.button]}
+          leftIcon={
+            <Image
+              style={styles.image}
+              resizeMode="contain"
+              source={require('../../menu/assets/Home.svg')}
+            />
+          }>
+          <Text style={styles.buttonText}>{strings.IntroScreen.button}</Text>
+        </Button>
+      </View>
+    </SafeAreaView>
+  );
+};
+
+export default IntroScreen;

@@ -44,19 +44,15 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
   return dispatch => {
     dispatch({
       type: DEALER__REQUEST,
-      payload: {
-        dealerBaseData,
-        dealerSelected,
-      },
     });
 
     return API.fetchDealer(dealerBaseData.id)
       .then(response => {
-        if (response.error) {
+        if (get(response, 'error') || get(response, 'status') === 'error') {
           return dispatch({
             type: DEALER__FAIL,
             payload: {
-              error: response.error.message,
+              error: get(response, 'message', 'error.message'),
             },
           });
         }

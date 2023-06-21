@@ -37,3 +37,5 @@ export const substractYears = yearsCol =>
 
 export const addDays = daysCol =>
   moment().add(daysCol, 'days').format('YYYY-MM-DD');
+
+export const getTimestampInSeconds = () => parseInt(moment().unix(), 10);

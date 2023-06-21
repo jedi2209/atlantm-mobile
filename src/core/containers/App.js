@@ -46,7 +46,7 @@ const mapStateToProps = ({core, dealer, modal}) => {
     isStoreUpdated: core.isStoreUpdated,
     modal,
     currentLanguage: core.language.selected,
-    dealer,
+    dealerSelected: dealer.selected,
   };
 };
 
@@ -61,6 +61,57 @@ const mapDispatchToProps = {
   fetchBrands,
 };
 
+const mainScreen = 'BottomTabNavigation';
+const storeVersion = '2022-09-20';
+
+const _awaitStoreToUpdate = async props => {
+  const storeData = store.getState();
+
+  const currentDealer = get(storeData, 'dealer.selected.id', false);
+  const isStoreUpdatedCurrent = get(storeData, 'core.isStoreUpdated', false);
+
+  const currentVersion = DeviceInfo.getVersion();
+  API.fetchVersion(currentVersion || null).then(res => {
+    if (res && res.settings) {
+      props.actionSettingsLoaded(res.settings);
+    }
+  });
+
+  if (currentDealer && isStoreUpdatedCurrent === storeVersion) {
+    const actionDealer = await props.fetchDealers(); // обновляем дилеров при каждом открытии прилаги
+    const currDealerItem = get(storeData, 'dealer.selected');
+    const currentDealerUpdated = await props.selectDealer({
+      dealerBaseData: currDealerItem,
+      dealerSelected: undefined,
+      isLocal: false,
+    });
+    //props.fetchBrands(); // обновляем бренды при каждом открытии прилаги
+    if (currentDealerUpdated && actionDealer && actionDealer.type) {
+      // уже всё обновлено, открываем экран автоцентра
+      return mainScreen;
+    }
+  }
+
+  try {
+    // если мы ещё не очищали стор
+    props.actionMenuOpenedCount(0);
+    const action = await props.actionStoreUpdated(storeVersion);
+    if (action && action.type) {
+      props.fetchBrands();
+      const actionDealer = await props.fetchDealers();
+      if (actionDealer && actionDealer.type) {
+        let result;
+        if (action.type === APP_STORE_UPDATED) {
+          result = 'IntroScreen';
+        }
+        return result;
+      }
+    }
+  } catch (error) {
+    console.error('_awaitStoreToUpdate error', error);
+  }
+};
+
 const App = props => {
   const [isLoading, setLoading] = useState(true);
 
@@ -68,74 +119,28 @@ const App = props => {
     auth,
     actionSetPushGranted,
     actionSetPushActionSubscribe,
-    dealer,
+    dealerSelected,
     menuOpenedCount,
     isStoreUpdated,
   } = props;
 
-  const mainScreen = 'BottomTabNavigation';
-  const storeVersion = '2022-09-20';
-
   moment.locale(APP_LANG);
-
-  const _awaitStoreToUpdate = async () => {
-    const storeData = store.getState();
-
-    const currentDealer = get(storeData, 'dealer.selected.id', false);
-    const isStoreUpdatedCurrent = get(storeData, 'core.isStoreUpdated', false);
-
-    const currentVersion = DeviceInfo.getVersion();
-    API.fetchVersion(currentVersion || null).then(res => {
-      if (res && res.settings) {
-        props.actionSettingsLoaded(res.settings);
-      }
-    });
-
-    if (currentDealer && isStoreUpdatedCurrent === storeVersion) {
-      const actionDealer = await props.fetchDealers(); // обновляем дилеров при каждом открытии прилаги
-      const currDealerItem = get(storeData, 'dealer.selected');
-      const currentDealerUpdated = await props.selectDealer({
-        dealerBaseData: currDealerItem,
-        dealerSelected: undefined,
-        isLocal: false,
-      });
-      //props.fetchBrands(); // обновляем бренды при каждом открытии прилаги
-      if (currentDealerUpdated && actionDealer && actionDealer.type) {
-        // уже всё обновлено, открываем экран автоцентра
-        return mainScreen;
-      }
-    }
-
-    try {
-      setLoading(true);
-      // если мы ещё не очищали стор
-      props.actionMenuOpenedCount(0);
-      const action = await props.actionStoreUpdated(storeVersion);
-      if (action && action.type) {
-        props.fetchBrands();
-        const actionDealer = await props.fetchDealers();
-        if (actionDealer && actionDealer.type) {
-          let result;
-          if (action.type === APP_STORE_UPDATED) {
-            result = 'IntroScreen';
-          }
-          return result;
-        }
-      }
-    } catch (error) {
-      console.error('_awaitStoreToUpdate error', error);
-    }
-  };
 
   useEffect(() => {
     NavigationService.setTopLevelNavigator(NavigationService.navigationRef);
 
-    _awaitStoreToUpdate().then(res => {
-      if (typeof res === 'undefined' || !res) {
-        res = 'IntroScreen';
-      }
-      setLoading(false);
-    });
+    setLoading(true);
+    _awaitStoreToUpdate(props)
+      .then(res => {
+        if (typeof res === 'undefined' || !res) {
+          res = 'IntroScreen';
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('_awaitStoreToUpdate error', err);
+        setLoading(false);
+      });
 
     PushNotifications.init();
 
@@ -188,7 +193,8 @@ const App = props => {
           theme={theme}
           config={{
             dependencies: {
-              'linear-gradient': require('react-native-linear-gradient').default,
+              'linear-gradient': require('react-native-linear-gradient')
+                .default,
             },
           }}>
           <NavigationContainer ref={NavigationService.navigationRef}>
