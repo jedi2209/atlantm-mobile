@@ -692,7 +692,7 @@ export default {
     return await this.request('/eko/review/post/', requestParams);
   },
 
-  carCostOrder(props) {
+  async carCostOrder(props) {
     let formData = new FormData();
 
     const formBody = _.compact([
@@ -756,8 +756,9 @@ export default {
       cnt++;
     });
 
-    const headersNew = _.merge({}, headers, {
+    let headersNew = _.merge({}, headers, {
       'Content-Type': 'multipart/form-data; ',
+      'x-auth': await JWTToken(),
     });
 
     // `${API_MAIN_URL}/orders/usedbuy/post/`,
