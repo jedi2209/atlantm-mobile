@@ -520,7 +520,6 @@ const LoginScreen = props => {
                   fields={FormConfig.fields}
                   SubmitButton={{
                     text: strings.Form.button.receiveCode,
-                    noAgreement: true,
                     rightIcon: <Icon name="sms" as={MaterialIcons} />,
                   }}
                   onSubmit={_verifyCode}
