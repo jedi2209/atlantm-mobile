@@ -31,6 +31,7 @@ const SingleCheckboxType = props => {
             {props.title}
           </Text>
           <Checkbox
+            aria-label={props.title}
             isChecked={props.isChecked}
             color="warmGray.50"
             _dark={{

@@ -118,6 +118,7 @@ const ReviewAddRatingStepScreen = props => {
     return (
       <View py={5} backgroundColor="white" px={3}>
         <Checkbox
+          aria-label={strings.ReviewAddRatingStepScreen.approve}
           isChecked={isChecked}
           onChange={() => setPublicAgree(!isChecked)}>
           {strings.ReviewAddRatingStepScreen.approve}

@@ -85,6 +85,7 @@ const CheckboxList = ({
                 <HStack justifyContent="space-between">
                   <Text style={styles.text}>{text}</Text>
                   <Checkbox
+                    aria-label={text}
                     color={checkboxColor}
                     isChecked={def.includes(id) ? true : false}
                     isReadOnly={true}

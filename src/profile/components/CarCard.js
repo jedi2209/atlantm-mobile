@@ -94,6 +94,7 @@ export const CarCard = ({data, type, checked, onPress, disabled}) => {
         <TouchableWithoutFeedback containerStyle={styles.checkboxContainer}>
           <View>
             <Checkbox
+              aria-label="Car selected"
               onChange={() => {
                 if (onPress) {
                   return onPress();

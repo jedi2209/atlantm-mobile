@@ -41,6 +41,12 @@ import {
 } from '../../const';
 
 import {strings} from '../../lang/const';
+import {
+  validateCheckbox,
+  validateDate,
+  validateDateTime,
+  validateEmail,
+} from './formValidate';
 
 const platformStyle = {
   ios: {
@@ -394,16 +400,16 @@ class Form extends Component {
         valid = true;
         switch (val.type.toLowerCase()) {
           case 'email':
-            valid = this._validateEmail(this.state[val.name]);
+            valid = validateEmail(this.state[val.name]);
             break;
           case 'datetime':
-            valid = this._validateDateTime(this.state[val.name]);
+            valid = validateDateTime(this.state[val.name]);
             break;
           case 'date':
-            valid = this._validateDate(this.state[val.name]);
+            valid = validateDate(this.state[val.name]);
             break;
           case 'checkbox':
-            valid = this._validateCheckbox(this.state[val.name]);
+            valid = validateCheckbox(this.state[val.name]);
             break;
           case 'component':
             valid = true;
@@ -433,13 +439,13 @@ class Form extends Component {
         // проверка любых полей, если они заполнены
         switch (val.type.toLowerCase()) {
           case 'email':
-            valid = this._validateEmail(this.state[val.name]);
+            valid = validateEmail(this.state[val.name]);
             break;
           case 'datetime':
-            valid = this._validateDateTime(this.state[val.name]);
+            valid = validateDateTime(this.state[val.name]);
             break;
           case 'date':
-            valid = this._validateDate(this.state[val.name]);
+            valid = validateDate(this.state[val.name]);
             break;
           case 'component':
             valid = true;
@@ -502,50 +508,6 @@ class Form extends Component {
           },
         });
       }
-      return false;
-    }
-    return true;
-  };
-
-  //returns true if valid, false if not valid
-  _validateEmail = email => {
-    var re =
-      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Zа-яА-Я\-0-9]+\.)+[a-zA-Zа-яА-Я]{2,}))$/;
-    switch (typeof email) {
-      case 'object':
-        for (const [key, data] of Object.entries(email)) {
-          if (data && data.value) {
-            return re.test(data.value);
-          } else {
-            return false;
-          }
-        }
-        break;
-      case 'string':
-        return re.test(email);
-    }
-  };
-
-  _validateDateTime = dateTime => {
-    if (typeof dateTime === 'undefined' || !dateTime) {
-      return false;
-    }
-    if (!dateTime.noTimeAlways) {
-      return dateTime.date && dateTime.time;
-    } else {
-      return typeof dateTime.date !== 'undefined';
-    }
-  };
-
-  _validateDate = date => {
-    if (typeof date === 'undefined' || !date) {
-      return false;
-    }
-    return true;
-  };
-
-  _validateCheckbox = isChecked => {
-    if (typeof isChecked === 'undefined' || !isChecked) {
       return false;
     }
     return true;
@@ -840,7 +802,7 @@ class Form extends Component {
           style={[
             styles.field,
             data.props && data.props.required
-              ? this.state[name] && this._validateEmail(value)
+              ? this.state[name] && validateEmail(value)
                 ? styles.fieldRequiredTrue
                 : styles.fieldRequiredFalse
               : {},
@@ -1385,6 +1347,7 @@ class Form extends Component {
               {label}
             </Text>
             <Checkbox
+              aria-label={label}
               onChange={() => {
                 this.onChangeField(data)(!this.state[name]);
               }}
@@ -1451,6 +1414,11 @@ class Form extends Component {
                     rounded={4}
                     backgroundColor={styleConst.color.white}>
                     <Checkbox
+                      aria-label={
+                        strings.Form.agreement.first +
+                        strings.Form.agreement.second +
+                        strings.Form.agreement.third
+                      }
                       onChange={isSelected => {
                         this.onChangeField({name: 'AgreementCheckbox'})(
                           isSelected,
@@ -1504,12 +1472,16 @@ class Form extends Component {
                       }
                       if (this._validate()) {
                         this.setState({loading: true});
-                        var promise = new Promise((resolve, reject) => {
-                          return this.props.onSubmit(this.state).then(data => {
-                            resolve(data);
-                          });
-                        });
-                        await promise
+                        const formSendRequest = new Promise(
+                          (resolve, reject) => {
+                            return this.props
+                              .onSubmit(this.state)
+                              .then(data => {
+                                resolve(data);
+                              });
+                          },
+                        );
+                        await formSendRequest
                           .then(data => {
                             this.setState({loading: false});
                             return data;
