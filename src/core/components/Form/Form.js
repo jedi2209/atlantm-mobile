@@ -240,6 +240,7 @@ class Form extends Component {
       text: strings.Form.button.send,
       props: {},
       region: APP_REGION,
+      noAgreement: false,
     },
     region: APP_REGION,
     testID: 'Form',
@@ -1443,7 +1444,12 @@ class Form extends Component {
                   },
                 ]}>
                 {!this.props.SubmitButton.noAgreement ? (
-                  <HStack mb={1} w={'90%'}>
+                  <HStack
+                    mb={1}
+                    justifyContent={'space-between'}
+                    padding={2}
+                    rounded={4}
+                    backgroundColor={styleConst.color.white}>
                     <Checkbox
                       onChange={isSelected => {
                         this.onChangeField({name: 'AgreementCheckbox'})(
@@ -1453,9 +1459,12 @@ class Form extends Component {
                       isChecked={this.state['AgreementCheckbox'] ? true : false}
                       defaultIsChecked={false}
                       color={styleConst.color.blue}
-                      style={{marginRight: 10}}
                     />
-                    <Text style={styles.userAgreementText}>
+                    <Text
+                      style={[
+                        styles.userAgreementText,
+                        {marginLeft: 10, flex: 1},
+                      ]}>
                       {strings.Form.agreement.first}{' '}
                       <Text
                         style={[
