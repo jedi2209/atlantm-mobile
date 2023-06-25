@@ -60,7 +60,7 @@ const FullScreenGallery = ({
   });
 
   if (loading) {
-    return <LogoLoader />;
+    return <LogoLoader mode={'relative'} />;
   }
 
   return (

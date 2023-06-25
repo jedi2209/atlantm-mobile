@@ -1,13 +1,6 @@
 import React, {useRef, useState, useEffect} from 'react';
 import Carousel from 'react-native-snap-carousel';
-import {
-  View,
-  Dimensions,
-  StyleSheet,
-  Platform,
-  Text,
-  Pressable,
-} from 'react-native';
+import {View, Dimensions, StyleSheet, Platform, Pressable} from 'react-native';
 import {Button, HStack, Icon, VStack} from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
