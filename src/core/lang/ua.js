@@ -220,6 +220,7 @@ export default {
         power: {
           hp: 'Потужність',
         },
+        torque: 'Макс.крутний момент',
       },
       gearbox: {
         title: 'Трансмісія',
@@ -256,6 +257,7 @@ export default {
       milimetrs: 'мм.',
       hp: 'к.с.',
       year: 'р.в.',
+      torque: 'Нм',
     },
     complectation: {
       title: 'Комплектація',
