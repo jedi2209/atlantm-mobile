@@ -173,6 +173,7 @@ const BrandModelFilterScreen = ({
                 <Text style={styles.colorText}>{node.label}</Text>
               </HStack>
               <Checkbox
+                aria-label={node.label}
                 onChange={() => {
                   let typeTmp = 'add';
                   if (brandFilter[node.id]) {
@@ -194,6 +195,7 @@ const BrandModelFilterScreen = ({
           <View style={styles[`nestedRow${level}Inner`]}>
             <Text style={{fontSize: 14}}>{node.label}</Text>
             <Checkbox
+              aria-label={node.label}
               onChange={() => {
                 let typeTmp = 'add';
                 if (modelFilter[node.id]) {

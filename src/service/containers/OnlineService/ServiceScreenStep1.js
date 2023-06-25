@@ -679,6 +679,9 @@ class ServiceScreenStep1 extends Component {
                               </Text>
                             </Text>
                             <Checkbox
+                              aria-label={
+                                strings.ServiceScreenStep1.priceRecommended
+                              }
                               onChange={() => {
                                 this.setState({
                                   recommended: !this.state.recommended,
