@@ -727,6 +727,11 @@ const NewCarItemScreen = ({
                 value: 'power.hp',
                 postfix: strings.NewCarItemScreen.shortUnits.hp,
               },
+              {
+                name: strings.NewCarItemScreen.tech.engine.torque,
+                value: 'engine.torque',
+                postfix: strings.NewCarItemScreen.shortUnits.torque,
+              },
             ],
             carDetails,
           )}
