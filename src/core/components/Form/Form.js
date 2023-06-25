@@ -11,7 +11,15 @@ import {
   Pressable,
 } from 'react-native';
 
-import {Text, Button, Switch, Toast, Checkbox, HStack} from 'native-base';
+import {
+  Text,
+  Button,
+  Switch,
+  Toast,
+  ToastRef,
+  Checkbox,
+  HStack,
+} from 'native-base';
 import ToastAlert from '../ToastAlert';
 import {get} from 'lodash';
 import {connect} from 'react-redux';
@@ -277,6 +285,7 @@ class Form extends Component {
     this.allFields = [];
 
     if (!this.props.SubmitButton.noAgreement) {
+      this.inputRefs['AgreementCheckbox'] = React.createRef();
       requredFields.push({
         name: 'AgreementCheckbox',
         type: 'checkbox',
@@ -473,6 +482,7 @@ class Form extends Component {
             return (
               <ToastAlert
                 id={id}
+                ref={React.createRef(ToastRef)}
                 status="warning"
                 duration={3000}
                 description={
@@ -493,6 +503,7 @@ class Form extends Component {
             return (
               <ToastAlert
                 id={id}
+                ref={React.createRef(ToastRef)}
                 status="warning"
                 duration={3000}
                 description={
