@@ -1459,6 +1459,7 @@ class Form extends Component {
                       isChecked={this.state['AgreementCheckbox'] ? true : false}
                       defaultIsChecked={false}
                       color={styleConst.color.blue}
+                      isDisabled={this.state.loading}
                     />
                     <Text
                       style={[
