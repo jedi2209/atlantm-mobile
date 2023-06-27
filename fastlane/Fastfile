@@ -139,7 +139,7 @@ platform :android do
     )
     gradle(
         project_dir: "./android/",
-        tasks: ["clean", "bundle"],
+        task: "clean bundle",
         build_type: "Release",
         flags: "-PbuildType=debug",
         print_command_output: true
@@ -161,7 +161,7 @@ platform :android do
     )
     gradle(
         project_dir: "./android/",
-        tasks: ["clean", "bundle"],
+        task: "clean bundle",
         build_type: "Release",
         flags: "-PbuildType=release",
         print_command_output: true
