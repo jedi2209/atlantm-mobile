@@ -1,17 +1,15 @@
 /* eslint-disable react/no-did-update-set-state */
 /* eslint-disable react-native/no-inline-styles */
-import React, {PureComponent} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Alert, StyleSheet} from 'react-native';
 // redux
 import {connect} from 'react-redux';
-import {get} from 'lodash';
 import {CALL_ME__SUCCESS, CALL_ME__FAIL} from '../../contacts/actionTypes';
 import * as NavigationService from '../../navigation/NavigationService';
 import Analytics from '../../utils/amplitude-analytics';
 
 import Form from '../../core/components/Form/Form';
 
-import {localUserDataUpdate} from '../../profile/actions';
 import {localDealerClear} from '../../dealer/actions';
 
 import {ERROR_NETWORK} from '../../core/const';
@@ -41,96 +39,38 @@ const mapStateToProps = ({dealer, profile, contacts, nav}) => {
 };
 
 const mapDispatchToProps = {
-  localUserDataUpdate,
   localDealerClear,
   callMe,
 };
 
 let isInternet = null;
-class CallMeBackScreen extends PureComponent {
-  constructor(props) {
-    super(props);
 
-    let dealerCustom = null;
+const CallMeBackScreen = ({
+  dealerSelected,
+  dealerSelectedLocal,
+  route,
+  phone,
+  firstName,
+  callMe,
+  localDealerClear,
+}) => {
+  const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
 
-    if (this.props.route?.params && this.props.route.params?.dealerCustom) {
-      dealerCustom = this.props.route?.params?.dealerCustom;
+  useEffect(() => {
+    if (route?.params && route.params?.dealerCustom) {
+      setDealerSelectedLocal(route?.params?.dealerCustom);
     }
-
-    this.state = {
-      loading: false,
-      success: false,
-      dealerSelectedLocal: dealerCustom
-        ? dealerCustom
-        : this.props.dealerSelected,
+    setDealerSelectedLocal(dealerSelected);
+    return () => {
+      localDealerClear();
     };
-    this.props.localDealerClear();
+  }, []);
 
-    this.FormConfig = {
-      fields: {
-        groups: [
-          {
-            name: strings.Form.group.dealer,
-            fields: [
-              {
-                name: 'DEALER',
-                type: 'dealerSelect',
-                label: strings.Form.group.dealer,
-                value: this.props.dealerSelected,
-                props: {
-                  goBack: false,
-                },
-              },
-            ],
-          },
-          {
-            name: strings.Form.group.contacts,
-            fields: [
-              {
-                name: 'PHONE',
-                type: 'phone',
-                label: strings.Form.field.label.phone,
-                value: this.props.phone,
-                props: {
-                  required: true,
-                },
-              },
-              {
-                name: 'NAME',
-                type: 'input',
-                label: strings.Form.field.label.name,
-                value: this.props.firstName,
-                props: {
-                  required: false,
-                  textContentType: 'name',
-                },
-              },
-            ],
-          },
-        ],
-      },
-    };
-  }
+  useEffect(() => {
+    setDealerSelectedLocal(dealerSelectedLocal);
+  }, [dealerSelectedLocal]);
 
-  componentDidUpdate(prevProps) {
-    if (
-      this.props.dealerSelectedLocal &&
-      this.state.dealerSelectedLocal &&
-      this.props.dealerSelectedLocal.id !== this.state.dealerSelectedLocal.id
-    ) {
-      this.setState(
-        {
-          dealerSelectedLocal: this.props.dealerSelectedLocal,
-        },
-        () => {
-          return true;
-        },
-      );
-    }
-    return false;
-  }
-
-  onPressCallMe = async props => {
+  const _onPressCallMe = async () => {
     if (isInternet == null) {
       isInternet = require('../../utils/internet').default;
     }
@@ -140,35 +80,32 @@ class CallMeBackScreen extends PureComponent {
     }
 
     let actionID = null;
-    if (this.props.route?.params && this.props.route.params?.actionID) {
-      actionID = this.props.route?.params?.actionID;
+    if (route?.params && route.params?.actionID) {
+      actionID = route?.params?.actionID;
     }
 
     let carID = null;
 
-    if (this.props.route?.params && this.props.route.params?.carId) {
-      carID = this.props.route?.params?.carId;
+    if (route?.params && route.params?.carId) {
+      carID = route?.params?.carId;
     }
 
-    this.setState({loading: true});
+    let dealerID = dealerSelected.id;
 
-    const dealerID = this.state.dealerSelectedLocal.id;
+    if (dealerSelectedLocalState) {
+      dealerID = dealerSelectedLocalState.id;
+    }
 
-    const action = await this.props.callMe({
+    const action = await callMe({
       dealerID,
-      name: props.NAME || '',
+      name: firstName || '',
       actionID,
       carID,
-      phone: get(props, 'PHONE', ''),
+      phone: phone || '',
     });
 
     if (action.type === CALL_ME__SUCCESS) {
-      const _this = this;
       Analytics.logEvent('order', 'contacts/callme');
-      _this.props.localUserDataUpdate({
-        NAME: props.NAME,
-        PHONE: props.PHONE,
-      });
       Alert.alert(
         strings.Notifications.success.title,
         strings.Notifications.success.textOrder,
@@ -176,7 +113,7 @@ class CallMeBackScreen extends PureComponent {
           {
             text: 'ОК',
             onPress: () => {
-              if (this.props.route?.params && this.props.route.params?.goBack) {
+              if (route?.params && route.params?.goBack) {
                 NavigationService.goBack();
               } else {
                 NavigationService.reset();
@@ -185,11 +122,9 @@ class CallMeBackScreen extends PureComponent {
           },
         ],
       );
-      this.setState({success: true, loading: false});
     }
 
     if (action.type === CALL_ME__FAIL) {
-      this.setState({loading: false});
       setTimeout(
         () =>
           Alert.alert(
@@ -201,27 +136,91 @@ class CallMeBackScreen extends PureComponent {
     }
   };
 
-  render() {
-    return (
-      <Form
-        contentContainerStyle={{
-          paddingHorizontal: 14,
-          marginTop: 20,
-        }}
-        keyboardAvoidingViewProps={{
-          enableAutomaticScroll: false,
-        }}
-        key="CallMeBackForm"
-        fields={this.FormConfig.fields}
-        barStyle={'light-content'}
-        SubmitButton={{
-          text: strings.CallMeBackScreen.button,
-        }}
-        onSubmit={this.onPressCallMe}
-      />
-    );
-  }
-}
+  const FormConfig = {
+    fields: {
+      groups: [
+        {
+          name: strings.Form.group.dealer,
+          fields: [
+            {
+              name: 'DEALER',
+              type: 'dealerSelect',
+              label: strings.Form.group.dealer,
+              value: dealerSelectedLocalState || dealerSelected,
+              props: {
+                goBack: true,
+                isLocal: true,
+              },
+            },
+          ],
+        },
+        {
+          name: strings.Form.group.contacts,
+          fields: [
+            {
+              name: 'PHONE',
+              type: 'phone',
+              label: strings.Form.field.label.phone,
+              value: phone,
+              props: {
+                required: true,
+              },
+            },
+            {
+              name: 'NAME',
+              type: 'input',
+              label: strings.Form.field.label.name,
+              value: firstName,
+              props: {
+                required: false,
+                textContentType: 'name',
+              },
+            },
+          ],
+        },
+      ],
+    },
+  };
+
+  return (
+    <Form
+      contentContainerStyle={{
+        paddingHorizontal: 14,
+        marginTop: 20,
+      }}
+      keyboardAvoidingViewProps={{
+        enableAutomaticScroll: false,
+      }}
+      key="CallMeBackForm"
+      fields={FormConfig.fields}
+      barStyle={'light-content'}
+      SubmitButton={{
+        text: strings.CallMeBackScreen.button,
+      }}
+      onSubmit={_onPressCallMe}
+    />
+  );
+};
+
+// shouldComponentUpdate(nextProps, nextState) {
+//   if (
+//     this.props.dealerSelectedLocal &&
+//     this.props.dealerSelectedLocal.id !== nextProps.dealerSelectedLocal.id
+//   ) {
+//     alert(1);
+//     this.setState(
+//       {
+//         dealerSelectedLocal: nextProps.dealerSelectedLocal.id,
+//       },
+//       () => {
+//         return true;
+//       },
+//     );
+//   } else {
+//     alert(2);
+//     return false;
+//   }
+// }
 
 const styles = StyleSheet.create({
   wrapper: {
