@@ -258,6 +258,7 @@ export default {
       hp: 'к.с.',
       year: 'р.в.',
       torque: 'Нм',
+      speed: 'км/год',
     },
     complectation: {
       title: 'Комплектація',
@@ -833,6 +834,7 @@ export default {
       11: 'DSG',
       12: 'Робот',
       13: 'Варіатор',
+      14: 'Редуктор',
     },
     body: {
       1: 'Хетчбек',

@@ -224,7 +224,7 @@ const SettingsScreen = props => {
               <Text
                 selectable={false}
                 style={[styles.langHeading, {fontSize: 20, lineHeight: 20}]}>
-                {strings.SettingsScreen.mailtoUs}
+                {strings.SettingsScreen.rateAppTitle}
               </Text>
               <Icon
                 size={55}

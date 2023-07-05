@@ -258,6 +258,7 @@ export default {
       hp: 'л.с.',
       year: 'г.в.',
       torque: 'Нм',
+      speed: 'км/ч',
     },
     complectation: {
       title: 'Комплектация',

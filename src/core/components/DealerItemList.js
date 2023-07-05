@@ -95,7 +95,7 @@ const DealerItemList = props => {
       shadow={'1'}
       style={[stylesDealerItemList.wrapper, style]}
       onPress={() => {
-        return _onPressDealer({props, navigation});
+        return _onPressDealer({...props, navigation});
       }}>
       <HStack space={3} justifyContent="space-between" alignItems="center">
         {city && city.name ? (

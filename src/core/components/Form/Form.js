@@ -249,25 +249,6 @@ const MaskedPhone = {
 };
 
 class Form extends Component {
-  static defaultProps = {
-    SubmitButton: {
-      text: strings.Form.button.send,
-      props: {},
-      region: APP_REGION,
-      noAgreement: false,
-    },
-    region: APP_REGION,
-    testID: 'Form',
-    barStyle: 'light-content',
-    contentContainerStyle: {},
-    formScrollViewStyle: {
-      flex: 1,
-      backgroundColor: '#eee',
-      paddingBottom: 0,
-    },
-    keyboardAvoidingViewProps: {},
-  };
-
   constructor(props) {
     super(props);
     this.defaultCountryCode =
@@ -284,7 +265,7 @@ class Form extends Component {
     let requredFields = [];
     this.allFields = [];
 
-    if (!this.props.SubmitButton.noAgreement) {
+    if (!this.props.SubmitButton.noAgreement && APP_REGION !== UKRAINE) {
       this.inputRefs['AgreementCheckbox'] = React.createRef();
       requredFields.push({
         name: 'AgreementCheckbox',
@@ -1424,22 +1405,27 @@ class Form extends Component {
                     padding={2}
                     rounded={4}
                     backgroundColor={styleConst.color.white}>
-                    <Checkbox
-                      aria-label={
-                        strings.Form.agreement.first +
-                        strings.Form.agreement.second +
-                        strings.Form.agreement.third
-                      }
-                      onChange={isSelected => {
-                        this.onChangeField({name: 'AgreementCheckbox'})(
-                          isSelected,
-                        );
-                      }}
-                      isChecked={this.state['AgreementCheckbox'] ? true : false}
-                      defaultIsChecked={false}
-                      color={styleConst.color.blue}
-                      isDisabled={this.state.loading}
-                    />
+                    {APP_REGION !== UKRAINE ? (
+                      <Checkbox
+                        aria-label={
+                          strings.Form.agreement.first +
+                          strings.Form.agreement.second +
+                          strings.Form.agreement.third
+                        }
+                        onChange={isSelected => {
+                          this.onChangeField({name: 'AgreementCheckbox'})(
+                            isSelected,
+                          );
+                        }}
+                        isChecked={
+                          this.state['AgreementCheckbox'] ? true : false
+                        }
+                        defaultIsChecked={false}
+                        color={styleConst.color.blue}
+                        isDisabled={this.state.loading}
+                        {...this.props.AgreementCheckbox}
+                      />
+                    ) : null}
                     <Text
                       style={[
                         styles.userAgreementText,
@@ -1533,5 +1519,24 @@ class Form extends Component {
     return res;
   }
 }
+
+Form.defaultProps = {
+  SubmitButton: {
+    text: strings.Form.button.send,
+    props: {},
+    region: APP_REGION,
+    noAgreement: false,
+  },
+  region: APP_REGION,
+  testID: 'Form',
+  barStyle: 'light-content',
+  contentContainerStyle: {},
+  formScrollViewStyle: {
+    flex: 1,
+    backgroundColor: '#eee',
+    paddingBottom: 0,
+  },
+  keyboardAvoidingViewProps: {},
+};
 
 export default connect(mapStateToProps, {})(Form);
