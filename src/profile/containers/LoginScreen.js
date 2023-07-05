@@ -521,7 +521,17 @@ const LoginScreen = props => {
                   SubmitButton={{
                     text: strings.Form.button.receiveCode,
                     rightIcon: <Icon name="sms" as={MaterialIcons} />,
+                    noAgreement: false,
                   }}
+                  AgreementCheckbox={
+                    APP_REGION === UKRAINE
+                      ? {
+                          defaultIsChecked: true,
+                          isDisabled: true,
+                          isChecked: true,
+                        }
+                      : {}
+                  }
                   onSubmit={_verifyCode}
                 />
               )}

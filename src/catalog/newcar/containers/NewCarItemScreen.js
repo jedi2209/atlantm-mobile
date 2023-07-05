@@ -797,7 +797,7 @@ const NewCarItemScreen = ({
               {
                 name: strings.NewCarItemScreen.techData.maxSpeed,
                 value: 'engine.speedmax',
-                postfix: 'км/ч.',
+                postfix: strings.NewCarItemScreen.shortUnits.speed,
               },
               {
                 name: strings.NewCarItemScreen.techData.dispersal,

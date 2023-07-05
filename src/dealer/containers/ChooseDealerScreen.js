@@ -171,10 +171,12 @@ const _onPressDealerItem = ({
       action &&
       [DEALER__SUCCESS, DEALER__SUCCESS__LOCAL].includes(action.type)
     ) {
-      if (pushActionSubscribeState) {
-        PushNotifications.subscribeToTopic('actions', newDealer.id);
-      } else {
-        PushNotifications.unsubscribeFromTopic('actions');
+      if (action.type === DEALER__SUCCESS) {
+        if (pushActionSubscribeState) {
+          PushNotifications.subscribeToTopic('actions', newDealer.id);
+        } else {
+          PushNotifications.unsubscribeFromTopic('actions');
+        }
       }
       if (returnScreen) {
         return navigation.navigate(
