@@ -99,13 +99,14 @@ platform :ios do
       content_image: "./ios/atlantm/Images.xcassets/AppIcon.appiconset/AppStore Icon.png"
     )
     commit_version_bump(
-        message: "[fastlane][ios] Updated build number",    # create a commit with a custom message
+        message: "[fastlane][ios] Updated build number #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]})",    # create a commit with a custom message
         xcodeproj: ENV['XCODE_PROJ'],
         force: true
     )
     add_git_tag(
         grouping: "builds",
-        prefix: "v"
+        prefix: "v",
+        postfix: lane_context[SharedValues::BUILD_NUMBER]
     )
     push_to_git_remote(
       remote: "origin",         # optional, default: "origin"
