@@ -1,228 +1,152 @@
-import React, { Component } from 'react';
-import { StyleSheet, SafeAreaView } from 'react-native';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, View, StatusBar, ActivityIndicator} from 'react-native';
+import {Icon, Fab} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // redux
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
-  actionFetchUsedCar,
-  actionSetUsedCarCity,
-  actionShowPriceFilter,
-  actionHidePriceFilter,
-  actionResetUsedCarList,
-  actionSelectUsedCarPriceRange,
-  actionSetNeedUpdateUsedCarList,
-  actionSetStopNeedUpdateUsedCarList,
+  actionFetchUsedCarByFilter,
+  actionSaveUsedCarFilters,
 } from '../../actions';
 
 // components
-import FooterFilter from '../components/FooterFilter';
-import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import CarList from '../../components/CarList';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 // helpers
-import Amplitude from '../../../utils/amplitude-analytics';
-import { get } from 'lodash';
+import Analytics from '../../../utils/amplitude-analytics';
+import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
-import declOfNum from '../../../utils/decl-of-num';
-import { EVENT_DEFAULT } from '../../actionTypes';
+import {EVENT_REFRESH} from '../../../core/actionTypes';
 
 const styles = StyleSheet.create({
-  safearea: {
+  content: {
     flex: 1,
-    backgroundColor: styleConst.color.header,
+    backgroundColor: styleConst.color.bg,
   },
 });
 
-const mapStateToProps = ({ dealer, nav, catalog }) => {
+const mapStateToProps = ({dealer, catalog}) => {
   return {
-    nav,
-    city: catalog.usedCar.city,
     items: catalog.usedCar.items,
-    total: catalog.usedCar.total,
     pages: catalog.usedCar.pages,
     prices: catalog.usedCar.prices,
-    priceRange: catalog.usedCar.priceRange,
-    needUpdate: catalog.usedCar.meta.needUpdate,
     isFetchItems: catalog.usedCar.meta.isFetchItems,
-    isPriceFilterShow: catalog.usedCar.meta.isPriceFilterShow,
     dealerSelected: dealer.selected,
+    filters: catalog.usedCar.filters,
   };
 };
 
-const mapDispatchToProps = {
-  actionFetchUsedCar,
-  actionSetUsedCarCity,
-  actionShowPriceFilter,
-  actionHidePriceFilter,
-  actionResetUsedCarList,
-  actionSelectUsedCarPriceRange,
-  actionSetNeedUpdateUsedCarList,
-  actionSetStopNeedUpdateUsedCarList,
+const UsedCarListScreen = ({
+  pages,
+  prices,
+  isFetchItems,
+  navigation,
+  route,
+  actionFetchUsedCarByFilter,
+  actionSaveUsedCarFilters,
+  dealerSelected,
+  filters,
+  items,
+}) => {
+  const [loading, setLoading] = useState(false);
+
+  const fabEnable = dealerSelected.region === 'by' ? true : false;
+
+  const _fetchUsedCar = type => {
+    if (type === EVENT_REFRESH) {
+      setLoading(true);
+    }
+
+    return actionFetchUsedCarByFilter({
+      type,
+      city: dealerSelected.city[0].id,
+      region: dealerSelected.region,
+      nextPage: pages?.next || null,
+      filters: filters.filters,
+      sortBy: filters.sorting.sortBy,
+      sortDirection: filters.sorting.sortDirection,
+    }).then(res => {
+      return setTimeout(() => {
+        setLoading(false);
+        navigation.setParams({
+          total: get(items, 'total', get(res, 'payload.total')),
+        });
+      }, 150);
+    });
+  };
+
+  useEffect(() => {
+    _fetchUsedCar(EVENT_REFRESH);
+  }, [filters.sorting?.sortDirection, filters.sorting?.sortBy]);
+
+  useEffect(() => {
+    actionSaveUsedCarFilters({
+      filters: filters.filters,
+      sorting: {
+        sortBy: route?.params?.sortBy,
+        sortDirection: route?.params?.sortDirection,
+      },
+    });
+  }, [route.params.sortDirection, route.params.sortBy]);
+
+  // Аналогично componentDidMount и componentDidUpdate:
+  useEffect(() => {
+    console.info('== UsedCarListScreen ==');
+    Analytics.logEvent('screen', 'catalog/usedcar/list');
+  }, [dealerSelected.city[0].id]);
+
+  return (
+    <View style={styles.content} testID="UserCarListSreen.Wrapper">
+      <StatusBar hidden />
+      {loading ? (
+        <LogoLoader />
+      ) : (
+        <>
+          <CarList
+            data={items}
+            pages={pages}
+            prices={prices}
+            itemScreen="UsedCarItemScreen"
+            dataHandler={_fetchUsedCar}
+            dealerSelected={dealerSelected}
+            isFetchItems={isFetchItems}
+          />
+          {fabEnable ? (
+            <Fab
+              renderInPortal={false}
+              size="sm"
+              style={{backgroundColor: styleConst.new.blueHeader}}
+              shadow={2}
+              onPress={() =>
+                navigation.navigate('ChatScreen', {
+                  prevScreen: 'Список б/у авто',
+                })
+              }
+              icon={
+                <Icon
+                  size={7}
+                  as={Ionicons}
+                  name="chatbox-outline"
+                  color="warmGray.50"
+                  _dark={{
+                    color: 'warmGray.50',
+                  }}
+                />
+              }
+            />
+          ) : null}
+        </>
+      )}
+    </View>
+  );
 };
 
-class UserCarListScreen extends Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = { total: {} } } = navigation.state;
-    const count = params.total.count;
-    const titleVariants = ['автомобиль', 'автомобиля', 'автомобилей'];
+const mapDispatchToProps = {
+  actionFetchUsedCarByFilter,
+  actionSaveUsedCarFilters,
+};
 
-    return {
-      headerTitle: count ? `${count} ${declOfNum(count, titleVariants)}` : null,
-      headerStyle: stylesHeader.common,
-      headerTitleStyle: stylesHeader.title,
-      headerLeft: <HeaderIconBack navigation={navigation} />,
-      headerRight: <HeaderIconMenu navigation={navigation} />,
-    };
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.props.navigation.setParams({ total: this.props.total });
-    }, 200);
-
-    Amplitude.logEvent('screen', 'catalog/usedcar');
-  }
-
-  componentDidUpdate() {
-    const {
-      total,
-      navigation,
-      needUpdate,
-      isFetchItems,
-      actionSetStopNeedUpdateUsedCarList,
-    } = this.props;
-
-    if (needUpdate && !isFetchItems) {
-      this.fetchUsedCar('default')
-        .then(() => {
-          actionSetStopNeedUpdateUsedCarList();
-          setTimeout(() => {
-            this.props.navigation.setParams({ total: this.props.total });
-          }, 200);
-        });
-    }
-  }
-
-  shouldComponentUpdate(nextProps) {
-    const {
-      city,
-      total,
-      items,
-      needUpdate,
-      isFetchItems,
-      dealerSelected,
-      isPriceFilterShow,
-    } = this.props;
-
-    const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'UserCarListScreen';
-
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      (items.length !== nextProps.items.length) ||
-      (isFetchItems !== nextProps.isFetchItems) ||
-      (total.count !== nextProps.total.count) ||
-      (isPriceFilterShow !== nextProps.isPriceFilterShow) ||
-      (city.id !== nextProps.city.id) ||
-      (needUpdate !== nextProps.needUpdate);
-  }
-
-  fetchUsedCar = (type, priceRangeFromFilter) => {
-    const {
-      city,
-      total,
-      pages,
-      priceRange,
-      navigation,
-      actionFetchUsedCar,
-    } = this.props;
-
-    return actionFetchUsedCar({
-      type,
-      priceRange: priceRangeFromFilter || priceRange,
-      city: city.id,
-      nextPage: pages.next,
-    })
-      .then(() => {
-        return setTimeout(() => {
-          this.props.navigation.setParams({ total: this.props.total });
-        }, 100);
-      });
-  }
-
-  onPressCity = () => {
-    const { navigation } = this.props;
-    const returnScreenKey = navigation.state.key;
-    navigation.navigate('UsedCarCityScreen', { returnScreen: returnScreenKey });
-  }
-
-  onPressPrice = () => {
-    this.props.actionShowPriceFilter();
-  }
-
-  onClosePrice = (priceRange) => {
-    const {
-      fetchUsedCar,
-      actionHidePriceFilter,
-      actionResetUsedCarList,
-      actionSelectUsedCarPriceRange,
-      actionSetNeedUpdateUsedCarList,
-    } = this.props;
-
-    actionHidePriceFilter();
-
-    if (priceRange) {
-      actionResetUsedCarList();
-      actionSetNeedUpdateUsedCarList();
-      actionSelectUsedCarPriceRange(priceRange);
-      this.fetchUsedCar(EVENT_DEFAULT, priceRange);
-    }
-  }
-
-  render() {
-    const {
-      items,
-      pages,
-      prices,
-      navigation,
-      priceRange,
-      isFetchItems,
-      dealerSelected,
-    } = this.props;
-
-    const showPriceFilterIcon = get(items, '0.type') !== 'empty';
-
-    console.log('== UsedCarListScreen ==');
-
-    return (
-      <SafeAreaView style={styles.safearea}>
-        <CarList
-          items={items}
-          pages={pages}
-          prices={prices}
-          itemScreen="UsedCarItemScreen"
-          dataHandler={this.fetchUsedCar}
-          dealerSelected={dealerSelected}
-          isFetchItems={isFetchItems}
-          navigation={navigation}
-        />
-
-        <FooterFilter
-          showPriceFilterIcon={showPriceFilterIcon}
-          currency={get(prices, 'curr.name')}
-          min={prices.min}
-          max={prices.max}
-          step={prices.step}
-          currentMinPrice={priceRange && priceRange.minPrice}
-          currentMaxPrice={priceRange && priceRange.maxPrice}
-          onPressCity={this.onPressCity}
-          onPressPrice={this.onPressPrice}
-          onClosePrice={this.onClosePrice}
-        />
-      </SafeAreaView>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(UserCarListScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(UsedCarListScreen);

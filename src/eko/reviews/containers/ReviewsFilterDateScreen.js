@@ -1,40 +1,28 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
-import { Body, Label, Content, ListItem, StyleProvider } from 'native-base';
+/* eslint-disable react-native/no-inline-styles */
+import React from 'react';
+import {VStack, HStack, Text, View, Pressable} from 'native-base';
 
 // redux
-import { connect } from 'react-redux';
-import { actionDateFromFill, actionSelectFilterDatePeriod } from '../../actions';
+import {connect} from 'react-redux';
+import {actionDateFromFill, actionSelectFilterDatePeriod} from '../../actions';
 
 // components
 import RadioIcon from '../../../core/components/RadioIcon';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // styles
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import {
-  REVIEWS_FILTER_DATE_PERIOD__ALL,
-  REVIEWS_FILTER_DATE_PERIOD__WEEK,
-  REVIEWS_FILTER_DATE_PERIOD__MONTH,
-  REVIEWS_FILTER_DATE_PERIOD__YEAR,
-} from '../../constants';
-
 import PropTypes from 'prop-types';
-import getTheme from '../../../../native-base-theme/components';
-import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
-import { substructMonth, substructWeek, substructYear, substruct10Years } from '../../../utils/date';
 
-const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-  },
-});
+import {
+  substructMonth,
+  substractWeek,
+  substractYears,
+} from '../../../utils/date';
+import {strings} from '../../../core/lang/const';
 
-const mapStateToProps = ({ eko, nav }) => {
+const mapStateToProps = ({eko, nav}) => {
   return {
     nav,
     filterDatePeriod: eko.reviews.filterDatePeriod,
@@ -46,107 +34,89 @@ const mapDispatchToProps = {
   actionSelectFilterDatePeriod,
 };
 
-class ReviewsFilterDateScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Отзывы за период',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <View />,
-  })
-
-  static propTypes = {
-    navigation: PropTypes.object,
-    filterDatePeriod: PropTypes.string,
-  }
-
-  shouldComponentUpdate(nextProps) {
-    return this.props.filterDatePeriod !== nextProps.filterDatePeriod;
-  }
-
-  onPressItem = (selectedDatePeriod) => {
-    const {
-      actionDateFromFill,
-      actionSelectFilterDatePeriod,
-    } = this.props;
-
+const ReviewsFilterDateScreen = ({
+  actionSelectFilterDatePeriod,
+  dateFrom,
+  actionDateFromFill,
+  filterDatePeriod,
+  navigation,
+}) => {
+  const _onPressItem = selectedDatePeriod => {
     requestAnimationFrame(() => {
-      if (this.isDatePeriodSelected(selectedDatePeriod)) return false;
+      if (_isDatePeriodSelected(selectedDatePeriod)) {
+        return false;
+      }
 
       actionSelectFilterDatePeriod(selectedDatePeriod);
 
-      this.processDate(selectedDatePeriod);
+      _processDate(selectedDatePeriod);
+      navigation.goBack();
     });
-  }
+  };
 
-  processDate = (datePeriod) => {
-    const { dateFrom, actionDateFromFill } = this.props;
+  const _processDate = datePeriod => {
     let newDateFrom = null;
 
     switch (datePeriod) {
-      case REVIEWS_FILTER_DATE_PERIOD__ALL:
-        newDateFrom = substruct10Years();
+      case strings.ReviewsFilterDateScreen.periods.all:
+        newDateFrom = substractYears(10);
         break;
-      case REVIEWS_FILTER_DATE_PERIOD__WEEK:
-        newDateFrom = substructWeek();
+      case strings.ReviewsFilterDateScreen.periods.week:
+        newDateFrom = substractWeek();
         break;
-      case REVIEWS_FILTER_DATE_PERIOD__MONTH:
+      case strings.ReviewsFilterDateScreen.periods.month:
         newDateFrom = substructMonth();
         break;
-      case REVIEWS_FILTER_DATE_PERIOD__YEAR:
-        newDateFrom = substructYear();
+      case strings.ReviewsFilterDateScreen.periods.year:
+        newDateFrom = substractYears(1);
         break;
       default:
         newDateFrom = dateFrom;
     }
 
     actionDateFromFill(newDateFrom);
-  }
+  };
 
-  isDatePeriodSelected = selectedDatePeriod => this.props.filterDatePeriod === selectedDatePeriod
+  const _isDatePeriodSelected = selectedDatePeriod =>
+    filterDatePeriod === selectedDatePeriod;
 
-  render() {
-    console.log('== ReviewsFilterDateScreen ==');
+  return (
+    <VStack space={5} alignContent={'center'} mt={8}>
+      {[
+        strings.ReviewsFilterDateScreen.periods.all,
+        strings.ReviewsFilterDateScreen.periods.week,
+        strings.ReviewsFilterDateScreen.periods.month,
+        strings.ReviewsFilterDateScreen.periods.year,
+      ].map((period, idx, arrayPeriod) => {
+        return (
+          <Pressable
+            key={period}
+            ml={4}
+            style={stylesList.listItemPressable}
+            onPress={() => _onPressItem(period)}>
+            <HStack alignItems={'center'}>
+              <RadioIcon
+                containerStyle={{
+                  marginTop: 5,
+                }}
+                selected={_isDatePeriodSelected(period)}
+              />
+              <View style={stylesList.bodyWithLeftGap}>
+                <Text style={[stylesList.label, {marginTop: 0}]}>{period}</Text>
+              </View>
+            </HStack>
+          </Pressable>
+        );
+      })}
+    </VStack>
+  );
+};
 
-    return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <Content>
-            {
-              [
-                REVIEWS_FILTER_DATE_PERIOD__ALL,
-                REVIEWS_FILTER_DATE_PERIOD__WEEK,
-                REVIEWS_FILTER_DATE_PERIOD__MONTH,
-                REVIEWS_FILTER_DATE_PERIOD__YEAR,
-              ].map((period, idx, arrayPeriod) => {
-                const handler = () => this.onPressItem(period);
+ReviewsFilterDateScreen.propTypes = {
+  filterDatePeriod: PropTypes.string,
+};
 
-                return (
-                  <View key={period} style={stylesList.listItemContainer}>
-                    <ListItem
-                      last={(arrayPeriod.length - 1) === idx}
-                      icon
-                      style={stylesList.listItemPressable}
-                      onPress={handler}
-                    >
-                      <RadioIcon
-                        containerStyle={{
-                          marginTop: 5,
-                        }}
-                        selected={this.isDatePeriodSelected(period)} />
-                      <Body style={stylesList.bodyWithLeftGap} >
-                        <Label style={stylesList.label}>{period}</Label>
-                      </Body>
-                    </ListItem>
-                  </View>
-                );
-              })
-            }
-          </Content>
-        </SafeAreaView>
-      </StyleProvider>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewsFilterDateScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ReviewsFilterDateScreen);

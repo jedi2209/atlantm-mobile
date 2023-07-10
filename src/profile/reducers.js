@@ -1,6 +1,6 @@
-import { combineReducers } from 'redux';
-import { REHYDRATE } from 'redux-persist/constants';
-import { get } from 'lodash';
+import {combineReducers} from 'redux';
+import {REHYDRATE} from 'redux-persist/es/constants';
+import {get} from 'lodash';
 import {
   PROFILE_CAR__FILL,
   PROFILE_NAME__FILL,
@@ -8,37 +8,28 @@ import {
   PROFILE_EMAIL__FILL,
   PROFILE_CAR_NUMBER__FILL,
   PROFILE_CAR_VIN__FILL,
-
-  PROFILE_LOGIN__FILL,
   PROFILE_PASSWORD__FILL,
   PROFILE_BONUS_LEVEL1__SET,
   PROFILE_BONUS_LEVEL2__SET,
   PROFILE_BONUS_INFO__REQUEST,
   PROFILE_BONUS_INFO__SUCCESS,
   PROFILE_BONUS_INFO__FAIL,
-
   PROFILE_DATA__REQUEST,
   PROFILE_DATA__SUCCESS,
   PROFILE_DATA__FAIL,
-
+  CAR_HIDE__SUCCESS,
+  CAR_HIDE__REQUEST,
+  CAR_HIDE__FAIL,
   LOGOUT,
-  LOGIN__SUCCESS,
-  LOGIN__FAIL,
-  LOGIN__REQUEST,
   REGISTER__SUCCESS,
-  REGISTER__FAIL,
-  REGISTER__REQUEST,
-
   CAR_HISTORY__REQUEST,
   CAR_HISTORY__SUCCESS,
   CAR_HISTORY__FAIL,
   CAR_HISTORY_LEVEL1__SET,
   CAR_HISTORY_LEVEL2__SET,
-
   CAR_HISTORY_DETAILS__REQUEST,
   CAR_HISTORY_DETAILS__SUCCESS,
   CAR_HISTORY_DETAILS__FAIL,
-
   FORGOT_PASS_LOGIN__FILL,
   FORGOT_PASS_CODE__FILL,
   FORGOT_PASS_MODE_CODE__SET,
@@ -48,18 +39,36 @@ import {
   FORGOT_PASS_SUBMIT_CODE__REQUEST,
   FORGOT_PASS_SUBMIT_CODE__FAIL,
   FORGOT_PASS_SUBMIT_CODE__SUCCESS,
+  SAVE_PROFILE__UPDATE,
+  SAVE_PROFILE__FAIL,
+  UPDATE_LOCAL_USER,
 } from './actionTypes';
 
-import { DEALER__SUCCESS } from '@dealer/actionTypes';
+import {APP_STORE_UPDATED} from '../core/actionTypes';
+
+import {DEALER__SUCCESS} from '../dealer/actionTypes';
+
+function login(state = '', action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'profile.login', '');
+    case SAVE_PROFILE__UPDATE:
+      return {...state, ...action.payload};
+    case SAVE_PROFILE__FAIL:
+    case LOGOUT:
+      // case APP_STORE_UPDATED:
+      return {};
+    default:
+      return state;
+  }
+}
 
 function name(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.name', '');
+      return get(action.payload, 'profile.localUserData.NAME', '');
     case PROFILE_NAME__FILL:
       return action.payload;
-    case LOGIN__SUCCESS:
-      return get(action, 'payload.name.full');
     default:
       return state;
   }
@@ -68,11 +77,9 @@ function name(state = '', action) {
 function phone(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.phone', '');
+      return get(action.payload, 'profile.localUserData.PHONE', '');
     case PROFILE_PHONE__FILL:
       return action.payload;
-    case LOGIN__SUCCESS:
-      return get(action, 'payload.phone');
     default:
       return state;
   }
@@ -81,11 +88,20 @@ function phone(state = '', action) {
 function email(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.email', '');
+      return get(action.payload, 'profile.localUserData.EMAIL', '');
     case PROFILE_EMAIL__FILL:
       return action.payload;
-    case LOGIN__SUCCESS:
-      return get(action, 'payload.email');
+    default:
+      return state;
+  }
+}
+
+function localUserData(state = '', action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'profile.localUserData', '');
+    case UPDATE_LOCAL_USER:
+      return {...state, ...action.payload};
     default:
       return state;
   }
@@ -96,10 +112,11 @@ function cars(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'profile.cars', []);
-    case LOGIN__SUCCESS:
     case PROFILE_DATA__SUCCESS:
+    case CAR_HIDE__SUCCESS:
       return action.payload.cars;
     case LOGOUT:
+      // case APP_STORE_UPDATED:
       return [];
     default:
       return state;
@@ -110,7 +127,7 @@ function cars(state = [], action) {
 function car(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.car', '');
+      return get(action.payload, 'profile.localUserData.CAR', null);
     case PROFILE_CAR__FILL:
       return action.payload;
     default:
@@ -121,7 +138,7 @@ function car(state = '', action) {
 function carNumber(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.carNumber', '');
+      return get(action.payload, 'profile.localUserData.carNumber', null);
     case PROFILE_CAR_NUMBER__FILL:
       return action.payload;
     default:
@@ -132,23 +149,10 @@ function carNumber(state = '', action) {
 function carVIN(state = '', action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'profile.carVIN', '');
+      return get(action.payload, 'profile.localUserData.carVIN', null);
     case PROFILE_CAR_VIN__FILL:
       return action.payload;
     case REGISTER__SUCCESS:
-      return '';
-    default:
-      return state;
-  }
-}
-
-function login(state = '', action) {
-  switch (action.type) {
-    case REHYDRATE:
-      return get(action.payload, 'profile.login', '');
-    case PROFILE_LOGIN__FILL:
-      return action.payload;
-    case LOGIN__SUCCESS:
       return '';
     default:
       return state;
@@ -161,49 +165,6 @@ function password(state = '', action) {
       return get(action.payload, 'profile.password', '');
     case PROFILE_PASSWORD__FILL:
       return action.payload;
-    case LOGIN__SUCCESS:
-      return '';
-    default:
-      return state;
-  }
-}
-
-function auth(state = {}, action) {
-  switch (action.type) {
-    case REHYDRATE:
-      return get(action.payload, 'profile.auth', {});
-    case LOGIN__REQUEST:
-    case LOGIN__FAIL:
-    case LOGOUT:
-      return {};
-    case LOGIN__SUCCESS:
-      return action.payload;
-    default:
-      return state;
-  }
-}
-
-function isLoginRequest(state = false, action) {
-  switch (action.type) {
-    case REHYDRATE:
-    case LOGIN__SUCCESS:
-    case LOGIN__FAIL:
-      return false;
-    case LOGIN__REQUEST:
-      return true;
-    default:
-      return state;
-  }
-}
-
-function isRegisterRequest(state = false, action) {
-  switch (action.type) {
-    case REHYDRATE:
-    case REGISTER__SUCCESS:
-    case REGISTER__FAIL:
-      return false;
-    case REGISTER__REQUEST:
-      return true;
     default:
       return state;
   }
@@ -214,8 +175,10 @@ function isFetchProfileData(state = false, action) {
     case REHYDRATE:
     case PROFILE_DATA__SUCCESS:
     case PROFILE_DATA__FAIL:
+    case CAR_HIDE__FAIL:
       return false;
     case PROFILE_DATA__REQUEST:
+    case CAR_HIDE__REQUEST:
       return true;
     default:
       return state;
@@ -226,10 +189,10 @@ function bonusData(state = {}, action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'profile.bonus.data', {});
-    case LOGIN__SUCCESS:
     case PROFILE_DATA__SUCCESS:
       return action.payload.bonus;
     case LOGOUT:
+      // case APP_STORE_UPDATED:
       return {};
     default:
       return state;
@@ -238,28 +201,31 @@ function bonusData(state = {}, action) {
 
 function bonusInfo(state = '', action) {
   switch (action.type) {
-  case REHYDRATE:
-    return get(action.payload, 'profile.bonus.info', '');
-  case DEALER__SUCCESS:
-  case PROFILE_BONUS_INFO__REQUEST:
-    return '';
-  case PROFILE_BONUS_INFO__SUCCESS:
-    return action.payload;
-  default:
-    return state;
+    case REHYDRATE:
+      return get(action.payload, 'profile.bonus.info', '');
+    case DEALER__SUCCESS:
+    case PROFILE_BONUS_INFO__REQUEST:
+      return '';
+    case PROFILE_BONUS_INFO__SUCCESS:
+      return action.payload;
+    case LOGOUT:
+      // case APP_STORE_UPDATED:
+      return '';
+    default:
+      return state;
   }
 }
 
 function isFetchBonusInfo(state = false, action) {
   switch (action.type) {
-  case REHYDRATE:
-  case PROFILE_BONUS_INFO__FAIL:
-  case PROFILE_BONUS_INFO__SUCCESS:
-    return false;
-  case PROFILE_BONUS_INFO__REQUEST:
-    return true;
-  default:
-    return state;
+    case REHYDRATE:
+    case PROFILE_BONUS_INFO__FAIL:
+    case PROFILE_BONUS_INFO__SUCCESS:
+      return false;
+    case PROFILE_BONUS_INFO__REQUEST:
+      return true;
+    default:
+      return state;
   }
 }
 
@@ -267,10 +233,38 @@ function discounts(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'profile.discounts', []);
-    case LOGIN__SUCCESS:
     case PROFILE_DATA__SUCCESS:
       return action.payload.discounts;
     case LOGOUT:
+      // case APP_STORE_UPDATED:
+      return [];
+    default:
+      return state;
+  }
+}
+
+function insurance(state = [], action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'profile.insurance', []);
+    case PROFILE_DATA__SUCCESS:
+      return action.payload.insurance;
+    case LOGOUT:
+      // case APP_STORE_UPDATED:
+      return [];
+    default:
+      return state;
+  }
+}
+
+function additionalPurchase(state = [], action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'profile.additionalPurchase', []);
+    case PROFILE_DATA__SUCCESS:
+      return action.payload.additionalPurchase;
+    case LOGOUT:
+      // case APP_STORE_UPDATED:
       return [];
     default:
       return state;
@@ -280,8 +274,8 @@ function discounts(state = [], action) {
 function level1Hash(state = null, action) {
   switch (action.type) {
     case REHYDRATE:
-    case LOGIN__SUCCESS:
     case LOGOUT:
+      // case APP_STORE_UPDATED:
       return null;
     case PROFILE_BONUS_LEVEL1__SET:
       return action.payload;
@@ -293,8 +287,8 @@ function level1Hash(state = null, action) {
 function level2Hash(state = null, action) {
   switch (action.type) {
     case REHYDRATE:
-    case LOGIN__SUCCESS:
     case LOGOUT:
+      // case APP_STORE_UPDATED:
       return null;
     case PROFILE_BONUS_LEVEL2__SET:
       return action.payload;
@@ -324,6 +318,7 @@ function carHistoryData(state = {}, action) {
     case CAR_HISTORY__SUCCESS:
       return action.payload;
     case LOGOUT:
+    // case APP_STORE_UPDATED:
     case CAR_HISTORY__REQUEST:
       return {};
     default:
@@ -336,6 +331,7 @@ function carHistorylevel1Hash(state = null, action) {
     case REHYDRATE:
     case CAR_HISTORY__SUCCESS:
     case LOGOUT:
+      // case APP_STORE_UPDATED:
       return null;
     case CAR_HISTORY_LEVEL1__SET:
       return action.payload;
@@ -349,6 +345,7 @@ function carHistorylevel2Hash(state = null, action) {
     case REHYDRATE:
     case CAR_HISTORY__SUCCESS:
     case LOGOUT:
+      // case APP_STORE_UPDATED:
       return null;
     case CAR_HISTORY_LEVEL2__SET:
       return action.payload;
@@ -385,60 +382,64 @@ function carHistoryDetailsData(state = {}, action) {
 
 const forgotPassLogin = (state = '', action) => {
   switch (action.type) {
-  case REHYDRATE:
-    return get(action, 'payload.profile.forgotPass.login', '');
-  case FORGOT_PASS_LOGIN__FILL:
-    return action.payload;
-  default:
-    return state;
+    case REHYDRATE:
+      return get(action, 'payload.profile.forgotPass.login', '');
+    case FORGOT_PASS_LOGIN__FILL:
+      return action.payload;
+    default:
+      return state;
   }
 };
 
 const forgotPassCode = (state = '', action) => {
   switch (action.type) {
-  case REHYDRATE:
-    return get(action, 'payload.profile.forgotPass.code', '');
-  case FORGOT_PASS_CODE__FILL:
-    return action.payload;
-  default:
-    return state;
+    case REHYDRATE:
+      return get(action, 'payload.profile.forgotPass.code', '');
+    case FORGOT_PASS_CODE__FILL:
+      return action.payload;
+    default:
+      return state;
   }
 };
 
 const forgotPassModeCode = (state = '', action) => {
   switch (action.type) {
-  case REHYDRATE:
-    return get(action, 'payload.profile.forgotPass.meta.forgotPassModeCode', '');
-  case FORGOT_PASS_MODE_CODE__SET:
-    return action.payload;
-  default:
-    return state;
+    case REHYDRATE:
+      return get(
+        action,
+        'payload.profile.forgotPass.meta.forgotPassModeCode',
+        '',
+      );
+    case FORGOT_PASS_MODE_CODE__SET:
+      return action.payload;
+    default:
+      return state;
   }
 };
 
 const isForgotPassRequest = (state = false, action) => {
   switch (action.type) {
-  case REHYDRATE:
-  case FORGOT_PASS_REQUEST__FAIL:
-  case FORGOT_PASS_REQUEST__SUCCESS:
-    return false;
-  case FORGOT_PASS_REQUEST__REQUEST:
-    return true;
-  default:
-    return state;
+    case REHYDRATE:
+    case FORGOT_PASS_REQUEST__FAIL:
+    case FORGOT_PASS_REQUEST__SUCCESS:
+      return false;
+    case FORGOT_PASS_REQUEST__REQUEST:
+      return true;
+    default:
+      return state;
   }
 };
 
 const isForgotPassCodeSubmit = (state = false, action) => {
   switch (action.type) {
-  case REHYDRATE:
-  case FORGOT_PASS_SUBMIT_CODE__FAIL:
-  case FORGOT_PASS_SUBMIT_CODE__SUCCESS:
-    return false;
-  case FORGOT_PASS_SUBMIT_CODE__REQUEST:
-    return true;
-  default:
-    return state;
+    case REHYDRATE:
+    case FORGOT_PASS_SUBMIT_CODE__FAIL:
+    case FORGOT_PASS_SUBMIT_CODE__SUCCESS:
+      return false;
+    case FORGOT_PASS_SUBMIT_CODE__REQUEST:
+      return true;
+    default:
+      return state;
   }
 };
 
@@ -449,12 +450,15 @@ export default combineReducers({
   car,
   carNumber,
 
-  auth,
   login,
   password,
   cars,
   carVIN,
   discounts,
+  insurance,
+  additionalPurchase,
+
+  localUserData,
 
   bonus: combineReducers({
     data: bonusData,
@@ -489,7 +493,7 @@ export default combineReducers({
 
   meta: combineReducers({
     isFetchProfileData,
-    isLoginRequest,
-    isRegisterRequest,
+    // isLoginRequest,
+    // isRegisterRequest,
   }),
 });

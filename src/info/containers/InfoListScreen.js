@@ -1,42 +1,54 @@
-import React, { Component } from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useState, useEffect} from 'react';
 import {
   View,
   Alert,
   FlatList,
   StyleSheet,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import { Container, Text, StyleProvider } from 'native-base';
+import {Pressable, Box, Text, Badge, Icon, Fab} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import {Offer} from '../../core/components/Offer';
+// import Badge from '../../core/components/Badge';
+import TransitionView from '../../core/components/TransitionView';
+
+const deviceWidth = Dimensions.get('window').width;
+const cardWidth = deviceWidth - 20;
 
 // redux
-import { connect } from 'react-redux';
-import { fetchInfoList, actionListReset } from '../actions';
-import { INFO_LIST__FAIL } from '../actionTypes';
+import {connect} from 'react-redux';
+import {fetchInfoList, actionListReset} from '../actions';
+import {
+  actionSetPushGranted,
+  actionSetPushActionSubscribe,
+} from '../../core/actions';
+import {INFO_LIST__FAIL} from '../actionTypes';
 
 // helpers
-import { get } from 'lodash';
-import { ERROR_NETWORK } from '../../core/const';
-import getTheme from '../../../native-base-theme/components';
+import {get} from 'lodash';
+import {ERROR_NETWORK} from '../../core/const';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
-import styleFooter from '../../core/components/Footer/style';
-import { verticalScale } from '../../utils/scale';
+import {verticalScale} from '../../utils/scale';
+import {strings} from '../../core/lang/const';
 
 // components
-import InfoListItem from '../components/InfoListItem';
-import DealerItemList from '../../core/components/DealerItemList';
-import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
+import PushNotifications from '../../core/components/PushNotifications';
+import style from '../../core/components/Footer/style';
+import LogoLoader from '../../core/components/LogoLoader';
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: styleConst.color.bg,
     flex: 1,
+    paddingBottom: 20,
   },
   spinner: {
     alignSelf: 'center',
     marginTop: verticalScale(60),
+    height: 200,
   },
   message: {
     fontFamily: styleConst.font.regular,
@@ -47,154 +59,237 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, info, nav }) => {
+const mapStateToProps = ({dealer, info, nav, core}) => {
   return {
     nav,
     list: info.list,
+    filters: info.filters,
     visited: info.visited,
     dealerSelected: dealer.selected,
     isFetchInfoList: info.meta.isFetchInfoList,
+    pushActionSubscribeState: core.pushActionSubscribeState,
+    currLang: core.language.selected,
   };
 };
 
 const mapDispatchToProps = {
   fetchInfoList,
   actionListReset,
+  actionSetPushGranted,
+  actionSetPushActionSubscribe,
 };
 
-class InfoListScreen extends Component {
-  state = { isRefreshing: false }
+const InfoListScreen = ({
+  navigation,
+  dealerSelected,
+  fetchInfoList,
+  isFetchInfoList,
+  actionListReset,
+  list,
+  filters,
+  currLang,
+}) => {
+  const [isRefreshing, setRefreshing] = useState(false);
+  const [filterType, setFilterType] = useState(null);
+  const zoomIn = {
+    1: {
+      opacity: 1,
+      scale: 1,
+    },
+    0.5: {
+      opacity: 0.5,
+      scale: 0.4,
+    },
+    0: {
+      opacity: 0,
+      scale: 0,
+    },
+  };
+  const {region, id: dealer} = dealerSelected;
+  const fabEnable = region === 'by' ? true : false;
 
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Акции',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
-    headerRight: <HeaderIconMenu navigation={navigation} />,
-  })
-
-  static propTypes = {
-    dealerSelected: PropTypes.object.isRequired,
-    list: PropTypes.array.isRequired,
-    visited: PropTypes.array.isRequired,
-    fetchInfoList: PropTypes.func.isRequired,
-    isFetchInfoList: PropTypes.bool.isRequired,
-  }
-
-  componentDidMount() {
-    const { navigation, dealerSelected, fetchInfoList, isFetchInfoList, actionListReset } = this.props;
-    const { region, id: dealer } = dealerSelected;
-    // const isPush = get(navigation, 'state.params.isPush');
-
+  useEffect(() => {
+    console.info('== InfoListScreen ==');
     if (!isFetchInfoList) {
       actionListReset();
-      fetchInfoList(region, dealer)
-        .then(action => {
-          if (action.type === INFO_LIST__FAIL) {
-            let message = get(action, 'payload.message', 'Произошла ошибка, попробуйте снова');
+      fetchInfoList(region, dealer, filterType).then(action => {
+        if (action.type === INFO_LIST__FAIL) {
+          let message = get(
+            action,
+            'payload.message',
+            strings.Notifications.error.text,
+          );
 
-            if (message === 'Network request failed') {
-              message = ERROR_NETWORK;
-            }
-
-            setTimeout(() => Alert.alert(message), 100);
+          if (message === 'Network request failed') {
+            message = ERROR_NETWORK;
           }
-        });
+
+          setTimeout(() => Alert.alert(message), 100);
+        }
+      });
     }
-  }
+  }, [filterType]);
 
-  onRefresh = () => {
-    const { dealerSelected, list, fetchInfoList } = this.props;
-    const { region, id: dealer } = dealerSelected;
-
-    this.setState({ isRefreshing: true });
-
-    fetchInfoList(region, dealer).then(() => {
-      this.setState({ isRefreshing: false });
+  const _onRefresh = () => {
+    setRefreshing(true);
+    fetchInfoList(region, dealer, filterType).then(() => {
+      setRefreshing(false);
     });
-  }
+  };
 
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
-
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'InfoListScreen';
-      }
-    }
-
-    return isActiveScreen;
-  }
-
-  renderItem = ({ item }) => {
+  const renderItem = data => {
     return (
-      <InfoListItem
-        nav={this.props.nav}
-        info={item}
-        visited={this.props.visited}
-        navigate={this.props.navigation.navigate}
-      />
+      <TransitionView
+        animation={zoomIn}
+        duration={350}
+        index={data.index}
+        style={[
+          styleConst.shadow.default,
+          {
+            width: cardWidth,
+            backgroundColor: styleConst.color.white,
+            borderRadius: 5,
+            marginVertical: 10,
+            marginHorizontal: 10,
+          },
+        ]}>
+        <Offer
+          theme="round"
+          key={`carousel-article-${data.item.hash}`}
+          data={data}
+          width={cardWidth}
+          height={200}
+          navigation={navigation.navigate}
+        />
+      </TransitionView>
     );
-  }
+  };
 
-  renderEmptyComponent = () => {
-    return this.props.isFetchInfoList ?
-      (
-          <View style={styles.spinnerContainer} >
-            <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} />
-          </View>
-      ) :
-      (
-          <Text style={styles.message}>В данный момент нет акций</Text>
-      );
-  }
-
-  renderHeaderComponent = () => {
-    return (
-      <DealerItemList
-        navigation={this.props.navigation}
-        city={this.props.dealerSelected.city}
-        name={this.props.dealerSelected.name}
-        brands={this.props.dealerSelected.brands}
-        returnScreen="InfoListScreen"
-      />
+  const renderEmptyComponent = () => {
+    return isFetchInfoList ? (
+      <View style={styles.spinnerContainer}>
+        <LogoLoader
+          style={{
+            position: 'relative',
+          }}
+        />
+      </View>
+    ) : (
+      <Text style={styles.message}>{strings.InfoListScreen.empty.text}</Text>
     );
-  }
+  };
 
-  render() {
-    const {
-      list,
-      visited,
-      navigation,
-      dealerSelected,
-      isFetchInfoList,
-    } = this.props;
-
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = navigation;
-
-    console.log('== InfoListScreen ==');
-
-    return (
-      <StyleProvider style={getTheme()}>
-        <Container style={styles.container}>
-          <FlatList
-            ListHeaderComponent={this.renderHeaderComponent}
-            data={list}
-            extraData={isFetchInfoList}
-            onRefresh={this.onRefresh}
-            refreshing={this.state.isRefreshing}
-            ListEmptyComponent={this.renderEmptyComponent}
-            style={styles.list}
-            renderItem={this.renderItem}
-            keyExtractor={item => `${item.id.toString()}`}
+  return (
+    <>
+      <Box style={styles.container}>
+        {!isRefreshing ? (
+          <>
+            {filters ? (
+              <View
+                style={{
+                  marginBottom: 5,
+                  marginHorizontal: 10,
+                  flexDirection: 'row',
+                }}>
+                {filters.map((el, i) => {
+                  return (
+                    <Pressable
+                      onPress={() => {
+                        filterType === el.id
+                          ? setFilterType(null)
+                          : setFilterType(el.id);
+                      }}
+                      key={'pressableFilter' + el.id + i}
+                      mr={1}
+                      padding={0.5}>
+                      <Badge
+                        key={'badgeItem' + el.id + i}
+                        variant={'outline'}
+                        alignSelf="center"
+                        bgColor={
+                          !filterType || filterType === el.id
+                            ? el.badge?.background
+                            : 'muted.300'
+                        }
+                        _text={{fontSize: 14, color: el.badge?.color}}
+                        borderColor={styleConst.color.white}
+                        rounded={'lg'}
+                        rightIcon={
+                          filterType === el.id ? (
+                            <Icon
+                              size={4}
+                              as={Ionicons}
+                              name="ios-close-outline"
+                              color="warmGray.50"
+                              _dark={{
+                                color: 'warmGray.50',
+                              }}
+                              mt={1}
+                            />
+                          ) : null
+                        }>
+                        {el.name[currLang]}
+                      </Badge>
+                    </Pressable>
+                  );
+                })}
+              </View>
+            ) : null}
+            <FlatList
+              data={list}
+              extraData={isFetchInfoList}
+              onRefresh={_onRefresh}
+              refreshing={isRefreshing}
+              ListEmptyComponent={renderEmptyComponent}
+              style={styles.list}
+              renderItem={renderItem}
+              keyExtractor={item => `${item.hash.toString()}`}
+            />
+          </>
+        ) : (
+          <ActivityIndicator
+            color={styleConst.color.blue}
+            style={styles.spinner}
           />
-        </Container>
-      </StyleProvider>
-    );
-  }
-}
+        )}
+      </Box>
+      {fabEnable && !isFetchInfoList ? (
+        <Fab
+          renderInPortal={false}
+          size="sm"
+          style={{backgroundColor: styleConst.new.blueHeader}}
+          onPress={() =>
+            navigation.navigate('ChatScreen', {
+              prevScreen: 'Акции -- список',
+            })
+          }
+          icon={
+            <Icon
+              size={7}
+              as={Ionicons}
+              name="chatbox-outline"
+              color="warmGray.50"
+              _dark={{
+                color: 'warmGray.50',
+              }}
+            />
+          }
+        />
+      ) : null}
+    </>
+  );
+};
+
+InfoListScreen.defaultProps = {
+  type: null,
+};
+
+InfoListScreen.propTypes = {
+  dealerSelected: PropTypes.object.isRequired,
+  list: PropTypes.array.isRequired,
+  visited: PropTypes.array.isRequired,
+  fetchInfoList: PropTypes.func.isRequired,
+  isFetchInfoList: PropTypes.bool.isRequired,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(InfoListScreen);

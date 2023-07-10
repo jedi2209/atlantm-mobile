@@ -1,100 +1,106 @@
-import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, Alert } from 'react-native';
-import { Row, Col, Button, Content, Segment, StyleProvider } from 'native-base';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, Text, ScrollView} from 'react-native';
+import {Button, HStack, View} from 'native-base';
+import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
+import {Divider} from 'react-native-paper';
 
 // redux
-import { connect } from 'react-redux';
-import { CAR_HISTORY_DETAILS__FAIL } from '../../actionTypes';
-import { actionFetchCarHistoryDetails } from '../../actions';
+import {connect} from 'react-redux';
+import {CAR_HISTORY_DETAILS__FAIL} from '../../actionTypes';
+import {actionFetchCarHistoryDetails} from '../../actions';
 
 // components
-import SpinnerView from '../../../core/components/SpinnerView';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 // helpers
-import Amplitude from '../../../utils/amplitude-analytics';
-import { get } from 'lodash';
-import getTheme from '../../../../native-base-theme/components';
+import Analytics from '../../../utils/amplitude-analytics';
+import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
-import numberWithGap from '../../../utils/number-with-gap';
-import { ERROR_NETWORK } from '../../../core/const';
-
-const TABS = {
-  WORKS: 'works',
-  PARTS: 'parts',
-};
+import showPrice from '../../../utils/price';
+import {ERROR_NETWORK} from '../../../core/const';
+import {strings} from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-  },
-  // section
   section: {
     paddingTop: styleConst.ui.horizontalGap,
     paddingRight: styleConst.ui.horizontalGap,
     paddingBottom: styleConst.ui.horizontalGap,
     marginLeft: styleConst.ui.horizontalGap,
-    borderBottomWidth: styleConst.ui.borderWidth,
-    borderBottomColor: styleConst.color.border,
-  },
-  segment: {
-    marginHorizontal: styleConst.ui.horizontalGap,
   },
   sectionTitle: {
     letterSpacing: styleConst.ui.letterSpacing,
-    fontSize: 18,
+    fontSize: 14,
+    color: '#141414',
     fontFamily: styleConst.font.regular,
-    marginBottom: 10,
+    marginBottom: 15,
+  },
+  sectionHelperRow: {
+    margin: 0,
+    padding: 0,
   },
   sectionProp: {
     paddingRight: 5,
-    marginTop: 5,
+    marginTop: 0,
   },
   sectionValue: {
     marginTop: 5,
   },
+  sectionHelper: {
+    margin: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingLeft: 5,
+  },
   sectionPropText: {
     letterSpacing: styleConst.ui.letterSpacing,
-    fontSize: 17,
+    fontSize: 13,
+    color: '#141414',
+    lineHeight: 18,
+    marginTop: 6,
   },
   sectionValueText: {
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
-    fontSize: 16,
+    fontSize: 14,
+    color: styleConst.color.greyText,
   },
-  tabText: {
-    fontFamily: styleConst.font.regular,
-    letterSpacing: styleConst.ui.letterSpacing,
-    color: styleConst.color.greyBlueText,
-  },
-  tabTextActive: {
-    color: '#fff',
-    fontFamily: styleConst.font.regular,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
-  tabButton: {
-    borderColor: styleConst.color.greyBlue,
-    flex: 1,
-    justifyContent: 'center',
-    paddingLeft: 0,
-    paddingRight: 0,
-  },
-  tabButtonActive: {
-    backgroundColor: styleConst.color.greyBlue,
-    borderColor: styleConst.color.greyBlue,
-    flex: 1,
-    justifyContent: 'center',
-    paddingLeft: 0,
-    paddingRight: 0,
+  sectionHelperText: {
+    // letterSpacing: styleConst.ui.letterSpacing,
+    // fontFamily: styleConst.font.regular,
+    lineHeight: 17,
+    fontSize: 20,
   },
 });
 
-const mapStateToProps = ({ nav, profile }) => {
+const modalStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: styleConst.color.white,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+  },
+  button: {
+    backgroundColor: styleConst.color.lightBlue,
+    justifyContent: 'center',
+  },
+  buttonText: {
+    color: styleConst.color.white,
+    textTransform: 'uppercase',
+    fontSize: 16,
+  },
+  TabsTextStyle: {
+    color: '#000',
+  },
+  TabsActiveTextStyle: {
+    color: styleConst.color.lightBlue,
+  },
+});
+
+const mapStateToProps = ({nav, profile}) => {
   return {
     nav,
-    auth: profile.auth,
+    profile: profile.login,
     details: profile.carHistory.details,
     isFetchCarHistoryDetails: profile.carHistory.meta.isFetchCarHistoryDetails,
   };
@@ -104,160 +110,207 @@ const mapDispatchToProps = {
   actionFetchCarHistoryDetails,
 };
 
-class CarHistoryDetailsScreen extends Component {
-  constructor(props) {
-    super(props);
+const CarHistoryDetailsScreen = props => {
+  const {isFetchCarHistoryDetails, details, profile, navigation} = props;
+  const vin = get(props.route, 'params.vin');
+  const title = get(props.route, 'params.title');
+  const workId = get(props.route, 'params.workId');
+  const workDealer = get(props.route, 'params.workDealer');
+  const token = profile.SAP.TOKEN;
+  const userid = profile.SAP.ID;
 
-    this.state = { tabName: TABS.WORKS };
-  }
+  let renderScene;
 
-  static navigationOptions = ({ navigation }) => {
-    const { params = {} } = navigation.state;
+  const [routes, setRoutesHead] = useState([]);
+  const [tabs, setTabs] = useState([]);
+  const [index, setIndex] = useState(0);
 
-    return {
-      headerTitle: params.title,
-      headerStyle: stylesHeader.common,
-      headerTitleStyle: stylesHeader.title,
-      headerLeft: <HeaderIconBack navigation={navigation} />,
-      headerRight: <View />,
-    };
-  }
+  const _renderTable = ({name, count, units, summ}, idx) => {
+    return (
+      <View key={`${name}${idx}`}>
+        <View style={styles.section}>
+          {name ? <Text style={styles.sectionTitle}>{name}</Text> : null}
+          {count
+            ? _renderItem({
+                prop: strings.CarHistoryDetailsScreen.count,
+                value: `${count} ${units}.`,
+              })
+            : null}
+          {get(summ, 'value')
+            ? _renderItem({
+                prop: strings.CarHistoryDetailsScreen.price,
+                value: showPrice(
+                  get(summ, 'value'),
+                  get(summ, 'currency'),
+                  true,
+                ),
+              })
+            : null}
+          {/* {get(summ, 'sale')
+            ? this.renderHelper('-', styleConst.color.red)
+            : null} */}
+          {get(summ, 'sale')
+            ? _renderItem({
+                prop: strings.CarHistoryDetailsScreen.sale,
+                value: showPrice(
+                  get(summ, 'sale'),
+                  get(summ, 'currency'),
+                  true,
+                ),
+              })
+            : null}
+          {/* {get(summ, 'tax')
+            ? this.renderHelper('+', styleConst.color.green)
+            : null} */}
+          {get(summ, 'tax')
+            ? _renderItem({
+                prop: strings.CarHistoryDetailsScreen.tax,
+                value: showPrice(get(summ, 'tax'), get(summ, 'currency'), true),
+              })
+            : null}
+          {get(summ, 'total')
+            ? _renderItem({
+                prop: strings.CarHistoryDetailsScreen.total.nds,
+                value: showPrice(
+                  get(summ, 'total'),
+                  get(summ, 'currency'),
+                  true,
+                ),
+              })
+            : null}
+        </View>
+        <Divider />
+      </View>
+    );
+  };
 
-  componentDidMount() {
-    Amplitude.logEvent('screen', 'lkk/carhistory/details');
+  const _renderItem = ({prop, value}) => (
+    <HStack>
+      <View style={styles.sectionProp}>
+        <Text style={styles.sectionPropText}>{`${prop}:`}</Text>
+      </View>
+      <View style={styles.sectionValue}>
+        <Text style={styles.sectionValueText}>{value}</Text>
+      </View>
+    </HStack>
+  );
 
-    const { auth, navigation, actionFetchCarHistoryDetails } = this.props;
-    const vin = get(navigation, 'state.params.vin');
-    const title = get(navigation, 'state.params.title');
-    const workId = get(navigation, 'state.params.workId');
-    const workDealer = get(navigation, 'state.params.workDealer');
-    const token = get(auth, 'token.id');
+  const renderTabBar = props => (
+    <TabBar
+      {...props}
+      indicatorStyle={{backgroundColor: styleConst.color.lightBlue}}
+      style={[{backgroundColor: styleConst.color.white}]}
+      renderLabel={({route, focused, color}) => {
+        return (
+          <Text
+            style={{
+              color: focused ? '#000' : styleConst.color.darkBg,
+              margin: 8,
+            }}>
+            {route.title}
+          </Text>
+        );
+      }}
+    />
+  );
 
-    navigation.setParams({ title });
+  useEffect(() => {
+    Analytics.logEvent('screen', 'lkk/carhistory/details');
 
-    actionFetchCarHistoryDetails({ vin, token, workId, workDealer })
+    props
+      .actionFetchCarHistoryDetails({vin, token, userid, workId, workDealer})
       .then(action => {
         if (action.type === CAR_HISTORY_DETAILS__FAIL) {
-          let message = get(action, 'payload.message', 'Произошла ошибка, попробуйте снова');
+          let message = get(
+            action,
+            'payload.message',
+            strings.Notifications.error.text,
+          );
 
           if (message === 'Network request failed') {
             message = ERROR_NETWORK;
           }
-
-          setTimeout(() => Alert.alert(message), 100);
         }
+        setTimeout(() => {
+          navigation.setParams({
+            mainTitle: 'Заказ-наряд #' + workId,
+          });
+        }, 150);
       });
-  }
+  }, []);
 
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
-
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'CarHistoryDetailsScreen';
-      }
+  useEffect(() => {
+    let heads = [];
+    let tabWorks, tabParts;
+    if (details.works && details.works.length) {
+      heads.push({
+        key: 'works',
+        title: strings.CarHistoryDetailsScreen.works,
+      });
+      tabWorks = () => (
+        <ScrollView>
+          {details.works.map((item, idx) => _renderTable(item, idx))}
+        </ScrollView>
+      );
     }
 
-    return isActiveScreen;
+    if (details.parts && details.parts.length) {
+      heads.push({
+        key: 'parts',
+        title: strings.CarHistoryDetailsScreen.materials,
+      });
+      tabParts = () => {
+        return (
+          <ScrollView>
+            {details.parts.map((item, idx) => _renderTable(item, idx))}
+          </ScrollView>
+        );
+      };
+    }
+
+    setTabs({works: tabWorks, parts: tabParts});
+    setRoutesHead(heads);
+  }, [details]);
+
+  if (tabs.works || tabs.parts) {
+    renderScene = SceneMap({
+      works: tabs.works,
+      parts: tabs.parts,
+    });
   }
 
-  selectWorksTab = () => this.setState({ tabName: TABS.WORKS })
-  selectPartsTab = () => this.setState({ tabName: TABS.PARTS })
+  if (isFetchCarHistoryDetails) {
+    return <LogoLoader />;
+  }
 
-  renderTable = ({ name, count, units, summ }, idx) => {
-    return (
-      <View key={`${name}${idx}`} style={styles.section}>
-        {name ? <Text style={styles.sectionTitle}>{name}</Text> : null}
-        {count ? this.renderItem({ prop: 'Количество', value: `${count} ${units}.` }) : null}
-        {get(summ, 'value') ? this.renderItem({ prop: 'Стоимость', value: `${numberWithGap(get(summ, 'value'))} ${get(summ, 'currency')}` }) : null}
-        {get(summ, 'sale') ? this.renderItem({ prop: 'Скидка', value: `${numberWithGap(get(summ, 'sale'))} ${get(summ, 'currency')}` }) : null}
-        {get(summ, 'total') ? this.renderItem({ prop: 'Итого с НДС', value: `${numberWithGap(get(summ, 'total'))} ${get(summ, 'currency')}` }) : null}
+  console.info('== CarHistoryDetails ==');
+
+  // modalStyles.container
+
+  return (
+    <View style={{flex: 1}}>
+      {renderScene ? (
+        <TabView
+          navigationState={{index, routes}}
+          renderTabBar={renderTabBar}
+          renderScene={renderScene}
+          onIndexChange={setIndex}
+        />
+      ) : null}
+      <View py={7} px={'5%'} shadow={5}>
+        <Button
+          rounded={'md'}
+          style={modalStyles.button}
+          _text={modalStyles.buttonText}
+          onPress={() => navigation.goBack()}>
+          {strings.ModalView.close}
+        </Button>
       </View>
-    );
-  }
+    </View>
+  );
+};
 
-  renderItem = ({ prop, value }) => (
-    <Row style={styles.sectionRow}>
-      <Col style={styles.sectionProp}>
-        <Text style={styles.sectionPropText}>{`${prop}:`}</Text>
-      </Col>
-      <Col style={styles.sectionValue}>
-        <Text style={styles.sectionValueText}>{value}</Text>
-      </Col>
-    </Row>
-  )
-
-  render() {
-    const { tabName } = this.state;
-    const isActiveWorksTab = tabName === TABS.WORKS;
-    const isActivePartsTab = tabName === TABS.PARTS;
-    const { isFetchCarHistoryDetails, details } = this.props;
-
-    console.log('== CarHistoryDetails ==');
-
-    if (isFetchCarHistoryDetails) {
-      return <SpinnerView />;
-    }
-
-    const works = get(details, 'works');
-    const parts = get(details, 'parts');
-
-    return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <Content>
-            <Segment style={styles.segment}>
-              {
-                works ?
-                (
-                  <Button
-                    first
-                    last={!parts}
-                    active={isActiveWorksTab}
-                    onPress={this.selectWorksTab}
-                    style={isActiveWorksTab ? styles.tabButtonActive : styles.tabButton}
-                  >
-                    <Text style={isActiveWorksTab ? styles.tabTextActive : styles.tabText}>Работы</Text>
-                  </Button>
-                ) : null
-              }
-              {
-                parts ? (
-                  <Button
-                    first={!works}
-                    last
-                    active={isActivePartsTab}
-                    onPress={this.selectPartsTab}
-                    style={isActivePartsTab ? styles.tabButtonActive : styles.tabButton}
-                  >
-                    <Text style={isActivePartsTab ? styles.tabTextActive : styles.tabText}>Материалы</Text>
-                  </Button>
-                ) : null
-              }
-            </Segment>
-
-            {
-              isActiveWorksTab && works ?
-                (
-                  <View style={styles.tabContent}>
-                    {works.map((item, idx) => this.renderTable(item, idx))}
-                  </View>
-                ) : null }
-              {
-                isActivePartsTab && parts ?
-                (
-                  <View style={styles.tabContent}>
-                    {parts.map((item, idx) => this.renderTable(item, idx))}
-                  </View>
-                ) : null
-              }
-          </Content>
-        </SafeAreaView>
-      </StyleProvider>
-    );
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(CarHistoryDetailsScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CarHistoryDetailsScreen);

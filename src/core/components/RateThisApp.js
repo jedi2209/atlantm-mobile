@@ -1,96 +1,62 @@
-import React, { Component } from 'react';
-import {Platform, View, Button, Modal, Text, TouchableHighlight, Alert} from "react-native";
-import Rate, { AndroidMarket } from 'react-native-rate';
+import {Platform, Alert, Linking} from 'react-native';
+import {strings} from '../lang/const';
+import {STORE_LINK} from '../const';
+// import {GooglePackageName} from '../../core/const';
+// import Rate, {AndroidMarket} from 'react-native-rate';
+// import InAppReview from 'react-native-in-app-review';
 
-export default class RateThisApp extends React.Component {
+const RateThisApp = ({onSuccess}) => {
+  let alert_buttons = {
+    // такое задротство из-за разного положения кнопок на iOS / Android. Нужно, чтобы кнопки были одинаково расположены
+    android: [
+      {
+        text: strings.RateThisApp.no,
+        onPress: () => {
+          onSuccess && onSuccess();
+        },
+        style: 'cancel',
+      },
+      {
+        text: strings.RateThisApp.later,
+        style: 'cancel',
+      },
+      {
+        text: strings.RateThisApp.rate,
+        onPress: () => {
+          Linking.openURL(STORE_LINK[Platform.OS]);
+        },
+      },
+    ],
+    ios: [
+      {
+        text: strings.RateThisApp.rate,
+        onPress: () => {
+          Linking.openURL(STORE_LINK[Platform.OS]);
+        },
+        style: 'default',
+      },
+      {
+        text: strings.RateThisApp.later,
+        style: 'cancel',
+      },
+      {
+        text: strings.RateThisApp.no,
+        onPress: () => {
+          return onSuccess && onSuccess();
+        },
+        style: 'destructive',
+      },
+    ],
+  };
 
-    render() {
-        let alert_buttons;
-        alert_buttons = [];
+  Alert.alert(
+    strings.RateThisApp.title,
+    strings.RateThisApp.text,
+    alert_buttons[Platform.OS],
+    {
+      cancelable: false,
+    },
+  );
+};
 
-        switch (Platform.OS) {
-            case 'android': // такое задротство из-за разного положения кнопок на iOS / Android. Нужно, чтобы кнопки были одинаково расположены
-                alert_buttons = [
-                    {
-                        text: 'Нет, спасибо', onPress: () => {
-                        this.props.onSuccess && this.props.onSuccess()
-                    }, style: 'cancel'
-                    },
-                    {
-                        text: 'Не сейчас', onPress: () => {
-                        this.props.onAskLater && this.props.onAskLater()
-                    }, style: 'cancel'
-                    },
-                    {
-                        text: 'Оценить', onPress: () => {
-                        let options = {
-                            AppleAppID: "XXXX",
-                            GooglePackageName: "com.atlantm",
-                            preferredAndroidMarket: AndroidMarket.Google,
-                            preferInApp: true,
-                            openAppStoreIfInAppFails: true,
-                            inAppDelay: 2.0,
-                        };
-
-                        Rate.rate(options, success => {
-                            console.log('Rate success', success);
-                            if (success) {
-                                console.log('Rate this.props.onSuccess', this.props.onSuccess);
-                                this.props.onSuccess && this.props.onSuccess();
-                            } else {
-                                console.log('Rate this.props.onAskLater', this.props.onAskLater);
-                                this.props.onAskLater && this.props.onAskLater();
-                            }
-                        });
-                    }
-                    },
-                ];
-                break;
-            case 'ios':
-                alert_buttons = [
-                    {
-                        text: 'Оценить', onPress: () => {
-                        let options = {
-                            AppleAppID: "XXXX",
-                            GooglePackageName: "com.atlantm",
-                            preferredAndroidMarket: AndroidMarket.Google,
-                            preferInApp: true,
-                            openAppStoreIfInAppFails: true,
-                            inAppDelay: 2.0,
-                        };
-
-                        Rate.rate(options, success => {
-                            console.log('Rate success', success);
-                            if (success) {
-                                console.log('Rate this.props.onSuccess', this.props.onSuccess);
-                                this.props.onSuccess && this.props.onSuccess();
-                            } else {
-                                console.log('Rate this.props.onAskLater', this.props.onAskLater);
-                                this.props.onAskLater && this.props.onAskLater();
-                            }
-                        });
-                    }
-                    },
-                    {
-                        text: 'Не сейчас', onPress: () => {
-                        this.props.onAskLater && this.props.onAskLater()
-                    }, style: 'cancel'
-                    },
-                    {
-                        text: 'Нет, спасибо', onPress: () => {
-                        this.props.onSuccess && this.props.onSuccess()
-                    }, style: 'cancel'
-                    },
-                ];
-        }
-
-        Alert.alert(
-            'Нравится приложение?',
-            'Расскажите миру о вашем опыте и оставьте свой отзыв!',
-            alert_buttons,
-            { cancelable: false }
-        );
-
-        return null;
-    }
-}
+export default RateThisApp;

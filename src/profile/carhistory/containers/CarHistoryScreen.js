@@ -1,38 +1,70 @@
-import React, { Component } from 'react';
-import { SafeAreaView, StyleSheet, View, Text, Alert } from 'react-native';
-import { StyleProvider, Content, ListItem, Body, Right, Icon, Row, Col, Item, Label } from 'native-base';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useEffect, useState} from 'react';
+import {
+  SafeAreaView,
+  StyleSheet,
+  View,
+  Text,
+  ScrollView,
+  StatusBar,
+  ActivityIndicator,
+} from 'react-native';
+import {
+  StyleProvider,
+  ListItem,
+  Body,
+  Right,
+  Row,
+  Col,
+  Item,
+  Label,
+} from 'native-base';
+import {
+  List,
+  DefaultTheme,
+  Provider as PaperProvider,
+  Divider,
+  Card,
+  Title,
+  Paragraph,
+} from 'react-native-paper';
+import Analytics from '../../../utils/amplitude-analytics';
 
 // redux
-import { connect } from 'react-redux';
-import { CAR_HISTORY__FAIL } from '../../actionTypes';
+import {connect} from 'react-redux';
+import {CAR_HISTORY__FAIL} from '../../actionTypes';
 import {
   actionFetchCarHistory,
-  actionSetCarHistoryLevel1,
-  actionSetCarHistoryLevel2,
+  // actionSetCarHistoryLevel1,
+  // actionSetCarHistoryLevel2,
 } from '../../actions';
 
-// components
-import * as Animatable from 'react-native-animatable';
-import SpinnerView from '../../../core/components/SpinnerView';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 // styles
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import { get, isEmpty } from 'lodash';
-import { dayMonthYear } from '../../../utils/date';
-import getTheme from '../../../../native-base-theme/components';
+import {get, isEmpty} from 'lodash';
+import {dayMonthYear, dayMonth} from '../../../utils/date';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
+import showPrice from '../../../utils/price';
 import numberWithGap from '../../../utils/number-with-gap';
-import { MONTH_TEXT } from '../../const';
-import { ERROR_NETWORK } from '../../../core/const';
+import {ERROR_NETWORK} from '../../../core/const';
+import {strings} from '../../../core/lang/const';
+
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: styleConst.color.blue,
+  },
+};
 
 const styles = StyleSheet.create({
   safearea: {
     flex: 1,
-    backgroundColor: styleConst.color.bg,
+    backgroundColor: styleConst.color.white,
   },
   emptyText: {
     textAlign: 'center',
@@ -40,15 +72,8 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginTop: 50,
   },
-  itemLevel1: {
-    marginBottom: 1,
-  },
-  itemLevel2: {
-    backgroundColor: styleConst.color.accordeonGrey1,
-    marginBottom: 1,
-  },
   itemLevel3: {
-    backgroundColor: styleConst.color.accordeonGrey2,
+    backgroundColor: styleConst.color.white,
     marginBottom: 2,
   },
   listItem: {
@@ -59,12 +84,37 @@ const styles = StyleSheet.create({
     minHeight: styleConst.ui.listHeight,
     paddingBottom: 10,
   },
+  dateContainer: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   date: {
-    fontSize: 15,
-    color: styleConst.color.greyText3,
+    color: styleConst.color.lightBlue,
+    fontSize: 18,
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
     marginTop: 5,
+    fontWeight: '400',
+    paddingBottom: 0,
+  },
+  dealer: {
+    color: styleConst.color.greyText,
+    fontSize: 14,
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
+    marginTop: 5,
+    fontWeight: '400',
+    paddingBottom: 5,
+  },
+  mileage: {
+    color: styleConst.color.greyBlueText,
+    fontSize: 14,
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.light,
+    marginTop: 5,
+    fontWeight: '400',
+    paddingBottom: 10,
   },
 
   // section
@@ -77,12 +127,19 @@ const styles = StyleSheet.create({
   },
   sectionPropText: {
     letterSpacing: styleConst.ui.letterSpacing,
-    fontSize: 17,
+    fontSize: 15,
+    color: styleConst.color.greyText,
   },
   sectionValueText: {
     letterSpacing: styleConst.ui.letterSpacing,
     fontFamily: styleConst.font.regular,
     fontSize: 16,
+    color: styleConst.color.greyText,
+  },
+  sectionValueReduceText: {
+    letterSpacing: styleConst.ui.letterSpacing,
+    fontFamily: styleConst.font.regular,
+    fontSize: 14,
   },
   about: {
     marginBottom: 5,
@@ -92,305 +149,165 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ nav, profile }) => {
+const mapStateToProps = ({nav, profile}) => {
   return {
     nav,
-    auth: profile.auth,
+    profile: profile.login,
     carHistory: profile.carHistory.data,
-    level1hash: profile.carHistory.level1Hash,
-    level2hash: profile.carHistory.level2Hash,
-    isFetchCarHistory: profile.carHistory.meta.isFetchCarHistory,
   };
 };
 
 const mapDispatchToProps = {
   actionFetchCarHistory,
-  actionSetCarHistoryLevel1,
-  actionSetCarHistoryLevel2,
 };
+const CarHistoryScreen = ({
+  profile,
+  route,
+  navigation,
+  carHistory,
+  actionFetchCarHistory,
+}) => {
+  const [isLoading, setLoading] = useState(true);
 
-class CarHistoryScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'История обслуживания',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <View />,
-  })
+  useEffect(() => {
+    const vin = get(route, 'params.car.vin');
+    const token = profile.SAP.TOKEN;
+    const userid = profile.SAP.ID;
 
-  componentDidMount() {
-    const { auth, navigation, actionFetchCarHistory } = this.props;
-    const vin = get(navigation, 'state.params.car.vin');
-    const token = get(auth, 'token.id');
+    Analytics.logEvent('screen', 'lkk/carhistory');
 
     actionFetchCarHistory({
       vin,
       token,
-    })
-      .then(action => {
-        if (action.type === CAR_HISTORY__FAIL) {
-          let message = get(action, 'payload.message', 'Произошла ошибка, попробуйте снова');
+      userid,
+    }).then(action => {
+      if (action.type === CAR_HISTORY__FAIL) {
+        let message = get(
+          action,
+          'payload.message',
+          strings.Notifications.error.text,
+        );
 
-          if (message === 'Network request failed') {
-            message = ERROR_NETWORK;
-          }
-
-          setTimeout(() => Alert.alert(message), 100);
+        if (message === 'Network request failed') {
+          message = ERROR_NETWORK;
         }
-      });
-  }
-
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
-
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'CarHistoryScreen';
       }
-    }
-
-    return isActiveScreen;
-  }
-
-  renderListItem = (label, value, isLast) => {
-    if (!value) return null;
-
-    return (
-      <View style={stylesList.listItemContainer}>
-        <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]}>
-          <Body>
-            <Item style={stylesList.inputItem} fixedLabel>
-              <Label style={stylesList.label}>{label}</Label>
-              <View style={stylesList.listItemValueContainer}>
-                <Text style={stylesList.listItemValue}>{value}</Text>
-              </View>
-            </Item>
-          </Body>
-        </ListItem>
-      </View>
-    );
-  }
-
-  onPressLevel1 = hash => {
-    this.props.actionSetCarHistoryLevel1(this.isActiveLevel1(hash) ? null : hash);
-  }
-  onPressLevel2 = hash => {
-    this.props.actionSetCarHistoryLevel2(this.isActiveLevel2(hash) ? null : hash);
-  }
-
-  isActiveLevel1 = hash => this.props.level1hash === hash;
-  isActiveLevel2 = hash => this.props.level2hash === hash;
-
-  renderLevel1 = (carHistory) => {
-    return Object.keys(carHistory).map((carHistoryYear, idx, yearsArray) => {
-      const item = carHistory[carHistoryYear];
-      const isLast = (yearsArray.length - 1) === idx;
-      const hash = item.hash;
-      const isActive = this.isActiveLevel1(hash);
-      const onPressHandler = () => this.onPressLevel1(hash);
-
-      return (
-        <View key={hash} style={styles.acc}>
-          {this.renderItemHeader({
-            label: carHistoryYear,
-            onPressHandler,
-            theme: 'itemLevel1',
-            isActive,
-            isLast,
-            isArrow: true,
-          })}
-          {
-            isActive ?
-              (
-                <Animatable.View
-                  style={[styles.accContent, styles.accContentLevel1]}
-                  animation="slideInDown"
-                  useNativeDriver={true}
-                  duration={700}
-                >
-                  {this.renderLevel2(item.history)}
-                </Animatable.View>
-              ) : null
-          }
-        </View>
-      );
+      setLoading(false);
     });
-  }
+    // return () => {
+    // }
+  }, []);
 
-  renderLevel2 = (carHistoryItemByMonth) => {
-    return Object.keys(carHistoryItemByMonth).map((month, idx, monthArray) => {
-      const item = carHistoryItemByMonth[month];
-      const isLast = (monthArray.length - 1) === idx;
-      const hash = item.hash;
-      const isActive = this.isActiveLevel2(hash);
-      const onPressHandler = () => this.onPressLevel2(hash);
+  const renderData = carHistory => {
+    return Object.keys(carHistory)
+      .reverse()
+      .map(carHistoryYear => {
+        const item = carHistory[carHistoryYear];
+        const hash = item.hash;
+        return (
+          <List.Accordion
+            key={'year' + hash}
+            title={carHistoryYear}
+            left={props => <List.Icon {...props} icon="calendar-multiple" />}>
+            {Object.keys(item.history)
+              .reverse()
+              .map(month => renderLevel(item.history[month].history))}
+          </List.Accordion>
+        );
+      });
+  };
 
-      return (
-        <View key={hash} style={styles.acc}>
-          {this.renderItemHeader({
-            label: MONTH_TEXT[month],
-            onPressHandler,
-            theme: 'itemLevel2',
-            isActive,
-            isLast,
-            isArrow: true,
-          })}
-          {
-            isActive ?
-              (
-                <Animatable.View
-                  animation="pulse"
-                  useNativeDriver={true}
-                  duration={700}
-                >
-                {this.renderLevel3(item.history)}
-              </Animatable.View>
-              ) : null
-          }
-        </View>
-      );
-    });
-  }
+  const renderLevel = works => {
+    const vin = get(route, 'params.car.vin');
 
-  renderLevel3 = (works) => {
-    const { navigation } = this.props;
-    const vin = get(navigation, 'state.params.car.vin');
-
-    return works.map((work, idx) => {
+    return works.map(work => {
       const workId = get(work, 'document.number');
       const workDealer = get(work, 'dealer.id');
-      const isLast = (works.length - 1) === idx;
-      const onPressHandler = () => navigation.navigate('CarHistoryDetailsScreen', {
-        vin,
-        workId,
-        workDealer,
-        title: `${get(work, 'document.name')} #${workId}`,
-      });
+      const onPressHandler = () => {
+        navigation.navigate('CarHistoryDetailsScreen', {
+          vin,
+          workId,
+          workDealer,
+          title: `${get(work, 'document.name')} #${workId}`,
+        });
+      };
 
-      return this.renderItemHeader({
-        work,
-        isLast,
-        key: work.hash,
-        onPressHandler,
-        isArrowPress: true,
-        theme: 'itemLevel3',
-      });
+      return renderLevelContent({work, onPress: onPressHandler});
     });
-  }
+  };
 
-  renderLevel3Item = ({ prop, value }) => (
-    <Row style={styles.sectionRow}>
-      <Col style={styles.sectionProp}>
-        <Text style={styles.sectionPropText}>{`${prop}:`}</Text>
-      </Col>
-      <Col style={styles.sectionValue}>
-        <Text style={styles.sectionValueText}>{value}</Text>
-      </Col>
-    </Row>
-  )
-
-  renderLevel3Content = ({ work }) => {
-    const { date, document, master, summ } = work;
+  const renderLevelContent = ({work, onPress}) => {
+    const {date, document, master, summ, car, hash} = work;
     const works = get(summ, 'works');
     const parts = get(summ, 'parts');
     const total = get(summ, 'total');
     const currency = get(summ, 'currency');
+    const dealerName = get(work, 'dealer.name', null);
+    // const sale = parseFloat(get(summ, 'sale.works') + get(summ, 'sale.parts'));
 
     return (
-      <Body style={styles.body}>
-        { date ? <Text style={styles.date}>{dayMonthYear(date)}</Text> : null }
-        { document ? this.renderLevel3Item({ prop: document.name, value: `#${document.number}` }) : null}
-        { master ? this.renderLevel3Item({ prop: 'Мастер', value: master }) : null}
-        { works ? this.renderLevel3Item({ prop: 'Ст-ть работ', value: `${numberWithGap(works)} ${currency}` }) : null}
-        { parts ? this.renderLevel3Item({ prop: 'Ст-ть запчастей', value: `${numberWithGap(parts)} ${currency}` }) : null}
-        { total ? this.renderLevel3Item({ prop: 'Всего', value: `${numberWithGap(total)} ${currency}` }) : null}
-      </Body>
+      <List.Item
+        onPress={onPress}
+        key={'item' + hash}
+        descriptionNumberOfLines={2}
+        title={[
+          [dayMonth(work.date)].join(' '),
+          ['#' + work.document.number].join(' '),
+        ].join(', ')}
+        description={[
+          dealerName,
+          [
+            strings.NewCarItemScreen.plates.mileage.toLowerCase(),
+            numberWithGap(car.mileage),
+          ].join(' '),
+          // master ? [strings.CarHistoryScreen.master, master].join(' ') : null,
+        ].join('\r\n')}
+        left={() => <List.Icon color={styleConst.color.blue} icon="car-info" />}
+        right={props => (
+          <View style={{justifyContent: 'center'}}>
+            <Text
+              style={{
+                textAlignVertical: 'center',
+                fontSize: 16,
+                color: styleConst.color.darkBg,
+              }}>
+              {[
+                strings.CarHistoryScreen.price.total2,
+                showPrice(total, currency, true),
+              ].join(' ')}
+            </Text>
+          </View>
+        )}
+      />
+    );
+  };
+
+  if (isLoading) {
+    return <LogoLoader />;
+  }
+
+  if (isEmpty(carHistory) || !carHistory.items) {
+    return (
+      <SafeAreaView style={styles.safearea}>
+        <StatusBar barStyle="dark-content" />
+        <Text style={styles.emptyText}>
+          {strings.CarHistoryScreen.empty.text}
+        </Text>
+      </SafeAreaView>
     );
   }
 
-  renderItemHeader = ({ work, key, label, theme, isActive, isArrow, onPressHandler, isArrowPress }) => {
-    const isLevel3 = theme === 'itemLevel3';
-
-    return (
-      <View key={key} style={[stylesList.listItemContainer, styles[theme]]}>
-        <ListItem
-          icon
-          last
-          style={[stylesList.listItem, isLevel3 ? styles.listItem : null]}
-          onPress={onPressHandler}
-        >
-          {
-            isLevel3 ?
-              this.renderLevel3Content({ work }) :
-              (
-                <Body>
-                  <Text style={stylesList.label}>{label}</Text>
-                </Body>
-              )
-          }
-          <Right>
-            {
-              isArrow ?
-                (
-                  <Icon
-                    name={isActive ? 'ios-arrow-down' : 'ios-arrow-forward'}
-                    style={[stylesList.iconArrow, stylesList.iconArrowWithText]}
-                  />
-                ) : null
-            }
-            { isArrowPress ? <Icon name="arrow-forward" style={[stylesList.iconArrow, styles.iconArrow]} /> : null }
-          </Right>
-        </ListItem>
-      </View>
-    );
-  }
-
-  render() {
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
-
-    const {
-      navigation,
-      carHistory,
-      isFetchCarHistory,
-    } = this.props;
-
-    const car = get(navigation, 'state.params.car');
-
-    console.log('== CarHistory ==');
-
-    if (isFetchCarHistory) {
-      return <SpinnerView />;
-    }
-
-    if (isEmpty(carHistory) || !carHistory.items) {
-      return (
-        <SafeAreaView style={styles.safearea}>
-          <Text style={styles.emptyText}>
-            Истории пока нет
-          </Text>
-        </SafeAreaView>
-      );
-    }
-
-    return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <Content>
-            <View style={styles.about}>
-              {car.brand ? this.renderListItem('Марка', car.brand) : null}
-              {car.model ? this.renderListItem('Модель', car.model) : null}
-              {car.number ? this.renderListItem('Гос. номер', car.number) : null}
-              {car.vin ? this.renderListItem('VIN', car.vin, true) : null}
-            </View>
-            {Object.keys(get(carHistory, 'items'), []).length ? this.renderLevel1(carHistory.items) : null}
-          </Content>
-        </SafeAreaView>
-      </StyleProvider>
-    );
-  }
-}
+  return (
+    <PaperProvider theme={theme}>
+      <ScrollView style={{backgroundColor: styleConst.color.white}}>
+        <View style={{flex: 1}}>
+          {Object.keys(get(carHistory, 'items'), []).length
+            ? renderData(carHistory.items)
+            : null}
+        </View>
+      </ScrollView>
+    </PaperProvider>
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarHistoryScreen);

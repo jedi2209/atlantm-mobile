@@ -1,25 +1,29 @@
+import * as Sentry from '@sentry/react-native';
 import API from '../utils/api';
 
 import {
   CALL_ME__REQUEST,
   CALL_ME__SUCCESS,
   CALL_ME__FAIL,
-
   CONTACTS_MAP_AVAILABLE_NAVIAPPS__SET,
   CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__REQUEST,
   CONTACTS_MAP_CHECK_AVAILABLE_NAVIAPPS__DONE,
+  CONTACTS_CHAT_SEND__REQUEST,
+  CONTACTS_CHAT_SEND__FAIL,
+  CONTACTS_CHAT_SEND__SUCCESS,
+  CONTACTS_CHAT_SAVE__COOKIE,
 } from './actionTypes';
 
-export const callMe = (props) => {
+export const callMe = props => {
   return dispatch => {
     dispatch({
       type: CALL_ME__REQUEST,
-      payload: { ...props },
+      payload: {...props},
     });
 
     return API.callMe(props)
       .then(res => {
-        const { error, status } = res;
+        const {error, status} = res;
 
         if (status !== 'success') {
           return dispatch({
@@ -31,9 +35,11 @@ export const callMe = (props) => {
           });
         }
 
-        return dispatch({ type: CALL_ME__SUCCESS });
+        return dispatch({type: CALL_ME__SUCCESS});
       })
       .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage('callMe API.callMe error');
         return dispatch({
           type: CALL_ME__FAIL,
           payload: {
@@ -66,6 +72,28 @@ export const actionSetAvailableNaviApps = availableNaviApps => {
     return dispatch({
       type: CONTACTS_MAP_AVAILABLE_NAVIAPPS__SET,
       payload: availableNaviApps,
+    });
+  };
+};
+
+export const actionChatIDSave = senderID => {
+  return dispatch => {
+    return dispatch({
+      type: CONTACTS_CHAT_SEND__SUCCESS,
+      payload: {
+        session: senderID,
+      },
+    });
+  };
+};
+
+export const saveCookies = cookiesData => {
+  return dispatch => {
+    return dispatch({
+      type: CONTACTS_CHAT_SAVE__COOKIE,
+      payload: {
+        cookiesData,
+      },
     });
   };
 };

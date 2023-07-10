@@ -1,0 +1,343 @@
+// @flow
+
+import color from 'color';
+import {Platform, Dimensions, PixelRatio} from 'react-native';
+import styleConst from '../../src/core/style-const';
+
+const PLATFORM = {
+  ANDROID: 'android',
+  IOS: 'ios',
+  MATERIAL: 'material',
+  WEB: 'web',
+};
+
+const deviceHeight = Dimensions.get('window').height;
+const deviceWidth = Dimensions.get('window').width;
+const platform = Platform.OS;
+const platformStyle = undefined;
+const isIphoneX =
+  platform === PLATFORM.IOS &&
+  (deviceHeight === 812 ||
+    deviceWidth === 812 ||
+    deviceHeight === 896 ||
+    deviceWidth === 896);
+
+export default {
+  platformStyle,
+  platform,
+
+  // Accordion
+  accordionBorderColor: '#d3d3d3',
+  accordionContentPadding: 10,
+  accordionIconFontSize: 18,
+  contentStyle: '#f5f4f5',
+  expandedIconStyle: '#000',
+  headerStyle: styleConst.color.greyText2,
+  iconStyle: '#000',
+  disableRow: '#a9a9a9',
+
+  // ActionSheet
+  elevation: 4,
+  containerTouchableBackgroundColor: 'rgba(0,0,0,0.4)',
+  innerTouchableBackgroundColor: styleConst.color.white,
+  listItemHeight: 50,
+  listItemBorderColor: 'transparent',
+  marginHorizontal: -15,
+  marginLeft: 16,
+  marginTop: 15,
+  minHeight: 56,
+  padding: 15,
+  touchableTextColor: '#757575',
+
+  // Android
+  androidRipple: true,
+  androidRippleColor: 'rgba(256, 256, 256, 0.3)',
+  androidRippleColorDark: 'rgba(0, 0, 0, 0.15)',
+  buttonUppercaseAndroidText: false,
+
+  // Badge
+  badgeBg: '#ED1727',
+  badgeColor: styleConst.color.white,
+  badgePadding: platform === PLATFORM.IOS ? 3 : 0,
+
+  // Button
+  buttonFontFamily: platform === PLATFORM.IOS ? 'System' : 'Roboto_medium',
+  buttonDisabledBg: '#b5b5b5',
+  buttonPadding: 6,
+  buttonDefaultActiveOpacity: 0.5,
+  buttonDefaultFlex: 1,
+  buttonDefaultBorderRadius: 2,
+  buttonDefaultBorderWidth: 1,
+  get buttonPrimaryBg() {
+    return this.brandPrimary;
+  },
+  get buttonPrimaryColor() {
+    return this.inverseTextColor;
+  },
+  get buttonInfoBg() {
+    return this.brandInfo;
+  },
+  get buttonInfoColor() {
+    return this.inverseTextColor;
+  },
+  get buttonSuccessBg() {
+    return this.brandSuccess;
+  },
+  get buttonSuccessColor() {
+    return this.inverseTextColor;
+  },
+  get buttonDangerBg() {
+    return this.brandDanger;
+  },
+  get buttonDangerColor() {
+    return this.inverseTextColor;
+  },
+  get buttonWarningBg() {
+    return this.brandWarning;
+  },
+  get buttonWarningColor() {
+    return this.inverseTextColor;
+  },
+  get buttonTextSize() {
+    return platform === PLATFORM.IOS
+      ? this.fontSizeBase * 1.1
+      : this.fontSizeBase - 1;
+  },
+  get buttonTextSizeLarge() {
+    return this.fontSizeBase * 1.5;
+  },
+  get buttonTextSizeSmall() {
+    return this.fontSizeBase * 0.8;
+  },
+  get borderRadiusLarge() {
+    return this.fontSizeBase * 3.8;
+  },
+  get iconSizeLarge() {
+    return this.iconFontSize * 1.5;
+  },
+  get iconSizeSmall() {
+    return this.iconFontSize * 0.6;
+  },
+
+  // Card
+  cardDefaultBg: styleConst.color.white,
+  cardBorderColor: styleConst.color.systemGray,
+  cardBorderRadius: 2,
+  cardItemPadding: platform === PLATFORM.IOS ? 10 : 12,
+
+  // CheckBox
+  CheckboxRadius: platform === PLATFORM.IOS ? 13 : 0,
+  CheckboxBorderWidth: platform === PLATFORM.IOS ? 1 : 2,
+  CheckboxPaddingLeft: platform === PLATFORM.IOS ? 6 : 0,
+  CheckboxPaddingBottom: platform === PLATFORM.IOS ? 0 : 0,
+  CheckboxIconSize: platform === PLATFORM.IOS ? 19 : 17,
+  CheckboxIconMarginTop: platform === PLATFORM.IOS ? undefined : 1,
+  CheckboxFontSize: platform === PLATFORM.IOS ? 16 / 0.9 : 18,
+  checkboxBgColor: styleConst.color.systemGray,
+  checkboxSize: 20,
+  checkboxTickColor: styleConst.color.white,
+  // checkboxDefaultColor: 'transparent',
+  checkboxTextShadowRadius: 0,
+
+  // Color
+  brandPrimary: styleConst.color.blue,
+  brandInfo: '#62B1F6',
+  brandSuccess: '#5cb85c',
+  brandDanger: '#d9534f',
+  brandWarning: '#f0ad4e',
+  brandDark: '#000',
+  brandLight: '#a9a9a9',
+
+  // Container
+  containerBgColor: styleConst.color.white,
+
+  // Date Picker
+  datePickerFlex: 1,
+  datePickerPadding: 10,
+  datePickerTextColor: '#000',
+  datePickerBg: 'transparent',
+
+  // FAB
+  fabBackgroundColor: styleConst.color.blue,
+  fabBorderRadius: 28,
+  fabBottom: 0,
+  fabButtonBorderRadius: 20,
+  fabButtonHeight: 40,
+  fabButtonLeft: 7,
+  fabButtonMarginBottom: 10,
+  fabContainerBottom: 20,
+  fabDefaultPosition: 20,
+  fabElevation: 4,
+  fabIconColor: styleConst.color.white,
+  fabIconSize: 24,
+  fabShadowColor: '#000',
+  fabShadowOffsetHeight: 2,
+  fabShadowOffsetWidth: 0,
+  fabShadowOpacity: 0.4,
+  fabShadowRadius: 2,
+  fabWidth: 56,
+
+  // Font
+  DefaultFontSize: 16,
+  fontFamily: platform === PLATFORM.IOS ? 'System' : styleConst.font.regular,
+  fontSizeBase: 15,
+  get fontSizeH1() {
+    return this.fontSizeBase * 1.8;
+  },
+  get fontSizeH2() {
+    return this.fontSizeBase * 1.6;
+  },
+  get fontSizeH3() {
+    return this.fontSizeBase * 1.4;
+  },
+
+  // Footer
+  footerHeight: 55,
+  footerDefaultBg:
+    platform === PLATFORM.IOS ? styleConst.color.bg : styleConst.color.blue,
+  footerPaddingBottom: 0,
+
+  // FooterTab
+  tabBarTextColor: platform === PLATFORM.IOS ? '#6b6b6b' : '#b3c7f9',
+  tabBarTextSize: platform === PLATFORM.IOS ? 14 : 11,
+  activeTab: platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
+  sTabBarActiveTextColor: '#007aff',
+  tabBarActiveTextColor:
+    platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
+  tabActiveBgColor:
+    platform === PLATFORM.IOS ? '#cde1f9' : styleConst.color.blue,
+
+  // Header
+  toolbarBtnColor:
+    platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
+  toolbarDefaultBg:
+    platform === PLATFORM.IOS ? styleConst.color.bg : styleConst.color.blue,
+  toolbarHeight: platform === PLATFORM.IOS ? 64 : 56,
+  toolbarSearchIconSize: platform === PLATFORM.IOS ? 20 : 23,
+  toolbarInputColor:
+    platform === PLATFORM.IOS ? '#CECDD2' : styleConst.color.white,
+  searchBarHeight: platform === PLATFORM.IOS ? 30 : 40,
+  searchBarInputHeight: platform === PLATFORM.IOS ? 30 : 50,
+  toolbarBtnTextColor:
+    platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
+  toolbarDefaultBorder:
+    platform === PLATFORM.IOS ? '#a7a6ab' : styleConst.color.blue,
+  iosStatusbar: platform === PLATFORM.IOS ? 'dark-content' : 'light-content',
+
+  // Icon
+  iconFamily: 'Ionicons',
+  iconFontSize: platform === PLATFORM.IOS ? 30 : 26,
+  iconHeaderSize: platform === PLATFORM.IOS ? 33 : 24,
+
+  // InputGroup
+  inputFontSize: 17,
+  inputBorderColor: '#D9D5DC',
+  inputSuccessBorderColor: '#2b8339',
+  inputErrorBorderColor: '#ed2f2f',
+  inputHeightBase: 50,
+  get inputColor() {
+    return this.textColor;
+  },
+  get inputColorPlaceholder() {
+    return '#575757';
+  },
+
+  // Line Height
+  buttonLineHeight: 19,
+  lineHeightH1: 32,
+  lineHeightH2: 27,
+  lineHeightH3: 25,
+  lineHeight: platform === PLATFORM.IOS ? 20 : 24,
+  listItemSelected:
+    platform === PLATFORM.IOS ? '#007aff' : styleConst.color.blue,
+
+  // List
+  listBg: 'transparent',
+  listBorderColor: '#c9c9c9',
+  listDividerBg: '#f4f4f4',
+  listBtnUnderlayColor: '#DDD',
+  listItemPadding: platform === PLATFORM.IOS ? 10 : 12,
+  listNoteColor: styleConst.color.greyText7,
+  listNoteSize: 13,
+
+  // Progress Bar
+  defaultProgressColor: '#E4202D',
+  inverseProgressColor: '#1A191B',
+
+  // Radio Button
+  radioBtnSize: platform === PLATFORM.IOS ? 25 : 23,
+  radioSelectedColorAndroid: styleConst.color.blue,
+  radioBtnLineHeight: platform === PLATFORM.IOS ? 29 : 24,
+  get radioColor() {
+    return this.brandPrimary;
+  },
+
+  // Segment
+  segmentBackgroundColor: styleConst.color.bg,
+  segmentActiveBackgroundColor: styleConst.color.blue,
+  segmentTextColor: styleConst.color.blue,
+  segmentActiveTextColor: styleConst.color.white,
+  segmentBorderColor: styleConst.color.blue,
+  segmentBorderColorMain: styleConst.color.blue,
+
+  // Spinner
+  defaultSpinnerColor: styleConst.color.blue,
+  inverseSpinnerColor: '#1A191B',
+
+  // Tab
+  tabBarDisabledTextColor: '#BDBDBD',
+  tabDefaultBg: styleConst.color.bg,
+  topTabBarTextColor: platform === PLATFORM.IOS ? '#6b6b6b' : '#b3c7f9',
+  topTabBarActiveTextColor:
+    platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
+  topTabBarBorderColor:
+    platform === PLATFORM.IOS ? '#a7a6ab' : styleConst.color.white,
+  topTabBarActiveBorderColor:
+    platform === PLATFORM.IOS ? '#007aff' : styleConst.color.white,
+
+  // Tabs
+  tabBgColor: styleConst.color.bg,
+  tabFontSize: 15,
+
+  // Text
+  textColor: styleConst.color.greyText,
+  inverseTextColor: styleConst.color.white,
+  noteFontSize: 14,
+  get defaultTextColor() {
+    return this.textColor;
+  },
+
+  // Title
+  titleFontfamily: platform === PLATFORM.IOS ? 'System' : 'Roboto_medium',
+  titleFontSize: platform === PLATFORM.IOS ? 17 : 19,
+  subTitleFontSize: platform === PLATFORM.IOS ? 11 : 14,
+  subtitleColor: platform === PLATFORM.IOS ? '#8e8e93' : styleConst.color.white,
+  titleFontColor: platform === PLATFORM.IOS ? '#000' : styleConst.color.white,
+
+  // Other
+  borderRadiusBase: platform === PLATFORM.IOS ? 5 : 2,
+  borderWidth: 1 / PixelRatio.getPixelSizeForLayoutSize(1),
+  contentPadding: 10,
+  dropdownLinkColor: '#414142',
+  inputLineHeight: 24,
+  deviceWidth,
+  deviceHeight,
+  isIphoneX,
+  inputGroupRoundedBorderRadius: 30,
+
+  // iPhoneX SafeArea
+  Inset: {
+    portrait: {
+      topInset: 24,
+      leftInset: 0,
+      rightInset: 0,
+      bottomInset: 34,
+    },
+    landscape: {
+      topInset: 0,
+      leftInset: 44,
+      rightInset: 44,
+      bottomInset: 21,
+    },
+  },
+};

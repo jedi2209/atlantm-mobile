@@ -1,0 +1,84 @@
+import React, {useEffect, useState} from 'react';
+import {StyleSheet, ActivityIndicator} from 'react-native';
+import {Button, View, ScrollView} from 'native-base';
+import {connect} from 'react-redux';
+
+import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
+import * as NavigationService from '../../navigation/NavigationService';
+
+import moment from 'moment';
+import styleConst from '../style-const';
+import {strings} from '../lang/const';
+
+const mapStateToProps = ({dealer, profile}) => {
+  return {
+    region: dealer.selected.region,
+  };
+};
+
+const WebviewScreen = ({route, region, SubmitButton, minHeight}) => {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    console.info('== WebviewScreen ==');
+    if (route.params?.html) {
+      setData({html: route.params.html});
+    }
+    if (route.params?.uri) {
+      setData({uri: route.params.uri});
+    }
+  }, [route?.params?.html, route?.params?.uri]);
+
+  if (data) {
+    return (
+      <>
+        <ScrollView
+          style={[styles.mainView, route.params?.mainScrollViewStyle]}>
+          <WebViewAutoHeight
+            style={[styles.webView, route.params?.webViewStyle]}
+            key={moment().unix()}
+            source={data}
+          />
+        </ScrollView>
+        <Button
+          style={styles.submitButton}
+          onPress={() => NavigationService.goBack()}>
+          {SubmitButton.text}
+        </Button>
+      </>
+    );
+  } else {
+    return (
+      <View flex={1} alignContent={'center'} justifyContent={'center'}>
+        <ActivityIndicator
+          color={styleConst.color.blue}
+          style={styleConst.spinner}
+        />
+      </View>
+    );
+  }
+};
+
+WebviewScreen.defaultProps = {
+  SubmitButton: {
+    text: strings.ModalView.close,
+  },
+};
+
+const styles = StyleSheet.create({
+  submitButton: {
+    marginBottom: 35,
+    marginHorizontal: 10,
+  },
+  mainView: {
+    paddingHorizontal: 10,
+    flex: 1,
+    paddingBottom: 25,
+    backgroundColor: styleConst.color.bg,
+  },
+  webView: {
+    backgroundColor: styleConst.color.bg,
+  },
+});
+
+export default connect(mapStateToProps)(WebviewScreen);

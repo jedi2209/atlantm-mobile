@@ -1,5 +1,153 @@
+import DeviceInfo from 'react-native-device-info';
+
+const bundle = DeviceInfo.getBundleId();
+
+let appRegion,
+  apiLang,
+  errorNetwork,
+  appleID,
+  googleID,
+  appName,
+  appEmail,
+  sentryDSN,
+  oneSignalKey,
+  amplitudeKey,
+  appLang,
+  countrySettings,
+  countryList,
+  phoneRestricted,
+  fbAppID,
+  jivoChat = null;
+
 export const RUSSIA = 'ru';
 export const BELARUSSIA = 'by';
 export const UKRAINE = 'ua';
 
-export const ERROR_NETWORK = 'Отсутствует интернет соединение';
+switch (bundle) {
+  case 'com.atlantm.app': // iOS BY
+  case 'com.atlantm': // Android BY
+    appRegion = BELARUSSIA;
+    appLang = 'ru';
+    apiLang = 'ru';
+    countrySettings = ['by', 'ru'];
+    countryList = require('./const.countries_by.json');
+    appEmail = 'atlant-m.corp@atlantm.com';
+    phoneRestricted = 'ua';
+    errorNetwork = 'Отсутствует интернет соединение';
+    appleID = 'XXXX';
+    googleID = 'com.atlantm';
+    appName = 'Atlant-M';
+    sentryDSN = 'https://XXXX@sentry.io/219899';
+    oneSignalKey = 'XXXX';
+    amplitudeKey = 'XXXX';
+    fbAppID = 'XXXX';
+    jivoChat = {
+      chatPage: 'https://api.atlantm.com/v1/jivo/widget/XXXX/',
+      chatID: 'XXXX',
+      secret: 'XXXX$C&F)J@NcRfUj',
+      socket: 'wss://livechat.atlantm.com/v1',
+    };
+    break;
+  case 'ua.atlantm.app': // iOS UA + Android UA
+    appRegion = UKRAINE;
+    appLang = 'uk';
+    apiLang = 'ua';
+    countrySettings = ['ua'];
+    phoneRestricted = ['ru', 'by'];
+    countryList = require('./const.countries_ua.json');
+    appEmail = 'info@vw-atlant.com.ua';
+    errorNetwork = "Відсутнє інтернет з'єднання";
+    appleID = '1619839155';
+    googleID = 'ua.atlantm.app';
+    appName = 'Автодім Атлант';
+    sentryDSN =
+      'https://XXXX@o76005.ingest.sentry.io/6367469';
+    oneSignalKey = 'XXXX';
+    amplitudeKey = 'XXXX';
+    fbAppID = 'XXXX';
+    jivoChat = {
+      chatPage: 'https://api.atlantm.com/v1/jivo/widget/XXXX/',
+      chatID: 'XXXX',
+      secret: 'XXXX$C&F)J@NcRfUj',
+      socket: 'wss://livechat.atlantm.com/v1',
+    };
+    break;
+}
+
+export const APP_LOCALE = {
+  ru: 'ru-RU',
+  by: 'ru-RU',
+  ua: 'uk-UK',
+};
+
+export const APP_LANG = appLang;
+
+export const API_LANG = apiLang;
+export const APP_REGION = appRegion;
+export const APP_COUNTRY_SETTINGS = countrySettings;
+export const APP_COUNTRY_LIST = countryList;
+export const APP_PHONE_RESTRICTED = phoneRestricted;
+
+export const ERROR_NETWORK = errorNetwork;
+
+export const AppleAppID = appleID;
+export const GooglePackageName = googleID;
+
+export const STORE_LINK = {
+  ios: `itms-apps://itunes.apple.com/app/id${AppleAppID}?action=update`,
+  android: `market://details?id=${GooglePackageName}`,
+};
+
+export const API_MAIN_URL = 'https://api.atlantm.com/v1';
+
+export const SENTRY_DSN = sentryDSN;
+
+export const APP_NAME = appName;
+
+export const APP_EMAIL = appEmail;
+
+export const ONESIGNAL = oneSignalKey;
+
+export const AMPLITUDE_KEY = amplitudeKey;
+
+export const VK_APP_ID = 'XXXX';
+
+export const FB_APP_ID = fbAppID;
+
+export const JIVO_CHAT = jivoChat;
+
+export const AWS_CONFIG = {
+  accessKeyId: 'XXXX',
+  secretAccessKey: 'XXXX/XXXX',
+  region: 'eu-west-1',
+};
+
+export const AUTH_DATA = {
+  by: {
+    GoogleSignin: {
+      webClientId:
+        'XXXX-XXXX.apps.googleusercontent.com',
+      iosClientId:
+        'XXXX-XXXX.apps.googleusercontent.com',
+    },
+  },
+  ua: {
+    GoogleSignin: {
+      webClientId:
+        'XXXX-ekmnngknqo6tdds5luqc795f39fk9e3v.apps.googleusercontent.com',
+      iosClientId:
+        'XXXX-si8a87cj8tto6rmrlkmv9bookjmvn36n.apps.googleusercontent.com',
+    },
+  },
+};
+
+export const API_MAIN_KEY = {
+  by: {
+    android: 'XXXX',
+    ios: 'XXXX',
+  },
+  ua: {
+    android: 'XXXX',
+    ios: 'XXXX',
+  },
+};

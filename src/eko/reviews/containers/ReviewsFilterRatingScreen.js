@@ -1,14 +1,16 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet, Alert } from 'react-native';
+import React, {useEffect} from 'react';
+import {Alert} from 'react-native';
 
 // redux
-import { connect } from 'react-redux';
-import { actionSelectFilterRatingFrom, actionSelectFilterRatingTo } from '../../actions';
+import {connect} from 'react-redux';
+import {
+  actionSelectFilterRatingFrom,
+  actionSelectFilterRatingTo,
+} from '../../actions';
 
 // components
-import { Body, Content, ListItem, StyleProvider } from 'native-base';
+import {HStack, View, Pressable} from 'native-base';
 import RadioIcon from '../../../core/components/RadioIcon';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import ListItemHeader from '../../../profile/components/ListItemHeader';
 import RatingStars from '../components/RatingStars';
 
@@ -16,22 +18,17 @@ import RatingStars from '../components/RatingStars';
 import stylesList from '../../../core/components/Lists/style';
 
 // helpers
-import { REVIEWS_RATING_TYPE__FROM, REVIEWS_RATING_TYPE__TO } from '../../constants';
+import {
+  REVIEWS_RATING_TYPE__FROM,
+  REVIEWS_RATING_TYPE__TO,
+} from '../../constants';
 import PropTypes from 'prop-types';
-import getTheme from '../../../../native-base-theme/components';
-import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
+
+import {strings} from '../../../core/lang/const';
 
 const RATING_ARRAY = [1, 2, 3, 4, 5];
 
-const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-  },
-});
-
-const mapStateToProps = ({ eko, nav }) => {
+const mapStateToProps = ({eko, nav}) => {
   return {
     nav,
     filterRatingFrom: eko.reviews.filterRatingFrom,
@@ -44,45 +41,30 @@ const mapDispatchToProps = {
   actionSelectFilterRatingTo,
 };
 
-class ReviewsFilterDateScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Отзывы c рейтингом',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <View />,
-  })
+const ReviewsFilterRatingScreen = ({
+  filterRatingFrom,
+  filterRatingTo,
+  actionSelectFilterRatingFrom,
+  actionSelectFilterRatingTo,
+}) => {
+  useEffect(() => {
+    console.info('== ReviewsFilterDateScreen ==');
+  }, []);
 
-  static propTypes = {
-    navigation: PropTypes.object,
-    filterRatingFrom: PropTypes.number,
-    filterRatingTo: PropTypes.number,
-    actionSelectFilterRatingFrom: PropTypes.func,
-    actionSelectFilterRatingTo: PropTypes.func,
-  }
-
-  shouldComponentUpdate(nextProps) {
-    const { filterRatingFrom, filterRatingTo } = this.props;
-
-    return filterRatingFrom !== nextProps.filterRatingFrom ||
-      filterRatingTo !== nextProps.filterRatingTo;
-  }
-
-  onPressItem = (selectedRating, type) => {
-    const {
-      filterRatingFrom,
-      filterRatingTo,
-      actionSelectFilterRatingFrom,
-      actionSelectFilterRatingTo,
-    } = this.props;
-
+  const _onPressItem = (selectedRating, type) => {
     requestAnimationFrame(() => {
       if (type === REVIEWS_RATING_TYPE__FROM) {
         if (selectedRating > filterRatingTo) {
-          return setTimeout(() => Alert.alert('"Рейтинг от" не может быть больше "рейтинга до"'), 100);
+          return setTimeout(
+            () =>
+              Alert.alert(
+                strings.ReviewsFilterRatingScreen.Notifications.rating,
+              ),
+            100,
+          );
         }
 
-        if (this.isRatingFromSelected(selectedRating)) {
+        if (_isRatingFromSelected(selectedRating)) {
           return false;
         } else {
           actionSelectFilterRatingFrom(selectedRating);
@@ -91,81 +73,92 @@ class ReviewsFilterDateScreen extends Component {
 
       if (type === REVIEWS_RATING_TYPE__TO) {
         if (selectedRating < filterRatingFrom) {
-          return setTimeout(() => Alert.alert('"Рейтинг до" не может быть меньше "рейтинга от"'), 100);
+          return setTimeout(
+            () =>
+              Alert.alert(
+                strings.ReviewsFilterRatingScreen.Notifications.rating2,
+              ),
+            100,
+          );
         }
 
-        if (this.isRatingToSelected(selectedRating)) {
+        if (_isRatingToSelected(selectedRating)) {
           return false;
         } else {
           actionSelectFilterRatingTo(selectedRating);
         }
       }
     });
-  }
+  };
 
-  isRatingFromSelected = selectedRatingFrom => this.props.filterRatingFrom === selectedRatingFrom
-  isRatingToSelected = selectedRatingTo => this.props.filterRatingTo === selectedRatingTo
+  const _isRatingFromSelected = selectedRatingFrom =>
+    filterRatingFrom === selectedRatingFrom;
+  const _isRatingToSelected = selectedRatingTo =>
+    filterRatingTo === selectedRatingTo;
 
-  renderRatingFrom = () => {
-    return RATING_ARRAY.map((rating, idx) => {
-      const handler = () => this.onPressItem(rating, REVIEWS_RATING_TYPE__FROM);
-      const isLast = (RATING_ARRAY.length - 1) === idx;
-      const isSelected = this.isRatingFromSelected(rating);
-      const key = `rating-from-${rating}`;
+  const _renderRating = type => {
+    switch (type) {
+      case 'from':
+        return RATING_ARRAY.map((rating, idx) => {
+          const handler = () => _onPressItem(rating, REVIEWS_RATING_TYPE__FROM);
+          const isSelected = _isRatingFromSelected(rating);
+          const key = `rating-from-${rating}`;
 
-      return this.renderItem(rating, isSelected, handler, isLast, key);
-    });
-  }
+          return _renderItem(rating, isSelected, handler, key);
+        });
+      case 'to':
+        return RATING_ARRAY.map((rating, idx) => {
+          const handler = () => _onPressItem(rating, REVIEWS_RATING_TYPE__TO);
+          const isSelected = _isRatingToSelected(rating);
+          const key = `rating-to-${rating}`;
 
-  renderRatingTo = () => {
-    return RATING_ARRAY.map((rating, idx) => {
-      const handler = () => this.onPressItem(rating, REVIEWS_RATING_TYPE__TO);
-      const isLast = (RATING_ARRAY.length - 1) === idx;
-      const isSelected = this.isRatingToSelected(rating);
-      const key = `rating-to-${rating}`;
+          return _renderItem(rating, isSelected, handler, key);
+        });
+      default:
+        break;
+    }
+  };
 
-      return this.renderItem(rating, isSelected, handler, isLast, key);
-    });
-  }
-
-  renderItem = (rating, isSelected, onPressHandler, isLast, key) => {
+  const _renderItem = (rating, isSelected, onPressHandler, key) => {
     return (
       <View key={key} style={stylesList.listItemContainer}>
-        <ListItem
-          last={isLast}
-          icon
-          style={stylesList.listItemPressable}
-          onPress={onPressHandler}
-        >
-          <RadioIcon
-            containerStyle={{
-              marginTop: 5,
-            }}
-            selected={isSelected} />
-          <Body style={stylesList.bodyWithLeftGap} >
+        <Pressable
+          style={[stylesList.listItemPressable, {marginTop: 15}]}
+          onPress={onPressHandler}>
+          <HStack ml={3} alignContent={'center'}>
+            <RadioIcon
+              selected={isSelected}
+              containerStyle={{marginRight: 10}}
+            />
             <RatingStars size="M" theme="blue" rating={rating} itemId={key} />
-          </Body>
-        </ListItem>
+          </HStack>
+        </Pressable>
       </View>
     );
-  }
+  };
 
-  render() {
-    console.log('== ReviewsFilterDateScreen ==');
+  return (
+    <View>
+      <ListItemHeader
+        text={strings.ReviewsFilterRatingScreen.rating.from.toUpperCase()}
+      />
+      {_renderRating('from')}
+      <ListItemHeader
+        text={strings.ReviewsFilterRatingScreen.rating.to.toUpperCase()}
+      />
+      {_renderRating('to')}
+    </View>
+  );
+};
 
-    return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <Content>
-            <ListItemHeader text="РЕЙТИНГ ОТ" />
-            {this.renderRatingFrom()}
-            <ListItemHeader text="РЕЙТИНГ ДО" />
-            {this.renderRatingTo()}
-          </Content>
-        </SafeAreaView>
-      </StyleProvider>
-    );
-  }
-}
+ReviewsFilterRatingScreen.propTypes = {
+  filterRatingFrom: PropTypes.number,
+  filterRatingTo: PropTypes.number,
+  actionSelectFilterRatingFrom: PropTypes.func,
+  actionSelectFilterRatingTo: PropTypes.func,
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewsFilterDateScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ReviewsFilterRatingScreen);

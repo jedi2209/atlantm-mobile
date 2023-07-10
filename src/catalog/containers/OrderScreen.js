@@ -1,246 +1,378 @@
-import React, { Component } from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, View, Alert, Text, Image } from 'react-native';
-import { Container, Content, List, StyleProvider, Footer, Button } from 'native-base';
-
+import {StyleSheet, Alert, Platform} from 'react-native';
+import Form from '../../core/components/Form/Form';
 // redux
-import { connect } from 'react-redux';
-import { actionCommentOrderCarFill, actionOrderCar } from '../actions';
-import { nameFill, phoneFill, emailFill } from '../../profile/actions';
-
-// components
-import Spinner from 'react-native-loading-spinner-overlay';
-import CarOrderList from '../components/CarOrderList';
-import CommentOrderForm from '../components/CommentOrderForm';
-import ProfileForm from '../../profile/components/ProfileForm';
-import ListItemHeader from '../../profile/components/ListItemHeader';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
+import {connect} from 'react-redux';
+import {actionOrderCar} from '../actions';
+import {localUserDataUpdate} from '../../profile/actions';
 
 // helpers
-import Amplitude from '../../utils/amplitude-analytics';
-import { get } from 'lodash';
+import Analytics from '../../utils/amplitude-analytics';
+import {get} from 'lodash';
+import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
-import numberWithGap from '../../utils/number-with-gap';
-import getTheme from '../../../native-base-theme/components';
-import styleConst from '@core/style-const';
-import stylesHeader from '../../core/components/Header/style';
-import { CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL } from '../actionTypes';
-import { ERROR_NETWORK } from '../../core/const';
-import isIPhoneX from '@utils/is_iphone_x';
-import FooterButton from "../../core/components/FooterButton";
+import styleConst from '../../core/style-const';
+import {CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL} from '../actionTypes';
+import {ERROR_NETWORK} from '../../core/const';
 
-const FOOTER_HEIGHT = 50;
+import {strings} from '../../core/lang/const';
+
+const $size = 40;
 const styles = StyleSheet.create({
-  safearea: {
+  list: {
+    paddingBottom: $size,
+  },
+  serviceForm: {
+    marginTop: $size,
+  },
+  // Скопировано из ProfileSettingsScreen.
+  container: {
     flex: 1,
-    backgroundColor: styleConst.color.bg,
+    paddingTop: 20,
+    paddingHorizontal: 14,
+    backgroundColor: '#eee',
+  },
+  header: {
+    marginBottom: 36,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  field: {
+    marginBottom: 18,
+  },
+  group: {
+    marginBottom: 36,
+  },
+  textinput: {
+    height: Platform.OS === 'ios' ? 40 : 'auto',
+    borderColor: '#d8d8d8',
+    borderBottomWidth: 1,
+    color: '#222b45',
+    fontSize: 18,
   },
   button: {
-    flex: 1,
-    height: isIPhoneX() ? styleConst.ui.footerHeightIphone+20 : styleConst.ui.footerHeightAndroid,
-    flexDirection: 'row',
     backgroundColor: styleConst.color.lightBlue,
+    justifyContent: 'center',
   },
   buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontFamily: styleConst.font.medium,
-    letterSpacing: styleConst.ui.letterSpacing,
-  },
-  buttonIcon: {
-    width: 18,
-    marginTop: 3,
-    marginLeft: 7,
-    resizeMode: 'contain',
-  },
-  footer: {
-    height: isIPhoneX() ? styleConst.ui.footerHeightIphone+40 : styleConst.ui.footerHeightAndroid,
-    backgroundColor: styleConst.color.header,
-  },
-  comment: {
-    paddingBottom: 40,
+    color: styleConst.color.white,
+    textTransform: 'uppercase',
+    fontSize: 16,
   },
 });
 
-const mapStateToProps = ({ catalog, profile }) => {
+const mapStateToProps = ({dealer, profile}) => {
   return {
-    name: profile.name,
-    phone: profile.phone,
-    email: profile.email,
-    comment: catalog.orderComment,
-    isOrderCarRequest: catalog.meta.isOrderCarRequest,
+    dealerSelectedLocal: dealer.selectedLocal,
+    dealerSelected: dealer.selected,
+    listBelarussia: dealer.listBelarussia,
+    firstName: UserData.get('NAME'),
+    secondName: UserData.get('SECOND_NAME'),
+    lastName: UserData.get('LAST_NAME'),
+    phone: UserData.get('PHONE')
+      ? UserData.get('PHONE')
+      : UserData.get('PHONE'),
+    email: UserData.get('EMAIL')
+      ? UserData.get('EMAIL')
+      : UserData.get('EMAIL'),
+    profile,
   };
 };
 
 const mapDispatchToProps = {
-  nameFill,
-  phoneFill,
-  emailFill,
   actionOrderCar,
-  actionCommentOrderCarFill,
+  localUserDataUpdate,
 };
 
 class OrderScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Заявка на покупку',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <View />,
-  })
+  constructor(props) {
+    super(props);
+    const isNewCar = get(props.route, 'params.isNewCar');
+    const orderedCar = get(props.route, 'params.car.ordered');
+    let model = '';
+    if (isNewCar) {
+      model = get(props.route, 'params.car.model');
+    } else {
+      model = get(props.route, 'params.car.model.name');
+    }
+
+    let carName = null;
+
+    if (get(props.route, 'params.car')) {
+      carName = [
+        get(props.route, 'params.car.brand'),
+        model,
+        get(props.route, 'params.car.complectation'),
+        !orderedCar ? get(props.route, 'params.car.year') : null,
+        orderedCar ? 'или аналог' : null,
+      ]
+        .filter(Boolean)
+        .join(' ');
+    }
+
+    const dealer = get(props.route, 'params.car.dealer');
+    let listDealers = [];
+    if (dealer) {
+      if (dealer.length) {
+        dealer.map(el => {
+          listDealers.push({
+            label: el.name,
+            value: el.id,
+            key: el.id,
+          });
+        });
+      } else {
+        if (typeof dealer == 'object') {
+          listDealers.push({
+            label: dealer.name,
+            value: dealer.id,
+            key: dealer.id,
+          });
+        }
+      }
+    }
+
+    this.FormConfig = {
+      fields: {
+        groups: [
+          {
+            name: listDealers.length
+              ? strings.Form.group.dealerCar
+              : strings.Form.group.car,
+            fields: [
+              listDealers.length > 1
+                ? {
+                    name: 'DEALER',
+                    type: 'select',
+                    label: strings.Form.field.label.dealer,
+                    value: null,
+                    props: {
+                      items: listDealers,
+                      required: true,
+                      placeholder: {
+                        label: strings.Form.field.placeholder.dealer,
+                        value: null,
+                        color: '#9EA0A4',
+                      },
+                    },
+                  }
+                : {
+                    name: 'DEALERNAME',
+                    type: 'input',
+                    label: strings.Form.field.label.dealer,
+                    value:
+                      listDealers[0] && listDealers[0].label
+                        ? listDealers[0].label
+                        : null,
+                    props: {
+                      editable: false,
+                      placeholder: strings.Form.field.placeholder.dealer,
+                    },
+                  },
+              carName
+                ? {
+                    name: 'CARNAME',
+                    type: 'input',
+                    label: isNewCar
+                      ? strings.Form.field.label.carNameComplectation
+                      : strings.Form.field.label.carNameYear,
+                    value: carName,
+                    props: {
+                      editable: false,
+                    },
+                  }
+                : {},
+              isNewCar
+                ? {
+                    name: 'TRADEIN',
+                    type: 'checkbox',
+                    label: strings.Form.field.label.tradeinWant,
+                    value: false,
+                  }
+                : {},
+              isNewCar
+                ? {
+                    name: 'CREDIT',
+                    type: 'checkbox',
+                    label: strings.Form.field.label.creditWant,
+                    value: false,
+                  }
+                : {},
+            ],
+          },
+          {
+            name: strings.Form.group.contacts,
+            fields: [
+              {
+                name: 'NAME',
+                type: 'input',
+                label: strings.Form.field.label.name,
+                value: this.props.firstName,
+                props: {
+                  required: true,
+                  textContentType: 'name',
+                },
+              },
+              {
+                name: 'SECOND_NAME',
+                type: 'input',
+                label: strings.Form.field.label.secondName,
+                value: this.props.secondName,
+                props: {
+                  textContentType: 'middleName',
+                },
+              },
+              {
+                name: 'LAST_NAME',
+                type: 'input',
+                label: strings.Form.field.label.lastName,
+                value: this.props.lastName,
+                props: {
+                  textContentType: 'familyName',
+                },
+              },
+              {
+                name: 'PHONE',
+                type: 'phone',
+                label: strings.Form.field.label.phone,
+                value: this.props.phone,
+                props: {
+                  required: true,
+                },
+              },
+              {
+                name: 'EMAIL',
+                type: 'email',
+                label: strings.Form.field.label.email,
+                value: this.props.email,
+              },
+            ],
+          },
+          {
+            name: strings.Form.group.additional,
+            fields: [
+              {
+                name: 'COMMENT',
+                type: 'textarea',
+                label: strings.Form.field.label.comment,
+                value: this.props.comment,
+                props: {
+                  placeholder: strings.Form.field.placeholder.comment,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    };
+  }
 
   static propTypes = {
-    navigation: PropTypes.object,
-    nameFill: PropTypes.func,
-    phoneFill: PropTypes.func,
-    emailFill: PropTypes.func,
-    name: PropTypes.string,
+    localUserDataUpdate: PropTypes.func,
+    firstName: PropTypes.string,
+    secondName: PropTypes.string,
+    lastName: PropTypes.string,
     phone: PropTypes.string,
     email: PropTypes.string,
     comment: PropTypes.string,
-    isOrderCarRequest: PropTypes.bool,
-  }
+  };
 
-  componentDidMount() {
-    this.props.actionCommentOrderCarFill('');
-  }
-
-  onPressOrder = async () => {
+  onPressOrder = async data => {
     const isInternetExist = await isInternet();
+    const nav = this.props.navigation;
 
     if (!isInternetExist) {
-      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-    } else {
-      const {
-        name,
-        phone,
-        email,
-        comment,
-        navigation,
-        actionOrderCar,
-        isOrderCarRequest,
-      } = this.props;
-
-      // предотвращаем повторную отправку формы
-      if (isOrderCarRequest) return;
-
-      const dealerId = get(navigation, 'state.params.dealerId');
-      const carId = get(navigation, 'state.params.carId');
-      const isNewCar = get(navigation, 'state.params.isNewCar');
-
-      if (!name || !phone) {
-        return setTimeout(() => {
-          Alert.alert(
-            'Недостаточно информации',
-            'Для заявки на покупку авто необходимо заполнить ФИО и номер контактного телефона',
-          );
-        }, 100);
-      }
-
-      actionOrderCar({
-        name,
-        phone,
-        dealerId,
-        email,
-        carId,
-        comment,
-        isNewCar,
-      })
-        .then(action => {
-          if (action.type === CATALOG_ORDER__SUCCESS) {
-            const car = get(navigation, 'state.params.car');
-            const { brand, model } = car;
-            const path = isNewCar ? 'newcar' : 'usedcar';
-
-            Amplitude.logEvent('order', `catalog/${path}`, {
-              brand_name: brand,
-              model_name: get(model, 'name'),
-            });
-
-            setTimeout(() => {
-              Alert.alert('Ваша заявка успешно отправлена');
-              navigation.goBack();
-            }, 100);
-          }
-
-          if (action.type === CATALOG_ORDER__FAIL) {
-            setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
-          }
-        });
+      setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+      return;
     }
-  }
+
+    let dealerId = 0;
+    const localDealer = get(data, 'DEALER', null);
+    if (localDealer) {
+      dealerId = localDealer;
+    } else {
+      dealerId = get(this.props.route, 'params.car.dealer[0].id', null);
+      if (!dealerId) {
+        dealerId = get(this.props.route, 'params.car.dealer.id', null);
+      }
+    }
+    const carId = get(this.props.route, 'params.carId');
+    const isNewCar = get(this.props.route, 'params.isNewCar');
+    const actionID = get(this.props.route, 'params.actionID');
+
+    const action = await this.props.actionOrderCar({
+      firstName: get(data, 'NAME'),
+      secondName: get(data, 'SECOND_NAME'),
+      lastName: get(data, 'LAST_NAME'),
+      email: get(data, 'EMAIL'),
+      phone: get(data, 'PHONE'),
+      tradeIn: get(data, 'TRADEIN', false),
+      credit: get(data, 'CREDIT', false),
+      dealerId,
+      carId,
+      actionID,
+      comment: data.COMMENT || '',
+      isNewCar,
+    });
+
+    if (action && action.type) {
+      switch (action.type) {
+        case CATALOG_ORDER__SUCCESS:
+          const car = get(this.props.route, 'params.car');
+          const {brand, model} = car;
+          const path = isNewCar ? 'newcar' : 'usedcar';
+          Analytics.logEvent('order', `catalog/${path}`, {
+            brand_name: brand,
+            model_name: get(model, 'name'),
+          });
+          this.props.localUserDataUpdate({
+            NAME: get(data, 'NAME'),
+            SECOND_NAME: get(data, 'SECOND_NAME'),
+            LAST_NAME: get(data, 'LAST_NAME'),
+            PHONE: get(data, 'PHONE'),
+            EMAIL: get(data, 'EMAIL'),
+          });
+          Alert.alert(
+            strings.Notifications.success.title,
+            strings.Notifications.success.textOrder,
+            [
+              {
+                text: 'ОК',
+                onPress: () => {
+                  nav.goBack();
+                },
+              },
+            ],
+          );
+          break;
+        case CATALOG_ORDER__FAIL:
+          Alert.alert(
+            strings.Notifications.error.title,
+            strings.Notifications.error.text,
+          );
+          break;
+      }
+    }
+  };
 
   render() {
-    const {
-      navigation,
-      name,
-      phone,
-      email,
-      comment,
-      nameFill,
-      emailFill,
-      phoneFill,
-      actionCommentOrderCarFill,
-      isOrderCarRequest,
-    } = this.props;
-
-    const car = get(navigation, 'state.params.car');
-    const currency = get(navigation, 'state.params.currency');
-    const { brand, model, isSale, price, priceSpecial, complectation } = car;
-    const processedPrice = `${numberWithGap(price)} ${currency}`;
-    const processedPriceSpecial = `${numberWithGap(priceSpecial)} ${currency}`;
-
-    console.log('== Order ==');
-
     return (
-      <StyleProvider style={getTheme()}>
-        <Container style={styles.safearea}>
-          <Content>
-            <List style={styles.list}>
-              <Spinner visible={isOrderCarRequest} color={styleConst.color.blue} />
-
-              <ListItemHeader text="АВТОМОБИЛЬ" />
-
-              <CarOrderList
-                brand={brand}
-                model={model}
-                isSale={isSale}
-                price={processedPrice}
-                priceSpecial={processedPriceSpecial}
-                complectation={complectation}
-              />
-
-              <ListItemHeader text="КОНТАКТНАЯ ИНФОРМАЦИЯ" />
-
-              <ProfileForm
-                name={name}
-                phone={phone}
-                email={email}
-                nameFill={nameFill}
-                phoneFill={phoneFill}
-                emailFill={emailFill}
-              />
-
-              <ListItemHeader text="КОММЕНТАРИИ" />
-
-              <View style={styles.comment}>
-                <CommentOrderForm
-                  comment={comment}
-                  commentFill={actionCommentOrderCarFill}
-                />
-              </View>
-            </List>
-          </Content>
-
-          <FooterButton
-              theme="blue"
-              icon="arrow"
-              uppercase={true}
-              text="Отправить"
-              onPressButton={this.onPressOrder}
-          />
-        </Container>
-      </StyleProvider>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key="OrderScreenForm"
+        testID="OrderScreen.Form"
+        fields={this.FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.Form.button.send}}
+        onSubmit={this.onPressOrder}
+      />
     );
   }
 }

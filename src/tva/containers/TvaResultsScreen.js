@@ -1,57 +1,96 @@
-import React, { Component } from 'react';
+/* eslint-disable react-native/no-inline-styles */
+import React, {useState, useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
-import { Text, View, Alert, StyleSheet, TouchableOpacity } from 'react-native';
-import { Container, Body, Label, Item, Content, ListItem, StyleProvider } from 'native-base';
+import {Alert, StyleSheet, Platform} from 'react-native';
+import {useNavigation} from '@react-navigation/native';
+import {
+  Button,
+  View,
+  Text,
+  ScrollView,
+  HStack,
+  Heading,
+  Box,
+  VStack,
+  useToast,
+} from 'native-base';
+import {localUserDataUpdate} from '../../profile/actions';
 
 // redux
-import { connect } from 'react-redux';
-import { actionTvaMessageSend, actionTvaMessageFill, actionSetActiveTvaOrderId } from '../actions';
+import {connect} from 'react-redux';
+import {
+  actionTvaMessageSend,
+  actionTvaMessageFill,
+  actionSetActiveTvaOrderId,
+} from '../actions';
 
-// components
-import Spinner from 'react-native-loading-spinner-overlay';
-import ButtonFull from '../../core/components/ButtonFull';
-import MessageForm from '../../core/components/MessageForm';
-import HeaderIconMenu from '../../core/components/HeaderIconMenu/HeaderIconMenu';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
-import ListItemHeader from '../../profile/components/ListItemHeader';
-import HeaderSubtitle from '../../core/components/HeaderSubtitle';
-
-// styles
-import stylesList from '../../core/components/Lists/style';
+import {TextInput} from '../../core/components/TextInput';
+import ToastAlert from '../../core/components/ToastAlert';
 
 // helpers
-import Amplitude from '../../utils/amplitude-analytics';
-import { get } from 'lodash';
-import { dayMonthYearTime } from '../../utils/date';
-import getTheme from '../../../native-base-theme/components';
+import Analytics from '../../utils/amplitude-analytics';
+import {get} from 'lodash';
+import {dayMonthYearTime} from '../../utils/date';
 import styleConst from '../../core/style-const';
-import stylesHeader from '../../core/components/Header/style';
-import { TVA_SEND_MESSAGE__SUCCESS, TVA_SEND_MESSAGE__FAIL } from '../actionTypes';
+import {
+  TVA_SEND_MESSAGE__SUCCESS,
+  TVA_SEND_MESSAGE__FAIL,
+} from '../actionTypes';
 import isInternet from '../../utils/internet';
-import { ERROR_NETWORK } from '../../core/const';
+import {ERROR_NETWORK} from '../../core/const';
+import {strings} from '../../core/lang/const';
 
+const $size = 40;
 const styles = StyleSheet.create({
   safearea: {
-    backgroundColor: styleConst.color.bg,
     flex: 1,
+    backgroundColor: styleConst.color.bg,
   },
-  label: {
-    flex: 2.5,
+  list: {
+    paddingBottom: $size,
   },
-  itemTitle: {
+  serviceForm: {
+    marginTop: $size,
+  },
+  // Скопировано из ProfileSettingsScreen.
+  container: {
+    flex: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 14,
+  },
+  header: {
+    marginBottom: 36,
+  },
+  heading: {
     fontSize: 20,
+    fontWeight: 'bold',
+    lineHeight: 24,
   },
-  button: {
+  textinput: {
+    height: Platform.OS === 'ios' ? 50 : 'auto',
     paddingTop: 20,
+    // borderColor: '#d8d8d8',
+    // borderBottomWidth: 1,
+    backgroundColor: styleConst.color.white,
+    color: '#222b45',
+    fontSize: 18,
+  },
+  buttonText: {
+    color: styleConst.color.white,
+    textTransform: 'uppercase',
+    fontSize: 16,
   },
 });
 
-const mapStateToProps = ({ dealer, nav, tva }) => {
+const TVAMessagingEnabled = false;
+
+const processDate = date => dayMonthYearTime(date);
+
+const mapStateToProps = ({dealer, tva}) => {
   return {
-    nav,
     dealerSelected: dealer.selected,
     results: tva.results,
-    message: tva.message,
+    comment: tva.message,
     activeOrderId: tva.activeOrderId,
     isMessageSending: tva.meta.isMessageSending,
   };
@@ -61,186 +100,250 @@ const mapDispatchToProps = {
   actionTvaMessageFill,
   actionTvaMessageSend,
   actionSetActiveTvaOrderId,
+  localUserDataUpdate,
 };
 
-class TvaResultsScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Табло выдачи авто',
-    headerStyle: [stylesHeader.common, stylesHeader.resetBorder],
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <HeaderIconMenu navigation={navigation} />,
-  })
+const TvaResultsScreen = props => {
+  const {
+    dealerSelected,
+    results,
+    actionTvaMessageFill,
+    actionSetActiveTvaOrderId,
+    message,
+    activeOrderId,
+    isMessageSending,
+    localUserDataUpdate,
+    actionTvaMessageSend,
+  } = props;
+  const [comment, setComment] = useState(message || '');
+  const [loading, setLoading] = useState(false);
+  const [successSent, setsuccessSent] = useState(false);
 
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-    navigation: PropTypes.object,
-    isMessageSending: PropTypes.bool,
-    actionTvaMessageFill: PropTypes.func,
-    actionTvaMessageSend: PropTypes.func,
-    actionSetActiveTvaOrderId: PropTypes.func,
-    message: PropTypes.string,
-    results: PropTypes.object,
-    activeOrderId: PropTypes.string,
-  }
+  const messageField = useRef();
 
-  componentDidMount() {
-    const { results, actionTvaMessageFill, actionSetActiveTvaOrderId } = this.props;
+  const toast = useToast();
+  const navigation = useNavigation();
+
+  const {car, info = []} = results;
+  const titleCar = `${car.brand} ${car.model}`;
+  const titleCarNumber = car.number;
+
+  localUserDataUpdate({
+    CARBRAND: car.brand,
+    CARMODEL: car.model,
+  });
+
+  useEffect(() => {
     const activeTvaOrderId = get(results, 'info.0.id');
 
     actionTvaMessageFill('');
     actionSetActiveTvaOrderId(activeTvaOrderId);
-  }
+  }, []);
 
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
+  const onPressOrder = orderId => actionSetActiveTvaOrderId(orderId);
 
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'TvaResultsScreen';
-      }
-    }
-
-    return isActiveScreen;
-  }
-
-  onPressMessageButton = async () => {
+  const onPressMessageButton = async () => {
+    setLoading(true);
     const isInternetExist = await isInternet();
 
     if (!isInternetExist) {
       return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
     } else {
-      const {
-        message,
-        dealerSelected,
-        activeOrderId,
-        isMessageSending,
-        actionTvaMessageFill,
-        actionTvaMessageSend,
-      } = this.props;
-
       // предотвращаем повторную отправку формы
-      if (isMessageSending) return;
+      if (isMessageSending) {
+        return;
+      }
 
-      if (!message) {
+      if (!comment) {
         setTimeout(() => {
-          Alert.alert('Введите текст сообщения');
+          toast.show({
+            render: ({id}) => {
+              return (
+                <ToastAlert
+                  id={id}
+                  status={'error'}
+                  description={'Введите текст сообщения'}
+                  title={strings.Notifications.error.title}
+                />
+              );
+            },
+          });
+          setLoading(false);
         }, 100);
 
         return;
       }
 
       actionTvaMessageSend({
-        text: message,
+        text: comment,
         id: activeOrderId,
         dealer: dealerSelected.id,
-      })
-        .then(action => {
-          const { type, payload } = action;
+      }).then(action => {
+        const {type, payload} = action;
 
-          if (type === TVA_SEND_MESSAGE__SUCCESS) {
-            Amplitude.logEvent('order', 'tva/message');
+        if (type === TVA_SEND_MESSAGE__SUCCESS) {
+          Analytics.logEvent('order', 'tva/message');
 
-            setTimeout(() => {
-              actionTvaMessageFill('');
-              Alert.alert(payload.status);
-            }, 100);
-          }
-
-          if (type === TVA_SEND_MESSAGE__FAIL) {
-            setTimeout(() => Alert.alert('', 'Произошла ошибка, попробуйте снова'), 100);
-          }
-        });
-    }
-  }
-
-  onPressOrder = (orderId) => this.props.actionSetActiveTvaOrderId(orderId)
-
-  processDate = (date) => dayMonthYearTime(date)
-
-  renderListItem = (label, value, isLast) => {
-    return (
-      <View style={stylesList.listItemContainer}>
-        <ListItem last={isLast} style={[stylesList.listItem, stylesList.listItemReset]}>
-          <Body>
-            <Item style={[stylesList.inputItem, { justifyContent: 'flex-start' }]} fixedLabel>
-              <Label style={[stylesList.label, styles.label]}>{label}</Label>
-              <View style={stylesList.listItemValueContainer}>
-                <Text style={stylesList.listItemValue}>{value}</Text>
-              </View>
-            </Item>
-          </Body>
-        </ListItem>
-      </View>
-    );
-  }
-
-  render() {
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
-
-    const {
-      message,
-      results,
-      activeOrderId,
-      isMessageSending,
-      actionTvaMessageFill,
-    } = this.props;
-
-    const { car, info } = results;
-    const titleCar = `${car.brand} ${car.model}`;
-    const titleCarNumber = car.number;
-    const textList = [titleCar, titleCarNumber];
-
-    console.log('== TvaResultsScreen ==');
-
-    return (
-      <StyleProvider style={getTheme()}>
-        <Container style={styles.safearea}>
-          <Content>
-            <Spinner visible={isMessageSending} color={styleConst.color.blue} />
-            <HeaderSubtitle content={textList} isBig={true} />
-            {
-              (info || []).map(item => {
+          setTimeout(() => {
+            toast.show({
+              render: ({id}) => {
                 return (
-                  <TouchableOpacity key={item.id} onPress={this.onPressBack} style={styles.item}>
-                    <ListItemHeader
-                      textStyle={styles.itemTitle}
-                      radio={true}
-                      radioSelected={activeOrderId === item.id}
-                      text={`№ ${item.id}`}
-                      onPress={() => this.onPressOrder(item.id)}
-                    />
-                    {this.renderListItem('Мастер-приёмщик', item.name)}
-                    {this.renderListItem('Время выдачи', this.processDate(item.date))}
-                    {this.renderListItem('Статус', item.status, true)}
-                  </TouchableOpacity>
+                  <ToastAlert
+                    id={id}
+                    status={'success'}
+                    description={payload.status}
+                    title={strings.Notifications.success.title}
+                  />
                 );
-              })
-            }
+              },
+            });
+            actionTvaMessageFill('');
+            setComment('');
+            messageField?.current.blur();
+            setLoading(false);
+          }, 100);
+        }
 
-            <ListItemHeader text="СООБЩЕНИЕ МАСТЕРУ"/>
+        if (type === TVA_SEND_MESSAGE__FAIL) {
+          setTimeout(
+            () =>
+              toast.show({
+                render: ({id}) => {
+                  return (
+                    <ToastAlert
+                      id={id}
+                      status={'error'}
+                      description={strings.Notifications.error.text}
+                      title={strings.Notifications.error.title}
+                    />
+                  );
+                },
+              }),
+            100,
+          );
+        }
+      });
+    }
+  };
 
-            <MessageForm
-              message={message}
-              messageFill={actionTvaMessageFill}
-            />
-
-            <View style={styles.button}>
-              <ButtonFull
-                text="ОТПРАВИТЬ"
-                arrow={true}
-                onPressButton={this.onPressMessageButton}
-              />
+  return (
+    <ScrollView flex={1}>
+      <View style={styles.container}>
+        <HStack justifyContent="space-between" mb={2}>
+          <Text style={styles.heading}>{titleCar}</Text>
+          <Text style={styles.heading}>{titleCarNumber}</Text>
+        </HStack>
+        {successSent ? (
+          <View style={{flex: 1, justifyContent: 'center'}}>
+            <View rounded={'lg'} mb={'1/6'} p={3}>
+              <Text
+                style={{
+                  fontSize: 22,
+                  fontWeight: 'bold',
+                  textAlign: 'center',
+                }}>
+                {strings.TvaResultsScreen.Notifications.success.messageSent}
+              </Text>
             </View>
+            <View>
+              <Button
+                variant="solid"
+                _text={styles.buttonText}
+                size="lg"
+                shadow={4}
+                onPress={() => navigation.navigate('BottomTabNavigation')}>
+                {strings.Navigation.back}
+              </Button>
+            </View>
+          </View>
+        ) : (
+          <>
+            {info.map(item => (
+              <Box
+                key={'ViewTvaResult' + item.id}
+                rounded={'lg'}
+                mb={8}
+                p={3}
+                style={[
+                  activeOrderId === item.id && {
+                    backgroundColor: styleConst.color.white,
+                  },
+                ]}>
+                <Heading mb={2} fontSize={18}>
+                  № {item.id}
+                </Heading>
+                <VStack space={'md'}>
+                  <HStack justifyContent="space-between">
+                    <Text>{strings.TvaResultsScreen.serviceMan}</Text>
+                    <Text>{item.name}</Text>
+                  </HStack>
+                  <HStack justifyContent="space-between">
+                    <Text>{strings.TvaResultsScreen.time}</Text>
+                    <Text>{processDate(item.date)}</Text>
+                  </HStack>
+                  <HStack justifyContent="space-between">
+                    <Text>{strings.TvaResultsScreen.status}</Text>
+                    <Text>{item.status}</Text>
+                  </HStack>
+                </VStack>
+              </Box>
+            ))}
+            {TVAMessagingEnabled ? (
+              <>
+                {' '}
+                <View mb={4}>
+                  <TextInput
+                    ref={messageField}
+                    multiline={true}
+                    numberOfLines={4}
+                    style={{
+                      height: Platform.OS === 'ios' ? 90 : 'auto',
+                      color: '#222b45',
+                      paddingTop: 25,
+                      paddingLeft: 15,
+                      paddingBottom: 0,
+                      paddingHorizontal: 0,
+                      maxHeight: 150,
+                      backgroundColor: 'white',
+                      fontSize: 18,
+                    }}
+                    label={strings.TvaResultsScreen.messageToServiceMan}
+                    value={comment}
+                    onChangeText={setComment}
+                  />
+                </View>
+                <View>
+                  <Button
+                    variant="solid"
+                    onPress={loading ? undefined : onPressMessageButton}
+                    isLoading={loading}
+                    _text={styles.buttonText}
+                    spinnerPlacement="start"
+                    isLoadingText={strings.Form.button.sending}
+                    size="lg"
+                    shadow={loading ? 1 : 4}
+                    style={styles.button}>
+                    {strings.Form.button.send}
+                  </Button>
+                </View>
+              </>
+            ) : null}
+          </>
+        )}
+      </View>
+    </ScrollView>
+  );
+};
 
-          </Content>
-        </Container>
-      </StyleProvider>
-    );
-  }
-}
+TvaResultsScreen.propTypes = {
+  dealerSelected: PropTypes.object,
+  isMessageSending: PropTypes.bool,
+  actionTvaMessageFill: PropTypes.func,
+  actionTvaMessageSend: PropTypes.func,
+  actionSetActiveTvaOrderId: PropTypes.func,
+  comment: PropTypes.string,
+  results: PropTypes.object,
+  activeOrderId: PropTypes.string,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(TvaResultsScreen);

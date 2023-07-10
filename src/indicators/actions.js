@@ -4,11 +4,10 @@ import {
   INDICATORS__REQUEST,
   INDICATORS__SUCCESS,
   INDICATORS__FAIL,
-
   INDICATOR_ACTIVE__SET,
 } from './actionTypes';
 
-export const actionSetActiveIndicator = (item) => {
+export const actionSetActiveIndicator = item => {
   return dispatch => {
     dispatch({
       type: INDICATOR_ACTIVE__SET,
@@ -17,13 +16,13 @@ export const actionSetActiveIndicator = (item) => {
   };
 };
 
-export const actionFetchIndicators = () => {
+export const actionFetchIndicators = region => {
   return dispatch => {
-    dispatch({ type: INDICATORS__REQUEST });
+    dispatch({type: INDICATORS__REQUEST});
 
-    return API.fetchIndicators()
+    return API.fetchIndicators(region)
       .then(res => {
-        const { error, status, data } = res;
+        const {error, status, data} = res;
 
         if (status !== 'success') {
           return dispatch({
@@ -37,24 +36,24 @@ export const actionFetchIndicators = () => {
 
         // Разбиваем массив массивов по 4 индикатора
         let newData = [];
-        data.reduce((prev, next, idx) => {
-          prev.push(next);
+        // data.reduce((prev, next, idx) => {
+        //   prev.push(next);
 
-          if ((idx + 1) % 4 === 0) {
-            newData.push(prev);
-            return [];
-          }
+        //   if ((idx + 1) % 4 === 0) {
+        //     newData.push(prev);
+        //     return [];
+        //   }
 
-          if (idx === (data.length - 1)) {
-            newData.push(prev);
-          }
+        //   if (idx === data.length - 1) {
+        //     newData.push(prev);
+        //   }
 
-          return prev;
-        }, []);
+        //   return prev;
+        // }, []);
 
         return dispatch({
           type: INDICATORS__SUCCESS,
-          payload: newData,
+          payload: data,
         });
       })
       .catch(error => {

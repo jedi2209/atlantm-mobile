@@ -1,26 +1,32 @@
-import RNAmplitude from 'react-native-amplitude-analytics';
-// import { GoogleAnalyticsTracker } from 'react-native-google-analytics-bridge';
+import {store} from '../core/store';
+import {get} from 'lodash';
+import {Amplitude} from '@amplitude/react-native';
+// import analytics from '@react-native-firebase/analytics';
+import * as Sentry from '@sentry/react-native';
 
-export default class Amplitude {
-  static getInstance() {
-    if (!this.instance) {
-      this.instance = new RNAmplitude('XXXX');
-    }
-    return this.instance;
-  }
+import {AMPLITUDE_KEY} from '../core/const';
 
-  static getGATracker() {
-    if (!this.gatracker) {
-      this.gatracker = new GoogleAnalyticsTracker('UA-118347995-1');
-    }
-
-    return this.gatracker;
-  }
-
+export default class Analytics {
   static logEvent(category, action, params) {
-    if (!__DEV__) {
-      this.getInstance().logEvent(`${category}:${action}`, params);
-      // this.getGATracker().trackEvent(category, action, params);
+    if (__DEV__) {
+      return true;
     }
+    if (typeof params === 'string') {
+      params = {params};
+    }
+    const ampInstance = Amplitude.getInstance();
+    const SAPID = get(store.getState(), 'profile.login.SAP.ID');
+    const UserID = get(store.getState(), 'profile.login.id');
+    const UserEmail = get(store.getState(), 'profile.login.EMAIL[0].VALUE');
+    ampInstance.init(AMPLITUDE_KEY);
+    if (SAPID || UserID) {
+      ampInstance.setUserId(SAPID ? SAPID : UserID);
+      Sentry.setUser({
+        id: SAPID ? SAPID : UserID,
+        email: UserEmail,
+      });
+    }
+    ampInstance.logEvent(`${category}:${action}`, params);
+    // analytics.logEvent(`${category}:${action}`, params);
   }
 }

@@ -4,47 +4,56 @@ import {
   INFO_LIST__REQUEST,
   INFO_LIST__SUCCESS,
   INFO_LIST__FAIL,
-
   INFO_POST__REQUEST,
   INFO_POST__SUCCESS,
   INFO_POST__FAIL,
   INFO_LIST__RESET,
-
   CALL_ME_INFO__REQUEST,
   CALL_ME_INFO__SUCCESS,
   CALL_ME_INFO__FAIL,
 } from './actionTypes';
 
+import {ERROR_NETWORK} from '../core/const';
+
 import API from '../utils/api';
 
-export const fetchInfoList = (region, dealer) => {
+export const fetchInfoList = (region, dealer, type) => {
   return dispatch => {
     dispatch({
       type: INFO_LIST__REQUEST,
       payload: {
         region,
         dealer,
+        type,
       },
     });
 
-    return API.fetchInfoList(region, dealer)
+    return API.fetchInfoList(region, dealer, type)
       .then(res => {
-        const { data, error } = res;
-
-        if (error) {
+        if (!res) {
           return dispatch({
             type: INFO_LIST__FAIL,
             payload: {
-              code: error.code,
-              message: error.message,
+              message: ERROR_NETWORK,
+            },
+          });
+        }
+        if (res && res.error) {
+          return dispatch({
+            type: INFO_LIST__FAIL,
+            payload: {
+              code: res.error.code,
+              message: res.error.message,
             },
           });
         }
 
-        return dispatch({
-          type: INFO_LIST__SUCCESS,
-          payload: data || [],
-        });
+        if (res) {
+          return dispatch({
+            type: INFO_LIST__SUCCESS,
+            payload: {data: res.data || [], filters: res.filters || []},
+          });
+        }
       })
       .catch(error => {
         return dispatch({
@@ -57,7 +66,7 @@ export const fetchInfoList = (region, dealer) => {
   };
 };
 
-export const fetchInfoPost = (infoID) => {
+export const fetchInfoPost = infoID => {
   return dispatch => {
     dispatch({
       type: INFO_POST__REQUEST,
@@ -68,7 +77,7 @@ export const fetchInfoPost = (infoID) => {
 
     return API.fetchInfoPost(infoID)
       .then(res => {
-        const { data, error } = res;
+        const {data, error} = res;
 
         if (error) {
           return dispatch({
@@ -80,15 +89,21 @@ export const fetchInfoPost = (infoID) => {
           });
         }
 
+        const actionInfo = {
+          id: infoID,
+          text: _.get(data, '0.text', ''),
+          date: _.get(data, '0.date', ''),
+          dealers: _.get(data, '0.dealers', ''),
+          img: _.get(data, '0.img', ''),
+          type: _.get(data, '0.type', ''),
+          imgCropAvailable: _.get(data, '0.imgCropAvailable', ''),
+        };
+
         dispatch({
           type: INFO_POST__SUCCESS,
-          payload: {
-            id: infoID,
-            text: _.get(data, '0.text', ''),
-            date: _.get(data, '0.date', ''),
-            img: _.get(data, '0.img', ''),
-          },
+          payload: actionInfo,
         });
+        return actionInfo;
       })
       .catch(error => {
         return dispatch({
@@ -101,16 +116,16 @@ export const fetchInfoPost = (infoID) => {
   };
 };
 
-export const callMeForInfo = (props) => {
+export const callMeForInfo = props => {
   return dispatch => {
     dispatch({
       type: CALL_ME_INFO__REQUEST,
-      payload: { ...props },
+      payload: {...props},
     });
 
     return API.callMe(props)
       .then(res => {
-        const { error, status } = res;
+        const {error, status} = res;
 
         if (status !== 'success') {
           return dispatch({
@@ -122,7 +137,7 @@ export const callMeForInfo = (props) => {
           });
         }
 
-        return dispatch({ type: CALL_ME_INFO__SUCCESS });
+        return dispatch({type: CALL_ME_INFO__SUCCESS});
       })
       .catch(error => {
         return dispatch({
@@ -138,6 +153,6 @@ export const callMeForInfo = (props) => {
 
 export const actionListReset = () => {
   return dispatch => {
-    dispatch({ type: INFO_LIST__RESET });
+    return dispatch({type: INFO_LIST__RESET});
   };
 };
