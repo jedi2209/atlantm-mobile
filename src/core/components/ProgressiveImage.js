@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { View, StyleSheet, Animated } from 'react-native';
+import React, {Component} from 'react';
+import {View, StyleSheet, Animated} from 'react-native';
 
 const styles = StyleSheet.create({
   imageOverlay: {
@@ -22,36 +22,33 @@ class ProgressiveImage extends Component {
   handleThumbnailLoad = () => {
     Animated.timing(this.thumbnailAnimated, {
       toValue: 1,
+      useNativeDriver: true,
     }).start();
-  }
+  };
 
   onImageLoad = () => {
     Animated.timing(this.imageAnimated, {
       toValue: 1,
+      useNativeDriver: true,
     }).start();
-  }
+  };
 
   render() {
-    const {
-      thumbnailSource,
-      source,
-      style,
-      ...props
-    } = this.props;
+    const {thumbnailSource, source, style, ...props} = this.props;
 
     return (
       <View style={styles.container}>
         <Animated.Image
           {...props}
           source={thumbnailSource}
-          style={[style, { opacity: this.thumbnailAnimated }]}
+          style={[style, {opacity: this.thumbnailAnimated}]}
           onLoad={this.handleThumbnailLoad}
           blurRadius={1}
         />
         <Animated.Image
           {...props}
           source={source}
-          style={[styles.imageOverlay, { opacity: this.imageAnimated }, style]}
+          style={[styles.imageOverlay, {opacity: this.imageAnimated}, style]}
           onLoad={this.onImageLoad}
         />
       </View>

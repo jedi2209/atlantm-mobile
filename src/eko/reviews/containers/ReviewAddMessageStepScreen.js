@@ -1,33 +1,15 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
-import { Content, StyleProvider } from 'native-base';
+import React, {PureComponent} from 'react';
+import Form from '../../../core/components/Form/Form';
+import DealerCard from '../../../core/components/DealerCard';
 
 // redux
-import { connect } from 'react-redux';
-import { actionAddReviewPlusFill, actionAddReviewMinusFill } from '../../actions';
-
-// components
-import InfoLine from '../../components/InfoLine';
-import ReviewAddMessageForm from '../components/ReviewAddMessageForm';
-import FooterButton from '../../../core/components/FooterButton';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
-import HeaderSubtitle from '../../../core/components/HeaderSubtitle';
+import {connect} from 'react-redux';
+import {actionAddReviewPlusFill, actionAddReviewMinusFill} from '../../actions';
 
 // helpers
-import { get } from 'lodash';
-import { TEXT_MESSAGE_CONTROL } from '../../constants';
-import getTheme from '../../../../native-base-theme/components';
-import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
+import {strings} from '../../../core/lang/const';
 
-const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-  },
-});
-
-const mapStateToProps = ({ dealer, eko, nav }) => {
+const mapStateToProps = ({dealer, eko, nav}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
@@ -41,68 +23,87 @@ const mapDispatchToProps = {
   actionAddReviewMinusFill,
 };
 
-class ReviewAddMessageStepScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Новый отзыв',
-    headerStyle: [stylesHeader.common, stylesHeader.resetBorder],
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <View />,
-  })
-
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
-
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'ReviewAddMessageStepScreen';
-      }
-    }
-
-    return isActiveScreen;
+class ReviewAddMessageStepScreen extends PureComponent {
+  constructor(props) {
+    super(props);
+    this.FormConfig = {
+      fields: {
+        groups: [
+          {
+            name: strings.Form.field.label.dealer,
+            fields: [
+              {
+                name: 'DEALER',
+                type: 'component',
+                value: (
+                  <DealerCard
+                    key={'DealerBlock'}
+                    item={this.props.dealerSelected}
+                  />
+                ),
+              },
+            ],
+          },
+          {
+            name: strings.ReviewAddMessageForm.label.plus,
+            fields: [
+              {
+                name: 'COMMENT_PLUS',
+                type: 'textarea',
+                label: '',
+                value: this.props.Text,
+                props: {
+                  placeholder: strings.ReviewAddMessageForm.placeholder.plus,
+                },
+              },
+            ],
+          },
+          {
+            name: strings.ReviewAddMessageForm.label.minus,
+            fields: [
+              {
+                name: 'COMMENT_MINUS',
+                type: 'textarea',
+                label: '',
+                value: this.props.Text,
+                props: {
+                  placeholder: strings.ReviewAddMessageForm.placeholder.minus,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    };
   }
 
-  componentDidMount() {
-
-  }
-
-  onPressButton = () => this.props.navigation.navigate('ReviewAddRatingStepScreen')
+  onPressOrder = async ({COMMENT_MINUS, COMMENT_PLUS}) => {
+    this.props.navigation.navigate('ReviewAddRatingStepScreen', {
+      COMMENT_PLUS,
+      COMMENT_MINUS,
+    });
+  };
 
   render() {
-    const {
-      messagePlus,
-      messageMinus,
-      actionAddReviewPlusFill,
-      actionAddReviewMinusFill,
-      navigation,
-      dealerSelected,
-    } = this.props;
-
-    console.log('== ReviewAddMessageStepScreen ==');
+    console.info('== ReviewAddMessageStepScreen ==');
 
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <Content>
-            <HeaderSubtitle content={dealerSelected.name} isBig={true} />
-            <ReviewAddMessageForm
-              messagePlus={messagePlus}
-              messageMinus={messageMinus}
-              messagePlusFill={actionAddReviewPlusFill}
-              messageMinusFill={actionAddReviewMinusFill}
-            />
-            <InfoLine gap={true} infoIcon={true} text={TEXT_MESSAGE_CONTROL} />
-          </Content>
-          <FooterButton
-            text="Продолжить"
-            onPressButton={this.onPressButton}
-          />
-        </SafeAreaView>
-      </StyleProvider>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key="ReviewAddForm"
+        fields={this.FormConfig.fields}
+        barStyle={'light-content'}
+        SubmitButton={{text: strings.MessageForm.continue}}
+        onSubmit={this.onPressOrder}
+      />
     );
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReviewAddMessageStepScreen);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ReviewAddMessageStepScreen);

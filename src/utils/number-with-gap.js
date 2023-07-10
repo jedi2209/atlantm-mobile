@@ -1,3 +1,6 @@
 export default function (number) {
-  return String(number).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
+  if (!number) {
+    return 0;
+  }
+  return number.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1 ');
 }

@@ -1,9 +1,8 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
-import { StyleProvider } from 'native-base';
+import React, {Component} from 'react';
+import {SafeAreaView, StyleSheet} from 'react-native';
 
 // redux
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import {
   actionReviewVisit,
   actionFetchReviews,
@@ -18,16 +17,11 @@ import {
 import ReviewsList from '../components/ReviewsList';
 import ReviewsFilter from '../components/ReviewsFilter';
 import DealerItemList from '../../../core/components/DealerItemList';
-import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 
 // helpers
-import { REVIEWS_FILTER_DATE_PERIOD__ALL } from '../../constants';
-import { get } from 'lodash';
-import getTheme from '../../../../native-base-theme/components';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
-import { substruct10Years } from '../../../utils/date';
+import {substractYears} from '../../../utils/date';
+import {strings} from '../../../core/lang/const';
 
 const styles = StyleSheet.create({
   content: {
@@ -36,7 +30,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, nav, eko }) => {
+const mapStateToProps = ({dealer, nav, eko}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
@@ -63,52 +57,35 @@ const mapDispatchToProps = {
 };
 
 class ReviewsScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Отзывы',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack returnScreen="MenuScreen" navigation={navigation} />,
-    headerRight: <HeaderIconMenu navigation={navigation} />,
-  })
+  componentDidUpdate(prevProps) {
+    const {needFetchReviews, isFetchReviews} = this.props;
+    const isFilterWillUpdate =
+      prevProps.dateTo !== this.props.dateTo ||
+      prevProps.dateFrom !== this.props.dateFrom ||
+      prevProps.filterRatingFrom !== this.props.filterRatingFrom ||
+      prevProps.filterRatingTo !== this.props.filterRatingTo;
 
-  componentDidUpdate() {
-    const { needFetchReviews, isFetchReviews } = this.props;
-
-    if (needFetchReviews && !isFetchReviews) {
+    if (isFilterWillUpdate && needFetchReviews && !isFetchReviews) {
       this.fetchReviews();
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
-
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'ReviewsScreen';
-      }
-    }
-
-    return isActiveScreen;
-  }
-
   onPressItem = review => {
-    const { navigation, actionReviewVisit } = this.props;
-
-    navigation.navigate('ReviewScreen', { review });
-
+    const {navigation} = this.props;
+    navigation.navigate('ReviewScreen', {
+      review,
+      returnScreen: 'ReviewsScreen',
+    });
     this.props.actionReviewVisit(review.id);
-  }
+  };
 
-  fetchReviews = (type) => {
+  fetchReviews = type => {
     let {
       pages,
       dateTo,
       dateFrom,
       filterRatingFrom,
       filterRatingTo,
-      navigation,
       dealerSelected,
       actionFetchReviews,
       actionDateFromFill,
@@ -118,9 +95,9 @@ class ReviewsScreen extends Component {
     } = this.props;
 
     if (!dateFrom) {
-      dateFrom = substruct10Years();
+      dateFrom = substractYears(10);
       actionDateFromFill(dateFrom);
-      actionSelectFilterDatePeriod(REVIEWS_FILTER_DATE_PERIOD__ALL);
+      actionSelectFilterDatePeriod(strings.ReviewsFilterDateScreen.periods.all);
     }
 
     if (!filterRatingFrom) {
@@ -137,49 +114,40 @@ class ReviewsScreen extends Component {
       nextPage: pages.next,
       dealerId: dealerSelected.id,
     });
-  }
+  };
 
-  onPressRating = () => this.props.navigation.navigate('ReviewsFilterRatingScreen')
-  onPressDate = () => this.props.navigation.navigate('ReviewsFilterDateScreen')
-  onPressAddReview = () => this.props.navigation.navigate('ReviewAddMessageStepScreen')
+  onPressRating = () =>
+    this.props.navigation.navigate('ReviewsFilterRatingScreen');
+  onPressDate = () => this.props.navigation.navigate('ReviewsFilterDateScreen');
+  onPressAddReview = () =>
+    this.props.navigation.navigate('ReviewAddMessageStepScreen');
 
   render() {
-    const {
-      pages,
-      reviews,
-      navigation,
-      dealerSelected,
-      isFetchReviews,
-    } = this.props;
-
-    console.log('== ReviewsScreen ==');
+    const {pages, reviews, navigation, dealerSelected, isFetchReviews} =
+      this.props;
 
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.content}>
-          <DealerItemList
-            navigation={navigation}
-            city={dealerSelected.city}
-            name={dealerSelected.name}
-            brands={dealerSelected.brands}
-            goBack={true}
-          />
+      <SafeAreaView style={styles.content}>
+        <DealerItemList
+          dealer={dealerSelected}
+          goBack={true}
+          style={{marginHorizontal: 8}}
+        />
 
-          <ReviewsList
-            items={reviews}
-            pages={pages}
-            dataHandler={this.fetchReviews}
-            onPressItemHandler={this.onPressItem}
-            isFetchItems={isFetchReviews}
-          />
+        <ReviewsList
+          items={reviews}
+          pages={pages}
+          dataHandler={this.fetchReviews}
+          onPressItemHandler={this.onPressItem}
+          isFetchItems={isFetchReviews}
+        />
 
-          <ReviewsFilter
-            onPressRating={this.onPressRating}
-            onPressDate={this.onPressDate}
-            onPressAddReview={this.onPressAddReview}
-          />
-        </SafeAreaView>
-      </StyleProvider>
+        <ReviewsFilter
+          onPressRating={this.onPressRating}
+          onPressDate={this.onPressDate}
+          onPressAddReview={this.onPressAddReview}
+        />
+      </SafeAreaView>
     );
   }
 }

@@ -1,25 +1,20 @@
-import React, { Component } from 'react';
-import {
-  View,
-  Image,
-  Keyboard,
-  StyleSheet,
-  TouchableOpacity,
-} from 'react-native';
+/* eslint-disable react-native/no-inline-styles */
+import React from 'react';
+import {View, Keyboard, StyleSheet, TouchableOpacity} from 'react-native';
 
 // components
-import { NavigationActions } from 'react-navigation';
+import * as NavigationService from '../../../navigation/NavigationService';
+import {Icon} from 'native-base';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../../style-const';
 
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 const containerSize = 40;
-const size = 20;
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: styleConst.ui.horizontalGap * 2,
-    paddingRight: styleConst.ui.horizontalGap * 2,
     width: containerSize,
     height: containerSize,
     justifyContent: 'center',
@@ -31,60 +26,88 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   icon: {
-    width: size,
-    height: size,
+    width: containerSize / 2,
+    height: containerSize / 2,
     resizeMode: 'contain',
   },
 });
 
-const MENU_SCREEN_NAME = 'MenuScreen';
+const MENU_SCREEN_NAME = 'BottomTabNavigation';
 
-export default class HeaderIconBack extends Component {
-  static propTypes = {
-    navigation: PropTypes.object,
-    returnScreen: PropTypes.string,
-  }
+const HeaderBackButton = props => {
+  const onPressBack = () => {
+    const {returnScreen, onPressBackCallBack} = props;
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
-  onPressBack = () => {
-    const { returnScreen, navigation } = this.props;
+    if (onPressBackCallBack && typeof onPressBackCallBack === 'function') {
+      onPressBackCallBack();
+    }
 
     if (returnScreen === MENU_SCREEN_NAME) {
-      this.onPressBackHome();
+      _onPressBackHome();
       return false;
     }
 
-    returnScreen ? navigation.navigate(returnScreen) : navigation.goBack();
-  }
+    returnScreen
+      ? NavigationService.navigate(returnScreen)
+      : NavigationService.goBack();
+  };
 
-  onPressBackHome = () => {
+  const _onPressBackHome = () => {
     Keyboard.dismiss();
-    const resetAction = NavigationActions.reset({
-      index: 0,
-      key: null,
-      actions: [
-        NavigationActions.navigate({ routeName: MENU_SCREEN_NAME }),
-      ],
-    });
-    this.props.navigation.dispatch(resetAction);
+    NavigationService.reset();
+  };
+
+  const fontColor = {
+    white: styleConst.color.bg,
+    blue: styleConst.color.lightBlue,
+  };
+
+  let fontType = null;
+
+  switch (props.type) {
+    default:
+      fontType = Ionicons;
+      break;
   }
 
-  render() {
-    return (
-      <TouchableOpacity
-        style={styles.container}
-        onPress={this.onPressBack}
-      >
-        <View style={styles.inner}>
-          <Image
-            style={styles.icon}
-            source={require('./assets/back.png')}
-          />
-        </View>
-      </TouchableOpacity>
-    );
-  }
-}
+  return (
+    <TouchableOpacity
+      style={[styles.container, props.ContainerStyle]}
+      testID="HeaderIconBack.Button"
+      onPress={onPressBack}>
+      <View style={[styles.inner, props.InnerStyle]}>
+        <Icon
+          size={props.iconSize}
+          as={fontType}
+          name={props.icon}
+          color="white"
+          _dark={{
+            color: 'white',
+          }}
+          style={[
+            {
+              color: fontColor[props.theme],
+            },
+            props.IconStyle,
+          ]}
+        />
+      </View>
+    </TouchableOpacity>
+  );
+};
+
+HeaderBackButton.propTypes = {
+  returnScreen: PropTypes.string,
+  color: PropTypes.string,
+  IconStyle: PropTypes.object,
+};
+
+HeaderBackButton.defaultProps = {
+  ContainerStyle: {},
+  type: 'Ionicons',
+  iconSize: 10,
+  icon: 'arrow-back',
+  theme: 'blue',
+};
+
+export default HeaderBackButton;

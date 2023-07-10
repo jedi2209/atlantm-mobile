@@ -1,35 +1,32 @@
-import React, { Component } from 'react';
-import { SafeAreaView, View, StyleSheet } from 'react-native';
-import { Content, StyleProvider } from 'native-base';
+/* eslint-disable react-native/no-inline-styles */
+import React, {Component} from 'react';
+import {View, StyleSheet} from 'react-native';
 
 // redux
-import { connect } from 'react-redux';
-import { actionFetchDealerRating } from '../../actions';
+import {connect} from 'react-redux';
+import {actionFetchDealerRating} from '../../actions';
 
 // components
 import Review from '../components/Review';
 import ReviewDealerAnswer from '../components/ReviewDealerAnswer';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import HeaderSubtitle from '../../../core/components/HeaderSubtitle';
-import SpinnerView from '../../../core/components/SpinnerView';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 // helpers
-import { get } from 'lodash';
-import getTheme from '../../../../native-base-theme/components';
+import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
+import {strings} from '../../../core/lang/const';
+import {ScrollView, VStack} from 'native-base';
 
 const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-  },
   review: {
+    marginLeft: 0,
+    marginTop: 10,
     marginBottom: styleConst.ui.horizontalGap,
   },
 });
 
-const mapStateToProps = ({ dealer, eko, nav }) => {
+const mapStateToProps = ({dealer, eko, nav}) => {
   return {
     nav,
     reviewDealerRating: eko.reviews.reviewDealerRating,
@@ -43,30 +40,9 @@ const mapDispatchToProps = {
 };
 
 class ReviewScreen extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Отзыв',
-    headerStyle: [stylesHeader.common, stylesHeader.resetBorder],
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <View />,
-  })
-
-  shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
-    let isActiveScreen = false;
-
-    if (nav) {
-      const rootLevel = nav.routes[nav.index];
-      if (rootLevel) {
-        isActiveScreen = get(rootLevel, `routes[${rootLevel.index}].routeName`) === 'ReviewScreen';
-      }
-    }
-
-    return isActiveScreen;
-  }
-
   componentDidMount() {
-    const { dealerSelected, reviewDealerRating, actionFetchDealerRating } = this.props;
+    const {dealerSelected, reviewDealerRating, actionFetchDealerRating} =
+      this.props;
 
     if (!reviewDealerRating) {
       actionFetchDealerRating({
@@ -75,7 +51,7 @@ class ReviewScreen extends Component {
     }
   }
 
-  getReview = () => get(this.props.navigation, 'state.params.review');
+  getReview = () => get(this.props.route, 'params.review');
 
   render() {
     const {
@@ -87,33 +63,35 @@ class ReviewScreen extends Component {
 
     const review = this.getReview();
 
-    if (!review) return null;
+    if (!review) {
+      return null;
+    }
 
-    console.log('== ReviewScreen ==');
+    console.info('== ReviewScreen ==');
 
     if (isFetchDealerRating) {
-      return <SpinnerView />;
+      return <LogoLoader />;
     }
 
     const subtitle = [
       dealerSelected.name,
-      `Рейтинг ${reviewDealerRating} из 10`,
+      `${strings.ReviewScreen.rating} ${reviewDealerRating} из 10`,
     ];
 
     return (
-      <StyleProvider style={getTheme()}>
-        <SafeAreaView style={styles.safearea}>
-          <Content>
+      <ScrollView>
+        <VStack>
+          <View style={{marginTop: 10}}>
             <HeaderSubtitle content={subtitle} isBig={true} />
+          </View>
 
-            <View style={styles.review}>
-              <Review review={review} />
-            </View>
+          <View mb={2} style={styles.review}>
+            <Review review={review} />
+          </View>
 
-            { review.answer ? <ReviewDealerAnswer text={review.answer} /> : null }
-          </Content>
-        </SafeAreaView>
-      </StyleProvider>
+          {review.answer ? <ReviewDealerAnswer text={review.answer} /> : null}
+        </VStack>
+      </ScrollView>
     );
   }
 }

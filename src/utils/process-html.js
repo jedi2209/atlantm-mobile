@@ -1,4 +1,5 @@
-import styleConst from '@core/style-const';
+import styleConst from '../core/style-const';
+import {APP_NAME} from '../core/const';
 
 const processHtml = (text, width) => {
   return `
@@ -7,25 +8,25 @@ const processHtml = (text, width) => {
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Акция Atlant-m</title>
+      <title>${APP_NAME}</title>
+      <style>
+        html, body {
+          width: ${width};
+          max-width: 100%;
+          font-size: 16px;
+          background-color: ${styleConst.color.bg};
+          font-family: 'Helvetica Neue';
+          padding: 0;
+          margin: 0;
+          overflow: 'scroll';
+        }
+        table {
+          font-size: 14px;
+        }
+      </style>
     </head>
     <body>
-    <style>
-    html, body {
-      width: ${width};
-      max-width: 100%;
-      font-size: 15px;
-      background-color: ${styleConst.color.bg};
-      font-family: 'Helvetica Neue';
-      padding: 0;
-      margin: 0;
-      overflow: 'scroll';
-    }
-    table {
-      font-size: 13px;
-    }
-  </style>
-      ${text}
+    ${text}
     </body>
     </html>
   `;

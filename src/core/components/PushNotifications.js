@@ -1,348 +1,181 @@
-import { Platform, PermissionsAndroid, Alert, Linking } from 'react-native';
+import {Platform, Alert, Linking, AppState} from 'react-native';
 
-import { NavigationActions } from 'react-navigation';
 import OneSignal from 'react-native-onesignal';
+import DeviceInfo from 'react-native-device-info';
+import {ONESIGNAL} from '../const';
+import Analytics from '../../utils/amplitude-analytics';
+import * as NavigationService from '../../navigation/NavigationService';
+import {strings} from '../lang/const';
 
-import { get } from 'lodash';
+import {get} from 'lodash';
 
-// const isAndroid = Platform.OS === 'android';
+const bundle = DeviceInfo.getBundleId();
 
 export default {
-    init() {
+  init() {
+    OneSignal.setLogLevel(6, 0);
+    OneSignal.setAppId(ONESIGNAL);
+    // OneSignal.addEventListener('received', this.onReceived);
+    // OneSignal.addEventListener('opened', this.onOpened);
+    //Method for handling notifications opened
+    this.setNotificationOpenedHandler();
+    //Method for handling notifications received while app in foreground
+    this.setNotificationWillShowInForegroundHandler();
 
-        OneSignal.addEventListener('received', this.onReceived);
-        OneSignal.addEventListener('opened', this.onOpened);
-        OneSignal.addEventListener('ids', this.onIds);
-    },
+    OneSignal.addPermissionObserver(event => {
+      console.info('OneSignal: permission changed:', event);
+    });
+  },
 
-    onReceived(notification) {
-        console.log("Notification received: ", notification);
-    },
+  onReceived(data) {
+    console.info('Notification received: ', data);
+    Analytics.logEvent('action', 'PushNotification/received', {
+      id: data.notification.notificationId,
+    });
+  },
 
-    onOpened(openResult, listener) {
-        let routeName;
+  onOpened(data) {
+    let routeName;
 
-        const data_test = get(openResult, 'notification.payload.additionalData', {});
-        console.log('data_test', data_test);
+    Analytics.logEvent('action', 'PushNotification/opened', {
+      id: data.notification.notificationId,
+    });
 
-        // console.log('Message: ', openResult.notification.payload.body);
-        // console.log('Data: ', openResult.notification.payload.additionalData);
-        // console.log('isActive: ', openResult.notification.isAppInFocus);
-        console.log('openResult: ', openResult);
-        const notif = openResult.notification.payload.additionalData;
+    const notif = data.notification.additionalData;
 
-        const target = get(notif, 'target');
-        const dealer = get(notif, 'dealer');
-        const carNumber = get(notif, 'car_number');
-        const actionId = get(notif, 'action_id');
-        const actionDate = get(notif, 'action_date', {});
-        const params = {};
+    const target = get(notif, 'target');
+    const dealer = get(notif, 'dealer', null);
+    const carNumber = get(notif, 'car_number', null);
+    const actionId = get(notif, 'action_id', null);
+    const actionDate = get(notif, 'action_date', null);
+    const params = {};
 
-        if (target === 'tva') {
-            routeName = 'Tva2Screen';
-            params.isPush = true;
-            params.dealerId = dealer;
-            params.carNumber = carNumber;
+    params.isPush = true;
+
+    switch (target) {
+      case 'tva':
+        routeName = 'TvaResultsScreen';
+        params.dealerId = dealer;
+        params.carNumber = carNumber;
+        break;
+      case 'action':
+        routeName = 'InfoPostScreen';
+        params.id = actionId;
+        break;
+      case 'chat':
+        routeName = 'ChatScreen';
+        params.refresh = true;
+      default:
+        break;
+    }
+    if (!routeName) return;
+    return NavigationService.navigate(routeName, params);
+  },
+
+  setNotificationWillShowInForegroundHandler() {
+    OneSignal.setNotificationWillShowInForegroundHandler(
+      notificationReceivedEvent => {
+        const appState = AppState.currentState;
+        console.info(
+          'OneSignal: notification will show in foreground:',
+          notificationReceivedEvent,
+        );
+        let notification = notificationReceivedEvent.getNotification();
+        console.info('notification: ', notification);
+        const data = notification.additionalData;
+        console.info('additionalData: ', data);
+        // Complete with null means don't show a notification.
+        if (
+          appState === 'active' &&
+          data.target === 'chat' &&
+          NavigationService.navigationRef.getCurrentRoute().name ===
+            'ChatScreen'
+        ) {
+          notification = null;
         }
-        if (target === 'action') {
-            routeName = 'InfoListScreen';
-            params.isPush = true;
-            params.id = actionId;
-            params.date = actionDate;
+        notificationReceivedEvent.complete(notification);
+      },
+    );
+  },
+
+  setNotificationOpenedHandler() {
+    OneSignal.setNotificationOpenedHandler(notification => {
+      this.onOpened(notification);
+    });
+  },
+
+  setExternalUserId(userID) {
+    OneSignal.setExternalUserId(userID);
+  },
+
+  removeExternalUserId() {
+    OneSignal.removeExternalUserId();
+  },
+
+  addTag(name, value) {
+    OneSignal.sendTag(name, value.toString());
+  },
+
+  removeTag(name) {
+    OneSignal.deleteTag(name);
+  },
+
+  async subscribeToTopic(topic, id) {
+    const isPermission = await this.checkPermission();
+    if (isPermission) {
+      OneSignal.disablePush(false);
+      OneSignal.sendTag(topic, id.toString());
+    }
+    return isPermission;
+  },
+
+  unsubscribeFromTopic(topic) {
+    OneSignal.deleteTag(topic);
+  },
+
+  setEmail(value) {
+    OneSignal.setEmail(value);
+  },
+
+  async deviceState() {
+    return await OneSignal.getDeviceState();
+  },
+
+  checkPermission() {
+    return new Promise((resolve, reject) => {
+      // Check push notification and OneSignal subscription statuses
+      OneSignal.promptForPushNotificationsWithUserResponse();
+      this.deviceState().then(deviceState => {
+        if (deviceState.hasNotificationPermission === false) {
+          switch (Platform.OS) {
+            case 'ios':
+              setTimeout(() => {
+                return Alert.alert(
+                  strings.Notifications.PushAlert.title,
+                  strings.Notifications.PushAlert.text,
+                  [
+                    {
+                      text: strings.Notifications.PushAlert.later,
+                      style: 'destructive',
+                    },
+                    {
+                      text: strings.Notifications.PushAlert.approve,
+                      onPress: () => {
+                        Linking.openURL(
+                          'app-settings://notification/' + bundle,
+                        );
+                      },
+                      style: 'cancel',
+                    },
+                  ],
+                );
+              }, 100);
+              break;
+          }
+          return resolve(false);
         }
-        if (!routeName) return;
-
-        const resetAction = NavigationActions.reset({
-            index: 0,
-            key: null,
-            actions: [
-                NavigationActions.navigate({routeName, params}),
-            ],
-        });
-
-        window.atlantmNavigation.dispatch(resetAction);
-
-        if (target === 'action') {
-            setTimeout(() => window.atlantmNavigation.navigate('InfoPostScreen', params), 200);
-        }
-    },
-
-    onIds(device) {
-        console.log('Device info: ', device);
-    },
-
-    addTag(name, value) {
-        console.log('addTag name:', name);
-        console.log('addTag value:', value);
-        OneSignal.sendTag(name, value.toString());
-    },
-
-    removeTag(name) {
-        console.log('removeTag', name);
-        OneSignal.deleteTag(name);
-    },
-
-    subscribeToTopic( topic, id ) {
-        return this.checkPermission()
-            .then(isPermission => {
-                if (isPermission) {
-                    OneSignal.setSubscription(true);
-                    OneSignal.sendTag(topic, id.toString());
-                }
-                return isPermission;
-            });
-    },
-
-    unsubscribeFromTopic( topic ) {
-        OneSignal.deleteTag(topic);
-    },
-
-    setEmail(value) {
-//        OneSignal.setEmail(value);
-    },
-
-    // logoutEmail() {
-    //     OneSignal.logoutEmail();
-    // },
-
-    checkPermission() {
-        return new Promise(function(resolve, reject) {
-            // Check push notification and OneSignal subscription statuses
-            OneSignal.getPermissionSubscriptionState((status) => {
-                if (status.notificationsEnabled) {
-                    return resolve(true);
-                } else {
-                    switch (Platform.OS) {
-                        case 'ios':
-                            setTimeout(() => {
-                                return Alert.alert(
-                                    'Уведомления выключены',
-                                    'Необходимо разрешить получение push-уведомлений для приложения Атлант-М в настройках',
-                                    [
-                                        {
-                                            text: 'Разрешить',
-                                            onPress() {
-                                                Linking.openURL('app-settings://notification/com.atlant-m');
-                                            },
-                                            style: 'cancel'
-                                        },
-                                        {text: 'Позже', style: 'destructive'},
-                                    ],
-                                );
-                            }, 100);
-                            break;
-                    }
-                    return resolve(false);
-                }
-            });
-        });
-    },
-}
-
-// export default {
-//   init({
-//     fcmToken,
-//     actionSetFCMToken,
-//     onPushPermissionGranted,
-//     onPushPermissionRejected,
-//     actionSetPreviousFCMToken,
-//   }){
-//       firebase.messaging().hasPermission()
-//           .then(enabled => {
-//               if (enabled) {
-//                   firebase.messaging().getToken().then(token => {
-//                       console.log('token', token);
-//                       actionSetFCMToken(token);
-//                       onPushPermissionGranted();
-//                   });
-//               } else {
-//                   try {
-//                       firebase.messaging().requestPermission();
-//                       firebase.messaging().getToken().then(token => {
-//                           console.log('token', token);
-//                           actionSetFCMToken(token);
-//                           onPushPermissionGranted();
-//                       });
-//                   } catch (error) {
-//                       console.log('не получили token');
-//                       actionSetFCMToken(null);
-//                       onPushPermissionRejected();
-//                   }
-//               }
-//           });
-//
-//     this.refreshTokenListener = firebase.messaging().onTokenRefresh(token => {
-//       actionSetPreviousFCMToken(fcmToken);
-//       actionSetFCMToken(token);
-//     });
-//
-//     // FCM.getInitialNotification().then((notif) => {
-//     //   console.log('getInitialNotification', notif);
-//     //
-//     //   this.openScreen(notif);
-//     // });
-//
-//       this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen: NotificationOpen) => {
-//           // Get the action triggered by the notification being opened
-//           const action = notificationOpen.action;
-//           // Get information about the notification that was opened
-//           const notification: Notification = notificationOpen.notification;
-//       });
-//
-//       this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification: Notification) => {
-//           // Process your notification as required
-//           // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
-//           console.log('notification1', notification);
-//       });
-//       this.notificationListener = firebase.notifications().onNotification((notification: Notification) => {
-//           // Process your notification as required
-//           console.log('notification2', notification);
-//       });
-//
-//     // this.notificationListener = firebase.notifications().onNotification((notif: Notification) => {
-//     //     console.log('notif', notif);
-//     //   const title = get(notif, 'fcm.title');
-//     //   const body = get(notif, 'fcm.body');
-//     //   const icon = get(notif, 'fcm.icon');
-//     //   const channel = get(notif, 'fcm.channel');
-//     //   const color = get(notif, 'fcm.color');
-//     //   const vibrate = get(notif, 'fcm.vibrate');
-//     //
-//     //   const target = get(notif, 'target');
-//     //
-//     //   const dealer = get(notif, 'dealer');
-//     //   const carNumber = get(notif, 'car_number');
-//     //   const actionId = get(notif, 'action_id');
-//     //   const actionDate = get(notif, 'action_date', {});
-//     //
-//     //   console.log('FCM.messaging().onMessage', notif);
-//     //
-//     //   if (Platform.OS === 'android' && !notif.local_notification) {
-//     //     this.sendLocalNotification({
-//     //       title,
-//     //       body,
-//     //       icon,
-//     //       color,
-//     //       vibrate,
-//     //
-//     //       target,
-//     //       carNumber,
-//     //       dealer,
-//     //       actionId,
-//     //       actionDate,
-//     //     });
-//     //   }
-//     //
-//     //   if (notif.opened_from_tray) {
-//     //     this.openScreen(notif);
-//     //   }
-//     //
-//     //   if (Platform.OS === 'ios') {
-//     //     switch (notif._notificationType) {
-//     //     case NotificationType.Remote:
-//     //       console.log('type Remote');
-//     //       notif.finish(RemoteNotificationResult.NewData);
-//     //       break;
-//     //     case NotificationType.NotificationResponse:
-//     //       console.log('type NotificationResponse');
-//     //       notif.finish();
-//     //       break;
-//     //     case NotificationType.WillPresent:
-//     //       console.log('type WillPresent');
-//     //       notif.finish(WillPresentNotificationResult.All);
-//     //       break;
-//     //     }
-//     //   }
-//     // });
-//   },
-//
-//   sendLocalNotification({
-//     title,
-//     body,
-//     icon,
-//     channel,
-//     color,
-//     vibrate,
-//
-//     target,
-//     carNumber,
-//     dealer,
-//     actionId,
-//     actionDate,
-//   }) {
-//     //   firebase.messaging().createLocalNotification({
-//     //   target,
-//     //   car_number: carNumber,
-//     //   action_id: actionId,
-//     //   action_date: actionDate,
-//     //   channel: channel,
-//     //   dealer,
-//     //   icon,
-//     //   color,
-//     //   title,  // as FCM payload
-//     //   body, // as FCM payload (required)
-//     //   sound: 'default',                // as FCM payload
-//     //   priority: 'high',                // as FCM payload
-//     //   badge: 0,                        // as FCM payload IOS only, set 0 to clear badges
-//     //   number: 1,                       // Android only
-//     //   lights: true,                    // Android only, LED blinking (default false)
-//     //   show_in_foreground: true,        // notification when app is in foreground (local & remote)
-//     //   vibrate: vibrate || 500,
-//     //   wake_screen: true, // Android only
-//     // });
-//   },
-//
-//   // createNotificationChannel({ id }) {
-//   //     const channel = new firebase.notifications.Android.Channel(
-//   //         id,
-//   //         'Default',
-//   //         firebase.notifications.Android.Importance.High
-//   //     ).setDescription("used for example");
-//   //     firebase.notifications.Android.createChannel(channel);
-//   // },
-//
-//   // openScreen(notif) {
-//   //   let routeName;
-//   //   const target = get(notif, 'target');
-//   //
-//   //   const dealer = get(notif, 'dealer');
-//   //   const carNumber = get(notif, 'car_number');
-//   //   const actionId = get(notif, 'action_id');
-//   //   const actionDate = get(notif, 'action_date', {});
-//   //   const params = {};
-//   //
-//   //   if (target === 'tva') {
-//   //     routeName = 'Tva2Screen';
-//   //     params.isPush = true;
-//   //     params.dealerId = dealer;
-//   //     params.carNumber = carNumber;
-//   //   }
-//   //
-//   //   if (target === 'action') {
-//   //     routeName = 'InfoListScreen';
-//   //     params.isPush = true;
-//   //     params.id = actionId;
-//   //     try {
-//   //       params.date = JSON.parse(actionDate);
-//   //     } catch (e) {
-//   //       console.log('не получилось распарсить json date для акции');
-//   //     }
-//   //   }
-//   //
-//   //   if (!routeName) return;
-//   //
-//   //   const resetAction = NavigationActions.reset({
-//   //     index: 0,
-//   //     key: null,
-//   //     actions: [
-//   //       NavigationActions.navigate({ routeName, params }),
-//   //     ],
-//   //   });
-//   //
-//   //   window.atlantmNavigation.dispatch(resetAction);
-//   //
-//   //   if (target === 'action') {
-//   //     setTimeout(() => window.atlantmNavigation.navigate('InfoPostScreen', params), 200);
-//   //   }
-//   // },
-// };
+        return resolve(true);
+      });
+    });
+  },
+};

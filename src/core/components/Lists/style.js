@@ -1,8 +1,8 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 // helpers
 import styleConst from '../../style-const';
-import { verticalScale } from '../../../utils/scale';
+import {verticalScale} from '../../../utils/scale';
 
 const iconLeftSize = 28;
 
@@ -16,25 +16,28 @@ export default StyleSheet.create({
   label: {
     color: '#000',
     fontSize: 18,
+    marginTop: 10,
     fontFamily: styleConst.font.regular,
   },
   bodyWithLeftGap: {
     marginLeft: 10,
+    justifyContent: 'space-between',
   },
   inputItem: {
     borderBottomWidth: 0,
     minHeight: styleConst.ui.listHeight,
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
   },
   listItemContainer: {
-    backgroundColor: '#fff',
+    backgroundColor: styleConst.color.white,
   },
   listItemContainerFirst: {
     borderTopWidth: styleConst.ui.borderWidth,
-    borderTopColor: styleConst.color.border,
+    borderTopColor: styleConst.color.systemGray,
   },
   listItem: {
-    minHeight: styleConst.ui.listHeight,
+    borderWidth: 0,
+    borderBottomWidth: 0,
   },
   listItemReset: {
     paddingRight: 0,
@@ -70,7 +73,6 @@ export default StyleSheet.create({
     color: styleConst.color.greyText3,
     fontSize: 17,
     letterSpacing: styleConst.ui.letterSpacing,
-    fontFamily: styleConst.font.regular,
     marginLeft: 10,
   },
 });

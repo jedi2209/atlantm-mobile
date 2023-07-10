@@ -1,124 +1,219 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, NativeModules } from 'react-native';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react-native/no-inline-styles */
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, Platform, View} from 'react-native';
+import {NativeBaseProvider} from 'native-base';
+import {NavigationContainer} from '@react-navigation/native';
+import * as NavigationService from '../../navigation/NavigationService';
+
+import {firebase} from '@react-native-firebase/app-check';
 
 // redux
-import { connect } from 'react-redux';
-import { store } from '../store';
-import { navigationChange } from '../../navigation/actions';
+import {connect} from 'react-redux';
+import {store} from '../store';
 import {
   actionSetPushGranted,
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
-  actionStoreUpdated
+  actionStoreUpdated,
+  actionSettingsLoaded,
 } from '../actions';
+import {fetchDealers, selectDealer, fetchBrands} from '../../dealer/actions';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+
+import {APP_STORE_UPDATED} from '../actionTypes';
+import {APP_LANG} from '../const';
+
+import {strings} from '../lang/const';
+import {theme} from '../theme';
 
 // helpers
 import API from '../../utils/api';
-import { get } from 'lodash';
+import {get} from 'lodash';
 import OneSignal from 'react-native-onesignal';
-// import RateThisApp from '../components/RateThisApp';
+import moment from 'moment';
+import PushNotifications from '../components/PushNotifications';
+import styleConst from '../style-const';
 
 // components
-import Sidebar from '../../menu/containers/Sidebar';
 import DeviceInfo from 'react-native-device-info';
+import * as Nav from '../../navigation/NavigationBase';
+import LogoTitle from '../components/LogoTitle';
 
-// routes
-import getRouter from '../router';
-
-if (__DEV__) {
-    NativeModules.DevSettings.setIsDebuggingRemotely(true)
-}
-
-const mapStateToProps = ({ core, dealer, profile }) => {
+const mapStateToProps = ({core, dealer, modal}) => {
   return {
-//     pushActionSubscribeState: core.pushActionSubscribeState,
-    dealerSelected: dealer.selected,
-    auth: profile.auth,
     menuOpenedCount: core.menuOpenedCount,
     isStoreUpdated: core.isStoreUpdated,
+    modal,
+    currentLanguage: core.language.selected,
+    dealerSelected: dealer.selected,
   };
 };
 
 const mapDispatchToProps = {
-  navigationChange,
   actionSetPushGranted,
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
-  actionStoreUpdated
+  actionStoreUpdated,
+  actionSettingsLoaded,
+  fetchDealers,
+  selectDealer,
+  fetchBrands,
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  app: {
-    flex: 2,
-    overflow: 'hidden',
-  },
-});
+const mainScreen = 'BottomTabNavigation';
+const storeVersion = '2022-09-20';
 
-class App extends Component {
-  componentDidMount() {
-    const {
-      auth,
-      dealerSelected,
-      actionStoreUpdated,
-      actionMenuOpenedCount,
-      menuOpenedCount,
-      isStoreUpdated
-    } = this.props;
+const _awaitStoreToUpdate = async props => {
+  const storeData = store.getState();
+
+  const currentDealer = get(storeData, 'dealer.selected.id', false);
+  const isStoreUpdatedCurrent = get(storeData, 'core.isStoreUpdated', false);
+
+  const currentVersion = DeviceInfo.getVersion();
+  API.fetchVersion(currentVersion || null).then(res => {
+    if (res && res.settings) {
+      props.actionSettingsLoaded(res.settings);
+    }
+  });
+
+  if (currentDealer && isStoreUpdatedCurrent === storeVersion) {
+    const actionDealer = await props.fetchDealers(); // обновляем дилеров при каждом открытии прилаги
+    const currDealerItem = get(storeData, 'dealer.selected');
+    const currentDealerUpdated = await props.selectDealer({
+      dealerBaseData: currDealerItem,
+      dealerSelected: undefined,
+      isLocal: false,
+    });
+    //props.fetchBrands(); // обновляем бренды при каждом открытии прилаги
+    if (currentDealerUpdated && actionDealer && actionDealer.type) {
+      // уже всё обновлено, открываем экран автоцентра
+      return mainScreen;
+    }
+  }
+
+  try {
+    // если мы ещё не очищали стор
+    props.actionMenuOpenedCount(0);
+    const action = await props.actionStoreUpdated(storeVersion);
+    if (action && action.type) {
+      props.fetchBrands();
+      const actionDealer = await props.fetchDealers();
+      if (actionDealer && actionDealer.type) {
+        let result;
+        if (action.type === APP_STORE_UPDATED) {
+          result = 'IntroScreen';
+        }
+        return result;
+      }
+    }
+  } catch (error) {
+    console.error('_awaitStoreToUpdate error', error);
+  }
+};
+
+const App = props => {
+  const [isLoading, setLoading] = useState(true);
+
+  const {
+    auth,
+    actionSetPushGranted,
+    actionSetPushActionSubscribe,
+    dealerSelected,
+    menuOpenedCount,
+    isStoreUpdated,
+  } = props;
+
+  moment.locale(APP_LANG);
+
+  useEffect(() => {
+    NavigationService.setTopLevelNavigator(NavigationService.navigationRef);
+
+    setLoading(true);
+    _awaitStoreToUpdate(props)
+      .then(res => {
+        if (typeof res === 'undefined' || !res) {
+          res = 'IntroScreen';
+        }
+        setLoading(false);
+      })
+      .catch(err => {
+        console.error('_awaitStoreToUpdate error', err);
+        setLoading(false);
+      });
+
+    PushNotifications.init();
+
+    if (Platform.OS === 'ios') {
+      //Prompt for push on iOS
+      OneSignal.promptForPushNotificationsWithUserResponse(status => {
+        if (status) {
+          actionSetPushGranted(true);
+
+          if (
+            Number(menuOpenedCount) <= 1 ||
+            menuOpenedCount === 0 ||
+            isStoreUpdated === false
+          ) {
+            actionSetPushActionSubscribe(true);
+          }
+
+          OneSignal.disablePush(false);
+        } else {
+          actionSetPushGranted(false);
+          actionSetPushActionSubscribe(false);
+          PushNotifications.unsubscribeFromTopic('actions');
+          OneSignal.disablePush(true);
+        }
+      });
+    } else {
+      firebase.appCheck().activate('ignored', false);
+    }
+
+    strings.setLanguage(APP_LANG);
 
     if (get(auth, 'login') === 'zteam') {
       window.atlantmDebug = true;
     }
+  }, []);
 
-    const currentDealer = get(dealerSelected, 'id', false);
-  
-    if (currentDealer && (isStoreUpdated !== undefined && isStoreUpdated !== '2019-02-01')) { // если мы ещё не очищали стор
-        actionMenuOpenedCount(0);
-        actionStoreUpdated('2019-02-01');
-        console.log('APP INIT INSIDE ====== currentDealer', currentDealer);
-        console.log('APP INIT INSIDE ====== isStoreUpdated', isStoreUpdated);
-    }
-
-    setTimeout(() => {
-
-        OneSignal.init('2094a3e1-3c9a-479d-90ae-93adfcd15dab', {
-            kOSSettingsKeyAutoPrompt: true,
-            kOSSettingsKeyInFocusDisplayOption: 2
-        });
-
-        console.log('APP INIT AFTER ====== menuOpenedCount', menuOpenedCount);
-        console.log('APP INIT AFTER ====== isStoreUpdated', isStoreUpdated);
-
-        OneSignal.setLogLevel(6, 0);
-        OneSignal.enableSound(true);
-        OneSignal.enableVibrate(true);
-    }, 500);
-  }
-
-  // shouldComponentUpdate() { return false; }
-
-  onNavigationStateChange = (prevState, newState) => {
-    this.props.navigationChange({ prevState, newState });
-  };
-
-  render() {
-    const isDealerSelected = get(store.getState(), 'dealer.selected.id');
-    let Router = getRouter(isDealerSelected ? 'MenuScreen' : 'IntroScreen');
-    if (this.props.version === false) {
-      Router = getRouter('AppIsDeprecated');
-    }
-    const defaultGetStateForAction = Router.router.getStateForAction;
-    Router.router.getStateForAction = (action, state) => {
-      return defaultGetStateForAction(action, state);
-    };
-
+  if (isLoading || !NavigationContainer) {
     return (
-      <Router onNavigationStateChange={this.onNavigationStateChange}/>
+      <View
+        flex={1}
+        style={styles.center}
+        backgroundColor={styleConst.color.blue}>
+        <LogoTitle theme={'white'} />
+      </View>
+    );
+  } else {
+    return (
+      <GestureHandlerRootView style={{flex: 1}}>
+        <NativeBaseProvider
+          theme={theme}
+          config={{
+            dependencies: {
+              'linear-gradient': require('react-native-linear-gradient')
+                .default,
+            },
+          }}>
+          <NavigationContainer ref={NavigationService.navigationRef}>
+            <Nav.Base />
+          </NavigationContainer>
+        </NativeBaseProvider>
+      </GestureHandlerRootView>
     );
   }
-}
+};
+
+const styles = StyleSheet.create({
+  activityIndicator: {
+    marginTop: 20,
+  },
+  center: {
+    justifyContent: 'center',
+    alignContent: 'center',
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

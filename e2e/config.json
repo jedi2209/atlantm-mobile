@@ -1,0 +1,11 @@
+{
+    "testEnvironment": "./environment",
+    "testRunner": "jest-circus/runner",
+    "testTimeout": 120000,
+    "testMatch": [  
+        "**/__tests__/**/*.[jt]s?(x)"
+    ],
+    "roots": ["../src/__tests__/"],
+    "reporters": ["detox/runners/jest/streamlineReporter"],
+    "verbose": true
+}

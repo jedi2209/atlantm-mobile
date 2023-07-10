@@ -1,0 +1,1 @@
+export const APP_LANG_SET = 'APP_LANG_SET';

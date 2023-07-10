@@ -1,38 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet } from 'react-native';
-import { Icon } from 'native-base';
+import {StyleSheet} from 'react-native';
+import {Icon} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import styleConst from '../style-const';
 
 const styles = StyleSheet.create({
   icon: {
-    color: styleConst.color.systemBlue,
+    color: styleConst.color.blue,
   },
 });
 
-export default class RadioIcon extends Component {
-  static propTypes = {
-    selected: PropTypes.bool,
-  }
+const RadioIcon = ({containerStyle, selected}) => {
+  return (
+    <Icon
+      name={selected ? 'md-radio-button-on' : 'md-radio-button-off'}
+      style={[styles.icon, containerStyle]}
+      as={Ionicons}
+    />
+  );
+};
 
-  static defaultProps = {
-    selected: false,
-    containerStyle: null,
-  }
+RadioIcon.propTypes = {
+  selected: PropTypes.bool,
+};
 
-  render() {
-    const { containerStyle, selected } = this.props;
+RadioIcon.defaultProps = {
+  selected: false,
+  containerStyle: null,
+};
 
-    return (
-      <Icon
-        name={selected ? 'md-radio-button-on' : 'md-radio-button-off'}
-        style={[
-          styles.icon,
-          containerStyle,
-        ]}
-      />
-    );
-  }
-}
+export default RadioIcon;

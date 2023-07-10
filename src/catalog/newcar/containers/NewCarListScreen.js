@@ -1,22 +1,25 @@
-import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, {useState, useEffect, useReducer} from 'react';
+import {StyleSheet, View, StatusBar, ActivityIndicator} from 'react-native';
 
 // redux
-import { connect } from 'react-redux';
-import { actionFetchNewCarByFilter } from '../../actions';
+import {connect} from 'react-redux';
+import {
+  actionFetchNewCarByFilter,
+  actionSaveNewCarFilters,
+} from '../../actions';
 
 // components
-import HeaderIconMenu from '../../../core/components/HeaderIconMenu/HeaderIconMenu';
-import HeaderIconBack from '../../../core/components/HeaderIconBack/HeaderIconBack';
 import CarList from '../../components/CarList';
+import {Icon, Fab} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import LogoLoader from '../../../core/components/LogoLoader';
 
 // helpers
-import Amplitude from '../../../utils/amplitude-analytics';
-import { get } from 'lodash';
+import Analytics from '../../../utils/amplitude-analytics';
+import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import stylesHeader from '../../../core/components/Header/style';
-import declOfNum from '../../../utils/decl-of-num';
-import { EVENT_REFRESH } from '../../../core/actionTypes';
+import {EVENT_REFRESH} from '../../../core/actionTypes';
 
 const styles = StyleSheet.create({
   content: {
@@ -25,147 +28,124 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({ dealer, nav, catalog }) => {
+const mapStateToProps = ({dealer, catalog}) => {
   return {
-    nav,
     dealerSelected: dealer.selected,
-    city: catalog.newCar.city,
+    brands: dealer.listBrands,
     items: catalog.newCar.items,
-    filterData: catalog.newCar.filterData,
+    filters: catalog.newCar.filters,
     isFetchingNewCarByFilter: catalog.newCar.meta.isFetchingNewCarByFilter,
-
-    // для pull-to-refresh
-    filterBrands: catalog.newCar.filterBrands,
-    filterModels: catalog.newCar.filterModels,
-    filterBody: catalog.newCar.filterBody,
-    filterGearbox: catalog.newCar.filterGearbox,
-    filterDrive: catalog.newCar.filterDrive,
-    filterEngineType: catalog.newCar.filterEngineType,
-    filterPrice: catalog.newCar.filterPrice,
-    filterPriceSpecial: catalog.newCar.filterPriceSpecial,
   };
 };
 
-const mapDispatchToProps = {
+const NewCarListScreen = ({
+  items,
+  navigation,
+  route,
+  filters,
   actionFetchNewCarByFilter,
-};
+  actionSaveNewCarFilters,
+  dealerSelected,
+  isFetchingNewCarByFilter,
+}) => {
+  const [loading, setLoading] = useState(true);
 
-class NewCarListScreen extends Component {
-  static navigationOptions = ({ navigation }) => {
-    const { params = { total: {} } } = navigation.state;
-    const count = get(params, 'total.count');
-    const titleVariants = ['автомобиль', 'автомобиля', 'автомобилей'];
+  const {data, pages, prices} = items;
 
-    return {
-      headerTitle: count ? `${count} ${declOfNum(count, titleVariants)}` : null,
-      headerStyle: stylesHeader.common,
-      headerTitleStyle: stylesHeader.title,
-      headerLeft: <HeaderIconBack navigation={navigation} />,
-      headerRight: <HeaderIconMenu navigation={navigation} />,
-    };
-  }
+  const fabEnable = dealerSelected.region === 'by' ? true : false;
 
-  componentDidMount() {
-    const { search_url } = this.props.filterData;
-
-    Amplitude.logEvent('screen', 'catalog/newcar/list', {
-      search_url: get(this.props, 'filterData.search_url'),
-    });
-  }
-
-  componentDidUpdate() {
-    const { navigation, items } = this.props;
-
-    if (items.total) {
-      return setTimeout(() => {
-        this.props.navigation.setParams({ total: get(this.props.items, 'total') });
-      }, 200);
-    }
-  }
-
-  shouldComponentUpdate(nextProps) {
-    const { dealerSelected, items, isFetchingNewCarByFilter } = this.props;
-    const nav = nextProps.nav.newState;
-    const isActiveScreen = nav.routes[nav.index].routeName === 'NewCarListScreen';
-
-    return (dealerSelected.id !== nextProps.dealerSelected.id && isActiveScreen) ||
-      (items.length !== nextProps.items.length) ||
-      (isFetchingNewCarByFilter !== nextProps.isFetchingNewCarByFilter);
-  }
-
-  fetchNewCar = (type) => {
-    const {
-      items,
-      filterData,
-      navigation,
-      actionFetchNewCarByFilter,
-
-      filterBrands,
-      filterModels,
-      filterBody,
-      filterGearbox,
-      filterDrive,
-      filterEngineType,
-      filterPrice,
-      filterPriceSpecial,
-    } = this.props;
-
-    const onResult = () => {
-      return setTimeout(() => {
-        this.props.navigation.setParams({ total: get(this.props.items, 'total') });
-      }, 150);
-    };
-
+  const _fetchNewCars = type => {
     if (type === EVENT_REFRESH) {
-      return actionFetchNewCarByFilter({
-        searchUrl: filterData.search_url,
-        filterBrands,
-        filterModels,
-        filterBody,
-        filterGearbox,
-        filterDrive,
-        filterEngineType,
-        filterPrice,
-        filterPriceSpecial,
-      })
-      .then(onResult);
+      setLoading(true);
     }
 
     return actionFetchNewCarByFilter({
       type,
-      searchUrl: filterData.search_url,
-      nextPage: get(items, 'pages.next'),
-    })
-    .then(onResult);
-  }
+      city: dealerSelected.city[0].id,
+      nextPage: pages?.next || null,
+      filters: filters.filters,
+      sortBy: filters.sorting.sortBy,
+      sortDirection: filters.sorting.sortDirection,
+    }).then(res => {
+      return setTimeout(() => {
+        setLoading(false);
+        navigation.setParams({
+          total: get(items, 'total', get(res, 'payload.total')),
+        });
+      }, 150);
+    });
+  };
 
-  render() {
-    const {
-      items,
-      navigation,
-      dealerSelected,
-      isFetchingNewCarByFilter,
-    } = this.props;
+  useEffect(() => {
+    _fetchNewCars(EVENT_REFRESH);
+  }, [filters.sorting.sortDirection, filters.sorting.sortBy]);
 
-    const { data, pages, prices } = items;
+  useEffect(() => {
+    actionSaveNewCarFilters({
+      filters: filters.filters,
+      sorting: {
+        sortBy: route?.params?.sortBy,
+        sortDirection: route?.params?.sortDirection,
+      },
+    });
+  }, [route.params.sortDirection, route.params.sortBy]);
 
-    console.log('== NewCarListScreen ==');
+  // Аналогично componentDidMount и componentDidUpdate:
+  useEffect(() => {
+    Analytics.logEvent('screen', 'catalog/newcar/list', {
+      search_url: `/stock/new/cars/get/city/${dealerSelected.city[0].id}/`,
+    });
+  }, [dealerSelected.city[0].id]);
 
-    return (
-      <View style={styles.content}>
-        <CarList
-          items={data}
-          pages={pages}
-          prices={prices}
-          navigation={navigation}
-          itemScreen="NewCarItemScreen"
-          dataHandler={this.fetchNewCar}
-          dealerSelected={dealerSelected}
-          isFetchItems={isFetchingNewCarByFilter}
-        />
-      </View>
-    );
-  }
-}
+  return (
+    <View style={styles.content} testID="NewCarsListSreen.Wrapper">
+      <StatusBar hidden />
+      {loading ? (
+        <LogoLoader />
+      ) : (
+        <>
+          <CarList
+            data={data}
+            pages={pages}
+            prices={prices}
+            resizeMode="contain"
+            itemScreen="NewCarItemScreen"
+            dataHandler={_fetchNewCars}
+            dealerSelected={dealerSelected}
+            isFetchItems={isFetchingNewCarByFilter}
+          />
+          {fabEnable ? (
+            <Fab
+              renderInPortal={false}
+              size="sm"
+              style={{backgroundColor: styleConst.new.blueHeader}}
+              onPress={() =>
+                navigation.navigate('ChatScreen', {
+                  prevScreen: 'Список новых авто',
+                })
+              }
+              icon={
+                <Icon
+                  size={7}
+                  as={Ionicons}
+                  name="chatbox-outline"
+                  color="warmGray.50"
+                  _dark={{
+                    color: 'warmGray.50',
+                  }}
+                />
+              }
+            />
+          ) : null}
+        </>
+      )}
+    </View>
+  );
+};
+
+const mapDispatchToProps = {
+  actionFetchNewCarByFilter,
+  actionSaveNewCarFilters,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewCarListScreen);

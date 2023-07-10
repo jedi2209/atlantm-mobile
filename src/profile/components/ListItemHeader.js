@@ -1,9 +1,9 @@
-import React, { PureComponent } from 'react';
-import { View, Text } from 'react-native';
+import React, {PureComponent} from 'react';
+import {View, Text} from 'react-native';
 import PropTypes from 'prop-types';
 
 // components
-import { ListItem } from 'native-base';
+import {Pressable} from 'native-base';
 import RadioIcon from '../../core/components/RadioIcon';
 
 export default class ListItemHeader extends PureComponent {
@@ -12,27 +12,32 @@ export default class ListItemHeader extends PureComponent {
     radio: PropTypes.bool,
     radioSelected: PropTypes.bool,
     onPress: PropTypes.func,
-  }
+  };
 
   static defaultProps = {
     textStyle: {},
     text: '',
     radio: false,
     radioSelected: false,
-  }
+  };
 
   render() {
-    const { text, radio, radioSelected, textStyle, onPress } = this.props;
+    const {text, radio, radioSelected, textStyle, onPress} = this.props;
 
     return (
       <View>
-        <ListItem onPress={onPress} itemHeader>
-          { radio ? <RadioIcon containerStyle={{
-            marginRight: 10,
-            marginTop: 1,
-          }} selected={radioSelected} /> : null }
+        <Pressable onPress={onPress}>
+          {radio ? (
+            <RadioIcon
+              containerStyle={{
+                marginRight: 10,
+                marginTop: 1,
+              }}
+              selected={radioSelected}
+            />
+          ) : null}
           <Text style={textStyle}>{text}</Text>
-        </ListItem>
+        </Pressable>
       </View>
     );
   }

@@ -2,8 +2,7 @@
 //  NotificationService.h
 //  OneSignalNotificationServiceExtension
 //
-//  Created by Aleksandr Kvasha on 03/11/2018.
-//  Copyright © 2018 Facebook. All rights reserved.
+//  Created by Alexander Kvasha on 24.02.2023.
 //
 
 #import <UserNotifications/UserNotifications.h>

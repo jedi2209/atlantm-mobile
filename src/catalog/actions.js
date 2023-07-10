@@ -1,20 +1,12 @@
+import * as Sentry from '@sentry/react-native';
 import API from '../utils/api';
 
-import { get } from 'lodash';
+import {get} from 'lodash';
 
 import {
   USED_CAR_LIST__REQUEST,
   USED_CAR_LIST__SUCCESS,
   USED_CAR_LIST__FAIL,
-  USED_CAR_LIST__RESET,
-  USED_CAR_LIST_UPDATE__SET,
-  USED_CAR_LIST_STOP_UPDATE__SET,
-  USED_CAR_CITY__SELECT,
-  USED_CAR_PRICE_RANGE__SELECT,
-  USED_CAR_REGION__SELECT,
-  USED_CAR_PRICE_FILTER__SHOW,
-  USED_CAR_PRICE_FILTER__HIDE,
-
   USED_CAR_DETAILS__REQUEST,
   USED_CAR_DETAILS__SUCCESS,
   USED_CAR_DETAILS__FAIL,
@@ -22,87 +14,367 @@ import {
   USED_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
   USED_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
   USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
-
   NEW_CAR_CITY__SELECT,
-  NEW_CAR_REGION__SELECT,
-
   NEW_CAR_FILTER_DATA__REQUEST,
   NEW_CAR_FILTER_DATA__SUCCESS,
   NEW_CAR_FILTER_DATA__FAIL,
+  USED_CAR_FILTER_DATA__REQUEST,
+  USED_CAR_FILTER_DATA__SUCCESS,
+  USED_CAR_FILTER_DATA__FAIL,
   NEW_CAR_BY_FILTER__REQUEST,
   NEW_CAR_BY_FILTER__SUCCESS,
   NEW_CAR_BY_FILTER__FAIL,
-
-  NEW_CAR_FILTER_BRANDS__SELECT,
-  NEW_CAR_FILTER_MODELS__SELECT,
-  NEW_CAR_FILTER_BODY__SELECT,
-  NEW_CAR_FILTER_GEARBOX__SELECT,
-  NEW_CAR_FILTER_ENGINE_TYPE__SELECT,
-  NEW_CAR_FILTER_DRIVE__SELECT,
-  NEW_CAR_FILTER_PRICE__SELECT,
-  NEW_CAR_FILTER_PRICE__SHOW,
-  NEW_CAR_FILTER_PRICE__HIDE,
-  NEW_CAR_FILTER_PRICE_SPECIAL__SET,
   NEW_CAR_DETAILS__REQUEST,
   NEW_CAR_DETAILS__SUCCESS,
   NEW_CAR_DETAILS__FAIL,
+  TD_CAR_DETAILS__REQUEST,
+  TD_CAR_DETAILS__SUCCESS,
+  TD_CAR_DETAILS__FAIL,
   NEW_CAR_DETAILS_PHOTO_VIEWER__OPEN,
   NEW_CAR_DETAILS_PHOTO_VIEWER__CLOSE,
   NEW_CAR_DETAILS_PHOTO_VIEWER_INDEX__UPDATE,
   NEW_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
-
   CATALOG_DEALER__REQUEST,
   CATALOG_DEALER__SUCCESS,
   CATALOG_DEALER__FAIL,
-
   CATALOG_ORDER__REQUEST,
   CATALOG_ORDER__SUCCESS,
   CATALOG_ORDER__FAIL,
-
   CATALOG_ORDER_COMMENT__FILL,
+  TESTDRIVE_LEAD__REQUEST,
+  TESTDRIVE_LEAD__SUCCESS,
+  TESTDRIVE_LEAD__FAIL,
+  TESTDRIVE_ORDER__REQUEST,
+  TESTDRIVE_ORDER__SUCCESS,
+  TESTDRIVE_ORDER__FAIL,
+  CREDIT_ORDER__REQUEST,
+  CREDIT_ORDER__SUCCESS,
+  CREDIT_ORDER__FAIL,
+  MYPRICE_ORDER__REQUEST,
+  MYPRICE_ORDER__SUCCESS,
+  MYPRICE_ORDER__FAIL,
 
   // comment
   CAR_COST__REQUEST,
   CAR_COST__SUCCESS,
   CAR_COST__FAIL,
-  CAR_COST_PHOTOS__FILL,
-  CAR_COST_BRAND__FILL,
-  CAR_COST_MODEL__FILL,
-  CAR_COST_YEAR__SELECT,
-  CAR_COST_MILEAGE__FILL,
-  CAR_COST_MILEAGE_UNIT__SELECT,
-  CAR_COST_ENGINE_VOLUME__FILL,
-  CAR_COST_ENGINE_TYPE__SELECT,
-  CAR_COST_GEARBOX__SELECT,
-  CAR_COST_COLOR__FILL,
-  CAR_COST_CAR_CONDITION__SELECT,
-  CAR_COST_COMMENT__FILL,
-  CAR_COST_VIN__FILL,
+
+  // filters
+  SAVE_USEDCAR_FILTERS,
+  SAVE_NEWCAR_FILTERS,
+  SAVE_BRANDMODEL_FILTERS_NEW,
+  SAVE_BRANDMODEL_FILTERS_USED,
 } from './actionTypes';
 
-import { EVENT_LOAD_MORE } from '../core/actionTypes';
+import {EVENT_LOAD_MORE} from '../core/actionTypes';
 
-export const actionFetchUsedCar = ({ type, city, nextPage, priceRange }) => {
+export const actionFetchNewCarFilterData = props => {
+  return dispatch => {
+    dispatch({
+      type: NEW_CAR_FILTER_DATA__REQUEST,
+      payload: props,
+    });
+
+    return API.fetchNewCarFilterData(props)
+      .then(res => {
+        if (res.error) {
+          return dispatch({
+            type: NEW_CAR_FILTER_DATA__FAIL,
+            payload: {
+              error: res.error.message,
+            },
+          });
+        }
+
+        dispatch({
+          type: SAVE_NEWCAR_FILTERS,
+          payload: {
+            url: `/stock/new/cars/get/city/${props.city}/`,
+          },
+        });
+
+        return dispatch({
+          type: NEW_CAR_FILTER_DATA__SUCCESS,
+          payload: {...res},
+        });
+      })
+      .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage(
+          'actionFetchNewCarFilterData API.fetchNewCarFilterData error',
+        );
+        return dispatch({
+          type: NEW_CAR_FILTER_DATA__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
+export const actionFetchUsedCarFilterData = props => {
+  return dispatch => {
+    dispatch({
+      type: USED_CAR_FILTER_DATA__REQUEST,
+      payload: props,
+    });
+
+    return API.fetchUsedCarFilterData(props)
+      .then(res => {
+        if (res.error) {
+          return dispatch({
+            type: USED_CAR_FILTER_DATA__FAIL,
+            payload: {
+              error: res.error.message,
+            },
+          });
+        }
+
+        if (props.region) {
+          dispatch({
+            type: SAVE_USEDCAR_FILTERS,
+            payload: {
+              url: `/stock/trade-in/cars/get/region/${props.region}/`,
+            },
+          });
+        } else {
+          if (props.city) {
+            dispatch({
+              type: SAVE_USEDCAR_FILTERS,
+              payload: {
+                url: `/stock/trade-in/cars/get/city/${props.city}/`,
+              },
+            });
+          }
+        }
+
+        return dispatch({
+          type: USED_CAR_FILTER_DATA__SUCCESS,
+          payload: {...res},
+        });
+      })
+      .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage(
+          'actionFetchUsedCarFilterData API.fetchUsedCarFilterData error',
+        );
+        return dispatch({
+          type: USED_CAR_FILTER_DATA__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const actionSaveBrandModelFilter = props => {
+  switch (props.stockType) {
+    case 'clear':
+      return dispatch => {
+        dispatch({
+          type: 'CLEAR_BRANDMODEL_FILTERS_NEW',
+          payload: props.stateFilters,
+        });
+        dispatch({
+          type: 'CLEAR_BRANDMODEL_FILTERS_USED',
+          payload: props.stateFilters,
+        });
+      };
+    case 'New':
+      return dispatch => {
+        dispatch({
+          type: SAVE_BRANDMODEL_FILTERS_NEW,
+          payload: props.stateFilters,
+        });
+      };
+    case 'Used':
+      return dispatch => {
+        dispatch({
+          type: SAVE_BRANDMODEL_FILTERS_USED,
+          payload: props.stateFilters,
+        });
+      };
+  }
+};
+
+export const actionFetchNewCarByFilter = props => {
+  props.url = `/stock/new/cars/get/city/${props.city}/`;
+  let urlParams = ['recNum=12'];
+  let filtersRaw = {};
+  let sortingRaw = {};
+
+  if (props.filters) {
+    for (const [key, value] of Object.entries(props.filters)) {
+      if (value || value === 0) {
+        if (typeof value === 'object') {
+          continue;
+        }
+        if (value === true) {
+          urlParams.push(`${key}=1`);
+          filtersRaw[key] = 1;
+        } else {
+          if (value !== false && value !== 'false') {
+            urlParams.push(`${key}=${value}`);
+            filtersRaw[key] = value;
+          }
+        }
+      }
+    }
+  }
+
+  return dispatch => {
+    dispatch({
+      type: NEW_CAR_BY_FILTER__REQUEST,
+      payload: props,
+    });
+
+    if (props.sortBy) {
+      sortingRaw.sortBy = props.sortBy;
+    }
+
+    if (props.sortDirection) {
+      sortingRaw.sortDirection = props.sortDirection;
+    }
+
+    if (props.type !== EVENT_LOAD_MORE) {
+      dispatch({
+        type: SAVE_NEWCAR_FILTERS,
+        payload: {
+          filters: filtersRaw,
+          sorting: sortingRaw,
+          url: props.url + '?' + urlParams.join('&'),
+        },
+      });
+    }
+
+    if (props.sortBy) {
+      urlParams.push(`sortBy=${props.sortBy}`);
+    }
+
+    if (props.sortDirection) {
+      urlParams.push(`sortDirection=${props.sortDirection}`);
+    }
+
+    if (props.type !== EVENT_LOAD_MORE) {
+      props.url = props.url + '?' + urlParams.join('&');
+    }
+
+    const newProps = {...props};
+
+    if (props.type === EVENT_LOAD_MORE) {
+      newProps.nextPageUrl = props.nextPage;
+    }
+
+    return API.fetchStock(newProps)
+      .then(response => {
+        if (response.error) {
+          return dispatch({
+            type: NEW_CAR_BY_FILTER__FAIL,
+            payload: {
+              error: response.error.message,
+            },
+          });
+        }
+
+        return dispatch({
+          type: NEW_CAR_BY_FILTER__SUCCESS,
+          payload: {
+            ...response,
+            type: props.type,
+          },
+        });
+      })
+      .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage('actionFetchNewCarByFilter API.fetchStock error');
+        return dispatch({
+          type: NEW_CAR_BY_FILTER__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
+export const actionFetchUsedCarByFilter = props => {
+  if (props.city) {
+    props.url = `/stock/trade-in/cars/get/city/${props.city}/`;
+  }
+  if (props.region) {
+    props.url = `/stock/trade-in/cars/get/region/${props.region}/`;
+  }
+  let urlParams = ['recNum=12'];
+  let filtersRaw = {};
+  let sortingRaw = {};
+
+  if (props.filters) {
+    for (const [key, value] of Object.entries(props.filters)) {
+      if (value || value === 0) {
+        if (typeof value === 'object') {
+          continue;
+        }
+        if (value === true) {
+          urlParams.push(`${key}=1`);
+          filtersRaw[key] = 1;
+        } else {
+          if (value !== false && value !== 'false') {
+            urlParams.push(`${key}=${value}`);
+            filtersRaw[key] = value;
+          }
+        }
+      }
+    }
+  }
+
   return dispatch => {
     dispatch({
       type: USED_CAR_LIST__REQUEST,
-      payload: {
-        type,
-        city,
-        nextPage,
-        priceRange,
-      },
+      payload: props,
     });
 
-    const nextPageUrl = type === EVENT_LOAD_MORE ? nextPage : null;
+    if (props.sortBy) {
+      sortingRaw.sortBy = props.sortBy;
+    }
 
-    return API.fetchUsedCar({
-      city,
-      priceRange,
-      nextPageUrl,
-    })
+    if (props.sortDirection) {
+      sortingRaw.sortDirection = props.sortDirection;
+    }
+
+    if (props.type !== EVENT_LOAD_MORE) {
+      dispatch({
+        type: SAVE_USEDCAR_FILTERS,
+        payload: {
+          filters: filtersRaw,
+          sorting: sortingRaw,
+          url: props.url + '?' + urlParams.join('&'),
+        },
+      });
+    }
+
+    if (props.sortBy) {
+      urlParams.push(`sortBy=${props.sortBy}`);
+    }
+
+    if (props.sortDirection) {
+      urlParams.push(`sortDirection=${props.sortDirection}`);
+    }
+
+    if (props.type !== EVENT_LOAD_MORE) {
+      props.url = props.url + '?' + urlParams.join('&');
+    }
+
+    const newProps = {...props};
+
+    if (props.type === EVENT_LOAD_MORE) {
+      newProps.nextPageUrl = props.nextPage;
+      newProps.isNextPage = true;
+    }
+    return API.fetchStock(newProps)
       .then(res => {
-        let { data, error, total, pages, prices } = res;
+        let {data, error, total, pages, prices} = res;
+
+        let type = props.type;
 
         if (error) {
           return dispatch({
@@ -114,8 +386,8 @@ export const actionFetchUsedCar = ({ type, city, nextPage, priceRange }) => {
           });
         }
 
-        if (data.length === 0) {
-          data.push({ type: 'empty', id: { api: 1 } });
+        if (data && !data?.length) {
+          data.push({type: 'empty', id: {api: 1}});
 
           // TODO: разобраться, почему перестает работать priceFilter если null
           prices = {};
@@ -133,6 +405,10 @@ export const actionFetchUsedCar = ({ type, city, nextPage, priceRange }) => {
         });
       })
       .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage(
+          'actionFetchUsedCarByFilter API.fetchStock error',
+        );
         return dispatch({
           type: USED_CAR_LIST__FAIL,
           payload: {
@@ -140,60 +416,6 @@ export const actionFetchUsedCar = ({ type, city, nextPage, priceRange }) => {
           },
         });
       });
-  };
-};
-
-export const actionSelectUsedCarPriceRange = (prices) => {
-  return dispatch => {
-    dispatch({
-      type: USED_CAR_PRICE_RANGE__SELECT,
-      payload: prices,
-    });
-  };
-};
-
-export const actionSelectUsedCarCity = (city) => {
-  return dispatch => {
-    dispatch({
-      type: USED_CAR_CITY__SELECT,
-      payload: city,
-    });
-  };
-};
-
-export const actionSelectUsedCarRegion = (region) => {
-  return dispatch => {
-    return dispatch({
-      type: USED_CAR_REGION__SELECT,
-      payload: region,
-    });
-  };
-};
-
-export const actionResetUsedCarList = (region) => {
-  return dispatch => {
-    return dispatch({
-      type: USED_CAR_LIST__RESET,
-      payload: region,
-    });
-  };
-};
-
-export const actionShowPriceFilter = (region) => {
-  return dispatch => {
-    return dispatch({
-      type: USED_CAR_PRICE_FILTER__SHOW,
-      payload: region,
-    });
-  };
-};
-
-export const actionHidePriceFilter = (region) => {
-  return dispatch => {
-    return dispatch({
-      type: USED_CAR_PRICE_FILTER__HIDE,
-      payload: region,
-    });
   };
 };
 
@@ -206,7 +428,6 @@ export const actionFetchDealer = dealerBaseData => {
 
     return API.fetchDealer(dealerBaseData.id)
       .then(response => {
-
         if (response.error) {
           return dispatch({
             type: CATALOG_DEALER__FAIL,
@@ -216,7 +437,7 @@ export const actionFetchDealer = dealerBaseData => {
           });
         }
 
-        const dealer = { ...response.data };
+        const dealer = {...response.data};
 
         dealer.id = dealerBaseData.id;
         dealer.region = dealerBaseData.region;
@@ -228,6 +449,8 @@ export const actionFetchDealer = dealerBaseData => {
         });
       })
       .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage('actionFetchDealer API.fetchDealer error');
         return dispatch({
           type: CATALOG_DEALER__FAIL,
           payload: {
@@ -238,7 +461,7 @@ export const actionFetchDealer = dealerBaseData => {
   };
 };
 
-export const actionCommentOrderCarFill = (comment) => {
+export const actionCommentOrderCarFill = comment => {
   return dispatch => {
     return dispatch({
       type: CATALOG_ORDER_COMMENT__FILL,
@@ -247,16 +470,53 @@ export const actionCommentOrderCarFill = (comment) => {
   };
 };
 
-export const actionOrderCar = (props) => {
+export const actionOrderTestDrive = props => {
+  return dispatch => {
+    dispatch({
+      type: TESTDRIVE_ORDER__REQUEST,
+      payload: {...props},
+    });
+
+    return API.orderTestDrive(props)
+      .then(res => {
+        const {error, status} = res;
+
+        if (status !== 'success') {
+          return dispatch({
+            type: TESTDRIVE_ORDER__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        return dispatch({type: TESTDRIVE_ORDER__SUCCESS});
+      })
+      .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage('actionOrderTestDrive API.orderTestDrive error');
+        return dispatch({
+          type: TESTDRIVE_ORDER__FAIL,
+          payload: {
+            error: error.message,
+            code: error.code,
+          },
+        });
+      });
+  };
+};
+
+export const actionOrderCar = props => {
   return dispatch => {
     dispatch({
       type: CATALOG_ORDER__REQUEST,
-      payload: { ...props },
+      payload: {...props},
     });
 
     return API.orderCar(props)
       .then(res => {
-        const { error, status } = res;
+        const {error, status} = res;
 
         if (status !== 'success') {
           return dispatch({
@@ -268,11 +528,124 @@ export const actionOrderCar = (props) => {
           });
         }
 
-        return dispatch({ type: CATALOG_ORDER__SUCCESS });
+        return dispatch({type: CATALOG_ORDER__SUCCESS});
       })
       .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage('actionOrderCar API.orderCar error');
         return dispatch({
           type: CATALOG_ORDER__FAIL,
+          payload: {
+            error: error.message,
+            code: error.code,
+          },
+        });
+      });
+  };
+};
+
+export const actionOrderCreditCar = props => {
+  return dispatch => {
+    dispatch({
+      type: CREDIT_ORDER__REQUEST,
+      payload: {...props},
+    });
+
+    return API.orderCreditCar(props)
+      .then(res => {
+        const {error, status} = res;
+
+        if (status !== 'success') {
+          return dispatch({
+            type: CREDIT_ORDER__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        return dispatch({type: CREDIT_ORDER__SUCCESS});
+      })
+      .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage('actionOrderCreditCar API.orderCreditCar error');
+        return dispatch({
+          type: TESTDRIVE_LEAD__FAIL,
+          payload: {
+            error: error.message,
+            code: error.code,
+          },
+        });
+      });
+  };
+};
+export const actionOrderMyPrice = props => {
+  return dispatch => {
+    dispatch({
+      type: MYPRICE_ORDER__REQUEST,
+      payload: {...props},
+    });
+
+    return API.orderMyPrice(props)
+      .then(res => {
+        const {error, status} = res;
+
+        if (status !== 'success') {
+          return dispatch({
+            type: MYPRICE_ORDER__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        return dispatch({type: MYPRICE_ORDER__SUCCESS});
+      })
+      .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage('actionOrderMyPrice API.orderMyPrice error');
+        return dispatch({
+          type: TESTDRIVE_LEAD__FAIL,
+          payload: {
+            error: error.message,
+            code: error.code,
+          },
+        });
+      });
+  };
+};
+export const actionOrderTestDriveLead = props => {
+  return dispatch => {
+    dispatch({
+      type: TESTDRIVE_LEAD__REQUEST,
+      payload: {...props},
+    });
+
+    return API.orderTestDriveLead(props)
+      .then(res => {
+        const {error, status} = res;
+
+        if (status !== 'success') {
+          return dispatch({
+            type: TESTDRIVE_LEAD__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        return dispatch({type: TESTDRIVE_LEAD__SUCCESS});
+      })
+      .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage(
+          'actionOrderTestDriveLead API.orderTestDriveLead error',
+        );
+        return dispatch({
+          type: TESTDRIVE_LEAD__FAIL,
           payload: {
             error: error.message,
             code: error.code,
@@ -300,17 +673,19 @@ export const actionFetchUsedCarDetails = carId => {
           });
         }
 
-        const details = { ...response.data };
+        const details = {...response.data};
 
         // если есть фото нужного размера, записываем их в стор в нужной структуре данных
-        const photoViewerItems = get(details, 'img.original', []).map(photo => {
-          return { source: { uri: photo+'?d=800x600' } };
+        let photoViewerItems = [];
+        photoViewerItems = get(details, 'img.original', []).map(photo => {
+          return {source: {uri: photo + '?d=800x600'}};
         });
 
-        photoViewerItems.length && dispatch({
-          type: USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
-          payload: photoViewerItems,
-        });
+        photoViewerItems.length &&
+          dispatch({
+            type: USED_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
+            payload: photoViewerItems,
+          });
 
         return dispatch({
           type: USED_CAR_DETAILS__SUCCESS,
@@ -318,6 +693,10 @@ export const actionFetchUsedCarDetails = carId => {
         });
       })
       .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage(
+          'actionFetchUsedCarDetails API.fetchUsedCarDetails error',
+        );
         return dispatch({
           type: USED_CAR_DETAILS__FAIL,
           payload: {
@@ -352,200 +731,13 @@ export const actionUpdateUsedCarPhotoViewerIndex = index => {
     });
   };
 };
-
-export const actionSetNeedUpdateUsedCarList = () => {
-  return dispatch => {
-    dispatch({
-      type: USED_CAR_LIST_UPDATE__SET,
-    });
-  };
-};
-
-export const actionSetStopNeedUpdateUsedCarList = () => {
-  return dispatch => {
-    dispatch({
-      type: USED_CAR_LIST_STOP_UPDATE__SET,
-    });
-  };
-};
-
 // newcar
-export const actionSelectNewCarCity = (city) => {
+export const actionSelectNewCarCity = city => {
   return dispatch => {
     dispatch({
       type: NEW_CAR_CITY__SELECT,
       payload: city,
     });
-  };
-};
-
-export const actionSelectNewCarRegion = (region) => {
-  return dispatch => {
-    return dispatch({
-      type: NEW_CAR_REGION__SELECT,
-      payload: region,
-    });
-  };
-};
-
-export const actionFetchNewCarFilterData = props => {
-  return dispatch => {
-    dispatch({
-      type: NEW_CAR_FILTER_DATA__REQUEST,
-      payload: props,
-    });
-
-    return API.fetchNewCarFilterData(props)
-      .then(res => {
-        if (res.error) {
-          return dispatch({
-            type: NEW_CAR_FILTER_DATA__FAIL,
-            payload: {
-              error: res.error.message,
-            },
-          });
-        }
-
-        return dispatch({
-          type: NEW_CAR_FILTER_DATA__SUCCESS,
-          payload: { ...res },
-        });
-      })
-      .catch(error => {
-        return dispatch({
-          type: NEW_CAR_FILTER_DATA__FAIL,
-          payload: {
-            error: error.message,
-          },
-        });
-      });
-  };
-};
-
-export const actionFetchNewCarByFilter = props => {
-  return dispatch => {
-    dispatch({
-      type: NEW_CAR_BY_FILTER__REQUEST,
-      payload: props,
-    });
-
-    const newProps = { ...props };
-
-    if (props.type === EVENT_LOAD_MORE) {
-      newProps.searchUrl = props.nextPage;
-    }
-
-    return API.fetchNewCarByFilter(newProps)
-      .then(response => {
-        if (response.error) {
-          return dispatch({
-            type: NEW_CAR_BY_FILTER__FAIL,
-            payload: {
-              error: response.error.message,
-            },
-          });
-        }
-
-        return dispatch({
-          type: NEW_CAR_BY_FILTER__SUCCESS,
-          payload: {
-            ...response,
-            type: props.type,
-          },
-        });
-      })
-      .catch(error => {
-        return dispatch({
-          type: NEW_CAR_BY_FILTER__FAIL,
-          payload: {
-            error: error.message,
-          },
-        });
-      });
-  };
-};
-
-export const actionSelectNewCarFilterBrands = (brands) => {
-  return dispatch => {
-    return dispatch({
-      type: NEW_CAR_FILTER_BRANDS__SELECT,
-      payload: brands,
-    });
-  };
-};
-
-export const actionSetNewCarFilterPriceSpecial = (priceSpecial) => {
-  return dispatch => {
-    return dispatch({
-      type: NEW_CAR_FILTER_PRICE_SPECIAL__SET,
-      payload: priceSpecial,
-    });
-  };
-};
-
-export const actionSelectNewCarFilterModels = (models) => {
-  return dispatch => {
-    return dispatch({
-      type: NEW_CAR_FILTER_MODELS__SELECT,
-      payload: models,
-    });
-  };
-};
-
-export const actionSelectNewCarFilterBody = (body) => {
-  return dispatch => {
-    return dispatch({
-      type: NEW_CAR_FILTER_BODY__SELECT,
-      payload: body,
-    });
-  };
-};
-
-export const actionSelectNewCarFilterGearbox = (gearbox) => {
-  return dispatch => {
-    dispatch({
-      type: NEW_CAR_FILTER_GEARBOX__SELECT,
-      payload: gearbox,
-    });
-  };
-};
-
-export const actionSelectNewCarFilterDrive = (drive) => {
-  return dispatch => {
-    dispatch({
-      type: NEW_CAR_FILTER_DRIVE__SELECT,
-      payload: drive,
-    });
-  };
-};
-
-export const actionSelectNewCarFilterEngineType = (engineType) => {
-  return dispatch => {
-    dispatch({
-      type: NEW_CAR_FILTER_ENGINE_TYPE__SELECT,
-      payload: engineType,
-    });
-  };
-};
-
-export const actionSelectNewCarFilterPrice = (prices) => {
-  return dispatch => {
-    dispatch({
-      type: NEW_CAR_FILTER_PRICE__SELECT,
-      payload: prices,
-    });
-  };
-};
-
-export const actionShowNewCarFilterPrice = () => {
-  return dispatch => {
-    return dispatch({ type: NEW_CAR_FILTER_PRICE__SHOW });
-  };
-};
-
-export const actionHideNewCarFilterPrice = () => {
-  return dispatch => {
-    return dispatch({ type: NEW_CAR_FILTER_PRICE__HIDE });
   };
 };
 
@@ -567,17 +759,25 @@ export const actionFetchNewCarDetails = carId => {
           });
         }
 
-        const details = { ...response.data };
+        const details = {...response.data};
 
         // если есть фото нужного размера, записываем их в стор в нужной структуре данных
-        const photoViewerItems = get(details, 'img.10000x440', []).map(photo => {
-          return { source: { uri: photo } };
-        });
+        let photoViewerItems = [];
+        if (get(details, 'imgReal.thumb')) {
+          photoViewerItems = get(details, 'imgReal.thumb', []).map(photo => {
+            return {source: {uri: photo + '?d=1000x1000'}};
+          });
+        } else {
+          photoViewerItems = get(details, 'img.10000x440', []).map(photo => {
+            return {source: {uri: photo}};
+          });
+        }
 
-        photoViewerItems.length && dispatch({
-          type: NEW_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
-          payload: photoViewerItems,
-        });
+        photoViewerItems.length &&
+          dispatch({
+            type: NEW_CAR_DETAILS_PHOTO_VIEWER_ITEMS__SET,
+            payload: photoViewerItems,
+          });
 
         return dispatch({
           type: NEW_CAR_DETAILS__SUCCESS,
@@ -585,8 +785,49 @@ export const actionFetchNewCarDetails = carId => {
         });
       })
       .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage(
+          'actionFetchNewCarDetails API.fetchNewCarDetails error',
+        );
         return dispatch({
           type: NEW_CAR_DETAILS__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const actionFetchTestDriveCarDetails = (dealerID, carID) => {
+  return dispatch => {
+    dispatch({
+      type: TD_CAR_DETAILS__REQUEST,
+      payload: {dealerID, carID},
+    });
+
+    return API.fetchTDCarDetails(dealerID, carID)
+      .then(response => {
+        if (response.error) {
+          return dispatch({
+            type: TD_CAR_DETAILS__FAIL,
+            payload: {
+              error: response.error.message,
+            },
+          });
+        }
+        return dispatch({
+          type: TD_CAR_DETAILS__SUCCESS,
+          payload: {...response.data},
+        });
+      })
+      .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage(
+          'actionFetchTestDriveCarDetails API.fetchTDCarDetails error',
+        );
+        return dispatch({
+          type: TD_CAR_DETAILS__FAIL,
           payload: {
             error: error.message,
           },
@@ -621,137 +862,18 @@ export const actionUpdateNewCarPhotoViewerIndex = index => {
 };
 
 // carcost
-export const actionFillPhotosCarCost = (photos) => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_PHOTOS__FILL,
-      payload: photos,
-    });
-  };
-};
 
-export const actionFillBrandCarCost = (brand) => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_BRAND__FILL,
-      payload: brand,
-    });
-  };
-};
-
-export const actionFillModelCarCost = (model) => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_MODEL__FILL,
-      payload: model,
-    });
-  };
-};
-
-export const actionFillColorCarCost = (color) => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_COLOR__FILL,
-      payload: color,
-    });
-  };
-};
-
-export const actionSelectYearCarCost = (year) => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_YEAR__SELECT,
-      payload: year,
-    });
-  };
-};
-
-export const actionFillMileageCarCost = (mileage) => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_MILEAGE__FILL,
-      payload: mileage,
-    });
-  };
-};
-
-export const actionSelectMileageUnitCarCost = (mileageUnit) => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_MILEAGE_UNIT__SELECT,
-      payload: mileageUnit,
-    });
-  };
-};
-
-export const actionFillEngineVolumeCarCost = (engine) => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_ENGINE_VOLUME__FILL,
-      payload: engine,
-    });
-  };
-};
-
-export const actionSelectEngineTypeCarCost = (engine) => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_ENGINE_TYPE__SELECT,
-      payload: engine,
-    });
-  };
-};
-
-export const actionFillVinCarCost = (engine) => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_VIN__FILL,
-      payload: engine,
-    });
-  };
-};
-
-export const actionSelectGearboxCarCost = (gearbox) => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_GEARBOX__SELECT,
-      payload: gearbox,
-    });
-  };
-};
-
-export const actionSelectCarConditionCarCost = (carCondition) => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_CAR_CONDITION__SELECT,
-      payload: carCondition,
-    });
-  };
-};
-
-export const actionFillCommentCarCost = (comment) => {
-  return dispatch => {
-    return dispatch({
-      type: CAR_COST_COMMENT__FILL,
-      payload: comment,
-    });
-  };
-};
-
-export const actionCarCostOrder = (props) => {
+export const actionCarCostOrder = props => {
   return dispatch => {
     dispatch({
       type: CAR_COST__REQUEST,
-      payload: { ...props },
+      payload: {...props},
     });
 
     return API.carCostOrder(props)
-      .then(rnFetchBlobresult => {
-        const { data } = rnFetchBlobresult;
+      .then(data => {
         try {
-          __DEV__ && console.log('carCostOrder result', rnFetchBlobresult);
-          const res = JSON.parse(data);
-          const { status, error } = res;
+          const {status, error} = data;
 
           if (status !== 'success') {
             return dispatch({
@@ -763,14 +885,21 @@ export const actionCarCostOrder = (props) => {
             });
           }
 
-          return dispatch({ type: CAR_COST__SUCCESS });
+          return dispatch({type: CAR_COST__SUCCESS});
         } catch (parseError) {
-          __DEV__ && console.log('carCostOrder parse error', parseError);
-
-          return dispatch({ type: CAR_COST__FAIL });
+          console.error(
+            'actionCarCostOrder parseError',
+            JSON.stringify(parseError),
+          );
+          Sentry.captureException(parseError);
+          Sentry.captureMessage('actionCarCostOrder parseError');
+          return dispatch({type: CAR_COST__FAIL});
         }
       })
       .catch(error => {
+        console.error('actionCarCostOrder error', JSON.stringify(error));
+        Sentry.captureException(error);
+        Sentry.captureMessage('actionCarCostOrder API.carCostOrder error');
         return dispatch({
           type: CAR_COST__FAIL,
           payload: {
@@ -781,3 +910,35 @@ export const actionCarCostOrder = (props) => {
   };
 };
 // END carcost
+
+/**
+ * Сохраняет список выбранных фильтров.
+ */
+export const actionSaveNewCarFilters = ({filters, sorting, url}) => {
+  return dispatch => {
+    return dispatch({
+      type: SAVE_NEWCAR_FILTERS,
+      payload: {
+        filters,
+        sorting,
+        url,
+      },
+    });
+  };
+};
+
+/**
+ * Сохраняет список выбранных фильтров на странице подержанных авто.
+ */
+export const actionSaveUsedCarFilters = ({filters, sorting, url}) => {
+  return dispatch => {
+    return dispatch({
+      type: SAVE_USEDCAR_FILTERS,
+      payload: {
+        filters,
+        sorting,
+        url,
+      },
+    });
+  };
+};

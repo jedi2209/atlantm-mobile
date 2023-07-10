@@ -1,309 +1,424 @@
-import React, { Component } from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import {
-  View,
   Text,
-  Alert,
   Linking,
   Dimensions,
   StyleSheet,
-  SafeAreaView,
-  ActivityIndicator,
+  Image,
+  BackHandler,
 } from 'react-native';
+import {TransitionPresets} from '@react-navigation/stack';
+import {useFocusEffect} from '@react-navigation/native';
+import TransitionView from '../../core/components/TransitionView';
+import {Button, ScrollView, View} from 'native-base';
+import ResponsiveImageView from 'react-native-responsive-image-view';
 
 // redux
-import { connect } from 'react-redux';
-import { fetchInfoPost, callMeForInfo } from '../actions';
+import {connect} from 'react-redux';
+import {fetchInfoPost} from '../actions';
 
-// components
-import DeviceInfo from 'react-native-device-info';
-import Spinner from 'react-native-loading-spinner-overlay';
-import { Content } from 'native-base';
-import FooterButton from '../../core/components/FooterButton';
-import HeaderIconBack from '../../core/components/HeaderIconBack/HeaderIconBack';
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
-import Imager from '../../core/components/Imager';
+import Badge from '../../core/components/Badge';
 
 // helpers
-import { get } from 'lodash';
+import {get} from 'lodash';
 import styleConst from '../../core/style-const';
-import processHtml from '../../utils/process-html';
-import { verticalScale } from '../../utils/scale';
-import stylesHeader from '../../core/components/Header/style';
-import { CALL_ME_INFO__SUCCESS, CALL_ME_INFO__FAIL } from '../actionTypes';
-import { dayMonth, dayMonthYear } from '../../utils/date';
-import isInternet from '../../utils/internet';
-import { ERROR_NETWORK } from '../../core/const';
-import isIPhoneX from '@utils/is_iphone_x';
+import Analytics from '../../utils/amplitude-analytics';
+import {verticalScale} from '../../utils/scale';
+import {dayMonth, dayMonthYear} from '../../utils/date';
+import {strings} from '../../core/lang/const';
 
-const isTablet = DeviceInfo.isTablet();
+import {TransparentBack} from '../../navigation/const';
+import LogoLoader from '../../core/components/LogoLoader';
 
 // image
-let IMAGE_HEIGHT_GUARD = 0;
-const { width: screenWidth } = Dimensions.get('window');
-const IMAGE_WIDTH = isTablet ? null : screenWidth;
-const IMAGE_HEIGHT = isTablet ? 220 : 170;
+const {width: screenWidth} = Dimensions.get('window');
+const webViewWidth = screenWidth - styleConst.ui.verticalGap;
 
-const styles = StyleSheet.create({
-  safearea: {
-    flex: 1,
-    backgroundColor: styleConst.color.bg,
-  },
-  spinner: {
-    alignSelf: 'center',
-    marginTop: verticalScale(60),
-  },
-  textContainer: {
-    flex: 1,
-    marginVertical: 10,
-    marginHorizontal: styleConst.ui.horizontalGap,
-  },
-  date: {
-    color: styleConst.color.greyText2,
-    fontFamily: styleConst.font.regular,
-    fontSize: 14,
-    letterSpacing: styleConst.ui.letterSpacing,
-    marginTop: verticalScale(5),
-  },
-  image: {
-    width: IMAGE_WIDTH,
-    height: IMAGE_HEIGHT,
-  },
-});
+const onMessage = ({nativeEvent}) => {
+  const data = nativeEvent.data;
 
-const mapStateToProps = ({ dealer, info, profile }) => {
+  if (typeof data !== undefined && data !== null) {
+    Linking.openURL(data);
+  }
+};
+
+const processDate = date => {
+  return `${strings.InfoPostScreen.filter.from} ${dayMonth(date?.from)} ${
+    strings.InfoPostScreen.filter.to
+  } ${dayMonthYear(date?.to)}`;
+};
+
+const mapStateToProps = ({dealer, info, core}) => {
   return {
-    list: info.list,
     posts: info.posts,
-    name: profile.name,
-    phone: profile.phone,
-    email: profile.email,
+    dealersList: {
+      ru: dealer.listRussia,
+      by: dealer.listBelarussia,
+      ua: dealer.listUkraine,
+    },
     dealerSelected: dealer.selected,
-    isCallMeRequest: info.meta.isCallMeRequest,
-    isFetchInfoPost: info.meta.isFetchInfoPost,
+    currLang: core.language.selected,
   };
 };
 
 const mapDispatchToProps = {
   fetchInfoPost,
-  callMeForInfo,
 };
 
-const injectScript = `
-(function () {
-  window.onclick = function(e) {
-    e.preventDefault();
-    window.postMessage(e.target.href);
-    e.stopPropagation()
-  }
-}());
-`;
+const InfoPostScreen = ({
+  currLang,
+  navigation,
+  dealersList,
+  dealerSelected,
+  posts,
+  route,
+  fetchInfoPost,
+}) => {
+  const postID = route.params.id;
 
-let amplitudeGuard = false;
+  const [refreshing, setRefreshing] = useState(false);
+  const [isLoading, setLoading] = useState(true);
+  const [postData, setPost] = useState(posts[postID]);
 
-class InfoPostScreen extends Component {
-  state = {
-    imageWidth: IMAGE_WIDTH,
-    imageHeight: IMAGE_HEIGHT,
-    webViewWidth: screenWidth - styleConst.ui.verticalGap,
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        if (isLoading) {
+          return true;
+        } else {
+          return false;
+        }
+      };
+
+      BackHandler.addEventListener('hardwareBackPress', onBackPress);
+
+      return () =>
+        BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+    }, [isLoading]),
+  );
+
+  useEffect(() => {
+    console.info('== InfoPost ==');
+    let isMounted = true;
+    let timeOutAfterLoaded = null;
+
+    if (!postData) {
+      fetchInfoPost(postID).then(res => {
+        if (isMounted) {
+          setPost(res);
+          timeOutAfterLoaded = setTimeout(() => setLoading(false), 500);
+        }
+      });
+    } else {
+      if (isMounted) {
+        setPost(posts[postID]);
+        timeOutAfterLoaded = setTimeout(() => setLoading(false), 500);
+      }
+    }
+    Analytics.logEvent('screen', 'offer/item', {
+      id: postID,
+    });
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timeOutAfterLoaded);
+    };
+  }, []);
+
+  const _onPressCallMe = () => {
+    navigation.navigate('CallMeBackScreen', {actionID: postID, goBack: true});
   };
 
-  static navigationOptions = ({ navigation }) => ({
-    headerTitle: 'Об акции',
-    headerStyle: stylesHeader.common,
-    headerTitleStyle: stylesHeader.title,
-    headerLeft: <HeaderIconBack navigation={navigation} />,
-    headerRight: <View />,
-  });
-
-  componentDidMount() {
-    const {
-      posts,
-      navigation,
-      fetchInfoPost,
-    } = this.props;
-
-    const id = navigation.state.params.id;
-    const post = posts[id];
-
-    if (!post) {
-      fetchInfoPost(id);
-    }
-  }
-
-  onLayoutImageTablet = () => {
-    this.refs.imageContainer.measure((ox, oy, width, height, px, py) => {
-      if (!IMAGE_HEIGHT_GUARD) {
-        IMAGE_HEIGHT_GUARD = 1;
-
-        this.setState({
-          imageWidth: width,
-          imageHeight: height,
+  const _onPressOrder = ({dealers}) => {
+    let customDealersList = [];
+    dealersList[dealerSelected.region].forEach(element => {
+      if (dealers.includes(element.id)) {
+        customDealersList.push({
+          id: element.id,
+          name: element.name,
         });
       }
     });
+    navigation.navigate('OrderScreen', {
+      car: {
+        dealer: customDealersList,
+      },
+      actionID: postID,
+      region: dealerSelected.region,
+      isNewCar: true,
+    });
   };
 
-  onLayoutImage = (e) => {
-    if (isTablet) {
-      return this.onLayoutImageTablet();
-    }
-
-    const { height: imageDynamicHeight } = e.nativeEvent.layout;
-
-    this.setState({ imageHeight: imageDynamicHeight });
-  };
-
-  onLayoutWebView= (e) => {
-    const { width: webViewWidth } = e.nativeEvent.layout;
-
-    this.setState({ webViewWidth });
-  };
-
-  getPost = () => {
-    const { posts, navigation } = this.props;
-    const id = navigation.state.params.id;
-
-    return posts[id];
-  };
-
-  onPressCallMe = async () => {
-    const isInternetExist = await isInternet();
-
-    if (!isInternetExist) {
-      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-    } else {
-      const {
-        name,
-        email,
-        phone,
-        navigation,
-        callMeForInfo,
-        dealerSelected,
-      } = this.props;
-
-      if (!phone) {
-        return Alert.alert(
-          'Добавьте номер телефона',
-          'Для обратного звонка необходимо добавить номер контактного телефона в профиле',
-          [
-            { text: 'Отмена', style: 'cancel' },
-            {
-              text: 'Заполнить',
-              onPress() { navigation.navigate('Profile2Screen'); },
-            },
-          ],
-        );
-      }
-
-      const post = this.getPost();
-      const action = post.id;
-      const dealerID = dealerSelected.id;
-      const device = `${DeviceInfo.getBrand()} ${DeviceInfo.getSystemVersion()}`;
-
-      callMeForInfo({
-        name,
-        email,
-        phone,
-        device,
-        action,
-        dealerID,
-      })
-        .then(action => {
-          if (action.type === CALL_ME_INFO__SUCCESS) {
-            setTimeout(() => Alert.alert('Ваша заявка успешно отправлена'), 100);
-          }
-
-          if (action.type === CALL_ME_INFO__FAIL) {
-            setTimeout(() => Alert.alert('Ошибка', 'Произошла ошибка, попробуйте снова'), 100);
-          }
+  const _onPressParts = ({dealers}) => {
+    let customDealersList = [];
+    dealersList[dealerSelected.region].forEach(element => {
+      if (dealers.includes(element.id)) {
+        customDealersList.push({
+          id: element.id,
+          name: element.name,
         });
+      }
+    });
+    navigation.navigate('OrderPartsScreen', {
+      car: {
+        dealer: customDealersList,
+      },
+      actionID: postID,
+      region: dealerSelected.region,
+    });
+  };
+
+  const _onPressService = ({dealers}) => {
+    let customDealersList = [];
+    dealersList[dealerSelected.region].forEach(element => {
+      if (dealers.includes(element.id)) {
+        customDealersList.push({
+          id: element.id,
+          name: element.name,
+        });
+      }
+    });
+    navigation.navigate('ServiceScreen', {
+      car: {
+        dealer: customDealersList,
+      },
+      actionID: postID,
+      region: dealerSelected.region,
+    });
+  };
+
+  const renderOrderButton = ({type, dealers}) => {
+    if (!type) {
+      return false;
+    }
+    switch (type.id) {
+      case 1: // buy
+        return (
+          <Button
+            uppercase={false}
+            title={strings.NewCarItemScreen.sendQuery}
+            style={[
+              styles.button,
+              styleConst.button.footer.buttonLeft,
+              {backgroundColor: styleConst.color.white, width: '53%'},
+            ]}
+            onPress={() => _onPressOrder({dealers})}>
+            <Text
+              style={[styles.buttonText, {color: styleConst.color.greyText}]}
+              selectable={false}>
+              {strings.NewCarItemScreen.sendQuery}
+            </Text>
+          </Button>
+        );
+      case 2: // service
+        return (
+          <Button
+            uppercase={false}
+            title={strings.NewCarItemScreen.sendQuery}
+            style={[
+              styles.button,
+              styleConst.button.footer.buttonLeft,
+              {backgroundColor: styleConst.color.orange, width: '53%'},
+            ]}
+            onPress={() => _onPressService({dealers})}>
+            <Text style={styles.buttonText} selectable={false}>
+              {strings.NewCarItemScreen.sendQuery}
+            </Text>
+          </Button>
+        );
+      case 3: // parts
+        return (
+          <Button
+            uppercase={false}
+            title={strings.NewCarItemScreen.sendQuery}
+            style={[
+              styles.button,
+              styleConst.button.footer.buttonLeft,
+              {backgroundColor: styleConst.color.green, width: '53%'},
+            ]}
+            onPress={() => _onPressParts({dealers})}>
+            <Text style={styles.buttonText}>
+              {strings.NewCarItemScreen.sendQuery}
+            </Text>
+          </Button>
+        );
     }
   };
 
-  processDate(date = {}) {
-    return `c ${dayMonth(date.from)} по ${dayMonthYear(date.to)}`;
-  }
-
-  onMessage({ nativeEvent }) {
-    const data = nativeEvent.data;
-
-    if (data !== undefined && data !== null) {
-      Linking.openURL(data);
-    }
-  }
-
-  render() {
-    // Для iPad меню, которое находится вне роутера
-    window.atlantmNavigation = this.props.navigation;
-
-    const { isCallMeRequest, navigation } = this.props;
-
-    const post = this.getPost();
-    let text = get(post, 'text');
-    const img = get(post, 'img');
-    const imageUrl = get(img, isTablet ? '10000x440' : '10000x300');
-    const date = get(post, 'date');
-
-    if (text) {
-      text = processHtml(text, this.state.webViewWidth);
-    }
-
-    console.log('== InfoPost ==');
-
-    return (
-      <SafeAreaView style={styles.safearea}>
-        <Content>
-          <Spinner visible={isCallMeRequest} color={styleConst.color.blue} />
-
+  const onLayoutWebView = e => {
+    setTimeout(() => {
+      navigation.setOptions(
+        TransparentBack(
+          navigation,
+          route,
+          {...TransitionPresets.ModalTransition},
           {
-            !text ?
-              <ActivityIndicator color={styleConst.color.blue} style={styles.spinner} /> :
-              (
-                <View>
-                  <View style={styles.imageContainer} ref="imageContainer">
-                    <Imager
-                      resizeMode="contain"
-                      onLayout={this.onLayoutImage}
-                      style={[
-                        styles.image,
-                        {
-                          width: this.state.imageWidth,
-                          height: this.state.imageHeight,
-                        },
-                      ]}
-                      source={{ uri: imageUrl }}
-                    />
-                  </View>
-                  <View
-                    style={styles.textContainer}
-                    onLayout={this.onLayoutWebView}
-                  >
-                  {
-                    date ?
-                      <Text style={styles.date}>{this.processDate(date)}</Text> :
-                      null
-                  }
-                    <WebViewAutoHeight
-                      source={{ html: text }}
-                      injectedJavaScript={injectScript}
-                      onMessage={this.onMessage}
-                    />
-                  </View>
-                </View>
-              )
-          }
-        </Content>
+            icon: 'close',
+          },
+        ),
+      );
+    }, 150);
+    setTimeout(() => setRefreshing(false), 500);
+  };
 
-        <FooterButton
-          theme="white"
-          icon="phone"
-          uppercase={false}
-          text="Позвоните мне"
-          onPressButton={this.onPressCallMe}
-        />
-      </SafeAreaView>
-    );
+  const _onRefresh = useCallback(() => {
+    setRefreshing(true);
+    fetchInfoPost(route.params.id).then(() => setRefreshing(false));
+  }, []);
+
+  let text = get(postData, 'text');
+  const img = get(postData, 'img');
+  const imageUrl = get(img, '10000x440');
+  const date = get(postData, 'date');
+  const type = get(postData, 'type');
+  const dealers = get(postData, 'dealers');
+  let resizeMode = null;
+  if (postData) {
+    resizeMode =
+      get(postData, 'imgCropAvailable') === true ? 'cover' : 'contain';
   }
-}
+
+  if (text) {
+    //text = processHtml(text, webViewWidth);
+  }
+
+  return (
+    <View style={{flex: 1}} backgroundColor={'white'}>
+      <ScrollView style={{margin: 0, padding: 0, flex: 1}}>
+        {!text || isLoading ? (
+          <LogoLoader
+            style={{
+              height: Dimensions.get('window').height - 100,
+              position: 'relative',
+            }}
+          />
+        ) : (
+          <View style={{flex: 1}}>
+            <View style={[styles.imageContainer]}>
+              {imageUrl ? (
+                <ResponsiveImageView source={{uri: imageUrl}}>
+                  {({getViewProps, getImageProps}) => (
+                    <View {...getViewProps()}>
+                      <Image {...getImageProps()} />
+                    </View>
+                  )}
+                </ResponsiveImageView>
+              ) : null}
+            </View>
+            <View
+              onLayout={onLayoutWebView}
+              style={{flex: 1}}
+              paddingBottom="1/3">
+              {date ? (
+                <Text style={styles.date}>{processDate(date)}</Text>
+              ) : null}
+              {type && type.badge ? (
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginTop: 3,
+                    paddingHorizontal: 9,
+                  }}>
+                  <Badge
+                    id={type.id}
+                    key={'badgeItem' + type.id}
+                    index={0}
+                    bgColor={type?.badge?.background}
+                    name={type?.name[currLang]}
+                    textColor={type?.badge?.color}
+                  />
+                </View>
+              ) : null}
+              <WebViewAutoHeight
+                style={{
+                  backgroundColor: styleConst.color.bg,
+                }}
+                key={get(postData, 'hash')}
+                source={{html: text}}
+                onMessage={onMessage}
+              />
+            </View>
+          </View>
+        )}
+      </ScrollView>
+      {type ? (
+        <TransitionView
+          animation={styleConst.animation.zoomIn}
+          duration={350}
+          index={1}
+          delay={3000}
+          style={[styleConst.shadow.default, styles.buttonWrapper]}>
+          {renderOrderButton({type, dealers})}
+          <Button
+            uppercase={false}
+            title={strings.InfoPostScreen.button.callMe}
+            style={[
+              styles.button,
+              styleConst.button.footer.buttonRight,
+              {backgroundColor: styleConst.color.lightBlue},
+            ]}
+            onPress={() => _onPressCallMe()}>
+            <Text style={styles.buttonText} selectable={false}>
+              {strings.InfoPostScreen.button.callMe}
+            </Text>
+          </Button>
+        </TransitionView>
+      ) : null}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  spinner: {
+    alignSelf: 'center',
+    marginTop: verticalScale(60),
+    height: 300,
+  },
+  imageContainer: {
+    minHeight: 50,
+  },
+  buttonWrapper: {
+    marginBottom: 20,
+    position: 'absolute',
+    bottom: 10,
+    height: 50,
+    width: '100%',
+    paddingHorizontal: '2%',
+    flex: 1,
+    flexDirection: 'row',
+  },
+  button: {
+    backgroundColor: styleConst.color.lightBlue,
+    color: 'white',
+    borderTopWidth: 0,
+    width: '47%',
+    borderRadius: 0,
+    alignContent: 'center',
+    justifyContent: 'center',
+    paddingLeft: 0,
+    paddingRight: 0,
+  },
+  buttonText: {
+    color: styleConst.color.white,
+    fontFamily: styleConst.font.medium,
+    fontSize: 14,
+    textTransform: 'uppercase',
+  },
+  textContainer: {
+    flex: 1,
+    marginVertical: 10,
+    marginHorizontal: 0,
+    marginBottom: 90,
+  },
+  date: {
+    color: styleConst.color.greyText2,
+    fontFamily: styleConst.font.regular,
+    fontSize: 14,
+    marginHorizontal: 10,
+    letterSpacing: styleConst.ui.letterSpacing,
+    marginTop: verticalScale(5),
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(InfoPostScreen);

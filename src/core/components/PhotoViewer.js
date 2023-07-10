@@ -1,91 +1,74 @@
-import React, { Component } from 'react';
-import { View, StyleSheet, Modal, Text, TouchableOpacity, Platform } from 'react-native';
+import React, {useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  Modal,
+  Text,
+  TouchableOpacity,
+  Platform,
+} from 'react-native';
 
 // helpers
 import PropTypes from 'prop-types';
 
 // components
-// import Gallery from 'react-native-image-gallery';
-import GallerySwiper from "react-native-gallery-swiper";
-import { Icon } from 'native-base';
+import {
+  StandaloneGallery,
+  GalleryItemType,
+  StandaloneGalleryHandler,
+} from 'react-native-gallery-toolkit';
 
-import styleConst from '@core/style-const';
+import GallerySwiper from 'react-native-gallery-swiper';
+import {Icon} from 'native-base';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-class PhotoViewer extends Component {
-  static propTypes = {
-    index: PropTypes.number,
-    visible: PropTypes.bool,
-    counter: PropTypes.bool,
-    items: PropTypes.arrayOf(
-      PropTypes.shape({
-        source: PropTypes.shape({
-          uri: PropTypes.string,
-        }),
-      })
-    ),
-    onChange: PropTypes.func,
-    onPressClose: PropTypes.func,
-  }
+import styleConst from '../style-const';
+import {strings} from '../../core/lang/const';
 
-  static defaultProps = {
-    counter: true,
-  }
+const _renderError = () => (
+  <View style={styles.errorContainer}>
+    <Text style={styles.errorText}>{strings.PhotoViewer.errorLoad}</Text>
+  </View>
+);
 
-  renderError() {
-    return (
-      <View style={styles.errorContainer}>
-        <Text style={styles.errorText}>Не удалось загрузить фото</Text>
-      </View>
-    );
-  }
+const galleryCount = (index, length) => (
+  <View style={styles.count}>
+    <Text style={styles.countText}>
+      {index + 1} / {length}
+    </Text>
+  </View>
+);
 
-  get galleryCount() {
-    return (
-      <View style={styles.count}>
-        <Text style={styles.countText}>{this.props.index + 1} / {this.props.items.length}</Text>
-      </View>
-    );
-  }
-
-  render() {
-    return (
-      <Modal
-        transparent={true}
-        visible={this.props.visible}
-        onRequestClose={this.props.onPressClose}
-      >
-        <GallerySwiper
-          images={this.props.items}
-            // Change this to render how many items before it.
-          initialNumToRender={2}
-            // Turning this off will make it feel faster
-            // and prevent the scroller to slow down
-            // on fast swipes.
-          sensitiveScroll={false}
-          onPageSelected={this.props.onChange}
-          style={styles.gallery}
-        />
-
-        {/* <Gallery
-          style={styles.gallery}
-          images={this.props.items}
-          errorComponent={this.renderError}
-          onPageSelected={this.props.onChange}
-          initialPage={this.props.index}
-        /> */}
-        {this.props.counter ? this.galleryCount : null}
-        <TouchableOpacity style={styles.close} onPress={this.props.onPressClose}>
-          <Icon style={styles.closeIcon} name="close" type="MaterialIcons" />
-        </TouchableOpacity>
-      </Modal>
-    );
-  }
-}
+const PhotoViewer = ({items, index, onPressClose, enableScale, onChange}) => {
+  const [visible, setVisible] = useState(false);
+  const [counter, setCounter] = useState(true);
+  return (
+    <Modal transparent={true} visible={visible} onRequestClose={onPressClose}>
+      <GallerySwiper
+        images={items}
+        // Change this to render how many items before it.
+        initialNumToRender={2}
+        // Turning this off will make it feel faster
+        // and prevent the scroller to slow down
+        // on fast swipes.
+        // sensitiveScroll={false}
+        enableScale={enableScale}
+        onPageSelected={onChange}
+        style={styles.gallery}
+      />
+      {counter ? galleryCount(index, items.length) : null}
+      <TouchableOpacity style={styles.close} onPress={onPressClose}>
+        <Icon style={styles.closeIcon} name="close" as={MaterialIcons} />
+      </TouchableOpacity>
+    </Modal>
+  );
+};
 
 const STATUSBAR_HEIGHT = Platform.OS === 'ios' ? 20 : 0;
 const positionTop = STATUSBAR_HEIGHT + 15;
 const color = styleConst.color.blue;
 const backgroundColor = 'rgba(255,255,255,1)';
+
 const styles = StyleSheet.create({
   gallery: {
     flex: 1,
@@ -133,5 +116,26 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
   },
 });
+
+PhotoViewer.defaultProps = {
+  counter: true,
+  enableScale: false,
+};
+
+PhotoViewer.propTypes = {
+  index: PropTypes.number,
+  visible: PropTypes.bool,
+  counter: PropTypes.bool,
+  items: PropTypes.arrayOf(
+    PropTypes.shape({
+      source: PropTypes.shape({
+        uri: PropTypes.string,
+      }),
+    }),
+  ),
+  enableScale: PropTypes.bool,
+  onChange: PropTypes.func,
+  onPressClose: PropTypes.func,
+};
 
 export default PhotoViewer;

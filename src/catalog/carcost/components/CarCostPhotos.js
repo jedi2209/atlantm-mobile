@@ -1,15 +1,23 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Image, TouchableOpacity, Dimensions } from 'react-native';
+import React, {Component} from 'react';
+import {
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  StatusBar,
+} from 'react-native';
 
 // components
-import { Grid, Row, Col, Icon } from 'native-base';
-import ActionSheet from 'react-native-actionsheet';
-import DeviceInfo from 'react-native-device-info';
+import {HStack, VStack, Icon, View} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import ActionSheet from '@alessiocancian/react-native-actionsheet';
 import ImagePicker from 'react-native-image-crop-picker';
 
 // helpers
 import PropTypes from 'prop-types';
+
 import styleConst from '../../../core/style-const';
+import {strings} from '../../../core/lang/const';
 
 const thumbs = [
   require('../assets/photo_car_1.png'),
@@ -20,8 +28,7 @@ const thumbs = [
   require('../assets/photo_car_6.png'),
 ];
 
-const isTablet = DeviceInfo.isTablet();
-const { width } = Dimensions.get('window');
+const {width} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   container: {
@@ -35,19 +42,16 @@ const styles = StyleSheet.create({
   },
   photo: {
     borderRadius: 3,
+    borderWidth: 0.5,
+    borderColor: 'black',
   },
   removeIconContainer: {
     ...StyleSheet.absoluteFillObject,
     zIndex: 1,
-    backgroundColor: 'transparent',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  removeIcon: {
-    color: '#fff',
-  },
   photoShadow: {
-    backgroundColor: 'rgba(0, 0, 0, 0.3)',
     ...StyleSheet.absoluteFillObject,
     zIndex: 1,
   },
@@ -55,18 +59,16 @@ const styles = StyleSheet.create({
 
 export default class CarCostPhotos extends Component {
   static propTypes = {
-    photos: PropTypes.object,
+    photos: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
     photosFill: PropTypes.func,
-  }
+  };
 
   constructor(props) {
     super(props);
 
     this.state = {};
 
-    if (!isTablet) {
-      this.state.itemWidth = this.getItemWidth(width);
-    }
+    this.state.itemWidth = this.getItemWidth(width);
 
     // генерируем хендлеры для actionSheet для каждого фото
     [1, 2, 3, 4, 5, 6].map(photoIndex => {
@@ -74,12 +76,13 @@ export default class CarCostPhotos extends Component {
         this.handlePhotoPress(i, photoIndex, props.photosFill);
       };
 
-      this[`onPressPhoto${photoIndex}`] = () => this[`actionSheet${photoIndex}`].show();
+      this[`onPressPhoto${photoIndex}`] = () =>
+        this[`actionSheet${photoIndex}`].show();
 
       this[`onPressRemovePhoto${photoIndex}`] = () => {
-        let newPhotos = { ...this.props.photos };
+        let newPhotos = {...this.props.photos};
         delete newPhotos[photoIndex];
-        this.props.photosFill(newPhotos);
+        props.photosFill(newPhotos);
       };
     });
   }
@@ -92,30 +95,30 @@ export default class CarCostPhotos extends Component {
 
     const settings = {
       cropping: false,
-      compressImageMaxWidth: 1000,
-      compressImageMaxHeight: 1000,
-      compressImageQuality: 0.6,
+      compressImageMaxWidth: 1400,
+      compressImageMaxHeight: 1400,
+      compressImageQuality: 0.9,
       mediaType: 'photo',
+      includeBase64: true,
+      writeTempFile: false,
+      includeExif: true,
+      forceJpg: true,
     };
 
     switch (action) {
       case 'gallery':
         const photoGallery = await ImagePicker.openPicker(settings);
 
-        console.log('gallery', photoGallery);
-
         if (photoGallery) {
-          cb({ ...this.props.photos, [photoIndex]: photoGallery });
+          cb({...this.props.photos, [photoIndex]: photoGallery});
         }
 
         break;
       case 'camera':
         const photoCamera = await ImagePicker.openCamera(settings);
 
-        console.log('camera', photoCamera);
-
         if (photoCamera) {
-          cb({ ...this.props.photos, [photoIndex]: photoCamera });
+          cb({...this.props.photos, [photoIndex]: photoCamera});
         }
 
         break;
@@ -124,78 +127,85 @@ export default class CarCostPhotos extends Component {
     }
   }
 
-  renderItem = (photoIndex) => {
-    const { photos } = this.props;
+  renderItem = photoIndex => {
+    const {photos} = this.props;
     const photo = photos[photoIndex];
-    const source = photo ? { uri: photo.path } : thumbs[photoIndex - 1];
+    const source = photo ? {uri: photo.path} : thumbs[photoIndex - 1];
     const width = this.state.itemWidth;
     const size = this.state.itemWidth / 1.4;
 
-    return <Col key={photoIndex} style={{ width }}>
-      <View>
-        {
-          photo ?
-            (
-              <TouchableOpacity style={styles.removeIconContainer} onPress={this[`onPressRemovePhoto${photoIndex}`]}>
-                <Icon name="md-close-circle" style={[styles.removeIcon, { fontSize: width / 2.5, marginTop: -12 }]} />
-              </TouchableOpacity>
-            ) : null
-        }
-        <TouchableOpacity style={[
-          styles.item,
-        ]} onPress={this[`onPressPhoto${photoIndex}`]}>
-          {
-            photo ?
-              <View style={[styles.photoShadow, { height: size }]} /> :
-              null
-          }
-          <Image style={[
-            styles.photo,
-            {
-              width,
-              height: size,
-              marginBottom: 15,
-            },
-          ]} source={source} />
+    return (
+      <View key={photoIndex} style={{width: width}}>
+        {photo ? (
+          <TouchableOpacity
+            style={styles.removeIconContainer}
+            onPress={this[`onPressRemovePhoto${photoIndex}`]}>
+            <Icon
+              name="md-close-circle"
+              as={Ionicons}
+              size={12}
+              color="white"
+            />
+          </TouchableOpacity>
+        ) : null}
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={[styles.item]}
+          onPress={this[`onPressPhoto${photoIndex}`]}>
+          {photo ? (
+            <View shadow={3} style={[styles.photoShadow, {height: size}]} />
+          ) : null}
+          <Image
+            style={[
+              styles.photo,
+              {
+                width,
+                height: size,
+                marginBottom: 15,
+              },
+            ]}
+            source={source}
+          />
         </TouchableOpacity>
       </View>
-    </Col>;
+    );
+  };
+
+  getItemWidth = contentWidth => (contentWidth - 70) / 3;
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.photos !== nextProps.photos;
   }
 
-  getItemWidth = contentWidth => ((contentWidth - 50) / 3)
-
-  onLayout = (e) => {
-    if (!isTablet) return false;
-
-    const { width: contentWidth } = e.nativeEvent.layout;
-
-    this.setState({ itemWidth: this.getItemWidth(contentWidth) });
-  }
+  onLayout = e => {
+    return false;
+  };
 
   render() {
     return (
       <View style={styles.container} onLayout={this.onLayout}>
-        {
-          [1, 2, 3, 4, 5, 6].map(photoIndex => {
-            return <ActionSheet
+        <StatusBar hidden />
+        {[1, 2, 3, 4, 5, 6].map(photoIndex => {
+          return (
+            <ActionSheet
               key={photoIndex}
               cancelButtonIndex={0}
-              ref={component => this[`actionSheet${photoIndex}`] = component}
-              title="Прикрепить фотографии"
-              options={['Отмена', 'Галерея', 'Камера']}
+              ref={component => (this[`actionSheet${photoIndex}`] = component)}
+              title={strings.CarCostScreen.chooseFoto}
+              options={[strings.Base.cancel, 'Галерея', 'Камера']}
               onPress={this[`handlePhotoPress${photoIndex}`]}
-            />;
-          })
-        }
+            />
+          );
+        })}
 
-        <Grid style={styles.menu} >
-          <Row style={styles.row}>
+        <VStack style={styles.menu}>
+          <HStack justifyContent="space-around">
             {[1, 2, 3].map(this.renderItem)}
-          </Row>
-          <Row style={styles.row}>
+          </HStack>
+          <HStack justifyContent="space-around">
             {[4, 5, 6].map(this.renderItem)}
-          </Row>
-        </Grid>
+          </HStack>
+        </VStack>
       </View>
     );
   }
