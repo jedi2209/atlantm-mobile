@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
 import {
-  View,
-  Text,
   Alert,
   Linking,
   Platform,
