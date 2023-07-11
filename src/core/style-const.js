@@ -1,4 +1,4 @@
-import {PixelRatio, Dimensions} from 'react-native';
+import {PixelRatio, Dimensions, Platform} from 'react-native';
 import {verticalScale} from '../utils/scale';
 
 export default {
@@ -65,7 +65,7 @@ export default {
     regular: 'Helvetica Neue',
     medium: 'HelveticaNeue-Medium',
     light: 'HelveticaNeue-Light',
-    brand: 'Montserrat',
+    brand: Platform.OS === 'ios' ? 'Montserrat' : 'Montserrat-Variable',
   },
   ui: {
     // хак чтобы в новой версии native-base футер прижимался к низу
