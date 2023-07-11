@@ -24,6 +24,8 @@ const stylesDealerItemList = StyleSheet.create({
     height: 28,
     width: 45,
     marginRight: 10,
+    alignContent: 'center',
+    alignItems: 'center',
   },
   dealerCity: {
     fontFamily: styleConst.font.light,
@@ -53,14 +55,45 @@ const _onPressDealer = props => {
   });
 };
 
+const _renderBrands = ({logoWidth, dealerBrand}) => {
+  return (
+    <HStack
+      alignItems={'center'}
+      justifyContent={dealerBrand.length > 2 ? 'space-between' : 'flex-end'}
+      w={logoWidth}>
+      {dealerBrand.map(brand => {
+        if (brand.logo) {
+          return (
+            <BrandLogo
+              brand={brand.id}
+              width={45}
+              style={stylesDealerItemList.brandLogo}
+              key={'brandLogo' + brand.id}
+            />
+          );
+        }
+      })}
+      {dealerBrand.length <= 2 ? (
+        <Icon
+          size="sm"
+          as={FontAwesome5}
+          color={styleConst.color.greyText4}
+          name={'angle-right'}
+          mr={1}
+        />
+      ) : null}
+    </HStack>
+  );
+};
+
 const DealerItemList = props => {
   const {city, dealer, style, readonly} = props;
   const navigation = useNavigation();
 
   const deviceWidth = Dimensions.get('window').width;
   const dealerBrand = get(dealer, 'brand', []);
-  let nameWidth = '5/6';
-  let logoWidth = '1/6';
+  let nameWidth = '4/6';
+  let logoWidth = '2/6';
   if (deviceWidth <= 480) {
     if (dealerBrand && dealerBrand?.length > 1) {
       nameWidth = '64%';
@@ -97,7 +130,11 @@ const DealerItemList = props => {
       onPress={() => {
         return _onPressDealer({...props, navigation});
       }}>
-      <HStack space={3} justifyContent="space-between" alignItems="center">
+      <HStack
+        space={3}
+        justifyContent="space-between"
+        alignItems="center"
+        alignContent={'center'}>
         {city && city.name ? (
           <Text
             style={stylesDealerItemList.city}
@@ -106,7 +143,7 @@ const DealerItemList = props => {
             {city && city.name ? city.name : dealer.city.name}
           </Text>
         ) : null}
-        <VStack w={nameWidth}>
+        <VStack>
           <Text
             style={stylesDealerItemList.name}
             ellipsizeMode="tail"
@@ -123,30 +160,21 @@ const DealerItemList = props => {
               {dealer.city.name}
             </Text>
           ) : null}
+          {dealerBrand && dealerBrand?.length > 2 ? (
+            <View mt={2}>{_renderBrands({logoWidth, dealerBrand})}</View>
+          ) : null}
         </VStack>
-        {get(dealer, 'brand') ? (
-          <HStack alignItems={'center'} w={logoWidth}>
-            {get(dealer, 'brand').map(brand => {
-              if (brand.logo) {
-                return (
-                  <BrandLogo
-                    brand={brand.id}
-                    width={45}
-                    style={stylesDealerItemList.brandLogo}
-                    key={'brandLogo' + brand.id}
-                  />
-                );
-              }
-            })}
-            <Icon
-              size="sm"
-              as={FontAwesome5}
-              color={styleConst.color.greyText4}
-              name={'angle-right'}
-              mr={1}
-            />
-          </HStack>
-        ) : null}
+        {dealerBrand && dealerBrand?.length <= 2 ? (
+          _renderBrands({logoWidth, dealerBrand})
+        ) : (
+          <Icon
+            size="sm"
+            as={FontAwesome5}
+            color={styleConst.color.greyText4}
+            name={'angle-right'}
+            mr={1}
+          />
+        )}
       </HStack>
     </MainWrapper>
   );
