@@ -518,6 +518,7 @@ export default {
   },
   IntroScreen: {
     button: 'Выберите свой автоцентр',
+    chooseRegion: 'Выберите ваш регион',
   },
   DiscountsScreen: {
     title: 'Скидки',

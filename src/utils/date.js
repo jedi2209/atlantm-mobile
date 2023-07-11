@@ -9,6 +9,8 @@ moment.locale(APP_LANG);
 
 export const time = date => (date ? moment(date).format('HH:mm') : null);
 
+export const year = moment().year();
+
 export const dayMonth = ts => (ts ? moment(ts).format('D MMMM') : null);
 
 export const format = (date, format) =>

@@ -59,6 +59,7 @@ import {BottomTabNavigation} from '../menu/containers/BottomTabNavigation';
 
 // routes
 import IntroScreen from '../intro/containers/IntroScreen';
+import IntroScreenNew from '../intro/containers/IntroScreenNew';
 import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 
 // orders
@@ -117,7 +118,7 @@ export const Base = ({navigation, route}) => {
   let initialRouteName = 'BottomTabNavigation';
 
   if (!dealerSelected || !dealerSelected.id) {
-    initialRouteName = 'IntroScreen';
+    initialRouteName = 'IntroScreenNew';
   }
   return (
     <>
@@ -137,6 +138,11 @@ export const Base = ({navigation, route}) => {
         <StackBase.Screen
           name="IntroScreen"
           component={IntroScreen}
+          options={{headerShown: false}}
+        />
+        <StackBase.Screen
+          name="IntroScreenNew"
+          component={IntroScreenNew}
           options={{headerShown: false}}
         />
         <StackBase.Screen

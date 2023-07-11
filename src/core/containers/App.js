@@ -62,7 +62,8 @@ const mapDispatchToProps = {
 };
 
 const mainScreen = 'BottomTabNavigation';
-const storeVersion = '2022-09-20';
+const storeVersion = '2023-07-11';
+const isNewIntroScreen = true;
 
 const _awaitStoreToUpdate = async props => {
   const storeData = store.getState();
@@ -102,7 +103,11 @@ const _awaitStoreToUpdate = async props => {
       if (actionDealer && actionDealer.type) {
         let result;
         if (action.type === APP_STORE_UPDATED) {
-          result = 'IntroScreen';
+          if (isNewIntroScreen) {
+            result = 'IntroScreenNew';
+          } else {
+            result = 'IntroScreen';
+          }
         }
         return result;
       }
@@ -133,7 +138,11 @@ const App = props => {
     _awaitStoreToUpdate(props)
       .then(res => {
         if (typeof res === 'undefined' || !res) {
-          res = 'IntroScreen';
+          if (isNewIntroScreen) {
+            res = 'IntroScreenNew';
+          } else {
+            res = 'IntroScreen';
+          }
         }
         setLoading(false);
       })
