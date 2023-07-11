@@ -842,7 +842,7 @@ PODS:
   - Sentry/HybridSDK (8.0.0):
     - SentryPrivate (= 8.0.0)
   - SentryPrivate (8.0.0)
-  - SocketRocket (0.6.0)
+  - SocketRocket (0.6.1)
   - TOCropViewController (2.6.1)
   - VK-ios-sdk (1.6.4)
   - Yoga (1.14.0)
@@ -1315,7 +1315,7 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   Sentry: 2158a4621096dcd0a3a4f7c80b84b04dde261035
   SentryPrivate: 1e3acf96ee818a8d0d95b8e922d39ab6be338ea0
-  SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
+  SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   VK-ios-sdk: 21091f214d271a74b3a3313ec62d1c4da98ce00f
   Yoga: 5ed1699acbba8863755998a4245daa200ff3817b
