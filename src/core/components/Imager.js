@@ -20,6 +20,7 @@ const styles = StyleSheet.create({
   svgWrapper: {
     alignItems: 'center',
     justifyContent: 'center',
+    display: 'flex',
   },
 });
 
@@ -34,9 +35,9 @@ const Imager = props => {
       {extension === 'svg' ? (
         <View
           style={[
-            StyleSheet.absoluteFill,
+            props?.absoluteFill ? StyleSheet.absoluteFill : {},
             styles.svgWrapper,
-            {...props.style},
+            props?.style,
           ]}>
           <SvgCssUri width="100%" height="100%" uri={path} />
         </View>
@@ -54,12 +55,14 @@ const Imager = props => {
               resizeMode={FastImage.resizeMode[props.resizeMode]}
               onLoadStart={() => {
                 setLoading(true);
+                props.onLoadStart();
               }}
               onError={e => {
-                console.error('Image error', e);
+                props.onLoadrError(e);
                 setLoading(false);
               }}
               onLoadEnd={() => {
+                props.onLoadEnd();
                 setLoading(false);
               }}
               {...props}
@@ -87,6 +90,14 @@ Imager.defaultProps = {
   testID: 'Imager.Wrapper',
   priority: 'normal',
   resizeMode: 'cover',
+  absoluteFill: true,
+  onLoadrError: e => console.error('Imager error image loading', e),
+  onLoadStart: () => {
+    return true;
+  },
+  onLoadEnd: () => {
+    return true;
+  },
 };
 
 export default Imager;

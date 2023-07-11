@@ -86,7 +86,7 @@ const _awaitStoreToUpdate = async props => {
       dealerSelected: undefined,
       isLocal: false,
     });
-    //props.fetchBrands(); // обновляем бренды при каждом открытии прилаги
+    await props.fetchBrands(); // обновляем бренды при каждом открытии прилаги
     if (currentDealerUpdated && actionDealer && actionDealer.type) {
       // уже всё обновлено, открываем экран автоцентра
       return mainScreen;
