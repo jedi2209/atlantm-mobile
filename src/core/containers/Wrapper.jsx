@@ -67,17 +67,6 @@ const _onBeforeLift = () => {
   SplashScreen.hide();
 };
 
-const Loader = () => (
-  <View style={styles.loader} flex={1}>
-    <ActivityIndicator
-      animating
-      size={'large'}
-      style={[styleConst.spinner]}
-      color={styleConst.color.white}
-    />
-  </View>
-);
-
 const Wrapper = () => {
   // Аналогично componentDidMount и componentDidUpdate:
   useEffect(() => {
@@ -91,16 +80,6 @@ const Wrapper = () => {
   }, []);
 
   return (
-    // <Provider store={store}>
-    //   <PersistGate
-    //     onBeforeLift={_onBeforeLift}
-    //     loading={<Loader />}
-    //     persistor={storePersist}>
-    //     <Sentry.TouchEventBoundary>
-    //       <App colorScheme={colorScheme} />
-    //     </Sentry.TouchEventBoundary>
-    //   </PersistGate>
-    // </Provider>
     <Provider store={store}>
       <PersistGate
         onBeforeLift={_onBeforeLift}
