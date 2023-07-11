@@ -104,7 +104,7 @@ platform :ios do
         force: true
     )
     add_git_tag(
-      build_number: "#{lane_context[SharedValues::VERSION_NUMBER]}." + properties["versionCode"],
+      build_number: "#{lane_context[SharedValues::VERSION_NUMBER]}.#{lane_context[SharedValues::BUILD_NUMBER]}",
       grouping: "builds",
       prefix: "v"
     )
