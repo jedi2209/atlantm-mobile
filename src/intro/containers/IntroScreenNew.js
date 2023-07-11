@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
   buttonsContainer: {
     flex: 1,
     justifyContent: 'flex-end',
+    marginBottom: 32,
   },
 });
 
