@@ -142,10 +142,9 @@ const _renderItem = ({item, props}) => {
   );
 };
 
-const _onRefresh = props => {
-  const {setRefreshing} = props;
+const _onRefresh = ({props, setRefreshing}) => {
   setRefreshing(true);
-  props.props.fetchDealers().then(() => {
+  props.fetchDealers().then(() => {
     // props.dataBrandsHandler();
     setRefreshing(false);
   });
@@ -433,7 +432,7 @@ const makeLists = props => {
 };
 
 const ChooseDealerScreen = props => {
-  const {route, isFetchDealer} = props;
+  const {route, isFetchDealer, region} = props;
 
   const [isRefreshing, setRefreshing] = useState(false);
   const layout = useWindowDimensions();
@@ -444,7 +443,7 @@ const ChooseDealerScreen = props => {
   const returnScreen = get(route, 'params.returnScreen', null);
   const returnState = get(route, 'params.returnState', null);
   const listAll = get(route, 'params.listAll', null);
-  const regions = get(route, 'params.regions', []);
+  const regions = get(route, 'params.regions', [region]);
 
   const tabsData = makeLists({
     ...props,
