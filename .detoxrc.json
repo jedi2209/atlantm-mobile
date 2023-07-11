@@ -1,0 +1,51 @@
+{
+  "testRunner": "jest",
+  "runnerConfig": "e2e/jest.config.js",
+  "skipLegacyWorkersInjection": true,
+  "apps": {
+    "ios.debug": {
+      "type": "ios.app",
+      "binaryPath": "./ios/build/Build/Products/Debug-iphonesimulator/atlantm.app",
+      "build": "xcodebuild -workspace ios/atlantm.xcworkspace -scheme atlantm -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build"
+
+    },
+    "ios.release": {
+      "type": "ios.app",
+      "binaryPath": "./ios/build/Build/Products/Release-iphonesimulator/atlantm.app",
+      "build": "xcodebuild -workspace ios/atlantm.xcworkspace -scheme atlantm -configuration Release -sdk iphonesimulator -derivedDataPath ios/build"
+
+    },
+    "android": {
+      "type": "android.apk",
+      "binaryPath": "SPECIFY_PATH_TO_YOUR_APP_BINARY"
+    }
+  },
+  "devices": {
+    "simulator": {
+      "type": "ios.simulator",
+      "device": {
+        "type": "iPhone 14"
+      }
+    },
+    "emulator": {
+      "type": "android.emulator",
+      "device": {
+        "avdName": "Pixel_3a_API_30_x86"
+      }
+    }
+  },
+  "configurations": {
+    "ios.debug": {
+      "device": "simulator",
+      "app": "ios.debug"
+    },
+    "ios.release": {
+      "device": "simulator",
+      "app": "ios.release"
+    },
+    "android": {
+      "device": "emulator",
+      "app": "android"
+    }
+  }
+}
