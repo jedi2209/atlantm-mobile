@@ -211,6 +211,7 @@ const makeLists = props => {
   const {
     settings,
     listAll,
+    regions,
     listBelarussia,
     listRussia,
     listUkraine,
@@ -325,6 +326,8 @@ const makeLists = props => {
     }
   } else {
     if (
+      regions.length &&
+      regions.includes(BELARUSSIA) &&
       listBelarussia &&
       listBelarussia.length &&
       countrySettings &&
@@ -357,6 +360,8 @@ const makeLists = props => {
     }
 
     if (
+      regions.length &&
+      regions.includes(RUSSIA) &&
       listRussia &&
       listRussia.length &&
       countrySettings &&
@@ -389,6 +394,8 @@ const makeLists = props => {
     }
 
     if (
+      regions.length &&
+      regions.includes(UKRAINE) &&
       APP_REGION === UKRAINE &&
       listUkraine &&
       listUkraine.length &&
@@ -437,10 +444,12 @@ const ChooseDealerScreen = props => {
   const returnScreen = get(route, 'params.returnScreen', null);
   const returnState = get(route, 'params.returnState', null);
   const listAll = get(route, 'params.listAll', null);
+  const regions = get(route, 'params.regions', []);
 
   const tabsData = makeLists({
     ...props,
     listAll,
+    regions,
     isRefreshing,
     setRefreshing,
     _renderItem,
@@ -482,7 +491,9 @@ const ChooseDealerScreen = props => {
       ) : null}
       <TabView
         navigationState={{index, routes}}
-        renderTabBar={renderTabBar}
+        renderTabBar={
+          tabsData.routesHead.length === 1 ? () => {} : renderTabBar
+        }
         renderScene={renderScene}
         onIndexChange={setIndex}
         initialLayout={{width: layout.width}}
