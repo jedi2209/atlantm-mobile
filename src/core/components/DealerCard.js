@@ -104,7 +104,7 @@ const drawCity = cityArr => {
 };
 
 const DealerCard = props => {
-  const {item} = props;
+  const {item, showBrands} = props;
 
   const CarImg = get(item, 'img[0]');
   const hash = get(item, 'hash');
@@ -119,7 +119,7 @@ const DealerCard = props => {
             {name}
           </Text>
         ) : null}
-        <HStack mb="2">{drawBrands(brands)}</HStack>
+        {showBrands ? <HStack mb="2">{drawBrands(brands)}</HStack> : null}
         {drawCity(get(item, 'city', []))}
       </View>
       {CarImg ? (
@@ -136,6 +136,10 @@ const DealerCard = props => {
       ) : null}
     </HStack>
   );
+};
+
+DealerCard.defaultProps = {
+  showBrands: true,
 };
 
 export default memo(DealerCard);

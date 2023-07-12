@@ -160,11 +160,16 @@ const DealerItemList = props => {
               {dealer.city.name}
             </Text>
           ) : null}
-          {dealerBrand && dealerBrand?.length > 2 ? (
-            <View mt={2}>{_renderBrands({logoWidth, dealerBrand})}</View>
+          {props.showBrands && dealerBrand && dealerBrand?.length > 2 ? (
+            <View mt={2}>
+              {_renderBrands({
+                logoWidth,
+                dealerBrand,
+              })}
+            </View>
           ) : null}
         </VStack>
-        {dealerBrand && dealerBrand?.length <= 2 ? (
+        {props.showBrands && dealerBrand && dealerBrand?.length <= 2 ? (
           _renderBrands({logoWidth, dealerBrand})
         ) : (
           <Icon
@@ -189,6 +194,7 @@ DealerItemList.propTypes = {
   goBack: PropTypes.bool,
   isLocal: PropTypes.bool,
   readonly: PropTypes.bool,
+  showBrands: PropTypes.bool,
 };
 
 DealerItemList.defaultProps = {
@@ -198,6 +204,7 @@ DealerItemList.defaultProps = {
   goBack: false,
   isLocal: false,
   readonly: false,
+  showBrands: true,
 };
 
 export default DealerItemList;

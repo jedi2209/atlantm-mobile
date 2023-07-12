@@ -8,7 +8,13 @@ import {
 } from 'react-native';
 import {Pressable, View, Box} from 'native-base';
 import {connect} from 'react-redux';
-import {APP_REGION, RUSSIA, BELARUSSIA, UKRAINE} from '../../core/const';
+import {
+  APP_REGION,
+  RUSSIA,
+  BELARUSSIA,
+  UKRAINE,
+  DEALERS_SETTINGS,
+} from '../../core/const';
 
 import {fetchDealers, selectDealer} from '../../dealer/actions';
 import {
@@ -134,7 +140,14 @@ const _renderItem = ({item, props}) => {
                 },
               ],
             }}>
-            <DealerCard item={item} />
+            <DealerCard
+              item={item}
+              showBrands={
+                get(DEALERS_SETTINGS, 'hideBrands', []).includes(item.id)
+                  ? false
+                  : true
+              }
+            />
           </Box>
         );
       }}

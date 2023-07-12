@@ -51,7 +51,7 @@ import chatStatus from '../../utils/chatStatus';
 
 import {get} from 'lodash';
 import styleConst from '../../core/style-const';
-import {ERROR_NETWORK, BELARUSSIA} from '../../core/const';
+import {DEALERS_SETTINGS, ERROR_NETWORK, BELARUSSIA} from '../../core/const';
 import Carousel from 'react-native-snap-carousel';
 import {strings} from '../../core/lang/const';
 
@@ -810,6 +810,13 @@ const ContactsScreen = ({
           <DealerItemList
             key={'dealerSelect'}
             dealer={dealerSelected}
+            showBrands={
+              get(DEALERS_SETTINGS, 'hideBrands', []).includes(
+                dealerSelected.id,
+              )
+                ? false
+                : true
+            }
             style={[
               {
                 // marginHorizontal: 15,
