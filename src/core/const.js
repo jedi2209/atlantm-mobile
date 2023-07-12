@@ -8,6 +8,7 @@ let appRegion,
   appleID,
   googleID,
   appName,
+  dealersSettings,
   appEmail,
   sentryDSN,
   oneSignalKey,
@@ -37,6 +38,9 @@ switch (bundle) {
     appleID = '1492492166';
     googleID = 'com.atlantm';
     appName = 'Atlant-M';
+    dealersSettings = {
+      hideBrands: [220, 137],
+    };
     sentryDSN = 'https://2e35f2a2455b4a3d97a1687270845d33@sentry.io/219899';
     oneSignalKey = '2094a3e1-3c9a-479d-90ae-93adfcd15dab';
     amplitudeKey = '2716d7eebc63593e80e4fd172fc8b6f3';
@@ -60,6 +64,9 @@ switch (bundle) {
     appleID = '1619839155';
     googleID = 'ua.atlantm.app';
     appName = 'Автодім Атлант';
+    dealersSettings = {
+      hideBrands: [220, 137],
+    };
     sentryDSN =
       'https://3bf79e8300e2427ca03f48301da3a7d9@o76005.ingest.sentry.io/6367469';
     oneSignalKey = '23d97877-865c-41a5-ba26-2a569779716a';
@@ -103,6 +110,8 @@ export const API_MAIN_URL = 'https://api.atlantm.com/v1';
 export const SENTRY_DSN = sentryDSN;
 
 export const APP_NAME = appName;
+
+export const DEALERS_SETTINGS = dealersSettings;
 
 export const APP_EMAIL = appEmail;
 
