@@ -143,7 +143,7 @@ const DealerItemList = props => {
             {city && city.name ? city.name : dealer.city.name}
           </Text>
         ) : null}
-        <VStack>
+        <VStack w={nameWidth}>
           <Text
             style={stylesDealerItemList.name}
             ellipsizeMode="tail"
