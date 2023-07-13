@@ -1,7 +1,8 @@
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React, {useState, useRef} from 'react';
+import {Animated, StyleSheet} from 'react-native';
 import {Pressable, Text, Avatar} from 'native-base';
 import styleConst from '../style-const';
+import Imager from './Imager';
 
 const flags = {
   belarus: require('../../../assets/flags/belarus.jpg'),
@@ -25,22 +26,84 @@ const styles = StyleSheet.create({
   },
 });
 
-const FlagButton = ({onPress, country, buttonSize, showCaption}) => {
-  return (
-    <Pressable onPress={onPress}>
-      <Avatar
-        key={'flag' + country}
-        bg={styleConst.color.blueNew}
-        alignSelf="center"
-        size={buttonSize}
-        shadow={8}
-        source={flags[country]}
-      />
-      {showCaption && country === 'belarusFree' ? (
-        <Text style={styles.text}>Жыве Беларусь!</Text>
-      ) : null}
-    </Pressable>
-  );
+const defaultOpacity = 0.7;
+
+const FlagButton = ({
+  onPress,
+  country,
+  buttonSize,
+  showCaption,
+  type,
+  style,
+}) => {
+  const [styleState, setStyleState] = useState({
+    opacity: defaultOpacity,
+  });
+  const selectedAnim = useRef(new Animated.Value(1)).current;
+  const _onPressIn = () => {
+    setStyleState({
+      opacity: 1,
+    });
+    Animated.sequence([
+      Animated.timing(selectedAnim, {
+        toValue: 0.8,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+      Animated.timing(selectedAnim, {
+        toValue: 1,
+        duration: 200,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+  switch (type) {
+    case 'avatar':
+      return (
+        <Pressable
+          onPressIn={_onPressIn}
+          onPressOut={() => {
+            setStyleState({
+              opacity: defaultOpacity,
+            });
+            onPress();
+          }}>
+          <Animated.View style={[{transform: [{scale: selectedAnim}]}]}>
+            <Avatar
+              key={'flag' + country}
+              bg={styleConst.color.blueNew}
+              alignSelf="center"
+              size={buttonSize}
+              shadow={7}
+              source={flags[country]}
+            />
+            {showCaption && country === 'belarusFree' ? (
+              <Text style={styles.text}>Жыве Беларусь!</Text>
+            ) : null}
+          </Animated.View>
+        </Pressable>
+      );
+    case 'flag':
+      return (
+        <Pressable
+          key={'flag' + country}
+          onPressIn={_onPressIn}
+          shadow={8}
+          onPressOut={() => {
+            setStyleState({
+              opacity: defaultOpacity,
+            });
+            onPress();
+          }}
+          style={styleState}>
+          <Animated.View style={[{transform: [{scale: selectedAnim}]}]}>
+            <Imager source={flags[country]} style={style} />
+          </Animated.View>
+        </Pressable>
+      );
+    default:
+      break;
+  }
 };
 
 FlagButton.defaultProps = {
@@ -48,6 +111,12 @@ FlagButton.defaultProps = {
   flagSize: 188,
   country: 'belarus',
   showCaption: false,
+  style: {
+    width: 150,
+    height: 100,
+    borderRadius: 10,
+  },
+  type: 'flag',
 };
 
 export default FlagButton;

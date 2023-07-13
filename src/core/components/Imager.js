@@ -27,8 +27,14 @@ const styles = StyleSheet.create({
 const Imager = props => {
   const [isLoading, setLoading] = useState(false);
 
-  const path = props.source.uri.toString();
-  const extension = path.split('.').pop();
+  let path = props?.source?.uri?.toString();
+  let extension = null;
+  if (path) {
+    extension = path.split('.').pop();
+  }
+  if (!extension && props?.source?.uri) {
+    return null;
+  }
 
   return (
     <View testID={props.testID}>
@@ -80,11 +86,11 @@ const Imager = props => {
   );
 };
 
-Imager.propTypes = {
-  source: PropTypes.shape({
-    uri: PropTypes.string.isRequired,
-  }).isRequired,
-};
+// Imager.propTypes = {
+//   source: PropTypes.shape({
+//     uri: PropTypes.string.isRequired,
+//   }).isRequired,
+// };
 
 Imager.defaultProps = {
   testID: 'Imager.Wrapper',
