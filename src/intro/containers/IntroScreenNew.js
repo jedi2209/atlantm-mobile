@@ -70,16 +70,19 @@ const IntroScreenNew = ({navigation}) => {
               onPress={() => onPressButton(['by'])}
               showCaption={true}
               country={'belarusFree'}
+              type="flag"
             />
           ) : (
             <FlagButton
               onPress={() => onPressButton(['by'])}
               country={'belarus'}
+              type="flag"
             />
           )}
           <FlagButton
             onPress={() => onPressButton(['ru'])}
             country={'russia'}
+            type="flag"
           />
         </HStack>
       </Animated.View>
