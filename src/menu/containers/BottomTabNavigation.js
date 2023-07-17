@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {Icon, useDisclose} from 'native-base';
+import {Icon, useDisclose, Image} from 'native-base';
 import orderFunctions from '../../utils/orders';
 import Analytics from '../../utils/amplitude-analytics';
 
@@ -12,6 +12,7 @@ import LogoTitle from '../../core/components/LogoTitle';
 
 // screens
 import ContactsScreen from '../../contacts/containers/ContactsScreen';
+import MainScreen from '../../core/containers/MainScreen';
 
 import AuthContainer from '../../profile/containers/AuthContainer';
 import PhoneChangeScreen from '../../profile/containers/PhoneChangeScreen';
@@ -40,6 +41,7 @@ import {
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
 const MenuStack = createStackNavigator();
+const ChatStack = createStackNavigator();
 const StackContacts = createStackNavigator();
 
 const ProfileStackView = ({navigation, route}) => (
@@ -128,9 +130,16 @@ const ContactsStackView = ({navigation, route}) => (
     }}>
     <StackContacts.Screen
       name="ContactsScreen"
-      component={ContactsScreen}
+      component={MainScreen}
       options={{
-        headerShown: false,
+        headerShown: true,
+        headerTitle: () => <LogoTitle />,
+        headerStyle: {
+          height: 120,
+          backgroundColor: '#F8F8F8',
+          elevation: 0,
+          shadowOpacity: 0,
+        },
       }}
     />
   </StackContacts.Navigator>
@@ -163,19 +172,19 @@ export const BottomTabNavigation = ({navigation, route}) => {
           tabBarActiveTintColor: styleConst.color.lightBlue,
           tabBarInactiveTintColor: styleConst.new.passive,
           tabBarHideOnKeyboard: true,
-          // tabBarStyle: {
-          //   position: 'absolute',
-          //   bottom: 25,
-          //   left: 15,
-          //   right: 15,
-          //   elevation: 0,
-          //   borderRadius: 15,
-          //   height: 60,
-          //   paddingBottom: 5,
-          //   paddingHorizontal: 5,
-          //   ...styleConst.shadow.default,
-          // },
-          // tabBarShowLabel: false,
+          tabBarStyle: {
+            position: 'absolute',
+            bottom: 25,
+            left: 15,
+            right: 15,
+            elevation: 0,
+            borderRadius: 15,
+            height: 60,
+            paddingBottom: 0,
+            paddingHorizontal: 5,
+            ...styleConst.shadow.default,
+          },
+          tabBarShowLabel: false,
         }}>
         <Tab.Screen
           name="Home"
@@ -192,20 +201,18 @@ export const BottomTabNavigation = ({navigation, route}) => {
               fontSize: 14,
             },
             tabBarTestID: 'BottomMenu.Home',
-            tabBarIcon: ({color}) => (
-              <Icon
-                size={5}
-                as={FontAwesome}
-                name="building-o"
-                color={color}
-                _dark={{
-                  color: color,
+            tabBarIcon: ({focused, color}) => (
+              <Image
+                alt={'Main logo bottom menu'}
+                source={require('../../../assets/logo-sm.svg')}
+                style={{
+                  height: focused ? '63%' : '45%',
+                  width: focused ? '90%' : '65%',
                 }}
               />
             ),
           }}
         />
-
         <Tab.Screen
           name="Search"
           component={CleanStackView}
@@ -225,7 +232,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
             tabBarTestID: 'BottomMenu.NewCars',
             tabBarIcon: ({color}) => (
               <Icon
-                size={5}
+                size={9}
                 as={FontAwesome5}
                 name="car"
                 color={color}
@@ -255,7 +262,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
             tabBarTestID: 'BottomMenu.Profile',
             tabBarIcon: ({color}) => (
               <Icon
-                size={6}
+                size={10}
                 as={FontAwesome5}
                 name="user"
                 color={color}
@@ -285,7 +292,7 @@ export const BottomTabNavigation = ({navigation, route}) => {
             tabBarTestID: 'BottomMenu.Orders',
             tabBarIcon: ({color}) => (
               <Icon
-                size={6}
+                size={9}
                 as={MaterialCommunityIcons}
                 name="phone-message"
                 color={color}
@@ -298,11 +305,13 @@ export const BottomTabNavigation = ({navigation, route}) => {
         />
 
         <Tab.Screen
-          name="Menu"
-          component={MenuStackView}
+          name="Chat"
+          component={CleanStackView}
           listeners={{
             tabPress: e => {
-              Analytics.logEvent('click', 'bottomMenu/menu');
+              e.preventDefault();
+              Analytics.logEvent('click', 'bottomMenu/chat');
+              navigation.navigate('ChatScreen');
             },
           }}
           options={{
@@ -311,12 +320,12 @@ export const BottomTabNavigation = ({navigation, route}) => {
             tabBarLabelStyle: {
               fontSize: 14,
             },
-            tabBarTestID: 'BottomMenu.Menu',
+            tabBarTestID: 'BottomMenu.Chat',
             tabBarIcon: ({color}) => (
               <Icon
-                size={5}
-                as={FontAwesome5}
-                name="bars"
+                size={10}
+                as={MaterialCommunityIcons}
+                name="wechat"
                 color={color}
                 _dark={{
                   color: color,

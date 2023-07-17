@@ -91,7 +91,7 @@ const ChatScreen = ({route, SubmitButton, profile, session, saveCookies}) => {
   }, []);
 
   useEffect(() => {
-    setData({uri: route.params.uri});
+    setData({uri: route?.params?.uri});
   }, [route?.params?.uri]);
 
   useEffect(() => {

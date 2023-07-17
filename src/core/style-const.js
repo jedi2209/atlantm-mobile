@@ -189,6 +189,7 @@ export default {
       backgroundColor: '#F8F8F8',
     },
   },
+  borderRadius: 8,
 };
 
 // fonts: https://github.com/react-native-training/react-native-fonts
