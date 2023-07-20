@@ -17,12 +17,13 @@ import {
   actionMenuOpenedCount,
   actionStoreUpdated,
   actionSettingsLoaded,
+  actionFetchMainScreenSettings,
 } from '../actions';
 import {fetchDealers, selectDealer, fetchBrands} from '../../dealer/actions';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 import {APP_STORE_UPDATED} from '../actionTypes';
-import {APP_LANG} from '../const';
+import {APP_LANG, APP_REGION} from '../const';
 
 import {strings} from '../lang/const';
 import {theme} from '../theme';
@@ -59,6 +60,7 @@ const mapDispatchToProps = {
   fetchDealers,
   selectDealer,
   fetchBrands,
+  actionFetchMainScreenSettings,
 };
 
 const mainScreen = 'BottomTabNavigation';
@@ -79,6 +81,7 @@ const _awaitStoreToUpdate = async props => {
   });
 
   if (currentDealer && isStoreUpdatedCurrent === storeVersion) {
+    // если мы уже выбрали регион и стор обновлен
     const actionDealer = await props.fetchDealers(); // обновляем дилеров при каждом открытии прилаги
     const currDealerItem = get(storeData, 'dealer.selected');
     const currentDealerUpdated = await props.selectDealer({
@@ -87,6 +90,7 @@ const _awaitStoreToUpdate = async props => {
       isLocal: false,
     });
     await props.fetchBrands(); // обновляем бренды при каждом открытии прилаги
+    await props.actionFetchMainScreenSettings(APP_REGION); // обновляем настройки главного экрана при каждом открытии прилаги
     if (currentDealerUpdated && actionDealer && actionDealer.type) {
       // уже всё обновлено, открываем экран автоцентра
       return mainScreen;
@@ -98,7 +102,8 @@ const _awaitStoreToUpdate = async props => {
     props.actionMenuOpenedCount(0);
     const action = await props.actionStoreUpdated(storeVersion);
     if (action && action.type) {
-      props.fetchBrands();
+      await props.fetchBrands();
+      await props.actionFetchMainScreenSettings(APP_REGION); // обновляем настройки главного экрана при каждом открытии прилаги
       const actionDealer = await props.fetchDealers();
       if (actionDealer && actionDealer.type) {
         let result;

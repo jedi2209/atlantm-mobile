@@ -51,6 +51,10 @@ const baseRequestParams = {
 
 export default {
   headers,
+  fetchMainScreenSettings(region) {
+    return this.request(`/mobile/screen/main/${region}/`, baseRequestParams);
+  },
+
   fetchDealers() {
     return this.request('/dealer/data/', baseRequestParams);
   },

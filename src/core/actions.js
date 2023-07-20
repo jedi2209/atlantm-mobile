@@ -5,7 +5,14 @@ import {
   APP_ACTION_RATED,
   APP_STORE_UPDATED,
   APP_SETTINGS_LOADED,
+  MAIN_SCREEN__REQUEST,
+  MAIN_SCREEN__SUCCESS,
+  MAIN_SCREEN__FAIL,
 } from './actionTypes';
+
+import API from '../utils/api';
+
+import {APP_REGION} from './const';
 
 export const actionSetPushGranted = isGranted => {
   return dispatch => {
@@ -57,5 +64,38 @@ export const actionSetPushActionSubscribe = isSubscribe => {
       type: APP_PUSH_ACTION_SUBSCRIBE__SET,
       payload: isSubscribe,
     });
+  };
+};
+
+export const actionFetchMainScreenSettings = (region = APP_REGION) => {
+  return dispatch => {
+    dispatch({type: MAIN_SCREEN__REQUEST});
+    return API.fetchMainScreenSettings(region)
+      .then(response => {
+        const {data: settings, error} = response;
+
+        if (error) {
+          return dispatch({
+            type: MAIN_SCREEN__FAIL,
+            payload: {
+              code: error.code,
+              error: error.message,
+            },
+          });
+        }
+
+        return dispatch({
+          type: MAIN_SCREEN__SUCCESS,
+          payload: settings,
+        });
+      })
+      .catch(error => {
+        return dispatch({
+          type: MAIN_SCREEN__FAIL,
+          payload: {
+            error: error?.message,
+          },
+        });
+      });
   };
 };

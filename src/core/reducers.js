@@ -20,6 +20,8 @@ import {
   APP_ACTION_RATED,
   APP_STORE_UPDATED,
   APP_SETTINGS_LOADED,
+  MAIN_SCREEN__SUCCESS,
+  MAIN_SCREEN__FAIL,
 } from './actionTypes';
 
 const pushGranted = (state = false, action) => {
@@ -107,6 +109,17 @@ const modal = (state = {application: false}, action) => {
   }
 };
 
+const mainScreenSettings = (state = {}, action) => {
+  switch (action.type) {
+    case MAIN_SCREEN__SUCCESS:
+      return action.payload;
+    case MAIN_SCREEN__FAIL:
+      return state;
+    default:
+      return state;
+  }
+};
+
 const coreReducer = combineReducers({
   pushGranted,
   pushActionSubscribeState,
@@ -115,6 +128,7 @@ const coreReducer = combineReducers({
   isStoreUpdated,
   language,
   settings,
+  mainScreenSettings,
 });
 
 const rootReducer = combineReducers({
