@@ -319,7 +319,6 @@ const ChatScreen = ({
   const renderTextMessage = ({author, createdAt, id, text, type}) => {
     const date = time(new Date(createdAt));
     const authorName = get(author, 'firstName', null);
-    console.info('authorName', authorName, author);
     if (author.id === chatSocket.userAtlantM.id) {
       // ответ Атлант-М
       return (
@@ -488,12 +487,10 @@ const ChatScreen = ({
   );
 
   useEffect(() => {
-    console.log('userID', session);
     setLoadingHistory(true);
     if (session === null) {
       PushNotifications.deviceState().then(res => {
         let senderIDNew = getUserID(res.userId);
-        console.log('senderIDNew', senderIDNew);
         setUser({id: senderIDNew});
         actionChatIDSave(senderIDNew);
         updateChat(senderIDNew);
