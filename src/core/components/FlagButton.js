@@ -1,6 +1,6 @@
 import React, {useState, useRef} from 'react';
 import {Animated, StyleSheet} from 'react-native';
-import {Pressable, Text, Avatar} from 'native-base';
+import {Pressable, Text, Avatar, Button} from 'native-base';
 import styleConst from '../style-const';
 import Imager from './Imager';
 
@@ -10,6 +10,14 @@ const flags = {
   ru: require('../../../assets/flags/russia.jpg'),
   russia: require('../../../assets/flags/russia.jpg'),
   belarusFree: require('../../../assets/flags/belarus-free.jpg'),
+};
+
+const countryName = {
+  by: 'Беларусь',
+  belarus: 'Беларусь',
+  ru: 'Россия',
+  russia: 'Россия',
+  belarusFree: 'Беларусь',
 };
 
 const styles = StyleSheet.create({
@@ -30,14 +38,10 @@ const styles = StyleSheet.create({
 
 const defaultOpacity = 0.7;
 
-const FlagButton = ({
-  onPress,
-  country,
-  buttonSize,
-  showCaption,
-  type,
-  style,
-}) => {
+const FlagButton = props => {
+  const {onPress, country, buttonSize, showCaption, type, style, styleText} =
+    props;
+
   const [styleState, setStyleState] = useState({
     opacity: defaultOpacity,
   });
@@ -76,7 +80,7 @@ const FlagButton = ({
               bg={styleConst.color.blueNew}
               alignSelf="center"
               size={buttonSize}
-              shadow={7}
+              shadow={styleConst.shadow.prop}
               source={flags[country]}
             />
             {showCaption && country === 'belarusFree' ? (
@@ -90,7 +94,7 @@ const FlagButton = ({
         <Pressable
           key={'flag' + country}
           onPressIn={_onPressIn}
-          shadow={8}
+          shadow={styleConst.shadow.prop}
           onPressOut={() => {
             setStyleState({
               opacity: defaultOpacity,
@@ -103,8 +107,33 @@ const FlagButton = ({
           </Animated.View>
         </Pressable>
       );
+    case 'button':
+      return (
+        <Button
+          key={'flag' + country}
+          style={style}
+          shadow={styleConst.shadow.prop}
+          leftIcon={
+            <Imager
+              source={flags[country]}
+              style={[style, {borderRadius: styleConst.borderRadius}]}
+              resizeMode="contain"
+            />
+          }
+          {...props}>
+          <Text style={[styleText, {fontFamily: styleConst.font.brand}]}>
+            {countryName[country]}
+          </Text>
+        </Button>
+      );
     default:
-      break;
+      return (
+        <Pressable key={'flag' + country} {...props}>
+          <Text style={[styleText, {fontFamily: styleConst.font.brand}]}>
+            {countryName[country]}
+          </Text>
+        </Pressable>
+      );
   }
 };
 
@@ -118,7 +147,7 @@ FlagButton.defaultProps = {
     height: 100,
     borderRadius: 10,
   },
-  type: 'flag',
+  type: 'text',
 };
 
 export default FlagButton;

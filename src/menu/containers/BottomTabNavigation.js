@@ -9,7 +9,6 @@ import {connect} from 'react-redux';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import FlagButton from '../../core/components/FlagButton';
 import LogoTitle from '../../core/components/LogoTitle';
 
 // screens
@@ -198,25 +197,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
           }}
           options={{
             headerShown: true,
-            headerTitle: () => (
-              <HStack>
-                <LogoTitle />
-                <Pressable
-                  alignContent={'center'}
-                  alignItems={'center'}
-                  pos={'absolute'}
-                  top={5}
-                  left={-60}
-                  onPress={() => navigation.navigate('IntroScreenNew')}>
-                  <FlagButton
-                    style={{width: 50, height: 33, borderRadius: 10}}
-                    onPress={() => navigation.navigate('IntroScreenNew')}
-                    country={route?.params?.region || region}
-                    type="flag"
-                  />
-                </Pressable>
-              </HStack>
-            ),
+            headerTitle: () => <LogoTitle />,
             headerStyle: {
               height: 120,
               backgroundColor: '#F8F8F8',
