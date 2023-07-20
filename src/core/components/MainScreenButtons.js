@@ -7,7 +7,7 @@ import styleConst from '../style-const';
 
 import PropTypes from 'prop-types';
 
-const {width, height} = Dimensions.get('window');
+const {width: widthDefault, height: heightDefault} = Dimensions.get('screen');
 
 const defaultOpacity = 1;
 
@@ -56,12 +56,12 @@ const BackGroundComponent = props => {
 
 const sizeType = {
   small: {
-    width: width / 3.5,
+    width: widthDefault / 3.5,
     height: 96,
   },
   half: {
-    width: width / 2,
-    height: width / 2,
+    width: widthDefault / 2,
+    height: widthDefault / 2,
   },
   full: {
     width: '100%',
@@ -101,7 +101,7 @@ const stylesTitle = StyleSheet.create({
 
 const styles = StyleSheet.create({
   titleBackground: {
-    backgroundColor: 'white',
+    backgroundColor: styleConst.color.white,
     position: 'absolute',
     opacity: 0.9,
     zIndex: 5,
@@ -122,12 +122,16 @@ export const MainScreenButton = ({
   size,
   type,
   background,
+  backgroundProps,
   hash,
   title,
   titleStyle,
   subTitle,
   subTitleStyle,
   onPress,
+  style,
+  width,
+  height,
 }) => {
   const [styleState, setStyleState] = useState({
     opacity: defaultOpacity,
@@ -152,8 +156,8 @@ export const MainScreenButton = ({
     ]).start();
   };
 
-  const width = sizeType[size].width;
-  const height = sizeType[size].height;
+  const widthDefault = sizeType[size].width;
+  const heightDefault = sizeType[size].height;
 
   return (
     <Animated.View style={[{transform: [{scale: selectedAnim}]}]}>
@@ -165,25 +169,30 @@ export const MainScreenButton = ({
           });
           onPress();
         }}
-        shadow={size === 'half' ? 3 : 5}
+        shadow={5}
+        background={styleConst.color.white}
         borderRadius={styleConst.borderRadius}
         style={[
           styleState,
           {
-            width,
-            height,
+            width: width ? width : widthDefault,
+            height: height ? height : heightDefault,
           },
+          style,
         ]}>
         {background ? (
           <BackGroundComponent
             background={background}
-            style={{
-              width,
-              height,
-              position: 'absolute',
-              borderRadius: styleConst.borderRadius,
-              zIndex: 0,
-            }}
+            style={[
+              {
+                width: width ? width : widthDefault,
+                height: height ? height : heightDefault,
+                position: 'absolute',
+                borderRadius: styleConst.borderRadius,
+                zIndex: 0,
+              },
+            ]}
+            {...backgroundProps}
           />
         ) : null}
         <Text
@@ -192,7 +201,7 @@ export const MainScreenButton = ({
             stylesTitle[type],
             stylesTitle[size],
             {
-              width,
+              width: width ? width : widthDefault,
             },
             titleStyle,
           ]}>
@@ -203,7 +212,7 @@ export const MainScreenButton = ({
             style={[
               stylesTitle.main,
               {
-                width,
+                width: width ? width : widthDefault,
               },
               subTitleStyle,
             ]}>
@@ -214,8 +223,8 @@ export const MainScreenButton = ({
           <View
             style={[
               {
-                height: height / 2.75,
-                width,
+                width: width ? width : widthDefault,
+                height: height ? height / 2.75 : heightDefault / 2.75,
               },
               styles.titleBackground,
               styles['titleBackground' + type],
@@ -235,10 +244,15 @@ MainScreenButton.propTypes = {
   background: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   type: PropTypes.oneOf(['top', 'bottom']),
   size: PropTypes.oneOf(['small', 'full', 'half']),
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };
 MainScreenButton.defaultProps = {
+  background: null,
   type: 'top',
   size: 'small',
+  width: null,
+  height: null,
 };
 
 MainScreenButtons.propTypes = {

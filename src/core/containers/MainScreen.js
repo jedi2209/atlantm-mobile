@@ -1,5 +1,14 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {HStack, Image, ScrollView, Text, VStack, View} from 'native-base';
+import {Dimensions, Linking} from 'react-native';
+import {
+  HStack,
+  Image,
+  ScrollView,
+  Text,
+  VStack,
+  View,
+  Pressable,
+} from 'native-base';
 import {connect} from 'react-redux';
 
 import {fetchInfoList, actionListReset} from '../../info/actions';
@@ -7,7 +16,8 @@ import {actionMenuOpenedCount, actionAppRated} from '../../core/actions';
 
 import styleConst from '../../core/style-const';
 import {MainScreenButton} from '../components/MainScreenButtons';
-import nav from '../../navigation/reducers';
+
+const {width, height} = Dimensions.get('screen');
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
@@ -15,17 +25,11 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
     isFetchInfoList: info.meta.isFetchInfoList,
     nav,
     profile,
-    brands: dealer.listBrands,
     dealerSelected: dealer.selected,
-    isСallMeRequest: contacts.isСallMeRequest,
-    phones: dealer.selected.phones || [],
-    phonesMobile: dealer.selected.phonesMobile || [],
-    addresses: dealer.selected.addresses || [],
-    socialNetworks: dealer.selected.socialNetworks || [],
-    sites: dealer.selected.sites || [],
 
     isAppRated: core.isAppRated,
     menuOpenedCount: core.menuOpenedCount,
+    mainScreenSettings: core.mainScreenSettings,
   };
 };
 
@@ -36,11 +40,73 @@ const mapDispatchToProps = {
   actionMenuOpenedCount,
 };
 
+const _linkProcess = (link, props) => {
+  switch (link.type) {
+    case 'screen':
+      if (link.path === 'WebviewScreen') {
+        return ['WebviewScreen', {html: link.path}];
+      }
+      if (link?.params) {
+        return [link.path, link.params];
+      }
+      return [link.path];
+    case 'webview':
+      return ['WebviewScreen', {html: link.path}];
+  }
+};
+
+const BlockConstruct = ({json, rowNum, dealerSelected, navigation}) => {
+  let i = 0;
+  let onPressBlockButton = () => {};
+  return json.map(item => {
+    i++;
+    if (item?.link?.type === 'url') {
+      onPressBlockButton = () => Linking.openURL(item?.link?.path);
+    } else {
+      const [link, linkParams] = _linkProcess(item.link);
+      onPressBlockButton = () => navigation.navigate(link, linkParams);
+    }
+    return (
+      <View p={2} key={'container' + rowNum + i}>
+        <MainScreenButton
+          title={item.title?.text}
+          type={item.title?.position}
+          size={item.type}
+          onPress={onPressBlockButton}
+          background={require('../../../assets/mainScreen/service.png')}
+        />
+      </View>
+    );
+  });
+};
+
 const MainScreen = props => {
-  const {navigation, dealerSelected} = props;
+  const {navigation, dealerSelected, mainScreenSettings} = props;
+
+  if (!mainScreenSettings) {
+    return null;
+  }
+
+  const firstRow = mainScreenSettings.shift();
+  let onPressBlockButton = () => {};
+
+  let i = 0;
+
+  //   <MainScreenButton
+  //   title={'Табло выдачи автомобиля'}
+  //   onPress={() => navigation.navigate('TvaScreenBase')}
+  //   background={require('../../../assets/mainScreen/tva.png')}
+  // />
+  // <MainScreenButton
+  //   title={'Отзывы об автоцентрах'}
+  //   onPress={() => navigation.navigate('ReviewsScreen')}
+  //   background={require('../../../assets/mainScreen/eko.png')}
+  // />
 
   return (
-    <View style={[styleConst.safearea.default]} testID="MainScreen.Wrapper">
+    <ScrollView
+      style={[styleConst.safearea.default]}
+      testID="MainScreen.Wrapper">
       <VStack>
         <ScrollView
           mt={3}
@@ -49,30 +115,43 @@ const MainScreen = props => {
           bounces={false}
           horizontal={true}>
           <HStack justifyContent={'space-around'} space={3}>
-            {dealerSelected.emergencyManagerInfo ? (
-              <MainScreenButton
-                title={'Аварийный менеджер'}
-                onPress={() =>
+            {/* {firstRow.map(item => {
+              if (item?.link?.type === 'url') {
+                onPressBlockButton = () => Linking.openURL(item?.link?.path);
+              } else {
+                const [link, linkParams] = _linkProcess(item.link, ...props);
+                onPressBlockButton = () =>
+                  navigation.navigate(link, linkParams);
+              }
+              if (
+                dealerSelected.emergencyManagerInfo &&
+                item.link.params.eval ===
+                  'props.dealerSelected.emergencyManagerInfo'
+              ) {
+                onPressBlockButton = () => {
                   navigation.navigate('WebviewScreen', {
                     html: dealerSelected.emergencyManagerInfo,
-                  })
-                }
-                background={require('../../../assets/emergency_manager.jpg')}
-                type={'bottom'}
-              />
-            ) : null}
-            <MainScreenButton
-              title={'Табло выдачи автомобиля'}
-              onPress={() => navigation.navigate('TvaScreenBase')}
-              background={require('../../../assets/mainScreen/tva.png')}
-            />
-            <MainScreenButton
-              title={'Отзывы об автоцентрах'}
-              onPress={() => navigation.navigate('ReviewsScreen')}
-              background={require('../../../assets/mainScreen/eko.png')}
-            />
+                  });
+                };
+                return (
+                  <MainScreenButton
+                    title={item.title?.text}
+                    type={item.title?.position}
+                    size={item.type}
+                    onPress={onPressBlockButton}
+                    background={require('../../../assets/emergency_manager.jpg')}
+                  />
+                );
+              }
+            })} */}
           </HStack>
         </ScrollView>
+        {/* {mainScreenSettings.map(el => {
+          i++;
+          return (
+            <BlockConstruct key={'row' + i} rowNum={i} json={el} {...props} />
+          );
+        })} */}
         <View p={2}>
           <MainScreenButton
             title={'Записаться на сервис'}
@@ -82,8 +161,8 @@ const MainScreen = props => {
             background={require('../../../assets/mainScreen/service.png')}
           />
         </View>
-        <View>
-          <HStack justifyContent={'space-between'}>
+        <View p={2}>
+          <HStack justifyContent={'space-between'} space={1}>
             <MainScreenButton
               title={'Новые\r\nавтомобили'}
               subTitle={'362 авто в наличии'}
@@ -98,10 +177,12 @@ const MainScreen = props => {
                 color: '#000000',
                 opacity: 0.7,
                 textAlign: 'left',
-                fontSize: 8,
+                fontSize: 10,
                 paddingHorizontal: 20,
                 top: 50,
               }}
+              width={width / 2.1}
+              height={width / 2.1}
               size={'half'}
               onPress={() =>
                 navigation.navigate('CarsStock', {
@@ -127,10 +208,12 @@ const MainScreen = props => {
                 color: '#FFFFFF',
                 opacity: 0.7,
                 textAlign: 'left',
-                fontSize: 8,
+                fontSize: 10,
                 paddingHorizontal: 20,
                 top: 50,
               }}
+              width={width / 2.1}
+              height={width / 2.1}
               size={'half'}
               onPress={() =>
                 navigation.navigate('CarsStock', {
@@ -151,10 +234,11 @@ const MainScreen = props => {
             size={'full'}
             onPress={() => navigation.navigate('CarCostScreen')}
             background={require('../../../assets/mainScreen/rate_my_car.png')}
+            backgroundProps={onLoadError => {}}
           />
         </View>
       </VStack>
-    </View>
+    </ScrollView>
   );
 };
 

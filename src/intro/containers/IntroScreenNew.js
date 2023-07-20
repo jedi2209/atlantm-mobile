@@ -6,8 +6,17 @@ import {strings} from '../../core/lang/const';
 // helpers
 import styleConst from '../../core/style-const';
 import LogoTitle from '../../core/components/LogoTitle';
+import LogoLoader from '../../core/components/LogoLoader';
 import FlagButton from '../../core/components/FlagButton';
 import {year} from '../../utils/date';
+
+// actions
+import {connect} from 'react-redux';
+import {selectDealer} from '../../dealer/actions';
+
+const mapDispatchToProps = {
+  selectDealer,
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -26,11 +35,29 @@ const styles = StyleSheet.create({
   },
 });
 
+const mapStateToProps = ({dealer}) => {
+  return {
+    dealer,
+    region: dealer.region,
+  };
+};
+
 const currYearSubstract = year - 1991;
 
-const IntroScreenNew = ({navigation}) => {
-  const onPressButton = regions =>
-    navigation.navigate('ChooseDealerScreen', {goBack: false, regions});
+const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
+  const [isLoading, setLoading] = useState(false);
+
+  const onPressButton = async dealers => {
+    setLoading(true);
+    await selectDealer({
+      dealerBaseData: dealer[dealers][0],
+      dealerSelected: dealer[dealers][0],
+      isLocal: false,
+    }).then(action => {
+      navigation.navigate('ContactsScreen');
+      // setLoading(false);
+    });
+  };
 
   const [countLogoClick, setCountLogoClick] = useState(0);
 
@@ -45,6 +72,10 @@ const IntroScreenNew = ({navigation}) => {
       useNativeDriver: true,
     }).start();
   }, []);
+
+  if (isLoading) {
+    return <LogoLoader />;
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -67,21 +98,21 @@ const IntroScreenNew = ({navigation}) => {
         <HStack alignContent={'center'} justifyContent={'space-around'}>
           {countLogoClick === currYearSubstract ? (
             <FlagButton
-              onPress={() => onPressButton(['by'])}
+              onPress={() => onPressButton('listBelarussia')}
               showCaption={true}
               country={'belarusFree'}
               type="flag"
             />
           ) : (
             <FlagButton
-              onPress={() => onPressButton(['by'])}
-              country={'belarus'}
+              onPress={() => onPressButton('listBelarussia')}
+              country={'by'}
               type="flag"
             />
           )}
           <FlagButton
-            onPress={() => onPressButton(['ru'])}
-            country={'russia'}
+            onPress={() => onPressButton('listRussia')}
+            country={'ru'}
             type="flag"
           />
         </HStack>
@@ -90,4 +121,4 @@ const IntroScreenNew = ({navigation}) => {
   );
 };
 
-export default IntroScreenNew;
+export default connect(mapStateToProps, mapDispatchToProps)(IntroScreenNew);

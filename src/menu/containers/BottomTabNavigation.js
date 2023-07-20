@@ -1,13 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {Icon, useDisclose, Image} from 'native-base';
+import {Icon, useDisclose, Image, Pressable, Text, HStack} from 'native-base';
 import orderFunctions from '../../utils/orders';
 import Analytics from '../../utils/amplitude-analytics';
+import {connect} from 'react-redux';
 
 // import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 
+import FlagButton from '../../core/components/FlagButton';
 import LogoTitle from '../../core/components/LogoTitle';
 
 // screens
@@ -37,6 +39,13 @@ import {
   ClassicHeaderBlue,
   BigCloseButton,
 } from '../../navigation/const';
+
+const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
+  return {
+    dealerSelected: dealer.selected,
+    region: dealer.region,
+  };
+};
 
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
@@ -132,14 +141,7 @@ const ContactsStackView = ({navigation, route}) => (
       name="ContactsScreen"
       component={MainScreen}
       options={{
-        headerShown: true,
-        headerTitle: () => <LogoTitle />,
-        headerStyle: {
-          height: 120,
-          backgroundColor: '#F8F8F8',
-          elevation: 0,
-          shadowOpacity: 0,
-        },
+        headerShown: false,
       }}
     />
   </StackContacts.Navigator>
@@ -149,7 +151,7 @@ const CleanStackView = () => {
   return <></>;
 };
 
-export const BottomTabNavigation = ({navigation, route}) => {
+const BottomTabNavigation = ({navigation, route, region}) => {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [actionSheetData, setActionSheetData] = useState({});
   const _showOrdersMenu = () => {
@@ -195,7 +197,32 @@ export const BottomTabNavigation = ({navigation, route}) => {
             },
           }}
           options={{
-            headerShown: false,
+            headerShown: true,
+            headerTitle: () => (
+              <HStack>
+                <LogoTitle />
+                <Pressable
+                  alignContent={'center'}
+                  alignItems={'center'}
+                  pos={'absolute'}
+                  top={5}
+                  left={-60}
+                  onPress={() => navigation.navigate('IntroScreenNew')}>
+                  <FlagButton
+                    style={{width: 50, height: 33, borderRadius: 10}}
+                    onPress={() => navigation.navigate('IntroScreenNew')}
+                    country={route?.params?.region || region}
+                    type="flag"
+                  />
+                </Pressable>
+              </HStack>
+            ),
+            headerStyle: {
+              height: 120,
+              backgroundColor: '#F8F8F8',
+              elevation: 0,
+              shadowOpacity: 0,
+            },
             tabBarLabel: strings.Menu.bottom.dealer,
             tabBarLabelStyle: {
               fontSize: 14,
@@ -344,3 +371,5 @@ export const BottomTabNavigation = ({navigation, route}) => {
     </>
   );
 };
+
+export default connect(mapStateToProps, null)(BottomTabNavigation);
