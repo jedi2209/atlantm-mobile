@@ -54,6 +54,7 @@ export default {
       shadowRadius: 3.84,
       elevation: 5,
     },
+    prop: 8,
   },
   form: {
     scrollView: {

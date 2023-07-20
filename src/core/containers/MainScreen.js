@@ -16,6 +16,7 @@ import {actionMenuOpenedCount, actionAppRated} from '../../core/actions';
 
 import styleConst from '../../core/style-const';
 import {MainScreenButton} from '../components/MainScreenButtons';
+import FlagButton from '../../core/components/FlagButton';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -26,6 +27,7 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
     nav,
     profile,
     dealerSelected: dealer.selected,
+    region: dealer.region,
 
     isAppRated: core.isAppRated,
     menuOpenedCount: core.menuOpenedCount,
@@ -81,7 +83,7 @@ const BlockConstruct = ({json, rowNum, dealerSelected, navigation}) => {
 };
 
 const MainScreen = props => {
-  const {navigation, dealerSelected, mainScreenSettings} = props;
+  const {navigation, dealerSelected, region, mainScreenSettings} = props;
 
   if (!mainScreenSettings) {
     return null;
@@ -104,10 +106,8 @@ const MainScreen = props => {
   // />
 
   return (
-    <ScrollView
-      style={[styleConst.safearea.default]}
-      testID="MainScreen.Wrapper">
-      <VStack>
+    <ScrollView style={styleConst.safearea.default} testID="MainScreen.Wrapper">
+      <VStack style={{paddingBottom: 100}}>
         <ScrollView
           mt={3}
           p={2}
@@ -146,12 +146,12 @@ const MainScreen = props => {
             })} */}
           </HStack>
         </ScrollView>
-        {/* {mainScreenSettings.map(el => {
+        {mainScreenSettings.map(el => {
           i++;
           return (
             <BlockConstruct key={'row' + i} rowNum={i} json={el} {...props} />
           );
-        })} */}
+        })}
         <View p={2}>
           <MainScreenButton
             title={'Записаться на сервис'}
@@ -235,6 +235,16 @@ const MainScreen = props => {
             onPress={() => navigation.navigate('CarCostScreen')}
             background={require('../../../assets/mainScreen/rate_my_car.png')}
             backgroundProps={onLoadError => {}}
+          />
+        </View>
+        <View p={2}>
+          <FlagButton
+            style={{padding: 10}}
+            styleText={{textAlign: 'center'}}
+            onPress={() => navigation.navigate('IntroScreenNew')}
+            country={region}
+            type={'button'}
+            variant={'unstyle'}
           />
         </View>
       </VStack>
