@@ -5,7 +5,9 @@ import styleConst from '../style-const';
 import Imager from './Imager';
 
 const flags = {
+  by: require('../../../assets/flags/belarus.jpg'),
   belarus: require('../../../assets/flags/belarus.jpg'),
+  ru: require('../../../assets/flags/russia.jpg'),
   russia: require('../../../assets/flags/russia.jpg'),
   belarusFree: require('../../../assets/flags/belarus-free.jpg'),
 };

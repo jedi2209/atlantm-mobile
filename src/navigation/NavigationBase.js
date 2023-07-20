@@ -55,7 +55,7 @@ import InfoPostScreen from '../info/containers/InfoPostScreen';
 import TvaScreen from '../tva/containers/TvaScreen';
 import TvaResultsScreen from '../tva/containers/TvaResultsScreen';
 
-import {BottomTabNavigation} from '../menu/containers/BottomTabNavigation';
+import BottomTabNavigation from '../menu/containers/BottomTabNavigation';
 
 // routes
 import IntroScreen from '../intro/containers/IntroScreen';

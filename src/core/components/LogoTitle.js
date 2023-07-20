@@ -36,7 +36,7 @@ const LogoTitle = props => {
     logoPath = require('../../menu/assets/logo-horizontal-white.svg');
   }
   return (
-    <View style={styles.Container}>
+    <View style={[styles.Container, props?.containerStyle]}>
       <Image resizeMode="contain" style={styles.Image} source={logoPath} />
     </View>
   );
