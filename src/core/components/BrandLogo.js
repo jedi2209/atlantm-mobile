@@ -76,7 +76,7 @@ const BrandLogo = props => {
             height: props.height,
           }}
           absoluteFill={false}
-          onLoadrError={e => {
+          onLoadError={e => {
             setCurrentLogoPath(props.brandsAll[brand]?.svg?.black);
           }}
           key={props.brandsAll[brand].hash + currPath}

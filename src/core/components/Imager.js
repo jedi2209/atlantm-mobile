@@ -64,7 +64,7 @@ const Imager = props => {
                 props.onLoadStart();
               }}
               onError={e => {
-                props.onLoadrError(e);
+                props.onLoadError(e);
                 setLoading(false);
               }}
               onLoadEnd={() => {
@@ -97,7 +97,7 @@ Imager.defaultProps = {
   priority: 'normal',
   resizeMode: 'cover',
   absoluteFill: true,
-  onLoadrError: e => console.error('Imager error image loading', e),
+  onLoadError: e => console.error('Imager error image loading', e),
   onLoadStart: () => {
     return true;
   },
