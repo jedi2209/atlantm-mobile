@@ -20,18 +20,25 @@ const styles = StyleSheet.create({
 });
 
 const RefreshSpinner = props => {
-  const {isRequest, onRefresh, containerStyle, text} = props;
+  const {isRequest, onRefresh, containerStyle, text, enabled} = props;
   return (
     <RefreshControl
-      tintColor={styleConst.color.lightBlue}
-      progressBackgroundColor={styleConst.color.green}
+      tintColor={styleConst.color.blueNew}
       color={styleConst.color.white}
       refreshing={isRequest}
       onRefresh={onRefresh}
+      enabled={enabled}
       style={styleConst.spinner}
       title={text}
     />
   );
+};
+
+RefreshSpinner.defaultProps = {
+  text: 'обновление экрана...',
+  refreshing: false,
+  enabled: true,
+  onRefresh: () => {},
 };
 
 export default RefreshSpinner;

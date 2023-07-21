@@ -168,7 +168,7 @@ export const MainScreenButton = ({
     <Animated.View style={[{transform: [{scale: selectedAnim}]}]}>
       <Pressable
         onPressIn={_onPressIn}
-        onPressOut={() => {
+        onPress={() => {
           setStyleState({
             opacity: defaultOpacity,
           });
