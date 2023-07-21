@@ -121,7 +121,7 @@ const FlagButton = props => {
             />
           }
           {...props}>
-          <Text style={[styleText, {fontFamily: styleConst.font.brand}]}>
+          <Text style={[styleText, {fontFamily: styleConst.font.regular}]}>
             {countryName[country]}
           </Text>
         </Button>
@@ -129,7 +129,7 @@ const FlagButton = props => {
     default:
       return (
         <Pressable key={'flag' + country} {...props}>
-          <Text style={[styleText, {fontFamily: styleConst.font.brand}]}>
+          <Text style={[styleText, {fontFamily: styleConst.font.regular}]}>
             {countryName[country]}
           </Text>
         </Pressable>

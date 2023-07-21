@@ -91,7 +91,7 @@ const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
           alignSelf={'center'}
           fontSize={24}
           my={16}
-          fontFamily={styleConst.font.brand}
+          fontFamily={styleConst.font.regular}
           color={styleConst.color.white}>
           {strings.IntroScreen.chooseRegion}
         </Text>
