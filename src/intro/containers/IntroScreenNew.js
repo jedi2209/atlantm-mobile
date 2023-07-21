@@ -54,7 +54,7 @@ const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
       dealerSelected: dealer[dealers][0],
       isLocal: false,
     }).then(action => {
-      navigation.navigate('ContactsScreen');
+      navigation.navigate('BottomTabNavigation', {screen: 'ContactsScreen'});
       // setLoading(false);
     });
   };

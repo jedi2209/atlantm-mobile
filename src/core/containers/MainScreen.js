@@ -1,24 +1,31 @@
-import React, {useState, useEffect, useRef} from 'react';
-import {Dimensions, Linking} from 'react-native';
+import React, {useState} from 'react';
+import {Dimensions, Linking, Platform, StyleSheet} from 'react-native';
 import {
   HStack,
-  Image,
   ScrollView,
   Text,
   VStack,
   View,
-  Pressable,
+  RefreshControl,
+  Button,
 } from 'native-base';
+import DeviceInfo from 'react-native-device-info';
 import {connect} from 'react-redux';
 
 import {fetchInfoList, actionListReset} from '../../info/actions';
-import {actionMenuOpenedCount, actionAppRated} from '../../core/actions';
+import {
+  actionMenuOpenedCount,
+  actionAppRated,
+  actionFetchMainScreenSettings,
+} from '../actions';
 
-import styleConst from '../../core/style-const';
+import styleConst from '../style-const';
 import {MainScreenButton} from '../components/MainScreenButtons';
-import FlagButton from '../../core/components/FlagButton';
+import FlagButton from '../components/FlagButton';
 
 import {get} from 'lodash';
+import {STORE_LINK, APP_REGION} from '../const';
+import RefreshSpinner from '../components/RefreshSpinner';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -42,6 +49,7 @@ const mapDispatchToProps = {
   actionListReset,
   actionAppRated,
   actionMenuOpenedCount,
+  actionFetchMainScreenSettings,
 };
 
 const _linkProcess = (link, props) => {
@@ -149,6 +157,16 @@ const _processRow = props => {
 const MainScreen = props => {
   const {navigation, dealerSelected, region, mainScreenSettings} = props;
 
+  const [isLoading, setLoading] = useState(false);
+
+  const _onRefresh = () => {
+    setLoading(true);
+    props.actionFetchMainScreenSettings(APP_REGION).then(res => {
+      console.log('props.actionFetchMainScreenSettings res', res);
+      setLoading(false);
+    });
+  };
+
   if (!mainScreenSettings) {
     return null;
   }
@@ -156,7 +174,12 @@ const MainScreen = props => {
   let i = 0;
 
   return (
-    <ScrollView style={styleConst.safearea.default} testID="MainScreen.Wrapper">
+    <ScrollView
+      style={styleConst.safearea.default}
+      testID="MainScreen.Wrapper"
+      refreshControl={
+        <RefreshSpinner isRequest={isLoading} onRefresh={_onRefresh} />
+      }>
       <VStack style={{paddingBottom: 100}}>
         {mainScreenSettings.map(el => {
           i++;
@@ -170,7 +193,7 @@ const MainScreen = props => {
             />
           );
         })}
-        <View p={2}>
+        <View px={2} pt={2}>
           <FlagButton
             style={{padding: 10}}
             styleText={{textAlign: 'center'}}
@@ -180,9 +203,33 @@ const MainScreen = props => {
             variant={'unstyle'}
           />
         </View>
+        <View px={2}>
+          <Button
+            variant="link"
+            size="md"
+            borderColor={styleConst.color.accordeonGrey1}
+            onPress={() => Linking.openURL(STORE_LINK[Platform.OS])}>
+            <Text selectable={false} style={styles.TextVersionInfo}>
+              {'ver. ' +
+                DeviceInfo.getVersion() +
+                ' (' +
+                DeviceInfo.getBuildNumber() +
+                ')'}
+            </Text>
+          </Button>
+        </View>
       </VStack>
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  TextVersionInfo: {
+    fontSize: 12,
+    fontFamily: styleConst.font.brand,
+    color: styleConst.color.lightBlue,
+    opacity: 0.5,
+  },
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
