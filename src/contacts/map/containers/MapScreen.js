@@ -9,6 +9,8 @@ import {
   StatusBar,
 } from 'react-native';
 
+import {Icon, Button, Text, View} from 'native-base';
+
 // Maps
 import MapView, {
   Marker,
@@ -25,7 +27,6 @@ import {
 } from '../../actions';
 
 // components
-import {Icon, Button} from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheet from '@alessiocancian/react-native-actionsheet';
 
@@ -44,8 +45,6 @@ const {width, height} = Dimensions.get('window');
 const styles = StyleSheet.create({
   mapContainer: {
     ...StyleSheet.absoluteFillObject,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -60,10 +59,6 @@ const styles = StyleSheet.create({
     width: '80%',
     marginBottom: 40,
     borderRadius: 5,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
   },
   iconRoute: {
     marginLeft: 10,
@@ -376,7 +371,11 @@ class MapScreen extends Component {
           },
         ]}>
         <StatusBar barStyle="default" />
-        <View style={styles.mapContainer} testID="MapScreen.MapView">
+        <View
+          style={styles.mapContainer}
+          justifyContent={'flex-end'}
+          alignItems={'center'}
+          testID="MapScreen.MapView">
           <MapView
             ref={this.handleRef}
             provider={PROVIDER_GOOGLE}
@@ -427,12 +426,15 @@ class MapScreen extends Component {
                 name="navigation"
                 color="white"
                 _dark={{
-                  color: 'white',
+                  color: styleConst.color.white,
                 }}
                 style={styles.iconRoute}
               />
             }>
-            <Text style={styles.buttonText}>
+            <Text
+              style={styles.buttonText}
+              color={styleConst.color.white}
+              fontSize={16}>
               {strings.MapScreen.makeRoute.toUpperCase()}
             </Text>
           </Button>
