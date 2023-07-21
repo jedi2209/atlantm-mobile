@@ -4,13 +4,11 @@ import React, {useState, useEffect} from 'react';
 
 import {
   StyleSheet,
-  ScrollView,
-  Text,
   TouchableWithoutFeedback,
   TouchableOpacity,
 } from 'react-native';
 import UserCars from '../components/UserCars';
-import {Button, HStack, Icon, View, Fab} from 'native-base';
+import {Button, HStack, Icon, View, Fab, Text, ScrollView} from 'native-base';
 
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -130,6 +128,7 @@ import {verticalScale} from '../../utils/scale';
 import {get} from 'lodash';
 import {dayMonthYear} from '../../utils/date';
 import LogoLoader from '../../core/components/LogoLoader';
+import RNBounceable from '@freakycoder/react-native-bounceable';
 
 const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
@@ -278,7 +277,7 @@ const ProfileScreenInfo = props => {
       (login.CASHBACK.STATUS.ID || login.CASHBACK.STATUS.NAME)
     ) {
       return (
-        <TouchableOpacity style={styles.bonusButtonWrapper}>
+        <RNBounceable style={styles.bonusButtonWrapper}>
           <View
             rounded={'lg'}
             style={[
@@ -360,7 +359,7 @@ const ProfileScreenInfo = props => {
               </Text>
             </View>
           </View>
-        </TouchableOpacity>
+        </RNBounceable>
       );
     }
     return <></>;
@@ -372,7 +371,7 @@ const ProfileScreenInfo = props => {
       (additionalPurchase && additionalPurchase.length)
     ) {
       return (
-        <TouchableOpacity
+        <RNBounceable
           style={styles.bonusButtonWrapper}
           onPress={() => navigation.navigate('AdditionalPurchaseScreen')}>
           <View
@@ -403,7 +402,7 @@ const ProfileScreenInfo = props => {
               </Text>
             </View>
           </View>
-        </TouchableOpacity>
+        </RNBounceable>
       );
     }
     return <></>;
@@ -449,7 +448,7 @@ const ProfileScreenInfo = props => {
       if (bonus.data && bonus.data.saldo) {
         return (
           <>
-            <TouchableOpacity
+            <RNBounceable
               style={styles.bonusButtonWrapper}
               onPress={() => navigation.navigate('BonusScreen')}>
               <View
@@ -519,7 +518,7 @@ const ProfileScreenInfo = props => {
                   </HStack>
                 </View>
               </View>
-            </TouchableOpacity>
+            </RNBounceable>
             <Button
               onPress={() => {
                 navigation.navigate('BonusScreenInfo', {
@@ -654,31 +653,11 @@ const ProfileScreenInfo = props => {
   }
 
   return (
-    <>
-      <ScrollView style={{flex: 1}} testID="ProfileScreen.Wrapper">
-        <Text
-          style={{
-            fontSize: 35,
-            fontWeight: '600',
-            marginHorizontal: 20,
-            marginTop: 70,
-            color: styleConst.color.greyText6,
-          }}>
+    <View flex={1} paddingBottom={styleConst.menu.paddingBottom}>
+      <ScrollView testID="ProfileScreen.Wrapper">
+        <Text fontSize={32} mx={5} mt={70} color={styleConst.color.greyText6}>
           {[login.NAME, login.LAST_NAME].join(' ')}
         </Text>
-        <DealerItemList
-          key={'dealerSelect'}
-          dealer={dealerSelected}
-          style={[
-            {
-              marginHorizontal: 15,
-              marginTop: 10,
-              paddingLeft: 10,
-              backgroundColor: styleConst.color.white,
-            },
-          ]}
-          returnScreen={navigation.state?.routeName}
-        />
         {_renderCars()}
         {_renderCashBack()}
         {_renderBonus()}
@@ -737,24 +716,8 @@ const ProfileScreenInfo = props => {
           }
         />
       ) : null}
-    </>
+    </View>
   );
 };
-
-// class ProfileScreenInfoSS extends Component {
-//   // componentDidUpdate(nextProps) {
-//   //   if (this.props.login.ID && this.props.login.ID !== nextProps.login.ID) {
-//   //     this.getUserData();
-//   //   }
-
-//   //   if (
-//   //     this.props.login.SAP &&
-//   //     this.props.login.SAP.ID !==
-//   //       (nextProps.login.SAP ? nextProps.login.SAP.ID : null)
-//   //   ) {
-//   //     this.getUserData();
-//   //   }
-//   // }
-// }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreenInfo);
