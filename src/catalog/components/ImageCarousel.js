@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   iconText: {
-    fontSize: 15,
+    fontSize: 14,
     color: styleConst.color.white,
     textAlign: 'center',
   },

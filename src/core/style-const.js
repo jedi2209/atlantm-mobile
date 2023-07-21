@@ -190,6 +190,9 @@ export default {
     },
   },
   borderRadius: 8,
+  menu: {
+    paddingBottom: 100,
+  },
 };
 
 // fonts: https://github.com/react-native-training/react-native-fonts
