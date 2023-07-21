@@ -18,6 +18,8 @@ import styleConst from '../../core/style-const';
 import {MainScreenButton} from '../components/MainScreenButtons';
 import FlagButton from '../../core/components/FlagButton';
 
+import {get} from 'lodash';
+
 const {width, height} = Dimensions.get('screen');
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
@@ -46,6 +48,16 @@ const _linkProcess = (link, props) => {
   switch (link.type) {
     case 'screen':
       if (link.path === 'WebviewScreen') {
+        if (link?.params?.getValue) {
+          const linkValue = link.params.getValue.split('.');
+          const linkObject = linkValue.shift();
+          if (linkObject === 'props') {
+            const htmlData = get(props, linkValue.join('.'));
+            if (htmlData) {
+              return ['WebviewScreen', {html: htmlData}];
+            }
+          }
+        }
         return ['WebviewScreen', {html: link.path}];
       }
       if (link?.params) {
@@ -57,27 +69,79 @@ const _linkProcess = (link, props) => {
   }
 };
 
-const BlockConstruct = ({json, rowNum, dealerSelected, navigation}) => {
+const RowConstruct = props => {
+  const {json, rowNum, rowLength, navigation} = props;
+  if (rowLength === 2) {
+    return (
+      <View p={2} key={'containerRow' + rowNum}>
+        <HStack justifyContent={'space-between'} space={1}>
+          {_processRow({rowData: json, rowNum, navigation, ...props})}
+        </HStack>
+      </View>
+    );
+  }
+
+  if (rowLength > 2) {
+    return (
+      <ScrollView
+        mt={3}
+        p={2}
+        showsHorizontalScrollIndicator={false}
+        bounces={false}
+        horizontal={true}>
+        <HStack justifyContent={'space-around'} space={3}>
+          {_processRow({rowData: json, rowNum, navigation, ...props})}
+        </HStack>
+      </ScrollView>
+    );
+  }
+
+  return (
+    <View p={2} key={'containerRow' + rowNum}>
+      {_processRow({rowData: json, rowNum, navigation, ...props})}
+    </View>
+  );
+};
+
+const _processRow = props => {
+  const {rowData, rowNum, navigation} = props;
   let i = 0;
   let onPressBlockButton = () => {};
-  return json.map(item => {
+
+  return rowData.map(item => {
     i++;
+    const screenName = item.link.path;
+    const screenImgAsset = screenName + '.png';
+
+    let widthNew = null;
+    let heightNew = null;
+
+    if (item.type === 'half') {
+      widthNew = width / 2.1;
+      heightNew = width / 2.1;
+    }
+
     if (item?.link?.type === 'url') {
       onPressBlockButton = () => Linking.openURL(item?.link?.path);
     } else {
-      const [link, linkParams] = _linkProcess(item.link);
+      const [link, linkParams] = _linkProcess(item.link, props);
       onPressBlockButton = () => navigation.navigate(link, linkParams);
     }
+
     return (
-      <View p={2} key={'container' + rowNum + i}>
-        <MainScreenButton
-          title={item.title?.text}
-          type={item.title?.position}
-          size={item.type}
-          onPress={onPressBlockButton}
-          background={require('../../../assets/mainScreen/service.png')}
-        />
-      </View>
+      <MainScreenButton
+        key={['button', rowNum, i].join('_')}
+        title={item.title?.text.replace('||', '\n')}
+        titleStyle={item?.titleStyle}
+        subTitle={item.subTitle?.replace('||', '\n')}
+        subTitleStyle={item?.subTitleStyle}
+        type={item?.titleStyle ? null : item.title?.position}
+        size={item.type}
+        width={widthNew ? widthNew : null}
+        height={heightNew ? heightNew : null}
+        onPress={onPressBlockButton}
+        background={{uri: item?.img}}
+      />
     );
   });
 };
@@ -89,154 +153,23 @@ const MainScreen = props => {
     return null;
   }
 
-  const firstRow = mainScreenSettings.shift();
-  let onPressBlockButton = () => {};
-
   let i = 0;
-
-  //   <MainScreenButton
-  //   title={'Табло выдачи автомобиля'}
-  //   onPress={() => navigation.navigate('TvaScreenBase')}
-  //   background={require('../../../assets/mainScreen/tva.png')}
-  // />
-  // <MainScreenButton
-  //   title={'Отзывы об автоцентрах'}
-  //   onPress={() => navigation.navigate('ReviewsScreen')}
-  //   background={require('../../../assets/mainScreen/eko.png')}
-  // />
 
   return (
     <ScrollView style={styleConst.safearea.default} testID="MainScreen.Wrapper">
       <VStack style={{paddingBottom: 100}}>
-        <ScrollView
-          mt={3}
-          p={2}
-          showsHorizontalScrollIndicator={false}
-          bounces={false}
-          horizontal={true}>
-          <HStack justifyContent={'space-around'} space={3}>
-            {/* {firstRow.map(item => {
-              if (item?.link?.type === 'url') {
-                onPressBlockButton = () => Linking.openURL(item?.link?.path);
-              } else {
-                const [link, linkParams] = _linkProcess(item.link, ...props);
-                onPressBlockButton = () =>
-                  navigation.navigate(link, linkParams);
-              }
-              if (
-                dealerSelected.emergencyManagerInfo &&
-                item.link.params.eval ===
-                  'props.dealerSelected.emergencyManagerInfo'
-              ) {
-                onPressBlockButton = () => {
-                  navigation.navigate('WebviewScreen', {
-                    html: dealerSelected.emergencyManagerInfo,
-                  });
-                };
-                return (
-                  <MainScreenButton
-                    title={item.title?.text}
-                    type={item.title?.position}
-                    size={item.type}
-                    onPress={onPressBlockButton}
-                    background={require('../../../assets/emergency_manager.jpg')}
-                  />
-                );
-              }
-            })} */}
-          </HStack>
-        </ScrollView>
         {mainScreenSettings.map(el => {
           i++;
           return (
-            <BlockConstruct key={'row' + i} rowNum={i} json={el} {...props} />
+            <RowConstruct
+              key={'row' + i}
+              rowNum={i}
+              rowLength={el.length}
+              json={el}
+              {...props}
+            />
           );
         })}
-        <View p={2}>
-          <MainScreenButton
-            title={'Записаться на сервис'}
-            type={'bottom'}
-            size={'full'}
-            onPress={() => navigation.navigate('ServiceScreen')}
-            background={require('../../../assets/mainScreen/service.png')}
-          />
-        </View>
-        <View p={2}>
-          <HStack justifyContent={'space-between'} space={1}>
-            <MainScreenButton
-              title={'Новые\r\nавтомобили'}
-              subTitle={'362 авто в наличии'}
-              titleStyle={{
-                color: '#232323',
-                paddingTop: 18,
-                paddingHorizontal: 20,
-                textAlign: 'left',
-                fontSize: 16,
-              }}
-              subTitleStyle={{
-                color: '#000000',
-                opacity: 0.7,
-                textAlign: 'left',
-                fontSize: 10,
-                paddingHorizontal: 20,
-                top: 50,
-              }}
-              width={width / 2.1}
-              height={width / 2.1}
-              size={'half'}
-              onPress={() =>
-                navigation.navigate('CarsStock', {
-                  screen: 'MainFilterScreen',
-                  params: {
-                    stockTypeDefault: 'New',
-                  },
-                })
-              }
-              background={require('../../../assets/mainScreen/newCars.png')}
-            />
-            <MainScreenButton
-              title={'Автомобили с\r\nпробегом'}
-              subTitle={'233 авто в наличии'}
-              titleStyle={{
-                color: '#DFDFDF',
-                paddingTop: 18,
-                paddingHorizontal: 20,
-                textAlign: 'left',
-                fontSize: 16,
-              }}
-              subTitleStyle={{
-                color: '#FFFFFF',
-                opacity: 0.7,
-                textAlign: 'left',
-                fontSize: 10,
-                paddingHorizontal: 20,
-                top: 50,
-              }}
-              width={width / 2.1}
-              height={width / 2.1}
-              size={'half'}
-              onPress={() =>
-                navigation.navigate('CarsStock', {
-                  screen: 'MainFilterScreen',
-                  params: {
-                    stockTypeDefault: 'Used',
-                  },
-                })
-              }
-              background={require('../../../assets/mainScreen/usedCars.png')}
-            />
-          </HStack>
-        </View>
-        <View p={2}>
-          <MainScreenButton
-            title={'Оцените моё авто'}
-            type={'bottom'}
-            size={'full'}
-            onPress={() => navigation.navigate('CarCostScreen')}
-            background={require('../../../assets/mainScreen/rate_my_car.png')}
-            backgroundProps={onLoadError => {}}
-          />
-        </View>
         <View p={2}>
           <FlagButton
             style={{padding: 10}}

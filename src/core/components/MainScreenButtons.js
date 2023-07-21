@@ -14,16 +14,21 @@ const defaultOpacity = 1;
 const BackGroundComponent = props => {
   const {background} = props;
   let type = null;
+  let backgroundPath = null;
 
-  if (typeof background === 'string') {
+  if (typeof background === 'object') {
+    backgroundPath = background?.uri;
+  }
+
+  if (typeof backgroundPath === 'string') {
     if (
-      background.indexOf('http://') === 0 ||
-      background.indexOf('https://') === 0
+      backgroundPath.indexOf('http://') === 0 ||
+      backgroundPath.indexOf('https://') === 0
     ) {
       type = 'pathRemote';
-    } else if (background.indexOf('#') === 0) {
+    } else if (backgroundPath.indexOf('#') === 0) {
       type = 'color';
-    } else if (background.indexOf('../') === 0) {
+    } else if (backgroundPath.indexOf('../') === 0) {
       type = 'pathLocal';
     }
   }
@@ -34,7 +39,7 @@ const BackGroundComponent = props => {
 
   switch (type) {
     case 'pathLocal':
-      return <Imager source={{uri: background}} {...props} />;
+      return <Imager source={background} {...props} />;
     case 'pathLocalObject':
       return <Imager source={background} {...props} />;
     case 'pathRemote':
@@ -42,7 +47,7 @@ const BackGroundComponent = props => {
         <Imager
           key={`mainScreenButtonImageBackground`}
           source={{
-            uri: background,
+            uri: backgroundPath,
           }}
           {...props}
         />
@@ -202,6 +207,7 @@ export const MainScreenButton = ({
             stylesTitle[size],
             {
               width: width ? width : widthDefault,
+              height: height ? height / 2.75 : heightDefault / 2.75,
             },
             titleStyle,
           ]}>
@@ -209,6 +215,8 @@ export const MainScreenButton = ({
         </Text>
         {subTitle ? (
           <Text
+            numberOfLines={2}
+            ellipsizeMode={'tail'}
             style={[
               stylesTitle.main,
               {
@@ -241,7 +249,11 @@ export const MainScreenButtons = () => {
 };
 
 MainScreenButton.propTypes = {
-  background: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  background: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.object,
+  ]),
   type: PropTypes.oneOf(['top', 'bottom']),
   size: PropTypes.oneOf(['small', 'full', 'half']),
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
