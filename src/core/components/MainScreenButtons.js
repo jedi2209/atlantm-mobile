@@ -78,7 +78,7 @@ const stylesTitle = StyleSheet.create({
   main: {
     zIndex: 10,
     color: styleConst.color.blueNew,
-    fontFamily: styleConst.font.brand,
+    fontFamily: styleConst.font.regular,
     position: 'absolute',
     paddingHorizontal: 3,
     textTransform: 'uppercase',

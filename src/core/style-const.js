@@ -63,10 +63,9 @@ export default {
     },
   },
   font: {
-    regular: 'Helvetica Neue',
-    medium: 'HelveticaNeue-Medium',
-    light: 'HelveticaNeue-Light',
-    brand: Platform.OS === 'ios' ? 'Montserrat' : 'Montserrat-Variable',
+    regular: Platform.OS === 'ios' ? 'Montserrat' : 'Montserrat-Regular',
+    medium: Platform.OS === 'ios' ? 'Montserrat-Medium' : 'Montserrat-Medium',
+    light: Platform.OS === 'ios' ? 'Montserrat-Light' : 'Montserrat-Light',
   },
   ui: {
     // хак чтобы в новой версии native-base футер прижимался к низу

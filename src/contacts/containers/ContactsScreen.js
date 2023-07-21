@@ -250,14 +250,14 @@ const _renderEmergencyManager = ({emergencyManagerInfo, navigation}) => {
         <View w={'50%'} paddingLeft={2} paddingTop={1}>
           <Text
             color={styleConst.color.blueNew}
-            fontFamily={styleConst.font.brand}
+            fontFamily={styleConst.font.regular}
             fontWeight={600}
             lineHeight={18}>
             {strings.ContactsScreen.emergencyManager.title}
           </Text>
           <Text
             color={styleConst.color.blueNew}
-            fontFamily={styleConst.font.brand}
+            fontFamily={styleConst.font.regular}
             marginTop={1}
             fontSize={9.5}>
             {strings.ContactsScreen.emergencyManager.subTitle}
