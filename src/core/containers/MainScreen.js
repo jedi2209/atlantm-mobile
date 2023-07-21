@@ -180,7 +180,7 @@ const MainScreen = props => {
       refreshControl={
         <RefreshSpinner isRequest={isLoading} onRefresh={_onRefresh} />
       }>
-      <VStack style={{paddingBottom: 100}}>
+      <VStack paddingBottom={styleConst.menu.paddingBottom}>
         {mainScreenSettings.map(el => {
           i++;
           return (
@@ -209,12 +209,16 @@ const MainScreen = props => {
             size="md"
             borderColor={styleConst.color.accordeonGrey1}
             onPress={() => Linking.openURL(STORE_LINK[Platform.OS])}>
-            <Text selectable={false} style={styles.TextVersionInfo}>
-              {'ver. ' +
+            <Text
+              selectable={false}
+              fontFamily={styleConst.font.regular}
+              fontSize={12}
+              color={styleConst.color.lightBlue}
+              opacity={0.5}>
+              {'v. ' +
                 DeviceInfo.getVersion() +
-                ' (' +
-                DeviceInfo.getBuildNumber() +
-                ')'}
+                '.' +
+                DeviceInfo.getBuildNumber()}
             </Text>
           </Button>
         </View>
@@ -222,14 +226,5 @@ const MainScreen = props => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  TextVersionInfo: {
-    fontSize: 12,
-    fontFamily: styleConst.font.brand,
-    color: styleConst.color.lightBlue,
-    opacity: 0.5,
-  },
-});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MainScreen);
