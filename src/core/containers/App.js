@@ -82,6 +82,8 @@ const _awaitStoreToUpdate = async props => {
 
   if (currentDealer && isStoreUpdatedCurrent === storeVersion) {
     // если мы уже выбрали регион и стор обновлен
+    await props.fetchBrands(); // обновляем бренды при каждом открытии прилаги
+    await props.actionFetchMainScreenSettings(APP_REGION); // обновляем настройки главного экрана при каждом открытии прилаги
     const actionDealer = await props.fetchDealers(); // обновляем дилеров при каждом открытии прилаги
     const currDealerItem = get(storeData, 'dealer.selected');
     const currentDealerUpdated = await props.selectDealer({
@@ -89,8 +91,6 @@ const _awaitStoreToUpdate = async props => {
       dealerSelected: undefined,
       isLocal: false,
     });
-    await props.fetchBrands(); // обновляем бренды при каждом открытии прилаги
-    await props.actionFetchMainScreenSettings(APP_REGION); // обновляем настройки главного экрана при каждом открытии прилаги
     if (currentDealerUpdated && actionDealer && actionDealer.type) {
       // уже всё обновлено, открываем экран автоцентра
       return mainScreen;
