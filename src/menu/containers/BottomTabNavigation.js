@@ -28,7 +28,8 @@ import {strings} from '../../core/lang/const';
 import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheetMenu from '../../core/components/ActionSheetMenu';
@@ -51,6 +52,9 @@ const ProfileStack = createStackNavigator();
 const MenuStack = createStackNavigator();
 const ChatStack = createStackNavigator();
 const StackContacts = createStackNavigator();
+
+const iconSize = 8;
+const iconSizeFocused = 9;
 
 const ProfileStackView = ({navigation, route}) => (
   <ProfileStack.Navigator
@@ -181,7 +185,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             paddingHorizontal: 5,
             ...styleConst.shadow.default,
           },
-          tabBarShowLabel: false,
+          // tabBarShowLabel: false,
         }}>
         <Tab.Screen
           name="Home"
@@ -206,12 +210,13 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             },
             tabBarTestID: 'BottomMenu.Home',
             tabBarIcon: ({focused, color}) => (
-              <Image
-                alt={'Main logo bottom menu'}
-                source={require('../../../assets/logo-sm.svg')}
-                style={{
-                  height: focused ? '63%' : '45%',
-                  width: focused ? '90%' : '65%',
+              <Icon
+                size={focused ? iconSizeFocused : iconSize}
+                as={AntDesign}
+                name="home"
+                color={color}
+                _dark={{
+                  color: color,
                 }}
               />
             ),
@@ -234,11 +239,11 @@ const BottomTabNavigation = ({navigation, route, region}) => {
               fontSize: 14,
             },
             tabBarTestID: 'BottomMenu.NewCars',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({color, focused}) => (
               <Icon
-                size={9}
-                as={FontAwesome5}
-                name="car"
+                size={focused ? iconSizeFocused : iconSize}
+                as={Ionicons}
+                name="car-sport-outline"
                 color={color}
                 _dark={{
                   color: color,
@@ -264,10 +269,10 @@ const BottomTabNavigation = ({navigation, route, region}) => {
               fontSize: 14,
             },
             tabBarTestID: 'BottomMenu.Profile',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({color, focused}) => (
               <Icon
-                size={10}
-                as={FontAwesome5}
+                size={focused ? iconSizeFocused : iconSize}
+                as={AntDesign}
                 name="user"
                 color={color}
                 _dark={{
@@ -294,9 +299,9 @@ const BottomTabNavigation = ({navigation, route, region}) => {
               fontSize: 14,
             },
             tabBarTestID: 'BottomMenu.Orders',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({color, focused}) => (
               <Icon
-                size={9}
+                size={focused ? iconSizeFocused : iconSize}
                 as={MaterialCommunityIcons}
                 name="phone-message"
                 color={color}
@@ -325,9 +330,9 @@ const BottomTabNavigation = ({navigation, route, region}) => {
               fontSize: 14,
             },
             tabBarTestID: 'BottomMenu.Chat',
-            tabBarIcon: ({color}) => (
+            tabBarIcon: ({color, focused}) => (
               <Icon
-                size={10}
+                size={focused ? iconSizeFocused : iconSize}
                 as={MaterialCommunityIcons}
                 name="wechat"
                 color={color}
