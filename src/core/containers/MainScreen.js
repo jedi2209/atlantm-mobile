@@ -1,14 +1,6 @@
 import React, {useState} from 'react';
 import {Dimensions, Linking, Platform, StyleSheet} from 'react-native';
-import {
-  HStack,
-  ScrollView,
-  Text,
-  VStack,
-  View,
-  RefreshControl,
-  Button,
-} from 'native-base';
+import {HStack, ScrollView, Text, VStack, View, Button} from 'native-base';
 import DeviceInfo from 'react-native-device-info';
 import {connect} from 'react-redux';
 
@@ -26,8 +18,10 @@ import FlagButton from '../components/FlagButton';
 import {get} from 'lodash';
 import {STORE_LINK, APP_REGION} from '../const';
 import RefreshSpinner from '../components/RefreshSpinner';
+import {RefreshControl} from 'react-native-gesture-handler';
 
 const {width, height} = Dimensions.get('screen');
+const isApple = Platform.OS === 'ios';
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
@@ -156,8 +150,9 @@ const _processRow = props => {
 
 const MainScreen = props => {
   const {navigation, dealerSelected, region, mainScreenSettings} = props;
-
   const [isLoading, setLoading] = useState(false);
+
+  let i = 0;
 
   const _onRefresh = () => {
     setLoading(true);
@@ -171,14 +166,16 @@ const MainScreen = props => {
     return null;
   }
 
-  let i = 0;
-
   return (
     <ScrollView
       style={styleConst.safearea.default}
       testID="MainScreen.Wrapper"
       refreshControl={
-        <RefreshSpinner isRequest={isLoading} onRefresh={_onRefresh} />
+        isApple ? (
+          <RefreshSpinner isRequest={isLoading} onRefresh={_onRefresh} />
+        ) : (
+          <RefreshControl refreshing={isLoading} onRefresh={_onRefresh} />
+        )
       }>
       <VStack paddingBottom={styleConst.menu.paddingBottom}>
         {mainScreenSettings.map(el => {
@@ -201,6 +198,8 @@ const MainScreen = props => {
             country={region}
             type={'button'}
             variant={'unstyle'}
+            backgroundColor={styleConst.color.bg}
+            shadow={null}
           />
         </View>
         <View px={2}>
