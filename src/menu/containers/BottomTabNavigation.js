@@ -30,6 +30,7 @@ import stylesHeader from '../../core/components/Header/style';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ActionSheetMenu from '../../core/components/ActionSheetMenu';
@@ -53,7 +54,7 @@ const MenuStack = createStackNavigator();
 const ChatStack = createStackNavigator();
 const StackContacts = createStackNavigator();
 
-const iconSize = 8;
+const iconSize = 7;
 const iconSizeFocused = 9;
 
 const ProfileStackView = ({navigation, route}) => (
@@ -212,8 +213,8 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             tabBarIcon: ({focused, color}) => (
               <Icon
                 size={focused ? iconSizeFocused : iconSize}
-                as={AntDesign}
-                name="home"
+                as={FontAwesome}
+                name="building-o"
                 color={color}
                 _dark={{
                   color: color,
@@ -303,7 +304,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
               <Icon
                 size={focused ? iconSizeFocused : iconSize}
                 as={MaterialCommunityIcons}
-                name="phone-message"
+                name="phone-message-outline"
                 color={color}
                 _dark={{
                   color: {color},
@@ -325,7 +326,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
           }}
           options={{
             headerShown: false,
-            tabBarLabel: strings.Menu.bottom.menu,
+            tabBarLabel: strings.Menu.bottom.chat,
             tabBarLabelStyle: {
               fontSize: 14,
             },
@@ -334,7 +335,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
               <Icon
                 size={focused ? iconSizeFocused : iconSize}
                 as={MaterialCommunityIcons}
-                name="wechat"
+                name="chat-question-outline"
                 color={color}
                 _dark={{
                   color: color,

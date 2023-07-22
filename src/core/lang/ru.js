@@ -20,6 +20,7 @@ export default {
       lkk: 'Кабинет',
       order: 'Заявка',
       menu: 'Меню',
+      chat: 'Чат',
     },
   },
   ColorBox: {
