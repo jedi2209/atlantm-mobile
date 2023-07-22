@@ -131,11 +131,7 @@ const MenuStackView = ({navigation, route}) => (
 );
 
 const ContactsStackView = ({navigation, route}) => (
-  <StackContacts.Navigator
-    initialRouteName="ContactsScreen"
-    options={{
-      headerShown: false,
-    }}>
+  <StackContacts.Navigator initialRouteName="ContactsScreen">
     <StackContacts.Screen
       name="ContactsScreen"
       component={MainScreen}

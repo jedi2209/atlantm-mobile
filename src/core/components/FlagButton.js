@@ -39,8 +39,17 @@ const styles = StyleSheet.create({
 const defaultOpacity = 0.7;
 
 const FlagButton = props => {
-  const {onPress, country, buttonSize, showCaption, type, style, styleText} =
-    props;
+  const {
+    onPress,
+    country,
+    buttonSize,
+    showCaption,
+    type,
+    style,
+    styleText,
+    shadow,
+    backgroundColor,
+  } = props;
 
   const [styleState, setStyleState] = useState({
     opacity: defaultOpacity,
@@ -80,7 +89,7 @@ const FlagButton = props => {
               bg={styleConst.color.blueNew}
               alignSelf="center"
               size={buttonSize}
-              shadow={styleConst.shadow.prop}
+              shadow={shadow}
               source={flags[country]}
             />
             {showCaption && country === 'belarusFree' ? (
@@ -94,7 +103,8 @@ const FlagButton = props => {
         <Pressable
           key={'flag' + country}
           onPressIn={_onPressIn}
-          shadow={styleConst.shadow.prop}
+          shadow={shadow}
+          background={backgroundColor}
           onPressOut={() => {
             setStyleState({
               opacity: defaultOpacity,
@@ -112,7 +122,7 @@ const FlagButton = props => {
         <Button
           key={'flag' + country}
           style={style}
-          shadow={styleConst.shadow.prop}
+          shadow={shadow}
           leftIcon={
             <Imager
               source={flags[country]}
@@ -142,6 +152,7 @@ FlagButton.defaultProps = {
   flagSize: 188,
   country: 'belarus',
   showCaption: false,
+  shadow: styleConst.shadow.prop,
   style: {
     width: 150,
     height: 100,
