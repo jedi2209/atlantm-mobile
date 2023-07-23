@@ -519,11 +519,12 @@ export const Base = ({navigation, route}) => {
         <StackProfile.Screen
           name="BonusScreenInfo"
           component={BonusScreenInfo}
-          options={ClassicHeaderWhite(
-            strings.BonusInfoScreen.title,
-            navigation,
-            route,
-          )}
+          options={{
+            headerTitle: '',
+            presentation: 'modal',
+            headerTransparent: true,
+            headerLeft: null,
+          }}
         />
         <StackProfile.Screen
           name="TOHistory"

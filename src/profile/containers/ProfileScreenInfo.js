@@ -176,7 +176,8 @@ const ProfileScreenInfo = props => {
   } = props;
   const [loading, setLoading] = useState(false);
 
-  const fabEnable = dealerSelected.region === 'by' ? true : false;
+  // const fabEnable = dealerSelected.region === 'by' ? true : false;
+  const fabEnable = false;
 
   useEffect(() => {
     Analytics.logEvent('screen', 'profile/main');
