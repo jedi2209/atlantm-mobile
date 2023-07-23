@@ -1,6 +1,6 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import {StyleSheet, Dimensions} from 'react-native';
-import {View, ScrollView} from 'native-base';
+import {View, ScrollView, Button} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -12,8 +12,10 @@ import WebViewAutoHeight from '../../../core/components/WebViewAutoHeight';
 
 // helpers
 import {get} from 'lodash';
+import moment from 'moment';
 import styleConst from '../../../core/style-const';
 import Analytics from '../../../utils/amplitude-analytics';
+import {strings} from '../../../core/lang/const';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -22,13 +24,18 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: styleConst.color.bg,
   },
-  spinner: {
-    flex: 1,
-  },
   webviewContainer: {
     flex: 1,
-    paddingHorizontal: '2%',
+    paddingHorizontal: '1%',
     paddingBottom: styleConst.ui.verticalGap - 5,
+    backgroundColor: styleConst.color.bg,
+  },
+  submitButton: {
+    marginBottom: 35,
+    marginHorizontal: 10,
+  },
+  webView: {
+    backgroundColor: styleConst.color.bg,
   },
 });
 
@@ -45,22 +52,23 @@ const mapDispatchToProps = {
   actionFetchBonusInfo,
 };
 
-class BonusInfoScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      webViewWidth: screenWidth - styleConst.ui.verticalGap,
-    };
-  }
+const BonusInfoScreen = props => {
+  const {
+    navigation,
+    route,
+    bonusInfo,
+    isFetchBonusInfo,
+    actionFetchBonusInfo,
+    dealerSelected,
+    submitButton,
+  } = props;
 
-  componentDidMount() {
-    const {navigation, bonusInfo, actionFetchBonusInfo, dealerSelected} =
-      this.props;
+  useEffect(() => {
     const {region, id} = dealerSelected;
 
-    let refererScreen = get(this.props.route, 'params.refererScreen', null);
+    let refererScreen = get(route, 'params.refererScreen', null);
     if (!refererScreen) {
-      refererScreen = get(this.props.route, 'params.returnScreen', null);
+      refererScreen = get(route, 'params.returnScreen', null);
     }
 
     Analytics.logEvent('screen', `${refererScreen}/bonus_info`, {
@@ -68,33 +76,38 @@ class BonusInfoScreen extends Component {
       dealer: id,
     });
     actionFetchBonusInfo({region, dealerID: id});
+  }, []);
+
+  if (isFetchBonusInfo) {
+    return <LogoLoader />;
   }
 
-  onLayoutWebView = e => {
-    const {width: webViewWidth} = e.nativeEvent.layout;
-
-    this.setState({webViewWidth});
-  };
-
-  render() {
-    let {bonusInfo, isFetchBonusInfo} = this.props;
-
-    if (isFetchBonusInfo) {
-      return <LogoLoader />;
-    }
-
-    return (
+  return (
+    <>
       <ScrollView style={styles.safearea}>
         {bonusInfo ? (
-          <View style={styles.webviewContainer} onLayout={this.onLayoutWebView}>
-            <WebViewAutoHeight source={{html: bonusInfo}} />
+          <View style={styles.webviewContainer}>
+            <WebViewAutoHeight
+              key={moment().unix()}
+              style={[styles.webView, route.params?.webViewStyle]}
+              source={{html: bonusInfo}}
+            />
           </View>
         ) : (
           <LogoLoader />
         )}
       </ScrollView>
-    );
-  }
-}
+      <Button style={styles.submitButton} onPress={() => navigation.goBack()}>
+        {submitButton.text}
+      </Button>
+    </>
+  );
+};
+
+BonusInfoScreen.defaultProps = {
+  submitButton: {
+    text: strings.ModalView.close,
+  },
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(BonusInfoScreen);

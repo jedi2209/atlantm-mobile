@@ -17,6 +17,7 @@ import {dayMonthYear} from '../../../utils/date';
 import Analytics from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
+import RNBounceable from '@freakycoder/react-native-bounceable';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -80,12 +81,13 @@ const styles = StyleSheet.create({
     borderTopWidth: styleConst.ui.borderWidth,
     borderTopColor: styleConst.color.systemGray,
     marginHorizontal: 20,
-    marginBottom: 50,
+    marginBottom: 120,
     marginTop: 30,
   },
   buttonText: {
     fontFamily: styleConst.font.medium,
     fontSize: 16,
+    textAlign: 'center',
     letterSpacing: styleConst.ui.letterSpacing,
     color: styleConst.color.lightBlue,
     paddingRight: styleConst.ui.horizontalGapInList,
@@ -286,25 +288,28 @@ class BonusScreen extends Component {
 
   renderBonusButton = () => {
     return (
-      <Button
+      <RNBounceable
         onPress={this.onPressBonusInfo}
         leftIcon={
           <Icon name="price-ribbon" as={Entypo} style={styles.buttonIcon} />
         }
-        _text={styles.buttonText}
-        rounded={'md'}
         style={[
-          styleConst.shadow.default,
           styles.button,
+          styleConst.shadow.default,
           {
             borderBottomWidth: 0,
             borderTopWidth: 0,
             borderLeftWidth: 0,
             borderRightWidth: 0,
+            borderRadius: 8,
+            justifyContent: 'center',
+            alignItems: 'center',
           },
         ]}>
-        {strings.ProfileScreenInfo.bonus.moreInfo}
-      </Button>
+        <Text style={styles.buttonText}>
+          {strings.ProfileScreenInfo.bonus.moreInfo}
+        </Text>
+      </RNBounceable>
     );
   };
 
