@@ -81,9 +81,7 @@ const RowConstruct = props => {
         </HStack>
       </View>
     );
-  }
-
-  if (rowLength > 2) {
+  } else if (rowLength > 2) {
     return (
       <ScrollView
         mt={3}
@@ -117,6 +115,7 @@ const _processRow = props => {
 
     let widthNew = null;
     let heightNew = null;
+    let style = {};
 
     if (item.type === 'half') {
       widthNew = width / 2.1;
@@ -128,6 +127,10 @@ const _processRow = props => {
     } else {
       const [link, linkParams] = _linkProcess(item.link, props);
       onPressBlockButton = () => navigation.navigate(link, linkParams);
+    }
+
+    if (i === rowData.length) {
+      style = {marginRight: 18};
     }
 
     return (
@@ -143,6 +146,7 @@ const _processRow = props => {
         height={heightNew ? heightNew : null}
         onPress={onPressBlockButton}
         background={{uri: item?.img}}
+        style={style}
       />
     );
   });
