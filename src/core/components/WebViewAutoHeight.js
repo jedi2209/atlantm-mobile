@@ -124,10 +124,16 @@ const WebViewAutoHeight = ({
       if (typeof onNavigationStateChange === 'function') {
         onNavigationStateChange(navState);
       }
-      if (navState.title) {
-        const realContentHeight = parseInt(navState.title, 10) || 0; // turn NaN to 0
-        setContentHeight(realContentHeight);
-      }
+      _handleHeight(navState);
+    }
+  };
+
+  const _handleHeight = navState => {
+    if (navState.title) {
+      const realContentHeight = parseInt(navState.title, 10) || 0; // turn NaN to 0
+      setContentHeight(realContentHeight);
+    } else {
+      setContentHeight(1000);
     }
   };
 
@@ -150,7 +156,7 @@ const WebViewAutoHeight = ({
         webviewRef = ref;
       }}
       onNavigationStateChange={
-        sourceModified?.html ? _handleNavigationChange : null
+        sourceModified?.html ? _handleNavigationChange : _handleHeight
       }
       dataDetectorTypes="all"
       allowsFullscreenVideo={true}
