@@ -48,11 +48,11 @@ export default {
       shadowColor: '#000',
       shadowOffset: {
         width: 0,
-        height: -2,
+        height: 1,
       },
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
-      elevation: 5,
+      elevation: 3,
     },
     prop: 8,
   },
