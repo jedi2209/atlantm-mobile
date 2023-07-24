@@ -131,6 +131,7 @@ export const MainScreenButton = ({
   hash,
   title,
   titleStyle,
+  titleBackgroundStyle,
   subTitle,
   subTitleStyle,
   onPress,
@@ -201,6 +202,8 @@ export const MainScreenButton = ({
           />
         ) : null}
         <Text
+          numberOfLines={2}
+          ellipsizeMode={'tail'}
           style={[
             stylesTitle.main,
             stylesTitle[type],
@@ -236,6 +239,7 @@ export const MainScreenButton = ({
               },
               styles.titleBackground,
               styles['titleBackground' + type],
+              titleBackgroundStyle,
             ]}
           />
         ) : null}
