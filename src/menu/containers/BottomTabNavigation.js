@@ -179,12 +179,11 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             bottom: 25,
             left: 15,
             right: 15,
-            elevation: 0,
             borderRadius: 15,
             height: 60,
             paddingBottom: 0,
             paddingHorizontal: 5,
-            ...styleConst.shadow.default,
+            ...styleConst.shadow.light,
           },
           // tabBarShowLabel: false,
         }}>
@@ -205,7 +204,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
               elevation: 0,
               shadowOpacity: 0,
             },
-            tabBarLabel: strings.Menu.bottom.dealer,
+            tabBarLabel: strings.Menu.bottom.main,
             tabBarLabelStyle: {
               fontSize: 14,
             },
@@ -213,8 +212,8 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             tabBarIcon: ({focused, color}) => (
               <Icon
                 size={focused ? iconSizeFocused : iconSize}
-                as={FontAwesome}
-                name="building-o"
+                as={AntDesign}
+                name="home"
                 color={color}
                 _dark={{
                   color: color,

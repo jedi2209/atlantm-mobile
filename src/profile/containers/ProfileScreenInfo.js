@@ -654,8 +654,10 @@ const ProfileScreenInfo = props => {
   }
 
   return (
-    <View flex={1} paddingBottom={styleConst.menu.paddingBottom}>
-      <ScrollView testID="ProfileScreen.Wrapper">
+    <View flex={1}>
+      <ScrollView
+        testID="ProfileScreen.Wrapper"
+        contentContainerStyle={{paddingBottom: styleConst.menu.paddingBottom}}>
         <Text fontSize={32} mx={5} mt={70} color={styleConst.color.greyText6}>
           {[login.NAME, login.LAST_NAME].join(' ')}
         </Text>
