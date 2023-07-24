@@ -236,6 +236,10 @@ export default {
     return this.request(`/mobile/agreement/${region}/`, baseRequestParams);
   },
 
+  // fetchVedaem(region) {
+  //   return this.request(`/mobile/vedaem/${region}/`, baseRequestParams);
+  // },
+
   // TODO: проверить, продолжает ли падать на пустом ответе
   // @see https://github.com/facebook/react-native/commit/122b3791ede095345f44666691aa9ce5aa7f725a
   fetchReviews({
