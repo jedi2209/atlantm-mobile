@@ -104,18 +104,33 @@ const RowConstruct = props => {
 };
 
 const _processRow = props => {
-  const {rowData, rowNum, navigation} = props;
+  const {dealerSelected, rowData, rowNum, navigation} = props;
   let i = 0;
   let onPressBlockButton = () => {};
 
   return rowData.map(item => {
     i++;
-    const screenName = item.link.path;
-    const screenImgAsset = screenName + '.png';
-
     let widthNew = null;
     let heightNew = null;
     let style = {};
+    let titleBackgroundStyle = {};
+
+    const screenName = item.link.path;
+    const screenImgAsset = screenName + '.png';
+    const isDealerButton = screenName === 'ChooseDealerScreen';
+    if (isDealerButton) {
+      item.img = dealerSelected.img.main[0];
+      item.title.text = dealerSelected.name;
+      item.titleStyle = {
+        fontSize: 9,
+        bottom: 0,
+      };
+      titleBackgroundStyle = {
+        borderBottomRightRadius: styleConst.borderRadius,
+        borderBottomLeftRadius: styleConst.borderRadius,
+        bottom: 0,
+      };
+    }
 
     if (item.type === 'half') {
       widthNew = width / 2.1;
@@ -142,11 +157,13 @@ const _processRow = props => {
         subTitleStyle={item?.subTitleStyle}
         type={item?.titleStyle ? null : item.title?.position}
         size={item.type}
+        link={item.link}
         width={widthNew ? widthNew : null}
         height={heightNew ? heightNew : null}
         onPress={onPressBlockButton}
         background={{uri: item?.img}}
         style={style}
+        titleBackgroundStyle={titleBackgroundStyle}
       />
     );
   });
