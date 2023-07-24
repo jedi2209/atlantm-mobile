@@ -86,8 +86,17 @@ const _renderBrands = ({logoWidth, dealerBrand}) => {
   );
 };
 
+const MainWrapper = props => {
+  if (!props.readonly) {
+    return <Pressable {...props} />;
+  } else {
+    delete props.onPress;
+    return <View {...props} />;
+  }
+};
+
 const DealerItemList = props => {
-  const {city, dealer, style, readonly} = props;
+  const {city, dealer, style, wrapperProps} = props;
   const navigation = useNavigation();
 
   const deviceWidth = Dimensions.get('window').width;
@@ -110,15 +119,6 @@ const DealerItemList = props => {
     }
   }
 
-  const MainWrapper = props => {
-    if (!props.readonly) {
-      return <Pressable {...props} />;
-    } else {
-      delete props.onPress;
-      return <View {...props} />;
-    }
-  };
-
   return (
     <MainWrapper
       rounded={'lg'}
@@ -129,7 +129,8 @@ const DealerItemList = props => {
       style={[stylesDealerItemList.wrapper, style]}
       onPress={() => {
         return _onPressDealer({...props, navigation});
-      }}>
+      }}
+      {...wrapperProps}>
       <HStack
         space={3}
         justifyContent="space-between"

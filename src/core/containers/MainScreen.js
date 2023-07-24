@@ -16,12 +16,14 @@ import {MainScreenButton} from '../components/MainScreenButtons';
 import FlagButton from '../components/FlagButton';
 
 import {get} from 'lodash';
-import {STORE_LINK, APP_REGION} from '../const';
+import {STORE_LINK, APP_REGION, DEALERS_SETTINGS} from '../const';
 import RefreshSpinner from '../components/RefreshSpinner';
 import {RefreshControl} from 'react-native-gesture-handler';
+import DealerItemList from '../components/DealerItemList';
 
 const {width, height} = Dimensions.get('screen');
 const isApple = Platform.OS === 'ios';
+const firstRowMarginTop = 3;
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
@@ -67,15 +69,27 @@ const _linkProcess = (link, props) => {
       }
       return [link.path];
     case 'webview':
-      return ['WebviewScreen', {html: link.path}];
+      return ['WebviewScreen', {uri: link.path}];
   }
 };
 
 const RowConstruct = props => {
-  const {json, rowNum, rowLength, navigation} = props;
-  if (rowLength === 2) {
+  const {json, rowNum, rowLength, navigation, firstRow, lastRow} = props;
+  if (rowLength === 1) {
     return (
-      <View p={2} key={'containerRow' + rowNum}>
+      <View
+        mt={firstRow ? firstRowMarginTop : 0}
+        p={2}
+        key={'containerRow' + rowNum}>
+        {_processRow({rowData: json, rowNum, navigation, ...props})}
+      </View>
+    );
+  } else if (rowLength === 2) {
+    return (
+      <View
+        mt={firstRow ? firstRowMarginTop : 0}
+        p={2}
+        key={'containerRow' + rowNum}>
         <HStack justifyContent={'space-between'} space={1}>
           {_processRow({rowData: json, rowNum, navigation, ...props})}
         </HStack>
@@ -84,8 +98,8 @@ const RowConstruct = props => {
   } else if (rowLength > 2) {
     return (
       <ScrollView
-        mt={3}
         p={2}
+        mt={firstRow ? firstRowMarginTop : 0}
         showsHorizontalScrollIndicator={false}
         bounces={false}
         horizontal={true}>
@@ -97,14 +111,17 @@ const RowConstruct = props => {
   }
 
   return (
-    <View p={2} key={'containerRow' + rowNum}>
+    <View
+      mt={firstRow ? firstRowMarginTop : 0}
+      p={2}
+      key={'containerRow' + rowNum}>
       {_processRow({rowData: json, rowNum, navigation, ...props})}
     </View>
   );
 };
 
 const _processRow = props => {
-  const {dealerSelected, rowData, rowNum, navigation} = props;
+  const {dealerSelected, rowData, rowNum, navigation, route} = props;
   let i = 0;
   let onPressBlockButton = () => {};
 
@@ -117,7 +134,8 @@ const _processRow = props => {
 
     const screenName = item.link.path;
     const screenImgAsset = screenName + '.png';
-    const isDealerButton = screenName === 'ChooseDealerScreen';
+    const isDealerButton =
+      screenName === 'ChooseDealerScreen' || screenName === 'DealerInfoScreen';
     if (isDealerButton) {
       item.img = dealerSelected.img.main[0];
       item.title.text = dealerSelected.name;
@@ -146,6 +164,25 @@ const _processRow = props => {
 
     if (i === rowData.length) {
       style = {marginRight: 18};
+    }
+
+    if (isDealerButton) {
+      return (
+        <DealerItemList
+          key={'dealerSelect'}
+          dealer={dealerSelected}
+          showBrands={
+            get(DEALERS_SETTINGS, 'hideBrands', []).includes(dealerSelected.id)
+              ? false
+              : true
+          }
+          returnScreen={
+            item?.link?.params?.returnScreen
+              ? item?.link?.params?.returnScreen
+              : route.name
+          }
+        />
+      );
     }
 
     return (
@@ -201,12 +238,23 @@ const MainScreen = props => {
       <VStack paddingBottom={styleConst.menu.paddingBottom}>
         {mainScreenSettings.map(el => {
           i++;
+          let rowFirst = false;
+          let rowLast = false;
+
+          if (i === 1) {
+            rowFirst = true;
+          }
+          if (i === mainScreenSettings.length) {
+            rowLast = true;
+          }
           return (
             <RowConstruct
               key={'row' + i}
               rowNum={i}
               rowLength={el.length}
               json={el}
+              firstRow={rowFirst}
+              lastRow={rowLast}
               {...props}
             />
           );

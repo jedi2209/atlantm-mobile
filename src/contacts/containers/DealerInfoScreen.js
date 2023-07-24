@@ -280,7 +280,7 @@ const _renderEmergencyManager = ({emergencyManagerInfo, navigation}) => {
 const intervalSecondsMini = 60;
 const intervalMiliSeconds = intervalSecondsMini * 1000;
 
-const ContactsScreen = ({
+const DealerInfoScreen = ({
   navigation,
   dealerSelected,
   sites,
@@ -740,7 +740,7 @@ const ContactsScreen = ({
 
   const onPressMap = addressData => {
     navigation.navigate('MapScreen', {
-      returnScreen: 'Home',
+      returnScreen: 'DealerInfoScreen',
       name: get(addressData, 'text'),
       city: get(addressData, 'city.name'),
       address: get(addressData, 'address'),
@@ -750,7 +750,7 @@ const ContactsScreen = ({
 
   const onPressTime = () => {
     navigation.navigate('WorkTimeScreen', {
-      returnScreen: 'Home',
+      returnScreen: 'DealerInfoScreen',
     });
   };
 
@@ -799,35 +799,6 @@ const ContactsScreen = ({
   return (
     <>
       <View style={styleConst.safearea.default} testID="ContactsScreen.Wrapper">
-        <Pressable
-          onPress={() =>
-            navigation.navigate('ChooseDealerScreen', {
-              goBack: true,
-              returnScreen: 'ContactsScreen',
-            })
-          }
-          style={[styles.buttonPrimary]}>
-          <DealerItemList
-            key={'dealerSelect'}
-            dealer={dealerSelected}
-            showBrands={
-              get(DEALERS_SETTINGS, 'hideBrands', []).includes(
-                dealerSelected.id,
-              )
-                ? false
-                : true
-            }
-            style={[
-              {
-                // marginHorizontal: 15,
-                marginTop: 10,
-                paddingLeft: 10,
-                backgroundColor: styleConst.color.white,
-              },
-            ]}
-            returnScreen={navigation.state?.routeName}
-          />
-        </Pressable>
         <ScrollView
           contentContainerStyle={{paddingBottom: 24}}
           ref={mainScrollView}
@@ -856,10 +827,10 @@ const ContactsScreen = ({
               onPressChat,
               onPressOrders: _showOrdersMenu,
             })}
-            {_renderEmergencyManager({
+            {/* {_renderEmergencyManager({
               emergencyManagerInfo: dealerSelected.emergencyManagerInfo,
               navigation,
-            })}
+            })} */}
             {_renderInfoList({isFetchInfoList, infoList, navigation})}
           </View>
         </ScrollView>
@@ -875,4 +846,4 @@ const ContactsScreen = ({
   );
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContactsScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(DealerInfoScreen);
