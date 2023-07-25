@@ -7,16 +7,29 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import {connect} from 'react-redux';
-import {HStack, ScrollView, Text, VStack, View, Button} from 'native-base';
+import {
+  HStack,
+  ScrollView,
+  Text,
+  VStack,
+  View,
+  Button,
+  Pressable,
+  Box,
+  Icon,
+} from 'native-base';
 import DeviceInfo from 'react-native-device-info';
 import {RefreshControl} from 'react-native-gesture-handler';
 import Carousel from 'react-native-snap-carousel';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {MainScreenButton} from '../components/MainScreenButtons';
 import FlagButton from '../components/FlagButton';
 import RefreshSpinner from '../components/RefreshSpinner';
 import DealerItemList from '../components/DealerItemList';
 import Offer from '../components/Offer';
+import RateThisApp from '../components/RateThisApp';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList, actionListReset} from '../../info/actions';
@@ -29,6 +42,7 @@ import {
 import {
   STORE_LINK,
   APP_REGION,
+  APP_EMAIL,
   DEALERS_SETTINGS,
   ERROR_NETWORK,
 } from '../const';
@@ -37,6 +51,7 @@ import {strings} from '../lang/const';
 
 import {get} from 'lodash';
 import Analytics from '../../utils/amplitude-analytics';
+import TransitionView from '../components/TransitionView';
 
 const {width, height} = Dimensions.get('screen');
 const isApple = Platform.OS === 'ios';
@@ -73,6 +88,42 @@ const styles = StyleSheet.create({
     marginTop: infoListHeight / 2,
     height: infoListHeight,
     backgroundColor: styleConst.color.bg,
+  },
+  VersionContainer: {
+    alignItems: 'center',
+    alignContent: 'center',
+    justifyContent: 'center',
+  },
+  TextVersionInfo: {
+    fontSize: 12,
+    fontFamily: styleConst.font.light,
+    color: styleConst.color.lightBlue,
+  },
+  langHeading: {
+    color: styleConst.color.white,
+    fontFamily: styleConst.font.medium,
+    fontSize: 24,
+  },
+  pushHeading: {
+    fontSize: 16,
+    color: styleConst.color.white,
+    fontFamily: styleConst.font.medium,
+  },
+  pushText: {
+    fontSize: 14,
+    color: styleConst.color.white,
+    fontFamily: styleConst.font.light,
+  },
+  pushButton: {
+    borderColor: styleConst.color.white,
+    borderWidth: 1,
+    marginTop: 10,
+    marginBottom: 0,
+  },
+  userAgreementText: {
+    fontSize: 12,
+    fontFamily: styleConst.font.light,
+    color: styleConst.color.lightBlue,
   },
 });
 
@@ -317,6 +368,10 @@ const MainScreen = props => {
   } = props;
   const [isLoading, setLoading] = useState(false);
 
+  const _onAppRateSuccess = () => {
+    !props.isAppRated && props.actionAppRated();
+  };
+
   let i = 0;
 
   useEffect(() => {
@@ -385,25 +440,174 @@ const MainScreen = props => {
             shadow={null}
           />
         </View>
-        <View px={2}>
-          <Button
-            variant="link"
-            size="md"
-            borderColor={styleConst.color.accordeonGrey1}
-            onPress={() => Linking.openURL(STORE_LINK[Platform.OS])}>
-            <Text
-              selectable={false}
-              fontFamily={styleConst.font.regular}
-              fontSize={12}
-              color={styleConst.color.lightBlue}
-              opacity={0.5}>
-              {'v. ' +
-                DeviceInfo.getVersion() +
-                '.' +
-                DeviceInfo.getBuildNumber()}
-            </Text>
-          </Button>
-        </View>
+        <HStack px={2} justifyContent={'space-between'}>
+          <MainScreenButton
+            key={['button', 'rateApp'].join('_')}
+            title={strings.SettingsScreen.rateAppTitle}
+            titleStyle={{color: styleConst.color.black}}
+            background={styleConst.color.orange}
+            size={'small'}
+            type={'bottom'}
+            onPress={() => {
+              return Linking.openURL('mailto:' + APP_EMAIL);
+            }}
+            icon={
+              <Icon
+                size={16}
+                as={Ionicons}
+                name={
+                  Platform.OS === 'android'
+                    ? 'logo-google-playstore'
+                    : 'logo-apple-appstore'
+                }
+                color="white"
+                _dark={{
+                  color: 'white',
+                }}
+                selectable={false}
+              />
+            }
+          />
+          <MainScreenButton
+            key={['button', 'writeToUS'].join('_')}
+            title={strings.SettingsScreen.mailtoUs}
+            titleStyle={{color: styleConst.color.black}}
+            background={styleConst.color.green}
+            size={'small'}
+            type={'bottom'}
+            onPress={() => {
+              return Linking.openURL('mailto:' + APP_EMAIL);
+            }}
+            icon={
+              <Icon
+                size={16}
+                as={Ionicons}
+                name={'mail-outline'}
+                color="white"
+                _dark={{
+                  color: 'white',
+                }}
+                selectable={false}
+              />
+            }
+          />
+        </HStack>
+        {false ? (
+          <Pressable
+            px={2}
+            pt={2}
+            onPress={() => {
+              Analytics.logEvent('screen', 'ratePopup', {
+                source: 'settings',
+              });
+              return RateThisApp({onSuccess: _onAppRateSuccess});
+              //return Linking.openURL(STORE_LINK[Platform.OS]);
+            }}>
+            <Box
+              borderWidth="1"
+              borderColor="coolGray.300"
+              bg={styleConst.color.orange}
+              p={2}
+              shadow={styleConst.shadow.default}
+              borderRadius={styleConst.borderRadius}
+              style={styles.block}>
+              <HStack
+                space={3}
+                justifyContent="space-between"
+                alignItems="center">
+                <Text
+                  selectable={false}
+                  fontSize={18}
+                  lineHeight={24}
+                  color={styleConst.color.white}
+                  fontFamily={styleConst.font.regular}>
+                  {strings.SettingsScreen.rateAppTitle}
+                </Text>
+                <Icon
+                  size={55}
+                  as={Ionicons}
+                  name={
+                    Platform.OS === 'android'
+                      ? 'logo-google-playstore'
+                      : 'logo-apple-appstore'
+                  }
+                  color="white"
+                  _dark={{
+                    color: 'white',
+                  }}
+                  selectable={false}
+                />
+              </HStack>
+            </Box>
+          </Pressable>
+        ) : null}
+        {false ? (
+          <Pressable
+            px={2}
+            pt={2}
+            onPress={() => {
+              return Linking.openURL('mailto:' + APP_EMAIL);
+            }}>
+            <Box
+              borderWidth="1"
+              borderColor="coolGray.300"
+              bg={styleConst.color.green}
+              borderRadius={styleConst.borderRadius}
+              shadow={styleConst.shadow.default}
+              p={2}
+              style={[styles.block]}>
+              <HStack
+                space={3}
+                justifyContent="space-between"
+                alignItems="center">
+                <Text
+                  selectable={false}
+                  fontSize={18}
+                  lineHeight={24}
+                  color={styleConst.color.white}
+                  fontFamily={styleConst.font.regular}>
+                  {strings.SettingsScreen.mailtoUs}
+                </Text>
+                <Icon
+                  size={12}
+                  as={Ionicons}
+                  name={'mail-outline'}
+                  color="white"
+                  _dark={{
+                    color: 'white',
+                  }}
+                  selectable={false}
+                />
+              </HStack>
+            </Box>
+          </Pressable>
+        ) : null}
+        <Button
+          px={2}
+          variant="link"
+          size="md"
+          onPress={() => navigation.navigate('UserAgreementScreen')}>
+          <Text style={styles.userAgreementText}>
+            {strings.Form.agreement.title}
+          </Text>
+        </Button>
+        <Button
+          px={2}
+          variant="link"
+          size="md"
+          onPress={() => Linking.openURL(STORE_LINK[Platform.OS])}>
+          <Text
+            selectable={false}
+            fontFamily={styleConst.font.regular}
+            fontSize={12}
+            color={styleConst.color.lightBlue}
+            opacity={0.5}>
+            {'v. ' +
+              DeviceInfo.getVersion() +
+              '.' +
+              DeviceInfo.getBuildNumber()}
+          </Text>
+        </Button>
       </VStack>
     </ScrollView>
   );

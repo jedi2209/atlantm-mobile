@@ -18,6 +18,8 @@ const BackGroundComponent = props => {
 
   if (typeof background === 'object') {
     backgroundPath = background?.uri;
+  } else {
+    backgroundPath = background;
   }
 
   if (typeof backgroundPath === 'string') {
@@ -132,6 +134,7 @@ export const MainScreenButton = ({
   title,
   titleStyle,
   titleBackgroundStyle,
+  icon,
   subTitle,
   subTitleStyle,
   onPress,
@@ -200,6 +203,15 @@ export const MainScreenButton = ({
             ]}
             {...backgroundProps}
           />
+        ) : null}
+        {icon ? (
+          <View
+            alignItems={'center'}
+            alignSelf={'center'}
+            height={height ? height : heightDefault}
+            width={width ? width : widthDefault}>
+            {icon}
+          </View>
         ) : null}
         <Text
           numberOfLines={2}
