@@ -5,6 +5,7 @@ export default {
   color: {
     blue: '#0061ED',
     blueNew: '#013da7',
+    black: '#000000',
     lightBlue: '#027aff',
     green: '#34BD78',
     green2: '#4cd864',
