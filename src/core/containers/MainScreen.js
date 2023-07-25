@@ -1,9 +1,24 @@
-import React, {useState} from 'react';
-import {Dimensions, Linking, Platform, StyleSheet} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {
+  Dimensions,
+  Linking,
+  Platform,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
+import {connect} from 'react-redux';
 import {HStack, ScrollView, Text, VStack, View, Button} from 'native-base';
 import DeviceInfo from 'react-native-device-info';
-import {connect} from 'react-redux';
+import {RefreshControl} from 'react-native-gesture-handler';
+import Carousel from 'react-native-snap-carousel';
 
+import {MainScreenButton} from '../components/MainScreenButtons';
+import FlagButton from '../components/FlagButton';
+import RefreshSpinner from '../components/RefreshSpinner';
+import DealerItemList from '../components/DealerItemList';
+import Offer from '../components/Offer';
+
+import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList, actionListReset} from '../../info/actions';
 import {
   actionMenuOpenedCount,
@@ -11,19 +26,23 @@ import {
   actionFetchMainScreenSettings,
 } from '../actions';
 
+import {
+  STORE_LINK,
+  APP_REGION,
+  DEALERS_SETTINGS,
+  ERROR_NETWORK,
+} from '../const';
 import styleConst from '../style-const';
-import {MainScreenButton} from '../components/MainScreenButtons';
-import FlagButton from '../components/FlagButton';
+import {strings} from '../lang/const';
 
 import {get} from 'lodash';
-import {STORE_LINK, APP_REGION, DEALERS_SETTINGS} from '../const';
-import RefreshSpinner from '../components/RefreshSpinner';
-import {RefreshControl} from 'react-native-gesture-handler';
-import DealerItemList from '../components/DealerItemList';
+import Analytics from '../../utils/amplitude-analytics';
 
 const {width, height} = Dimensions.get('screen');
 const isApple = Platform.OS === 'ios';
 const firstRowMarginTop = 3;
+const infoListHeight = 250;
+const cardWidth = width - 50;
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
@@ -47,6 +66,15 @@ const mapDispatchToProps = {
   actionMenuOpenedCount,
   actionFetchMainScreenSettings,
 };
+
+const styles = StyleSheet.create({
+  spinnerContainer: {
+    flex: 1,
+    marginTop: infoListHeight / 2,
+    height: infoListHeight,
+    backgroundColor: styleConst.color.bg,
+  },
+});
 
 const _linkProcess = (link, props) => {
   switch (link.type) {
@@ -176,6 +204,7 @@ const _processRow = props => {
               ? false
               : true
           }
+          goBack={true}
           returnScreen={
             item?.link?.params?.returnScreen
               ? item?.link?.params?.returnScreen
@@ -206,17 +235,101 @@ const _processRow = props => {
   });
 };
 
+const fetchInfoData = props => {
+  const {region, fetchInfoList} = props;
+  fetchInfoList(region).then(action => {
+    if (action && action.type && action.type === INFO_LIST__FAIL) {
+      let message = get(
+        action,
+        'payload.message',
+        strings.Notifications.error.text,
+      );
+
+      if (message === 'Network request failed') {
+        message = ERROR_NETWORK;
+      }
+      return false;
+    }
+    return true;
+  });
+};
+
+const _renderInfoList = params => {
+  const {isFetchInfoList, infoList, navigation} = params;
+  if (isFetchInfoList) {
+    return (
+      <View style={styles.spinnerContainer}>
+        <ActivityIndicator
+          color={styleConst.color.blue}
+          style={styleConst.spinner}
+        />
+      </View>
+    );
+  } else if (infoList && infoList.length) {
+    return (
+      <View px={2} pt={2} testID="ContactsScreen.currentActionsHeading">
+        <HStack justifyContent={'space-between'}>
+          <Text py={2} fontSize={16} fontFamily={styleConst.font.regular}>
+            {strings.Menu.main.actions}
+          </Text>
+          <Text
+            py={2}
+            pl={4}
+            onPress={() => navigation.navigate('InfoList')}
+            color={styleConst.color.lightBlue}
+            fontSize={16}>
+            {strings.Base.all}
+          </Text>
+        </HStack>
+        <Carousel
+          data={infoList}
+          renderItem={item => {
+            return (
+              <Offer
+                key={`carousel-article-${item.hash}`}
+                data={item}
+                width={cardWidth}
+                height={infoListHeight}
+                imageStyle={{borderRadius: styleConst.borderRadius}}
+                imagePressable={true}
+              />
+            );
+          }}
+          sliderWidth={width}
+          itemWidth={cardWidth}
+          inactiveSlideScale={0.98}
+          loop={true}
+        />
+      </View>
+    );
+  }
+  return <></>;
+};
+
 const MainScreen = props => {
-  const {navigation, dealerSelected, region, mainScreenSettings} = props;
+  const {
+    navigation,
+    region,
+    mainScreenSettings,
+    isFetchInfoList,
+    infoList,
+    fetchInfoList,
+  } = props;
   const [isLoading, setLoading] = useState(false);
 
   let i = 0;
 
+  useEffect(() => {
+    Analytics.logEvent('screen', 'main screen');
+    fetchInfoData({region, fetchInfoList});
+  }, [region]);
+
   const _onRefresh = () => {
     setLoading(true);
-    props.actionFetchMainScreenSettings(APP_REGION).then(res => {
-      console.log('props.actionFetchMainScreenSettings res', res);
-      setLoading(false);
+    fetchInfoData({region, fetchInfoList}).then(() => {
+      props.actionFetchMainScreenSettings(APP_REGION).then(res => {
+        setLoading(false);
+      });
     });
   };
 
@@ -259,6 +372,7 @@ const MainScreen = props => {
             />
           );
         })}
+        {_renderInfoList({isFetchInfoList, infoList, navigation})}
         <View px={2} pt={2}>
           <FlagButton
             style={{padding: 10}}

@@ -67,11 +67,19 @@ export default {
     return this.request('/brands/info/get/', baseRequestParams);
   },
 
-  fetchInfoList(region = APP_REGION, dealer = 0, type = null) {
-    let url = `/info/actions/get/?region=${region}&dealer=${dealer}`;
-    if (type) {
-      url = url + `&type=${type}`;
-    }
+  fetchInfoList(region = APP_REGION, dealer = null, type = null) {
+    const url =
+      '/info/actions/get/?' +
+      new URLSearchParams(
+        _.omitBy(
+          {
+            region,
+            dealer,
+            type,
+          },
+          _.isNil,
+        ),
+      );
     return this.request(url, baseRequestParams);
   },
 

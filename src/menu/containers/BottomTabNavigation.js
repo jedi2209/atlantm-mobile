@@ -12,7 +12,6 @@ import {createStackNavigator} from '@react-navigation/stack';
 import LogoTitle from '../../core/components/LogoTitle';
 
 // screens
-import DealerInfoScreen from '../../contacts/containers/DealerInfoScreen';
 import MainScreen from '../../core/containers/MainScreen';
 
 import AuthContainer from '../../profile/containers/AuthContainer';
@@ -140,13 +139,6 @@ const ContactsStackView = ({navigation, route}) => (
     <StackContacts.Screen
       name="ContactsScreen"
       component={MainScreen}
-      options={{
-        headerShown: false,
-      }}
-    />
-    <StackContacts.Screen
-      name="DealerInfoScreen"
-      component={DealerInfoScreen}
       options={{
         headerShown: false,
       }}

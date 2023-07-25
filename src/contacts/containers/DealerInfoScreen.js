@@ -24,7 +24,6 @@ import {
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import DealerItemList from '../../core/components/DealerItemList';
 import Plate from '../../core/components/Plate';
 import RateThisApp from '../../core/components/RateThisApp';
 import Imager from '../../core/components/Imager';
@@ -41,7 +40,7 @@ import {callMe} from '../actions';
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList, actionListReset} from '../../info/actions';
 import {actionMenuOpenedCount, actionAppRated} from '../../core/actions';
-import {Offer} from '../../core/components/Offer';
+import Offer from '../../core/components/Offer';
 
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
@@ -60,25 +59,17 @@ const infoListHeight = 190;
 
 const styles = StyleSheet.create({
   imgHero: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    width: null,
     height: HEADER_MAX_HEIGHT,
     resizeMode: 'cover',
-    zIndex: 0,
+    zIndex: 10,
   },
   blackBack: {
     height: 80,
     backgroundColor: '#000',
-    opacity: 0.7,
-    zIndex: 2,
+    width: '100%',
   },
   address: {
-    marginTop: -80,
-    marginLeft: '2%',
-    marginBottom: 7,
+    marginBottom: 0,
     paddingVertical: 3,
     display: 'flex',
     flexDirection: 'row',
@@ -94,7 +85,7 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     color: styleConst.color.accordeonGrey2,
   },
-  scrollView: {paddingLeft: 20, zIndex: 3},
+  scrollView: {paddingLeft: 14, marginTop: 8, zIndex: 3},
   buttonPrimary: {
     marginTop: 60,
     marginHorizontal: '2%',
@@ -204,6 +195,7 @@ const _renderInfoList = params => {
                 data={item}
                 width={cardWidth}
                 height={infoListHeight}
+                imagePressable={false}
               />
             );
           }}
@@ -319,144 +311,150 @@ const DealerInfoScreen = ({
     if (addresses.length > 1) {
       return (
         <>
-          <View style={[styles.blackBack, {height: 66}]} />
-          <View
-            style={[styles.address, {marginTop: -66, marginBottom: 0}]}
-            testID="ContactsScreen.PressMap">
-            <HStack justifyContent={'space-between'} w={'98%'}>
-              <Pressable
-                onPress={() => {
-                  setActionSheetData({
-                    options: addresses.concat([
-                      {
-                        priority: addresses.length + 1,
-                        id: 'cancel',
-                        text: strings.Base.cancel.toLowerCase(),
-                        icon: {
-                          name: 'ios-close',
-                          color: '#f70707',
-                        },
+          <HStack mx={2} my={2} justifyContent={'space-between'} zIndex={10}>
+            <Pressable
+              onPress={() => {
+                setActionSheetData({
+                  options: addresses.concat([
+                    {
+                      priority: addresses.length + 1,
+                      id: 'cancel',
+                      text: strings.Base.cancel.toLowerCase(),
+                      icon: {
+                        name: 'ios-close',
+                        color: '#f70707',
                       },
-                    ]),
-                    cancelButtonIndex: addresses.length - 1,
-                    title: strings.ContactsScreen.navigate,
-                    destructiveButtonIndex: addresses.length || null,
-                  });
-                  onOpen();
-                }}
-                w={'4/5'}>
-                <HStack alignItems={'center'}>
-                  <Icon
-                    size={10}
-                    as={MaterialIcons}
-                    name="navigation"
-                    color="warmGray.50"
-                    _dark={{
-                      color: 'warmGray.50',
-                    }}
-                    mr={0.5}
-                  />
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                    style={styles.addressText}>
-                    {strings.ContactsScreen.navigate}
-                  </Text>
-                </HStack>
-              </Pressable>
-              <Pressable
-                ml={1}
-                w={'1/5'}
-                onPress={() => onPressTime()}
-                alignItems={'center'}>
-                {/* <HStack alignItems={'center'}> */}
+                    },
+                  ]),
+                  cancelButtonIndex: addresses.length - 1,
+                  title: strings.ContactsScreen.navigate,
+                  destructiveButtonIndex: addresses.length || null,
+                });
+                onOpen();
+              }}
+              w={'4/5'}>
+              <HStack alignItems={'center'}>
                 <Icon
-                  size={8}
-                  as={MaterialCommunityIcons}
-                  name="timetable"
+                  size={10}
+                  as={MaterialIcons}
+                  name="navigation"
                   color="warmGray.50"
                   _dark={{
                     color: 'warmGray.50',
                   }}
+                  mr={0.5}
                 />
-                <Text style={{color: 'white', fontSize: 10, lineHeight: 12}}>
-                  {strings.ContactsScreen.timework}
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={styles.addressText}>
+                  {strings.ContactsScreen.navigate}
                 </Text>
-                {/* <VStack alignItems={'center'}>
-                    <Text style={{color: 'white', fontSize: 12}}>вторник</Text>
-                    <Text style={{color: 'white', fontSize: 13}}>
-                      с 9 до 17
-                    </Text>
-                  </VStack> */}
-                {/* </HStack> */}
-              </Pressable>
-            </HStack>
-          </View>
+              </HStack>
+            </Pressable>
+            <Pressable
+              ml={1}
+              w={'1/5'}
+              onPress={() => onPressTime()}
+              alignItems={'center'}>
+              {/* <HStack alignItems={'center'}> */}
+              <Icon
+                size={8}
+                as={MaterialCommunityIcons}
+                name="timetable"
+                color="warmGray.50"
+                _dark={{
+                  color: 'warmGray.50',
+                }}
+              />
+              <Text style={{color: 'white', fontSize: 10, lineHeight: 12}}>
+                {strings.ContactsScreen.timework}
+              </Text>
+              {/* <VStack alignItems={'center'}>
+                  <Text style={{color: 'white', fontSize: 12}}>вторник</Text>
+                  <Text style={{color: 'white', fontSize: 13}}>
+                    с 9 до 17
+                  </Text>
+                </VStack> */}
+              {/* </HStack> */}
+            </Pressable>
+          </HStack>
+          <View
+            style={styles.blackBack}
+            opacity={0.7}
+            position={'absolute'}
+            left={0}
+            zIndex={1}
+          />
         </>
       );
     } else {
       return (
-        <>
-          <View style={styles.blackBack} />
-          <View style={styles.address} testID="ContactsScreen.PressMap">
-            <HStack justifyContent={'space-between'} w={'98%'}>
-              <Pressable onPress={() => onPressMap(addresses[0])} w={'4/5'}>
-                <HStack alignItems={'center'}>
-                  <Icon
-                    size={10}
-                    as={MaterialIcons}
-                    name="navigation"
-                    color="warmGray.50"
-                    _dark={{
-                      color: 'warmGray.50',
-                    }}
-                    mr={0.5}
-                  />
-                  <VStack w={'90%'}>
-                    <Text
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
-                      style={styles.addressText}>
-                      {addresses.length === 1 ? addresses[0]?.text : ''}
-                    </Text>
-                    <Text
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
-                      style={[styles.addressText, styles.addressTextSmall]}>
-                      {strings.ContactsScreen.navigate}
-                    </Text>
-                  </VStack>
-                </HStack>
-              </Pressable>
-              <Pressable
-                ml={1}
-                w={'1/5'}
-                onPress={() => onPressTime()}
-                alignItems={'center'}>
-                {/* <HStack alignItems={'center'}> */}
+        <View style={styles.address} testID="ContactsScreen.PressMap">
+          <HStack mx={2} justifyContent={'space-between'} zIndex={10}>
+            <Pressable onPress={() => onPressMap(addresses[0])} w={'4/5'}>
+              <HStack alignItems={'center'}>
                 <Icon
-                  size={8}
-                  as={MaterialCommunityIcons}
-                  name="timetable"
+                  size={10}
+                  as={MaterialIcons}
+                  name="navigation"
                   color="warmGray.50"
                   _dark={{
                     color: 'warmGray.50',
                   }}
+                  mr={0.5}
                 />
-                <Text style={{color: 'white', fontSize: 10, lineHeight: 12}}>
-                  {strings.ContactsScreen.timework}
-                </Text>
-                {/* <VStack alignItems={'center'}>
-                    <Text style={{color: 'white', fontSize: 12}}>вторник</Text>
-                    <Text style={{color: 'white', fontSize: 13}}>
-                      с 9 до 17
-                    </Text>
-                  </VStack> */}
-                {/* </HStack> */}
-              </Pressable>
-            </HStack>
-          </View>
-        </>
+                <VStack w={'90%'}>
+                  <Text
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                    style={styles.addressText}>
+                    {addresses.length === 1 ? addresses[0]?.text : ''}
+                  </Text>
+                  <Text
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                    style={[styles.addressText, styles.addressTextSmall]}>
+                    {strings.ContactsScreen.navigate}
+                  </Text>
+                </VStack>
+              </HStack>
+            </Pressable>
+            <Pressable
+              ml={1}
+              w={'1/5'}
+              onPress={() => onPressTime()}
+              alignItems={'center'}>
+              {/* <HStack alignItems={'center'}> */}
+              <Icon
+                size={8}
+                as={MaterialCommunityIcons}
+                name="timetable"
+                color="warmGray.50"
+                _dark={{
+                  color: 'warmGray.50',
+                }}
+              />
+              <Text style={{color: 'white', fontSize: 10, lineHeight: 12}}>
+                {strings.ContactsScreen.timework}
+              </Text>
+              {/* <VStack alignItems={'center'}>
+                  <Text style={{color: 'white', fontSize: 12}}>вторник</Text>
+                  <Text style={{color: 'white', fontSize: 13}}>
+                    с 9 до 17
+                  </Text>
+                </VStack> */}
+              {/* </HStack> */}
+            </Pressable>
+          </HStack>
+          <View
+            style={styles.blackBack}
+            opacity={0.7}
+            position={'absolute'}
+            left={0}
+            zIndex={1}
+          />
+        </View>
       );
     }
   };
@@ -480,66 +478,73 @@ const DealerInfoScreen = ({
         contentContainerStyle={{paddingRight: 30}}
         style={styles.scrollView}>
         <HStack>
-          <Plate
-            title={strings.ContactsScreen.call}
-            status={callAvailable ? 'enabled' : 'disabled'}
-            subtitle={get(
-              dealerSelected,
-              'phonesMobile[0].subtitle',
-              get(dealerSelected, 'phones[0].subtitle', null),
-            )}
-            onPress={() => {
-              if (!isOpened) {
-                Alert.alert(
-                  strings.ContactsScreen.closedDealer.title,
-                  strings.ContactsScreen.closedDealer.text,
-                  [
-                    {
-                      text: strings.ContactsScreen.closedDealer.no,
-                      style: 'cancel',
-                    },
-                    {
-                      text: strings.ContactsScreen.closedDealer.yes,
-                      onPress: () => {
-                        navigation.navigate('CallMeBackScreen');
-                      },
-                    },
-                  ],
-                  {cancelable: false},
-                );
-              } else {
-                if (phonesMobile.length > 1) {
-                  setActionSheetData({
-                    options: phonesMobile.concat([
+          {false ? (
+            <Plate
+              title={strings.ContactsScreen.call}
+              status={callAvailable ? 'enabled' : 'disabled'}
+              subtitle={get(
+                dealerSelected,
+                'phonesMobile[0].subtitle',
+                get(dealerSelected, 'phones[0].subtitle', null),
+              )}
+              onPress={() => {
+                if (!isOpened) {
+                  Alert.alert(
+                    strings.ContactsScreen.closedDealer.title,
+                    strings.ContactsScreen.closedDealer.text,
+                    [
                       {
-                        priority: phonesMobile.length + 1,
-                        id: 'cancel',
-                        text: strings.Base.cancel.toLowerCase(),
-                        icon: {
-                          name: 'ios-close',
-                          color: '#f70707',
+                        text: strings.ContactsScreen.closedDealer.no,
+                        style: 'cancel',
+                      },
+                      {
+                        text: strings.ContactsScreen.closedDealer.yes,
+                        onPress: () => {
+                          navigation.navigate('CallMeBackScreen');
                         },
                       },
-                    ]),
-                    cancelButtonIndex: phonesMobile.length - 1,
-                    title: strings.ContactsScreen.call,
-                    destructiveButtonIndex: phonesMobile.length || null,
-                  });
-                  onOpen();
-                } else {
-                  Linking.openURL(phonesMobile[0].link).catch(
-                    console.error('phonesMobile[0].link failed', phonesMobile),
+                    ],
+                    {cancelable: false},
                   );
+                } else {
+                  if (phonesMobile.length > 1) {
+                    setActionSheetData({
+                      options: phonesMobile.concat([
+                        {
+                          priority: phonesMobile.length + 1,
+                          id: 'cancel',
+                          text: strings.Base.cancel.toLowerCase(),
+                          icon: {
+                            name: 'ios-close',
+                            color: '#f70707',
+                          },
+                        },
+                      ]),
+                      cancelButtonIndex: phonesMobile.length - 1,
+                      title: strings.ContactsScreen.call,
+                      destructiveButtonIndex: phonesMobile.length || null,
+                    });
+                    onOpen();
+                  } else {
+                    Linking.openURL(phonesMobile[0].link).catch(
+                      console.error(
+                        'phonesMobile[0].link failed',
+                        phonesMobile,
+                      ),
+                    );
+                  }
                 }
-              }
-            }}
-          />
-          <Plate
-            testID="ContactsScreen.ButtonCallMe"
-            title={strings.ContactsScreen.callOrder}
-            subtitle=""
-            onPress={onPressCallMe}
-          />
+              }}
+            />
+          ) : null}
+          {false ? (
+            <Plate
+              testID="ContactsScreen.ButtonCallMe"
+              title={strings.ContactsScreen.callOrder}
+              subtitle=""
+              onPress={onPressCallMe}
+            />
+          ) : null}
           {fabEnable ? (
             <Plate
               title={strings.ContactsScreen.chat.title}
@@ -815,7 +820,7 @@ const DealerInfoScreen = ({
               cache: 'web',
             }}
           />
-          <View style={{marginTop: HEADER_MAX_HEIGHT - 65}}>
+          <View mt={-20}>
             {_renderAddress(addresses)}
             {_renderPlates({
               callAvailable,
