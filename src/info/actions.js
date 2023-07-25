@@ -13,11 +13,15 @@ import {
   CALL_ME_INFO__FAIL,
 } from './actionTypes';
 
-import {ERROR_NETWORK} from '../core/const';
+import {APP_REGION, ERROR_NETWORK} from '../core/const';
 
 import API from '../utils/api';
 
-export const fetchInfoList = (region, dealer, type) => {
+export const fetchInfoList = (
+  region = APP_REGION,
+  dealer = null,
+  type = null,
+) => {
   return dispatch => {
     dispatch({
       type: INFO_LIST__REQUEST,

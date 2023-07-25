@@ -245,7 +245,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
             type: APP_LANG_SET,
             payload: dealer.region,
           });
-          dispatch(fetchInfoList(dealer.region, dealer.id));
+          // dispatch(fetchInfoList(dealer.region, dealer.id));
         }
 
         PushNotifications.addTag('dealer', dealer.id);

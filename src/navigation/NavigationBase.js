@@ -42,6 +42,8 @@ import FullScreenGallery from '../core/components/FullScreenGallery';
 import MainFilterScreen from '../catalog/containers/filters/MainFilterScreen';
 import BrandModelFilterScreen from '../catalog/containers/filters/BrandModelFilterScreen';
 
+import DealerInfoScreen from '../contacts/containers/DealerInfoScreen';
+
 // Used Cars Catalog
 import UsedCarListScreen from '../catalog/usedcar/containers/UsedCarListScreen';
 import UsedCarItemScreen from '../catalog/usedcar/containers/UsedCarItemScreen';
@@ -155,7 +157,29 @@ export const Base = ({navigation, route}) => {
               stylesHeader.transparentHeaderTitle,
               {color: '#222B45'},
             ],
+            presentation: 'modal',
           })}
+        />
+        <StackContacts.Screen
+          name="DealerInfoScreen"
+          component={DealerInfoScreen}
+          options={TransparentBack(
+            navigation,
+            route,
+            {
+              // ...TransitionPresets.ModalTransition,
+              headerTitle: '',
+              headerTitleStyle: [
+                stylesHeader.transparentHeaderTitle,
+                {color: '#222B45'},
+              ],
+              presentation: 'modal',
+            },
+            {
+              icon: 'close',
+              iconSize: 12,
+            },
+          )}
         />
         <StackContacts.Screen
           name="WorkTimeScreen"
@@ -240,11 +264,14 @@ export const Base = ({navigation, route}) => {
         <StackBase.Screen
           name="InfoList"
           component={InfoListScreen}
-          options={ClassicHeaderWhite(
-            strings.InfoListScreen.title,
-            navigation,
-            route,
-          )}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ModalTransition,
+            headerTitle: strings.InfoListScreen.title,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
         />
         <StackBase.Screen
           name="InfoPostScreen"

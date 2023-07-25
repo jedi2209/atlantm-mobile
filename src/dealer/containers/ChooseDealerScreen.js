@@ -191,6 +191,9 @@ const _onPressDealerItem = ({
         }
       }
       if (returnScreen) {
+        if (goBack) {
+          navigation.goBack();
+        }
         return navigation.navigate(
           returnScreen,
           returnState ? returnState : {},
