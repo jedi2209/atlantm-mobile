@@ -11,7 +11,7 @@ import {
 import PropTypes from 'prop-types';
 import {Pressable, Box, Text, Badge, Icon, Fab} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {Offer} from '../../core/components/Offer';
+import Offer from '../../core/components/Offer';
 // import Badge from '../../core/components/Badge';
 import TransitionView from '../../core/components/TransitionView';
 
@@ -112,7 +112,7 @@ const InfoListScreen = ({
     console.info('== InfoListScreen ==');
     if (!isFetchInfoList) {
       actionListReset();
-      fetchInfoList(region, dealer, filterType).then(action => {
+      fetchInfoList(region, null, filterType).then(action => {
         if (action.type === INFO_LIST__FAIL) {
           let message = get(
             action,
@@ -132,7 +132,7 @@ const InfoListScreen = ({
 
   const _onRefresh = () => {
     setRefreshing(true);
-    fetchInfoList(region, dealer, filterType).then(() => {
+    fetchInfoList(region, null, filterType).then(() => {
       setRefreshing(false);
     });
   };
@@ -157,6 +157,7 @@ const InfoListScreen = ({
           theme="round"
           key={`carousel-article-${data.item.hash}`}
           data={data}
+          bounceable={true}
           width={cardWidth}
           height={200}
           navigation={navigation.navigate}
@@ -191,48 +192,50 @@ const InfoListScreen = ({
                   marginHorizontal: 10,
                   flexDirection: 'row',
                 }}>
-                {filters.map((el, i) => {
-                  return (
-                    <Pressable
-                      onPress={() => {
-                        filterType === el.id
-                          ? setFilterType(null)
-                          : setFilterType(el.id);
-                      }}
-                      key={'pressableFilter' + el.id + i}
-                      mr={1}
-                      padding={0.5}>
-                      <Badge
-                        key={'badgeItem' + el.id + i}
-                        variant={'outline'}
-                        alignSelf="center"
-                        bgColor={
-                          !filterType || filterType === el.id
-                            ? el.badge?.background
-                            : 'muted.300'
-                        }
-                        _text={{fontSize: 14, color: el.badge?.color}}
-                        borderColor={styleConst.color.white}
-                        rounded={'lg'}
-                        rightIcon={
-                          filterType === el.id ? (
-                            <Icon
-                              size={4}
-                              as={Ionicons}
-                              name="ios-close-outline"
-                              color="warmGray.50"
-                              _dark={{
-                                color: 'warmGray.50',
-                              }}
-                              mt={1}
-                            />
-                          ) : null
-                        }>
-                        {el.name[currLang]}
-                      </Badge>
-                    </Pressable>
-                  );
-                })}
+                {filters.length > 1
+                  ? filters.map((el, i) => {
+                      return (
+                        <Pressable
+                          onPress={() => {
+                            filterType === el.id
+                              ? setFilterType(null)
+                              : setFilterType(el.id);
+                          }}
+                          key={'pressableFilter' + el.id + i}
+                          mr={1}
+                          padding={0.5}>
+                          <Badge
+                            key={'badgeItem' + el.id + i}
+                            variant={'outline'}
+                            alignSelf="center"
+                            bgColor={
+                              !filterType || filterType === el.id
+                                ? el.badge?.background
+                                : 'muted.300'
+                            }
+                            _text={{fontSize: 14, color: el.badge?.color}}
+                            borderColor={styleConst.color.white}
+                            rounded={'lg'}
+                            rightIcon={
+                              filterType === el.id ? (
+                                <Icon
+                                  size={4}
+                                  as={Ionicons}
+                                  name="ios-close-outline"
+                                  color="warmGray.50"
+                                  _dark={{
+                                    color: 'warmGray.50',
+                                  }}
+                                  mt={1}
+                                />
+                              ) : null
+                            }>
+                            {el.name[currLang]}
+                          </Badge>
+                        </Pressable>
+                      );
+                    })
+                  : null}
               </View>
             ) : null}
             <FlatList
@@ -247,9 +250,10 @@ const InfoListScreen = ({
             />
           </>
         ) : (
-          <ActivityIndicator
-            color={styleConst.color.blue}
-            style={styles.spinner}
+          <LogoLoader
+            style={{
+              position: 'relative',
+            }}
           />
         )}
       </Box>
