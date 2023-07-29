@@ -3,6 +3,7 @@ export default {
     main: {
       // основное меню
       autocenter: 'Автоцентр',
+      autocenters: 'Автоцентры',
       actions: 'Акции',
       newcars: 'Новые авто',
       usedcars: 'Авто с пробегом',

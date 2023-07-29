@@ -96,7 +96,7 @@ const MainWrapper = props => {
 };
 
 const DealerItemList = props => {
-  const {city, dealer, style, wrapperProps} = props;
+  const {city, dealer, style, wrapperProps, placeholder} = props;
   const navigation = useNavigation();
 
   const deviceWidth = Dimensions.get('window').width;
@@ -136,7 +136,7 @@ const DealerItemList = props => {
         justifyContent="space-between"
         alignItems="center"
         alignContent={'center'}>
-        {city && city.name ? (
+        {city && city.name && !placeholder ? (
           <Text
             style={stylesDealerItemList.city}
             ellipsizeMode="tail"
@@ -149,11 +149,13 @@ const DealerItemList = props => {
             style={stylesDealerItemList.name}
             ellipsizeMode="tail"
             numberOfLines={1}>
-            {dealer && dealer.name
+            {placeholder
+              ? placeholder
+              : dealer && dealer.name
               ? dealer.name
               : strings.DealerItemList.chooseDealer}
           </Text>
-          {false && dealer && dealer.city ? (
+          {false && dealer && dealer.city && !placeholder ? (
             <Text
               style={stylesDealerItemList.dealerCity}
               ellipsizeMode="tail"
@@ -161,7 +163,10 @@ const DealerItemList = props => {
               {dealer.city.name}
             </Text>
           ) : null}
-          {props.showBrands && dealerBrand && dealerBrand?.length > 2 ? (
+          {props.showBrands &&
+          dealerBrand &&
+          dealerBrand?.length > 2 &&
+          !placeholder ? (
             <View mt={2}>
               {_renderBrands({
                 logoWidth,
@@ -170,7 +175,10 @@ const DealerItemList = props => {
             </View>
           ) : null}
         </VStack>
-        {props.showBrands && dealerBrand && dealerBrand?.length <= 2 ? (
+        {props.showBrands &&
+        dealerBrand &&
+        dealerBrand?.length <= 2 &&
+        !placeholder ? (
           _renderBrands({logoWidth, dealerBrand})
         ) : (
           <Icon
@@ -196,6 +204,7 @@ DealerItemList.propTypes = {
   isLocal: PropTypes.bool,
   readonly: PropTypes.bool,
   showBrands: PropTypes.bool,
+  placeholder: PropTypes.string,
 };
 
 DealerItemList.defaultProps = {
@@ -206,6 +215,7 @@ DealerItemList.defaultProps = {
   isLocal: false,
   readonly: false,
   showBrands: true,
+  placeholder: false,
 };
 
 export default DealerItemList;
