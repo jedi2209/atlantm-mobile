@@ -51,6 +51,7 @@
     "@react-native-clipboard/clipboard": "^1.11.1",
     "@react-native-community/cli-debugger-ui": "^8.0.0",
     "@react-native-community/datetimepicker": "^6.7.5",
+    "@react-native-community/netinfo": "^9.4.1",
     "@react-native-community/slider": "^4.4.2",
     "@react-native-firebase/analytics": "^17.3.0",
     "@react-native-firebase/app": "^17.3.0",

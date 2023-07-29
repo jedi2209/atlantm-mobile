@@ -1,4 +1,6 @@
+import NetInfo from '@react-native-community/netinfo';
+
 export default async function () {
-  const isConnected = await fetch('https://www.google.com');
-  return !!isConnected;
+  const networkStatus = await NetInfo.fetch();
+  return networkStatus.isConnected;
 }
