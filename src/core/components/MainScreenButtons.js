@@ -70,6 +70,10 @@ const sizeType = {
     width: widthDefault / 2,
     height: widthDefault / 2,
   },
+  '2/3': {
+    width: widthDefault / 1.65,
+    height: 96,
+  },
   full: {
     width: '100%',
     height: 128,
@@ -208,6 +212,7 @@ export const MainScreenButton = ({
           <View
             alignItems={'center'}
             alignSelf={'center'}
+            alignContent={'center'}
             height={height ? height : heightDefault}
             width={width ? width : widthDefault}>
             {icon}
@@ -271,7 +276,7 @@ MainScreenButton.propTypes = {
     PropTypes.object,
   ]),
   type: PropTypes.oneOf(['top', 'bottom']),
-  size: PropTypes.oneOf(['small', 'full', 'half']),
+  size: PropTypes.oneOf(['small', '2/3', 'half', 'full']),
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 };

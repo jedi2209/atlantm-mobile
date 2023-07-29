@@ -52,6 +52,7 @@ import {strings} from '../lang/const';
 import {get} from 'lodash';
 import Analytics from '../../utils/amplitude-analytics';
 import TransitionView from '../components/TransitionView';
+import style from '../components/Footer/style';
 
 const {width, height} = Dimensions.get('screen');
 const isApple = Platform.OS === 'ios';
@@ -286,9 +287,9 @@ const _processRow = props => {
   });
 };
 
-const fetchInfoData = props => {
+const fetchInfoData = async props => {
   const {region, fetchInfoList} = props;
-  fetchInfoList(region).then(action => {
+  return fetchInfoList(region).then(action => {
     if (action && action.type && action.type === INFO_LIST__FAIL) {
       let message = get(
         action,
@@ -305,7 +306,7 @@ const fetchInfoData = props => {
   });
 };
 
-const _renderInfoList = params => {
+const _renderActions = params => {
   const {isFetchInfoList, infoList, navigation} = params;
   if (isFetchInfoList) {
     return (
@@ -316,7 +317,7 @@ const _renderInfoList = params => {
         />
       </View>
     );
-  } else if (infoList && infoList.length) {
+  } else if (infoList?.length) {
     return (
       <View px={2} pt={2} testID="ContactsScreen.currentActionsHeading">
         <HStack justifyContent={'space-between'}>
@@ -376,20 +377,29 @@ const MainScreen = props => {
 
   useEffect(() => {
     Analytics.logEvent('screen', 'main screen');
-    fetchInfoData({region, fetchInfoList});
-  }, [region]);
+  }, [region, fetchInfoList]);
 
-  const _onRefresh = () => {
+  useEffect(() => {
+    if (isLoading === false) {
+      fetchInfoData({region, fetchInfoList});
+    }
+  }, [fetchInfoList, isLoading, region]);
+
+  const _onRefresh = async () => {
     setLoading(true);
-    fetchInfoData({region, fetchInfoList}).then(() => {
-      props.actionFetchMainScreenSettings(APP_REGION).then(res => {
-        setLoading(false);
-      });
-    });
+    await props.actionFetchMainScreenSettings(APP_REGION);
+    setLoading(false);
   };
 
   if (!mainScreenSettings) {
-    return null;
+    return (
+      <View style={styles.spinnerContainer}>
+        <ActivityIndicator
+          color={styleConst.color.blue}
+          style={styleConst.spinner}
+        />
+      </View>
+    );
   }
 
   return (
@@ -427,71 +437,96 @@ const MainScreen = props => {
             />
           );
         })}
-        {_renderInfoList({isFetchInfoList, infoList, navigation})}
+        {_renderActions({isFetchInfoList, infoList, navigation})}
         <View px={2} pt={2}>
-          <FlagButton
-            style={{padding: 10}}
-            styleText={{textAlign: 'center'}}
-            onPress={() => navigation.navigate('IntroScreenNew')}
-            country={region}
-            type={'button'}
-            variant={'unstyle'}
-            backgroundColor={styleConst.color.bg}
-            shadow={null}
-          />
+          <HStack justifyContent={'space-between'}>
+            {/* <MainScreenButton
+              key={['button', 'rateApp'].join('_')}
+              title={strings.SettingsScreen.rateAppTitle}
+              titleStyle={{color: styleConst.color.black}}
+              background={styleConst.color.orange}
+              size={'small'}
+              type={'bottom'}
+              onPress={() => {
+                return Linking.openURL('mailto:' + APP_EMAIL);
+              }}
+              icon={
+                <Icon
+                  size={16}
+                  as={Ionicons}
+                  name={
+                    Platform.OS === 'android'
+                      ? 'logo-google-playstore'
+                      : 'logo-apple-appstore'
+                  }
+                  color="white"
+                  _dark={{
+                    color: 'white',
+                  }}
+                  selectable={false}
+                />
+              }
+            /> */}
+            <FlagButton
+              style={{
+                width: width / 3,
+                height: 97,
+                borderRadius: 10,
+                opacity: 1,
+                ...styleConst.shadow.default,
+              }}
+              onPress={() => navigation.navigate('IntroScreenNew')}
+              country={region}
+              type={'flag'}
+              shadow={null}
+            />
+            <MainScreenButton
+              key={['button', 'settings'].join('_')}
+              title={strings.Menu.main.settings}
+              titleStyle={{color: styleConst.color.black}}
+              background={styleConst.color.orange}
+              size={'2/3'}
+              type={'bottom'}
+              onPress={() => navigation.navigate('SettingsScreen')}
+              icon={
+                <Icon
+                  size={12}
+                  as={Ionicons}
+                  mt={1.5}
+                  name={'settings-outline'}
+                  color="white"
+                  _dark={{
+                    color: 'white',
+                  }}
+                  selectable={false}
+                />
+              }
+            />
+            {/* <MainScreenButton
+              key={['button', 'writeToUS'].join('_')}
+              title={strings.SettingsScreen.mailtoUs}
+              titleStyle={{color: styleConst.color.black}}
+              background={styleConst.color.green}
+              size={'small'}
+              type={'bottom'}
+              onPress={() => {
+                return Linking.openURL('mailto:' + APP_EMAIL);
+              }}
+              icon={
+                <Icon
+                  size={16}
+                  as={Ionicons}
+                  name={'mail-outline'}
+                  color="white"
+                  _dark={{
+                    color: 'white',
+                  }}
+                  selectable={false}
+                />
+              }
+            /> */}
+          </HStack>
         </View>
-        <HStack px={2} justifyContent={'space-between'}>
-          <MainScreenButton
-            key={['button', 'rateApp'].join('_')}
-            title={strings.SettingsScreen.rateAppTitle}
-            titleStyle={{color: styleConst.color.black}}
-            background={styleConst.color.orange}
-            size={'small'}
-            type={'bottom'}
-            onPress={() => {
-              return Linking.openURL('mailto:' + APP_EMAIL);
-            }}
-            icon={
-              <Icon
-                size={16}
-                as={Ionicons}
-                name={
-                  Platform.OS === 'android'
-                    ? 'logo-google-playstore'
-                    : 'logo-apple-appstore'
-                }
-                color="white"
-                _dark={{
-                  color: 'white',
-                }}
-                selectable={false}
-              />
-            }
-          />
-          <MainScreenButton
-            key={['button', 'writeToUS'].join('_')}
-            title={strings.SettingsScreen.mailtoUs}
-            titleStyle={{color: styleConst.color.black}}
-            background={styleConst.color.green}
-            size={'small'}
-            type={'bottom'}
-            onPress={() => {
-              return Linking.openURL('mailto:' + APP_EMAIL);
-            }}
-            icon={
-              <Icon
-                size={16}
-                as={Ionicons}
-                name={'mail-outline'}
-                color="white"
-                _dark={{
-                  color: 'white',
-                }}
-                selectable={false}
-              />
-            }
-          />
-        </HStack>
         {false ? (
           <Pressable
             px={2}
@@ -582,32 +617,36 @@ const MainScreen = props => {
             </Box>
           </Pressable>
         ) : null}
-        <Button
-          px={2}
-          variant="link"
-          size="md"
-          onPress={() => navigation.navigate('UserAgreementScreen')}>
-          <Text style={styles.userAgreementText}>
-            {strings.Form.agreement.title}
-          </Text>
-        </Button>
-        <Button
-          px={2}
-          variant="link"
-          size="md"
-          onPress={() => Linking.openURL(STORE_LINK[Platform.OS])}>
-          <Text
-            selectable={false}
-            fontFamily={styleConst.font.regular}
-            fontSize={12}
-            color={styleConst.color.lightBlue}
-            opacity={0.5}>
-            {'v. ' +
-              DeviceInfo.getVersion() +
-              '.' +
-              DeviceInfo.getBuildNumber()}
-          </Text>
-        </Button>
+        {false ? (
+          <Button
+            px={2}
+            variant="link"
+            size="md"
+            onPress={() => navigation.navigate('UserAgreementScreen')}>
+            <Text style={styles.userAgreementText}>
+              {strings.Form.agreement.title}
+            </Text>
+          </Button>
+        ) : null}
+        {false ? (
+          <Button
+            px={2}
+            variant="link"
+            size="md"
+            onPress={() => Linking.openURL(STORE_LINK[Platform.OS])}>
+            <Text
+              selectable={false}
+              fontFamily={styleConst.font.regular}
+              fontSize={12}
+              color={styleConst.color.lightBlue}
+              opacity={0.5}>
+              {'v. ' +
+                DeviceInfo.getVersion() +
+                '.' +
+                DeviceInfo.getBuildNumber()}
+            </Text>
+          </Button>
+        ) : null}
       </VStack>
     </ScrollView>
   );

@@ -224,7 +224,7 @@ const SettingsScreen = props => {
               <Text
                 selectable={false}
                 style={[styles.langHeading, {fontSize: 20, lineHeight: 20}]}>
-                {strings.SettingsScreen.rateAppTitle}
+                {strings.SettingsScreen.rateAppTitleTwoRows}
               </Text>
               <Icon
                 size={55}
@@ -319,9 +319,9 @@ const SettingsScreen = props => {
           <Text selectable={false} style={styles.TextVersionInfo}>
             {'ver. ' +
               DeviceInfo.getVersion() +
-              ' (' +
+              '.' +
               DeviceInfo.getBuildNumber() +
-              ')'}
+              ''}
           </Text>
         </Button>
       </TransitionView>
