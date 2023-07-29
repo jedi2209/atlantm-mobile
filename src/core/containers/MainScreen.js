@@ -149,7 +149,7 @@ const _linkProcess = (link, props) => {
       }
       return [link.path];
     case 'webview':
-      return ['WebviewScreen', {uri: link.path}];
+      return ['WebviewScreen', {uri: link.path, linkParams: link.params}];
   }
 };
 

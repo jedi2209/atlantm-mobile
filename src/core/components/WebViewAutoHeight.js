@@ -1,5 +1,5 @@
-import React, {useState, useRef} from 'react';
-import {Linking, View} from 'react-native';
+import React, {useState, useRef, useEffect} from 'react';
+import {Linking, View, ActivityIndicator, StyleSheet} from 'react-native';
 import WebView from 'react-native-webview';
 import styleConst from '../style-const';
 
@@ -34,7 +34,7 @@ const styleCSS = `
         padding: 15 15 120 15;
         font-size: 16px !important;
         font-family: "HelveticaNeue-Light", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        backgroundColor: ${styleConst.color.bg};
+        background-color: ${styleConst.color.white};
     }
     a, a:visited, a.hover {
         color: #0072e7;
@@ -78,14 +78,24 @@ const styleCSS = `
     }
     img {
       width: auto;
-      max-width: 100%;
+      max-width: 100%;      
     }
-    p {
+    p, div, h1, h2, h3, h4, table, ul, ol {
       margin-left: 2%;
       margin-right: 2%;
     }
   </style>
 `;
+
+const styles = StyleSheet.create({
+  spinnerContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    backgroundColor: styleConst.color.bg,
+  },
+});
 
 const codeInject = html => {
   if (!html || typeof html === 'undefined') {
@@ -97,18 +107,31 @@ const codeInject = html => {
   return html;
 };
 
+const _fetchURL = async url => {
+  const res = await fetch(url);
+  if (res && res.status !== 200) {
+    return false;
+  }
+  const text = await res.text();
+  return codeInject(text);
+};
+
 const WebViewAutoHeight = ({
   onNavigationStateChange,
   source,
   style,
   minHeight,
+  fetchURL,
   ...otherProps
 }) => {
   if (!minHeight) {
     minHeight = 400;
   }
   const [contentHeight, setContentHeight] = useState(minHeight);
+  const [isLoading, setLoading] = useState(false);
+  const [sourceModified, setSource] = useState(false);
   let webviewRef = useRef(null);
+
   const _handleNavigationChange = navState => {
     if (
       navState.url &&
@@ -137,13 +160,38 @@ const WebViewAutoHeight = ({
     }
   };
 
-  let sourceModified;
+  useEffect(() => {
+    setLoading(sourceModified ? false : true);
+    return () => {
+      setLoading(false);
+    };
+  }, [sourceModified]);
 
-  if (source?.html) {
-    sourceModified = {html: codeInject(source.html)};
-  }
-  if (source?.uri) {
-    sourceModified = {uri: source?.uri};
+  useEffect(() => {
+    if (source?.html) {
+      setSource({
+        html: codeInject(source.html),
+      });
+    }
+    if (source?.uri) {
+      setSource({uri: source?.uri});
+      if (fetchURL) {
+        _fetchURL(source?.uri).then(res => {
+          setSource({html: res});
+        });
+      }
+    }
+  }, [fetchURL, source.html, source?.uri]);
+
+  if (isLoading) {
+    return (
+      <View style={styles.spinnerContainer}>
+        <ActivityIndicator
+          color={styleConst.color.blue}
+          style={styleConst.spinner}
+        />
+      </View>
+    );
   }
 
   return (
@@ -151,7 +199,13 @@ const WebViewAutoHeight = ({
       {...otherProps}
       source={sourceModified}
       scrollEnabled={false}
-      style={[style, {height: Math.max(contentHeight, minHeight)}]}
+      style={[
+        style,
+        {
+          backgroundColor: styleConst.color.bg,
+          height: Math.max(contentHeight, minHeight) + 30,
+        },
+      ]}
       ref={ref => {
         webviewRef = ref;
       }}
@@ -169,6 +223,7 @@ const WebViewAutoHeight = ({
 
 WebViewAutoHeight.defaultProps = {
   minHeight: 200,
+  fetchURL: false,
 };
 
 export default WebViewAutoHeight;
