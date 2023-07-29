@@ -102,6 +102,7 @@ import {
   BigCloseButton,
   TransparentBack,
 } from './const';
+import style from '../core/components/Footer/style';
 
 const StackEKO = createStackNavigator();
 const StackEKOAddReview = createStackNavigator();

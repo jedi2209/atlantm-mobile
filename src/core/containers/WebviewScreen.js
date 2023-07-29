@@ -31,13 +31,14 @@ const WebviewScreen = ({route, region, SubmitButton, minHeight}) => {
 
   if (data) {
     return (
-      <>
+      <View flex={1} backgroundColor={styleConst.color.white}>
         <ScrollView
           style={[styles.mainView, route.params?.mainScrollViewStyle]}>
           <WebViewAutoHeight
             style={[styles.webView, route.params?.webViewStyle]}
             key={moment().unix()}
             source={data}
+            {...route.params?.linkParams}
           />
         </ScrollView>
         <Button
@@ -45,7 +46,7 @@ const WebviewScreen = ({route, region, SubmitButton, minHeight}) => {
           onPress={() => NavigationService.goBack()}>
           {SubmitButton.text}
         </Button>
-      </>
+      </View>
     );
   } else {
     return (
@@ -67,17 +68,20 @@ WebviewScreen.defaultProps = {
 
 const styles = StyleSheet.create({
   submitButton: {
-    marginBottom: 35,
-    marginHorizontal: 10,
+    bottom: 35,
+    position: 'absolute',
+    width: '90%',
+    left: '5%',
   },
   mainView: {
-    paddingHorizontal: 10,
     flex: 1,
     paddingBottom: 25,
-    backgroundColor: styleConst.color.bg,
+    backgroundColor: styleConst.color.white,
   },
   webView: {
-    backgroundColor: styleConst.color.bg,
+    backgroundColor: styleConst.color.white,
+    paddingBottom: 25,
+    marginBottom: 75,
   },
 });
 
