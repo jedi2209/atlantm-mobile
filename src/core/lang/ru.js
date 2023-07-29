@@ -704,6 +704,7 @@ export default {
     pushText2: '\r\nМы не будем беспокоить вас по пустякам.\r\nОбещаем!',
     mainLanguage: 'Язык интерфейса',
     rateAppTitle: 'Оставьте отзыв о приложении',
+    rateAppTitleTwoRows: 'Оставьте отзыв\nо приложении',
     mailtoUs: 'Вопрос или пожелание?\r\nНапишите нам!',
   },
   PhoneChangeScreen: {
