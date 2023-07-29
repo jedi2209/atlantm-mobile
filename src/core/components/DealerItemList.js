@@ -215,7 +215,7 @@ DealerItemList.defaultProps = {
   isLocal: false,
   readonly: false,
   showBrands: true,
-  placeholder: false,
+  placeholder: null,
 };
 
 export default DealerItemList;
