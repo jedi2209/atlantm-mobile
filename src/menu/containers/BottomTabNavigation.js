@@ -332,8 +332,8 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             tabBarIcon: ({color, focused}) => (
               <Icon
                 size={focused ? iconSizeFocused : iconSize}
-                as={MaterialCommunityIcons}
-                name="chat-question-outline"
+                as={AntDesign}
+                name="message1"
                 color={color}
                 _dark={{
                   color: color,
