@@ -218,7 +218,9 @@ const _processRow = props => {
       screenName === 'ChooseDealerScreen' || screenName === 'DealerInfoScreen';
     if (isDealerButton) {
       item.img = dealerSelected.img.main[0];
-      item.title.text = dealerSelected.name;
+      if (!item.title.text) {
+        item.title.text = strings.Menu.main.autocenters;
+      }
       item.titleStyle = {
         fontSize: 9,
         bottom: 0,
@@ -251,6 +253,7 @@ const _processRow = props => {
         <DealerItemList
           key={'dealerSelect'}
           dealer={dealerSelected}
+          placeholder={item.title.text}
           showBrands={
             get(DEALERS_SETTINGS, 'hideBrands', []).includes(dealerSelected.id)
               ? false

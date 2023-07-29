@@ -3,6 +3,7 @@ export default {
     main: {
       // основное меню
       autocenter: 'Автоцентр',
+      autocenters: 'Автоцентры',
       actions: 'Акції',
       newcars: 'Нові авто',
       usedcars: 'Авто з пробігом',
@@ -16,6 +17,7 @@ export default {
     bottom: {
       // нижнее меню
       search: 'Авто',
+      main: 'Главный',
       dealer: 'Автоцентр',
       lkk: 'Кабінет',
       order: 'Запит',
