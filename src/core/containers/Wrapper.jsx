@@ -11,6 +11,7 @@ import * as Sentry from '@sentry/react-native';
 // redux
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/es/integration/react';
+import {enableLatestRenderer} from 'react-native-maps';
 import {store, storePersist} from '../store';
 
 // components
@@ -22,6 +23,8 @@ import {LogBox} from 'react-native';
 
 import {SENTRY_DSN} from '../const';
 import styleConst from '../style-const';
+
+enableLatestRenderer();
 
 const colorScheme = Appearance.getColorScheme();
 

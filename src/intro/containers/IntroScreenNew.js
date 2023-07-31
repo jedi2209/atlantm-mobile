@@ -49,14 +49,18 @@ const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
 
   const onPressButton = async dealers => {
     setLoading(true);
-    await selectDealer({
+    selectDealer({
       dealerBaseData: dealer[dealers][0],
       dealerSelected: dealer[dealers][0],
       isLocal: false,
-    }).then(action => {
-      navigation.navigate('BottomTabNavigation', {screen: 'ContactsScreen'});
-      // setLoading(false);
-    });
+    })
+      .then(action => {
+        navigation.navigate('BottomTabNavigation', {screen: 'ContactsScreen'});
+        // setLoading(false);
+      })
+      .catch(error => {
+        console.error('IntroScreenNew onPressButton', error);
+      });
   };
 
   const [countLogoClick, setCountLogoClick] = useState(0);

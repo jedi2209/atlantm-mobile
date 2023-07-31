@@ -1,17 +1,13 @@
-require_relative '../node_modules/react-native/scripts/react_native_pods'
-require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
+# Resolve react_native_pods.rb with node to allow for hoisting
+require Pod::Executable.execute_command('node', ['-p',
+  'require.resolve(
+    "react-native/scripts/react_native_pods.rb",
+    {paths: [process.argv[1]]},
+  )', __dir__]).strip
 
-# source 'https://github.com/CocoaPods/Specs.git' 
-# source 'https://github.com/JivoChat/JMSpecsRepo.git'
-# source 'https://github.com/JivoChat/JMSpecsRepoDevelop.git'
-
-# plugin 'cocoapods-user-defined-build-types' # укажите плагин
-# enable_user_defined_build_types! # активируйте его
-
+# platform :ios, min_ios_version_supported
 platform :ios, '13.0'
 prepare_react_native_project!
-
-$RNFirebaseAsStaticFramework = true
 
 # If you are using a `react-native-flipper` your iOS build will fail when `NO_FLIPPER=1` is set.
 # because `react-native-flipper` depends on (FlipperKit,...) that will be excluded
@@ -22,7 +18,7 @@ $RNFirebaseAsStaticFramework = true
 #   dependencies: {
 #     ...(process.env.NO_FLIPPER ? { 'react-native-flipper': { platforms: { ios: null } } } : {}),
 # ```
-flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled(["Debug"], {'Flipper' => '0.163.0'})
+flipper_config = ENV['NO_FLIPPER'] == "1" ? FlipperConfiguration.disabled : FlipperConfiguration.enabled
 
 linkage = ENV['USE_FRAMEWORKS']
 if linkage != nil
@@ -32,6 +28,8 @@ end
 
 target 'atlantm' do
   config = use_native_modules!
+  use_frameworks! :linkage => :static
+  $RNFirebaseAsStaticFramework = true
 
   # Flags change depending on the env values.
   flags = get_default_flags()
@@ -39,34 +37,31 @@ target 'atlantm' do
   use_react_native!(
     :path => config[:reactNativePath],
     # Hermes is now enabled by default. Disable by setting this flag to false.
-    # Upcoming versions of React Native may rely on get_default_flags(), but
-    # we make it explicit here to aid in the React Native upgrade process.
     :hermes_enabled => flags[:hermes_enabled],
     :fabric_enabled => flags[:fabric_enabled],
     # Enables Flipper.
     #
     # Note that if you have use_frameworks! enabled, Flipper will not work and
     # you should disable the next line.
-    :flipper_configuration => flipper_config,
+    # :flipper_configuration => flipper_config,
+    # :flipper_configuration => FlipperConfiguration.disabled,
     # An absolute path to your application root.
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  pod 'Firebase', :modular_headers => true
-  pod 'FirebaseCore', :modular_headers => true
+  # pod 'Firebase', :modular_headers => true
+  # pod 'FirebaseCore', :modular_headers => true
   pod 'FBSDKCoreKit', :modular_headers => true
   pod 'GoogleUtilities', :modular_headers => true
 
-  pod 'react-native-google-maps', :path => '../node_modules/react-native-maps'
+  rn_maps_path = '../node_modules/react-native-maps'
+  pod 'react-native-google-maps', :path => rn_maps_path
   pod 'GoogleMaps'
-  pod 'Google-Maps-iOS-Utils'
-  pod 'GoogleSignIn', '~> 6.2.2'
+  pod 'Google-Maps-iOS-Utils', :git => 'https://github.com/Simon-TechForm/google-maps-ios-utils.git', :branch => 'feat/support-apple-silicon'
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
   pod 'OneSignalXCFramework', '>= 3.0.0', '< 4.0'
-
-  # pod 'JivoSDK', '4.0.0-beta.0', :build_type => :dynamic_framework
 
   target 'atlantmTests' do
     inherit! :complete
@@ -74,11 +69,10 @@ target 'atlantm' do
   end
 
   post_install do |installer|
-    # JivoPatcher.new(installer).patch()
+    # https://github.com/facebook/react-native/blob/main/packages/react-native/scripts/react_native_pods.rb#L197-L202
     react_native_post_install(
       installer,
-      # Set `mac_catalyst_enabled` to `true` in order to apply patches
-      # necessary for Mac Catalyst builds
+      config[:reactNativePath],
       :mac_catalyst_enabled => false
     )
     __apply_Xcode_12_5_M1_post_install_workaround(installer)
@@ -89,53 +83,6 @@ target 'atlantm' do
 end
 
 target 'OneSignalNotificationServiceExtension' do
+  use_frameworks! :linkage => :static
   pod 'OneSignalXCFramework', '>= 3.0.0', '< 4.0'
-end
-
-class JivoPatcher
-  def initialize(installer)
-    @sdkname = "JivoSDK"
-    @installer = installer
-  end
-  
-  def patch()
-    libnames = collectLibNames()
-    
-    @installer.pods_project.targets.each do |target|
-      if target.respond_to?(:product_type) and target.product_type == "com.apple.product-type.bundle"
-        target.build_configurations.each do |config|
-          config.build_settings['CODE_SIGNING_ALLOWED'] = 'NO'
-        end
-      end
-      
-      target.build_configurations.each do |config|
-        if libnames.include? target.to_s
-          config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-          config.build_settings['GENERATE_INFOPLIST_FILE'] = 'YES'
-          config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
-        end
-      end
-    end
-  end
-  
-  private def collectLibNames()
-    depnames = Array.new
-    
-    @installer.pod_targets.each do |target|
-      next if target.to_s != @sdkname
-      depnames = collectTargetLibNames(target)
-    end
-    
-    return depnames.uniq()
-  end
-
-  private def collectTargetLibNames(target)
-    depnames = [target.to_s]
-    
-    target.dependent_targets.each do |subtarget|
-      depnames += [subtarget.to_s] + collectTargetLibNames(subtarget)
-    end
-    
-    return depnames
-  end
 end
