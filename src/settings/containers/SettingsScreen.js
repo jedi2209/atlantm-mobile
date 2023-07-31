@@ -31,6 +31,7 @@ import {actionSetPushActionSubscribe, actionAppRated} from '../../core/actions';
 // components
 import PushNotifications from '../../core/components/PushNotifications';
 import RateThisApp from '../../core/components/RateThisApp';
+import FlagButton from '../../core/components/FlagButton';
 import TransitionView from '../../core/components/TransitionView';
 
 // helpers
@@ -38,6 +39,8 @@ import Analytics from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
 import {APP_EMAIL, APP_REGION, STORE_LINK} from '../../core/const';
 import {strings} from '../../core/lang/const';
+
+const {width, height} = Dimensions.get('screen');
 
 const styles = StyleSheet.create({
   VersionContainer: {
@@ -87,6 +90,7 @@ const mapStateToProps = ({dealer, info, nav, core}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
+    region: dealer.region,
     pushActionSubscribeState: core.pushActionSubscribeState,
     currentLang: core.language.selected || APP_REGION,
   };
@@ -143,7 +147,7 @@ const SettingsScreen = props => {
       <TransitionView
         animation={styleConst.animation.zoomIn}
         duration={250}
-        index={2}>
+        index={3}>
         <Box
           borderWidth="1"
           borderColor="coolGray.300"
@@ -196,7 +200,7 @@ const SettingsScreen = props => {
       <TransitionView
         animation={styleConst.animation.zoomIn}
         duration={250}
-        index={3}>
+        index={4}>
         <Pressable
           onPress={() => {
             Analytics.logEvent('screen', 'ratePopup', {
@@ -247,7 +251,7 @@ const SettingsScreen = props => {
       <TransitionView
         animation={styleConst.animation.zoomIn}
         duration={250}
-        index={4}>
+        index={5}>
         <Pressable
           onPress={() => {
             return Linking.openURL('mailto:' + APP_EMAIL);
@@ -285,6 +289,21 @@ const SettingsScreen = props => {
               />
             </HStack>
           </Box>
+        </Pressable>
+      </TransitionView>
+      <TransitionView
+        animation={styleConst.animation.zoomIn}
+        duration={250}
+        index={6}>
+        <Pressable onPress={() => props.navigation.navigate('IntroScreenNew')}>
+          <FlagButton
+            style={{padding: 15}}
+            styleText={{textAlign: 'center'}}
+            shadow={null}
+            onPress={() => props.navigation.navigate('IntroScreenNew')}
+            country={props.region}
+            type={'button'}
+          />
         </Pressable>
       </TransitionView>
       <TransitionView

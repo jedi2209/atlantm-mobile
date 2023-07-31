@@ -124,6 +124,7 @@ const FlagButton = props => {
         <Button
           key={'flag' + country}
           shadow={shadow}
+          variant={'unstyle'}
           leftIcon={
             <Imager
               source={flags[country]}
