@@ -174,16 +174,17 @@ const WebViewAutoHeight = ({
       });
     }
     if (source?.uri) {
-      setSource({uri: source?.uri});
       if (fetchURL) {
         _fetchURL(source?.uri).then(res => {
           setSource({html: res});
         });
+      } else {
+        setSource({uri: source?.uri});
       }
     }
   }, [fetchURL, source.html, source?.uri]);
 
-  if (isLoading) {
+  if (isLoading || !sourceModified) {
     return (
       <View style={styles.spinnerContainer}>
         <ActivityIndicator

@@ -25,7 +25,7 @@ async function getOrders(type = 'default') {
           id: 'cancel',
           text: strings.Base.cancel.toLowerCase(),
           icon: {
-            name: 'ios-close',
+            name: 'close',
             color: '#f70707',
           },
         },
@@ -40,7 +40,7 @@ async function getOrders(type = 'default') {
           id: 'cancel',
           text: strings.Base.cancel.toLowerCase(),
           icon: {
-            name: 'ios-close',
+            name: 'close',
             color: '#f70707',
           },
         },
