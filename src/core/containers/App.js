@@ -64,7 +64,7 @@ const mapDispatchToProps = {
 };
 
 const mainScreen = 'BottomTabNavigation';
-const storeVersion = '2023-07-12';
+const storeVersion = '2023-07-29';
 const isNewIntroScreen = true;
 
 const _awaitStoreToUpdate = async props => {
@@ -74,11 +74,10 @@ const _awaitStoreToUpdate = async props => {
   const isStoreUpdatedCurrent = get(storeData, 'core.isStoreUpdated', false);
 
   const currentVersion = DeviceInfo.getVersion();
-  API.fetchVersion(currentVersion || null).then(res => {
-    if (res && res.settings) {
-      props.actionSettingsLoaded(res.settings);
-    }
-  });
+  const {settings} = await API.fetchVersion(currentVersion || null);
+  if (settings) {
+    props.actionSettingsLoaded(settings);
+  }
 
   if (currentDealer && isStoreUpdatedCurrent === storeVersion) {
     // если мы уже выбрали регион и стор обновлен
@@ -91,7 +90,7 @@ const _awaitStoreToUpdate = async props => {
       dealerSelected: undefined,
       isLocal: false,
     });
-    if (currentDealerUpdated && actionDealer && actionDealer.type) {
+    if (currentDealerUpdated && actionDealer?.type) {
       // уже всё обновлено, открываем экран автоцентра
       return mainScreen;
     }

@@ -351,7 +351,7 @@ export const Base = ({navigation, route}) => {
                   },
                 },
                 {
-                  icon: 'md-close',
+                  icon: 'close-outline',
                   iconSize: 12,
                   IconStyle: {
                     width: 40,
@@ -630,7 +630,7 @@ export const Base = ({navigation, route}) => {
             headerTitleStyle: stylesHeader.whiteHeaderTitle,
             headerLeft: () => {
               return ArrowBack(navigation, route, {
-                icon: 'md-close',
+                icon: 'close-outline',
                 IconStyle: {
                   fontSize: 42,
                   width: 40,
@@ -671,7 +671,7 @@ const EKO = ({navigation, route}) => (
         {
           headerLeft: () => {
             return ArrowBack(navigation, route, {
-              icon: 'md-close',
+              icon: 'close-outline',
               iconSize: 12,
               IconStyle: {
                 color: styleConst.color.white,

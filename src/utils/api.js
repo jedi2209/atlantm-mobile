@@ -21,20 +21,17 @@ const secretKey = [
 ].join('__');
 
 const JWTToken = async () => {
-  return await JWTSign(
+  const token = await JWTSign(
     {
-      iss: 'MobileAPP',
       exp: (getTimestampInSeconds() + 60) * 1000, // expiration date, required, in ms, absolute to 1/1/1970
+      iss: 'MobileAPP',
     }, // body
     secretKey,
     {
       alg: 'HS512',
     },
-  )
-    .then(token => {
-      return token;
-    }) // token as the only argument
-    .catch(console.error); // possible errors
+  ).catch(console.error);
+  return token;
 };
 const headers = {
   Accept: 'application/json',
@@ -92,34 +89,31 @@ export default {
       return false;
     }
     let requestedVersion = parseInt(version.replace(/\./gi, ''));
-    return this.request('/mobile/check/version/', baseRequestParams).then(
-      res => {
-        if (res && res.version) {
-          let APPVersionFromApi = parseInt(res.version.replace(/\./gi, ''));
-          if (APPVersionFromApi > requestedVersion) {
-            Alert.alert(
-              strings.Notifications.UpdatePopup.title,
-              strings.Notifications.UpdatePopup.text,
-              [
-                {
-                  text: strings.Notifications.UpdatePopup.later,
-                  style: 'destructive',
-                },
-                {
-                  text: `✅ ${strings.Notifications.UpdatePopup.update}`,
-                  style: 'default',
-                  onPress: () => {
-                    BackHandler.exitApp();
-                    Linking.openURL(STORE_LINK[Platform.OS]);
-                  },
-                },
-              ],
-            );
-          }
-        }
-        return res;
-      },
-    );
+    const res = await this.request('/mobile/check/version/', baseRequestParams);
+    if (res?.version) {
+      let APPVersionFromApi = parseInt(res.version.replace(/\./gi, ''));
+      if (APPVersionFromApi > requestedVersion) {
+        Alert.alert(
+          strings.Notifications.UpdatePopup.title,
+          strings.Notifications.UpdatePopup.text,
+          [
+            {
+              text: strings.Notifications.UpdatePopup.later,
+              style: 'destructive',
+            },
+            {
+              text: `✅ ${strings.Notifications.UpdatePopup.update}`,
+              style: 'default',
+              onPress: () => {
+                BackHandler.exitApp();
+                Linking.openURL(STORE_LINK[Platform.OS]);
+              },
+            },
+          ],
+        );
+      }
+    }
+    return res;
   },
 
   chatAvailable() {
@@ -1129,7 +1123,7 @@ export default {
               if (res?.data) {
                 answer = res?.data;
               }
-              console.error('apiGetDataError res.info().respType: ' + url);
+              console.error('apiGetDataError res.info().respType: ' + url, res);
               break;
           }
           return answer;
