@@ -442,93 +442,33 @@ const MainScreen = props => {
         })}
         {_renderActions({isFetchInfoList, infoList, navigation})}
         <View px={2} pt={2}>
-          <HStack justifyContent={'space-between'}>
-            {/* <MainScreenButton
-              key={['button', 'rateApp'].join('_')}
-              title={strings.SettingsScreen.rateAppTitle}
-              titleStyle={{color: styleConst.color.black}}
-              background={styleConst.color.orange}
-              size={'small'}
-              type={'bottom'}
-              onPress={() => {
-                return Linking.openURL('mailto:' + APP_EMAIL);
-              }}
-              icon={
-                <Icon
-                  size={16}
-                  as={Ionicons}
-                  name={
-                    Platform.OS === 'android'
-                      ? 'logo-google-playstore'
-                      : 'logo-apple-appstore'
-                  }
-                  color="white"
-                  _dark={{
-                    color: 'white',
-                  }}
-                  selectable={false}
-                />
-              }
-            /> */}
-            <FlagButton
-              style={{
-                width: width / 3,
-                height: 97,
-                borderRadius: 10,
-                opacity: 1,
-                ...styleConst.shadow.default,
-              }}
-              onPress={() => navigation.navigate('IntroScreenNew')}
-              country={region}
-              type={'flag'}
-              shadow={null}
-            />
-            <MainScreenButton
-              key={['button', 'settings'].join('_')}
-              title={strings.Menu.main.settings}
-              titleStyle={{color: styleConst.color.black}}
-              background={styleConst.color.orange}
-              size={'2/3'}
-              type={'bottom'}
-              onPress={() => navigation.navigate('SettingsScreen')}
-              icon={
-                <Icon
-                  size={12}
-                  as={Ionicons}
-                  mt={1.5}
-                  name={'settings-outline'}
-                  color="white"
-                  _dark={{
-                    color: 'white',
-                  }}
-                  selectable={false}
-                />
-              }
-            />
-            {/* <MainScreenButton
-              key={['button', 'writeToUS'].join('_')}
-              title={strings.SettingsScreen.mailtoUs}
-              titleStyle={{color: styleConst.color.black}}
-              background={styleConst.color.green}
-              size={'small'}
-              type={'bottom'}
-              onPress={() => {
-                return Linking.openURL('mailto:' + APP_EMAIL);
-              }}
-              icon={
-                <Icon
-                  size={16}
-                  as={Ionicons}
-                  name={'mail-outline'}
-                  color="white"
-                  _dark={{
-                    color: 'white',
-                  }}
-                  selectable={false}
-                />
-              }
-            /> */}
-          </HStack>
+          <MainScreenButton
+            key={['button', 'settings'].join('_')}
+            title={strings.Menu.main.settings}
+            titleStyle={{
+              color: styleConst.color.black,
+              bottom: 9,
+              fontSize: 16,
+            }}
+            background={styleConst.color.orange}
+            size={'full'}
+            type={'bottom'}
+            height={80}
+            onPress={() => navigation.navigate('SettingsScreen')}
+            icon={
+              <Icon
+                size={12}
+                as={Ionicons}
+                mt={0.4}
+                name={'settings-outline'}
+                color="white"
+                _dark={{
+                  color: 'white',
+                }}
+                selectable={false}
+              />
+            }
+          />
         </View>
         {false ? (
           <Pressable

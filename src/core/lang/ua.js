@@ -707,6 +707,7 @@ export default {
     mainLanguage: 'Мова інтерфейсу',
     rateAppTitle: 'Залишити відгук на додаток',
     mailtoUs: 'Питання чи пропозиція?\r\nНапишіть нам!',
+    regionChange: 'Изменить регион',
   },
   PhoneChangeScreen: {
     title: 'Залишилося\r\nзовсім трішки',

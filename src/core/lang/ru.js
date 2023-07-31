@@ -707,6 +707,7 @@ export default {
     rateAppTitle: 'Оставьте отзыв о приложении',
     rateAppTitleTwoRows: 'Оставьте отзыв\nо приложении',
     mailtoUs: 'Вопрос или пожелание?\r\nНапишите нам!',
+    regionChange: 'Изменить регион',
   },
   PhoneChangeScreen: {
     title: 'Осталось\r\nчуть-чуть',
