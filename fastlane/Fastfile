@@ -243,8 +243,8 @@ platform :android do
     gradle(
         project_dir: "./android/",
         task: "clean bundle",
-        build_type: "Release",
-        flags: "-PbuildType=release",
+        build_type: "ci",
+        flags: "-PbuildType=ci",
         print_command_output: true
     )
     properties = property_file_read(file: ENV['ANDROID_PROPERTY'])
