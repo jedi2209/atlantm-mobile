@@ -205,6 +205,66 @@ platform :android do
     )
   end
 
+  desc "Commit a new version for Google Play"
+  lane :version do
+    versionFile = File.read("../android/app/versioning/app_version.properties")
+    re = /versionCode=(\d+)/
+    versionCode = versionFile[re, 1].to_i+1
+
+    git_commit(
+      path: ['./android/app/versioning/app_version.properties'],
+      message: "[fastlane][android] Updated build number to #{lane_context[SharedValues::VERSION_NUMBER]}.#{versionCode}"
+    )
+    add_git_tag(
+      build_number: "#{lane_context[SharedValues::VERSION_NUMBER]}." + properties["versionCode"],
+      grouping: "builds",
+      prefix: "v"
+    )
+    push_to_git_remote
+  end
+
+  desc "CI: submit a new internal build to Google Play"
+  lane :ci do
+    versionFile = File.read("../android/app/versioning/app_version.properties")
+    re = /versionCode=(\d+)/
+    versionCode = versionFile[re, 1].to_i
+
+    changelog_from_git_commits(
+        pretty: "- %s",# Optional, lets you provide a custom format to apply to each commit when generating the changelog text
+        date_format: "short",# Optional, lets you provide an additional date format to dates within the pretty-formatted string
+        match_lightweight_tag: false,  # Optional, lets you ignore lightweight (non-annotated) tags when searching for the last tag
+        merge_commit_filtering: "exclude_merges", # Optional, lets you filter out merge commits
+        tag_match_pattern: "builds/androidinternal/*"
+    )
+    gradle(
+        project_dir: "./android/",
+        task: "clean bundle",
+        build_type: "Release",
+        flags: "-PbuildType=release",
+        print_command_output: true
+    )
+    properties = property_file_read(file: ENV['ANDROID_PROPERTY'])
+    puts "AABs: #{Actions.lane_context[SharedValues::GRADLE_ALL_AAB_OUTPUT_PATHS]}"
+    puts "AAB: #{Actions.lane_context[SharedValues::GRADLE_AAB_OUTPUT_PATH]}"
+    upload_to_play_store(
+        track: 'internal',
+        skip_upload_metadata: true,
+        skip_upload_changelogs: true,
+        skip_upload_images: true,
+        skip_upload_screenshots: true
+    )
+    slack(
+      message: "Встречаем новый билд #{lane_context[SharedValues::VERSION_NUMBER]}.#{versionCode} на Android для Атлант-М!\r\n\r\nИзменения в #{lane_context[SharedValues::VERSION_NUMBER]}.#{versionCode}:\n#{lane_context[SharedValues::FL_CHANGELOG]}",
+      channel: "#_notify-bot",  # Optional, by default will post to the default channel configured for the POST URL.
+      success: true,        # Optional, defaults to true.
+      slack_url: ENV['SLACK_URL'],
+      payload: {  # Optional, lets you specify any number of your own Slack attachments.
+        "Build Date" => Time.new.to_s,
+      },
+      link_names: true
+    )
+  end
+
   desc "Make a new release build"
   lane :release do
     gradle(

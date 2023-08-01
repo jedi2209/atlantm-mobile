@@ -19,6 +19,8 @@
     "android": "yarn clean:android; open -a iTerm ./android/dev.sh && adb wait-for-device && sleep 10; adb uninstall com.atlantm; sleep 10; npx react-native run-android --active-arch-only",
     "android-local": "yarn clean:android; bundle exec fastlane android test && adb uninstall com.atlantm; adb install ./android/app/build/outputs/bundle/release/app-release.aab && adb shell am start -n com.atlantm/.MainActivity",
     "android-release": "yarn clean:android; git checkout ./android/app/versioning/app_version.properties && bundle exec fastlane android release && open ./android/app/build/outputs/bundle/release;",
+    "android-version": "yarn clean:android; bundle exec fastlane android version",
+    "android-ci": "yarn clean:android; bundle exec fastlane android ci",
     "android-build": "yarn clean:android; bundle exec fastlane android internal",
     "reinstall": "./reinstall.sh",
     "sonar": "open -a iTerm ./sonarqube/docker-start.sh; node ./sonarqube/init.js",
