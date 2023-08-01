@@ -18,7 +18,8 @@ project.ext.react = [
 
 project.ext.version = [
     code:   versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100,
-    incr:   versionBuild + 1,
+    // incr:   versionBuild + 1,
+    incr:   versionBuild,
     name:   "${versionMajor}.${versionMinor}.${versionPatch}",
     build:  0
 ]
@@ -131,7 +132,7 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             if (project.hasProperty('buildType')) {
                 if (buildType != "debug") {
-                    saveChanges(project.ext.version.incr)
+                    // saveChanges(project.ext.version.incr)
                 }
             }
             firebaseCrashlytics {
