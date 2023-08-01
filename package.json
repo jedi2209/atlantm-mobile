@@ -3,7 +3,7 @@
   "version": "8.4.6",
   "private": true,
   "scripts": {
-    "build": "yarn android-build; yarn ios-build;",
+    "build": "yarn android-version; yarn ios-build;",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "postinstall": "patch-package; cd ios; NO_FLIPPER=1; pod update; cd ../; NO_FLIPPER=1; npx pod-install;",
     "react": "watchman watch-del $(pwd); watchman watch-project $(pwd); npx react-native start --reset-cache",
