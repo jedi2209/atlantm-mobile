@@ -52,6 +52,22 @@ Runs all the tests
 
 Submit a new Internal Build to Google Play
 
+### android version
+
+```sh
+[bundle exec] fastlane android version
+```
+
+Commit a new version for Google Play
+
+### android ci
+
+```sh
+[bundle exec] fastlane android ci
+```
+
+CI: submit a new internal build to Google Play
+
 ### android release
 
 ```sh
