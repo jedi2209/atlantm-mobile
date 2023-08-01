@@ -24,14 +24,8 @@ project.ext.version = [
 ]
 
 if (project.hasProperty('buildType')) {
-    println "buildType: ${buildType}"
     if (buildType == "release") {
-        project.ext.version = [
-            code:   versionMajor * 100000 + versionMinor * 1000 + versionPatch * 100,
-            incr:   versionBuild + 1,
-            name:   "${versionMajor}.${versionMinor}.${versionPatch}",
-            build:  0
-        ]
+        project.ext.version.incr = versionBuild + 1
     }
 }
 
