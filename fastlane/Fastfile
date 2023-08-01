@@ -209,14 +209,18 @@ platform :android do
   lane :version do
     versionFile = File.read("../android/app/versioning/app_version.properties")
     re = /versionCode=(\d+)/
-    versionCode = versionFile[re, 1].to_i+1
-
+    versionCodeCurrent = versionFile[re, 1].to_i
+    versionCode = versionCodeCurrent+1
+    Dir.chdir("..") do
+      # code here runs in the parent directory
+      sh "sed -i '' -e 's/versionCode=#{versionCodeCurrent}/versionCode=#{versionCode}/' android/app/versioning/app_version.properties"
+    end
     git_commit(
       path: ['./android/app/versioning/app_version.properties'],
       message: "[fastlane][android] Updated build number to #{lane_context[SharedValues::VERSION_NUMBER]}.#{versionCode}"
     )
     add_git_tag(
-      build_number: "#{lane_context[SharedValues::VERSION_NUMBER]}." + properties["versionCode"],
+      build_number: "#{lane_context[SharedValues::VERSION_NUMBER]}.#{versionCode}",
       grouping: "builds",
       prefix: "v"
     )
