@@ -243,7 +243,7 @@ platform :android do
     gradle(
         project_dir: "./android/",
         task: "clean bundle",
-        build_type: "ci",
+        build_type: "release",
         flags: "-PbuildType=ci",
         print_command_output: true
     )
