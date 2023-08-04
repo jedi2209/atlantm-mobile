@@ -6,8 +6,6 @@ import {NativeBaseProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
 
-import {firebase} from '@react-native-firebase/app-check';
-
 // redux
 import {connect} from 'react-redux';
 import {store} from '../store';
@@ -179,8 +177,6 @@ const App = props => {
           OneSignal.disablePush(true);
         }
       });
-    } else {
-      firebase.appCheck().activate('ignored', false);
     }
 
     strings.setLanguage(APP_LANG);

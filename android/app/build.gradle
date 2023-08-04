@@ -1,9 +1,9 @@
 apply plugin: "com.android.application"
 apply plugin: 'com.google.gms.google-services'
 apply plugin: "com.facebook.react"
-apply plugin: 'com.google.firebase.crashlytics'
-apply plugin: 'com.google.firebase.appdistribution'
-apply plugin: 'com.google.firebase.firebase-perf'
+// apply plugin: 'com.google.firebase.crashlytics'
+// apply plugin: 'com.google.firebase.appdistribution'
+// apply plugin: 'com.google.firebase.firebase-perf'
 
 import com.android.build.OutputFile
 // import org.apache.tools.ant.taskdefs.condition.Os
@@ -140,10 +140,10 @@ android {
                     saveChanges(project.ext.version.incr)
                 }
             }
-            firebaseCrashlytics {
-                nativeSymbolUploadEnabled true
-                unstrippedNativeLibsDir 'build/intermediates/merged_native_libs/release/out/lib'
-            }
+            // firebaseCrashlytics {
+            //     nativeSymbolUploadEnabled true
+            //     unstrippedNativeLibsDir 'build/intermediates/merged_native_libs/release/out/lib'
+            // }
         }
     }
     // applicationVariants are e.g. debug, release
