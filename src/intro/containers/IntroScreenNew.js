@@ -100,10 +100,9 @@ const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
           {strings.IntroScreen.chooseRegion}
         </Text>
         <HStack alignContent={'center'} justifyContent={'space-around'}>
-          {countLogoClick === currYearSubstract ? (
+          {countLogoClick === currYearSubstract && false ? (
             <FlagButton
               onPress={() => onPressButton('listBelarussia')}
-              showCaption={true}
               country={'belarusFree'}
               type="flag"
             />
@@ -111,18 +110,32 @@ const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
             <FlagButton
               onPress={() => onPressButton('listBelarussia')}
               country={'by'}
-              type="flag"
+              type="button"
+              leftIcon={<></>}
+              shadow={null}
+              variant={'outline'}
+              styleText={{
+                fontSize: 20,
+                color: styleConst.color.bg,
+              }}
             />
           )}
           <FlagButton
             onPress={() => onPressButton('listRussia')}
             country={'ru'}
-            type="flag"
+            type="button"
+            leftIcon={<></>}
+            shadow={null}
+            variant={'outline'}
+            styleText={{
+              fontSize: 20,
+              color: styleConst.color.bg,
+            }}
           />
         </HStack>
       </Animated.View>
     </SafeAreaView>
   );
 };
-
+// "outline" | "ghost" | "solid" | "subtle" | "link" | "unstyled"
 export default connect(mapStateToProps, mapDispatchToProps)(IntroScreenNew);

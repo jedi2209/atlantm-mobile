@@ -140,7 +140,7 @@ const FlagButton = props => {
       );
     default:
       return (
-        <Pressable key={'flag' + country} {...props}>
+        <Pressable key={'flag' + country} {...props} shadow={null}>
           <Text style={[styleText, {fontFamily: styleConst.font.regular}]}>
             {countryName[country]}
           </Text>
