@@ -176,8 +176,8 @@ const BottomTabNavigation = ({navigation, route, region}) => {
           tabBarStyle: {
             position: 'absolute',
             bottom: 25,
-            left: 15,
-            right: 15,
+            left: 7,
+            right: 7,
             borderRadius: 15,
             height: 60,
             paddingBottom: 0,
@@ -196,9 +196,9 @@ const BottomTabNavigation = ({navigation, route, region}) => {
           }}
           options={{
             headerShown: true,
-            headerTitle: () => <LogoTitle />,
+            headerTitle: () => <LogoTitle containerStyle={{marginTop: 0}} />,
             headerStyle: {
-              height: 120,
+              height: 70,
               backgroundColor: '#F8F8F8',
               elevation: 0,
               shadowOpacity: 0,
