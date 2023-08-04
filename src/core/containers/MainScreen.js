@@ -441,33 +441,14 @@ const MainScreen = props => {
           );
         })}
         {_renderActions({isFetchInfoList, infoList, navigation})}
-        <View px={2} pt={2}>
+        <View px={2} mt={4}>
           <MainScreenButton
             key={['button', 'settings'].join('_')}
             title={strings.Menu.main.settings}
-            titleStyle={{
-              color: styleConst.color.black,
-              bottom: 9,
-              fontSize: 16,
-            }}
-            background={styleConst.color.orange}
+            background={require('../../../assets/mainScreen/settings.png')}
             size={'full'}
             type={'bottom'}
-            height={80}
             onPress={() => navigation.navigate('SettingsScreen')}
-            icon={
-              <Icon
-                size={12}
-                as={Ionicons}
-                mt={0.4}
-                name={'settings-outline'}
-                color="white"
-                _dark={{
-                  color: 'white',
-                }}
-                selectable={false}
-              />
-            }
           />
         </View>
         {false ? (
