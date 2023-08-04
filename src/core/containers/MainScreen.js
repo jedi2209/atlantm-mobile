@@ -250,23 +250,40 @@ const _processRow = props => {
 
     if (isDealerButton) {
       return (
-        <DealerItemList
-          key={'dealerSelect'}
-          dealer={dealerSelected}
-          placeholder={item.title.text}
-          showBrands={
-            get(DEALERS_SETTINGS, 'hideBrands', []).includes(dealerSelected.id)
-              ? false
-              : true
-          }
-          goBack={true}
-          returnScreen={
-            item?.link?.params?.returnScreen
-              ? item?.link?.params?.returnScreen
-              : route.name
+        <MainScreenButton
+          key={['button', 'dealers', 'select'].join('_')}
+          title={item.title.text}
+          background={require('../../../assets/mainScreen/dealers.png')}
+          size={'full'}
+          type={'bottom'}
+          onPress={() =>
+            navigation.navigate('ChooseDealerScreen', {
+              returnScreen: item?.link?.params?.returnScreen
+                ? item?.link?.params?.returnScreen
+                : route.name,
+              goBack: true,
+            })
           }
         />
       );
+      // return (
+      //   <DealerItemList
+      //     key={'dealerSelect'}
+      //     dealer={dealerSelected}
+      //     placeholder={item.title.text}
+      //     showBrands={
+      //       get(DEALERS_SETTINGS, 'hideBrands', []).includes(dealerSelected.id)
+      //         ? false
+      //         : true
+      //     }
+      //     goBack={true}
+      //     returnScreen={
+      //       item?.link?.params?.returnScreen
+      //         ? item?.link?.params?.returnScreen
+      //         : route.name
+      //     }
+      //   />
+      // );
     }
 
     return (
