@@ -61,7 +61,7 @@ export default class RatingStars extends PureComponent {
           return (
             <Icon
               key={`star-${idx}-${itemId}`}
-              name="ios-star"
+              name="star"
               as={Ionicons}
               size={size === 's' ? 3 : 4}
               mr={2}
@@ -76,7 +76,7 @@ export default class RatingStars extends PureComponent {
               return (
                 <Icon
                   key={`emptyStars-${idx}-${itemId}`}
-                  name="ios-star-outline"
+                  name="star-outline"
                   as={Ionicons}
                   size={size === 's' ? 3 : 4}
                   mr={2}
