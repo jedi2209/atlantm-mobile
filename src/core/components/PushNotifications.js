@@ -1,6 +1,6 @@
 import {Platform, Alert, Linking, AppState} from 'react-native';
 
-import OneSignal from 'react-native-onesignal';
+import {OneSignal} from 'react-native-onesignal';
 import DeviceInfo from 'react-native-device-info';
 import {ONESIGNAL} from '../const';
 import Analytics from '../../utils/amplitude-analytics';
@@ -13,8 +13,7 @@ const bundle = DeviceInfo.getBundleId();
 
 export default {
   init() {
-    OneSignal.setLogLevel(6, 0);
-    OneSignal.setAppId(ONESIGNAL);
+    OneSignal.initialize(ONESIGNAL);
     // OneSignal.addEventListener('received', this.onReceived);
     // OneSignal.addEventListener('opened', this.onOpened);
     //Method for handling notifications opened
@@ -22,8 +21,8 @@ export default {
     //Method for handling notifications received while app in foreground
     this.setNotificationWillShowInForegroundHandler();
 
-    OneSignal.addPermissionObserver(event => {
-      console.info('OneSignal: permission changed:', event);
+    OneSignal.Notifications.addEventListener('permissionChange', observer => {
+      console.info('OneSignal: permission changed:', observer);
     });
   },
 
@@ -73,7 +72,8 @@ export default {
   },
 
   setNotificationWillShowInForegroundHandler() {
-    OneSignal.setNotificationWillShowInForegroundHandler(
+    OneSignal.Notifications.addEventListener(
+      'foregroundWillDisplay',
       notificationReceivedEvent => {
         const appState = AppState.currentState;
         console.info(
@@ -99,52 +99,52 @@ export default {
   },
 
   setNotificationOpenedHandler() {
-    OneSignal.setNotificationOpenedHandler(notification => {
+    OneSignal.Notifications.addEventListener('click', notification => {
       this.onOpened(notification);
     });
   },
 
   setExternalUserId(userID) {
-    OneSignal.setExternalUserId(userID);
+    OneSignal.User.login(userID);
   },
 
   removeExternalUserId() {
-    OneSignal.removeExternalUserId();
+    OneSignal.User.logout();
   },
 
   addTag(name, value) {
-    OneSignal.sendTag(name, value.toString());
+    OneSignal.User.addTag(name, value.toString());
   },
 
   removeTag(name) {
-    OneSignal.deleteTag(name);
+    OneSignal.User.removeTag(name);
   },
 
   async subscribeToTopic(topic, id) {
     const isPermission = await this.checkPermission();
     if (isPermission) {
-      OneSignal.disablePush(false);
-      OneSignal.sendTag(topic, id.toString());
+      this.unsubscribeFromTopic(topic);
+      OneSignal.User.addTag(topic, id.toString());
     }
     return isPermission;
   },
 
   unsubscribeFromTopic(topic) {
-    OneSignal.deleteTag(topic);
+    this.removeTag(topic);
   },
 
   setEmail(value) {
-    OneSignal.setEmail(value);
+    OneSignal.User.addEmail(value);
   },
 
   async deviceState() {
-    return await OneSignal.getDeviceState();
+    return await OneSignal.Notifications.hasPermission();
   },
 
   checkPermission() {
     return new Promise((resolve, reject) => {
       // Check push notification and OneSignal subscription statuses
-      OneSignal.promptForPushNotificationsWithUserResponse();
+      OneSignal.Notifications.requestPermission();
       this.deviceState().then(deviceState => {
         if (deviceState.hasNotificationPermission === false) {
           switch (Platform.OS) {
