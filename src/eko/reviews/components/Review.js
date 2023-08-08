@@ -1,16 +1,9 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Text, StyleSheet} from 'react-native';
-import {
-  Icon,
-  View,
-  VStack,
-  HStack,
-  Box,
-  Pressable,
-  ScrollView,
-} from 'native-base';
+import {Icon, View, VStack, HStack, Box, Pressable} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import {decode} from 'html-entities';
 
 // components
@@ -162,8 +155,8 @@ export default class Review extends Component {
     return (
       <HStack mb={1} style={[inList ? {width: '90%'} : styles.reviewFull]}>
         <Icon
-          name={isPlus ? 'ios-add-circle-outline' : 'ios-remove-circle-outline'}
-          as={Ionicons}
+          name={isPlus ? 'like' : 'dislike'}
+          as={SimpleLineIcons}
           size={6}
           style={[
             styles.reviewIcon,
