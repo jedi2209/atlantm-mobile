@@ -5,7 +5,7 @@
   "scripts": {
     "build": "yarn android-version; yarn ios-build;",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "patch-package; cd ios; NO_FLIPPER=1; pod update; cd ../; NO_FLIPPER=1; npx pod-install;",
+    "postinstall": "patch-package; cd ios; NO_FLIPPER=1 pod update; cd ../; NO_FLIPPER=1 npx pod-install;",
     "react": "watchman watch-del $(pwd); watchman watch-project $(pwd); npx react-native start --reset-cache",
     "check-dependencies": "rnx-dep-check",
     "fix-dependencies": "rnx-dep-check --write",
@@ -98,7 +98,7 @@
     "react-native-maps": "^1.7.1",
     "react-native-modal": "^13.0.0",
     "react-native-nested-listview": "0.14.2",
-    "react-native-onesignal": "^4.5.0",
+    "react-native-onesignal": "5.0.0-beta-02",
     "react-native-orientation-locker": "^1.3.1",
     "react-native-otp-auto-fill": "^0.1.17",
     "react-native-pager-view": "^6.1.4",

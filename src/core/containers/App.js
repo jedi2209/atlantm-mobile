@@ -29,7 +29,7 @@ import {theme} from '../theme';
 // helpers
 import API from '../../utils/api';
 import {get} from 'lodash';
-import OneSignal from 'react-native-onesignal';
+import {OneSignal} from 'react-native-onesignal';
 import moment from 'moment';
 import PushNotifications from '../components/PushNotifications';
 import styleConst from '../style-const';
@@ -133,6 +133,14 @@ const App = props => {
 
   moment.locale(APP_LANG);
 
+  const hasPermission = async () => {
+    const res = await OneSignal.Notifications.hasPermission();
+    if (res) {
+      return res;
+    }
+    return false;
+  };
+
   useEffect(() => {
     NavigationService.setTopLevelNavigator(NavigationService.navigationRef);
 
@@ -157,26 +165,25 @@ const App = props => {
 
     if (Platform.OS === 'ios') {
       //Prompt for push on iOS
-      OneSignal.promptForPushNotificationsWithUserResponse(status => {
-        if (status) {
-          actionSetPushGranted(true);
+      OneSignal.Notifications.requestPermission();
+      if (hasPermission()) {
+        actionSetPushGranted(true);
 
-          if (
-            Number(menuOpenedCount) <= 1 ||
-            menuOpenedCount === 0 ||
-            isStoreUpdated === false
-          ) {
-            actionSetPushActionSubscribe(true);
-          }
-
-          OneSignal.disablePush(false);
-        } else {
-          actionSetPushGranted(false);
-          actionSetPushActionSubscribe(false);
-          PushNotifications.unsubscribeFromTopic('actions');
-          OneSignal.disablePush(true);
+        if (
+          Number(menuOpenedCount) <= 1 ||
+          menuOpenedCount === 0 ||
+          isStoreUpdated === false
+        ) {
+          actionSetPushActionSubscribe(true);
         }
-      });
+
+        OneSignal.User.PushSubscription.optIn();
+      } else {
+        actionSetPushGranted(false);
+        actionSetPushActionSubscribe(false);
+        PushNotifications.unsubscribeFromTopic('actions');
+        OneSignal.User.PushSubscription.optOut();
+      }
     }
 
     strings.setLanguage(APP_LANG);
