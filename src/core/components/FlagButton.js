@@ -49,6 +49,7 @@ const FlagButton = props => {
     type,
     style,
     styleText,
+    styleImage,
     shadow,
     backgroundColor,
   } = props;
@@ -128,7 +129,7 @@ const FlagButton = props => {
           leftIcon={
             <Imager
               source={flags[country]}
-              style={[style, {borderRadius: styleConst.borderRadius}]}
+              style={[styleImage, {borderRadius: styleConst.borderRadius}]}
               resizeMode="contain"
             />
           }
@@ -166,6 +167,11 @@ FlagButton.defaultProps = {
   style: {
     width: 150,
     height: 100,
+    borderRadius: 10,
+  },
+  styleImage: {
+    width: 50,
+    height: 10,
     borderRadius: 10,
   },
   type: 'text',

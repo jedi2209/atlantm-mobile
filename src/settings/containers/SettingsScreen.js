@@ -297,12 +297,21 @@ const SettingsScreen = props => {
         index={6}>
         <Pressable onPress={() => props.navigation.navigate('IntroScreenNew')}>
           <FlagButton
-            style={{padding: 15}}
-            styleText={{textAlign: 'center'}}
+            style={[
+              styleConst.shadow.default,
+              styles.block,
+              {width: cardWidth},
+            ]}
+            styleText={{
+              textAlign: 'center',
+              fontFamily: styleConst.font.light,
+              color: styleConst.color.lightBlue,
+            }}
             shadow={null}
             onPress={() => props.navigation.navigate('IntroScreenNew')}
             country={props.region}
             type={'button'}
+            variant={'outline'}
           />
         </Pressable>
       </TransitionView>
@@ -332,15 +341,17 @@ const SettingsScreen = props => {
           variant="outline"
           size="md"
           borderColor={styleConst.color.accordeonGrey1}
+          opacity={0.6}
+          mb={4}
           onPress={() => {
             return Linking.openURL(STORE_LINK[Platform.OS]);
           }}>
           <Text selectable={false} style={styles.TextVersionInfo}>
-            {'ver. ' +
-              DeviceInfo.getVersion() +
-              '.' +
-              DeviceInfo.getBuildNumber() +
-              ''}
+            {[
+              'ver',
+              ' ' + DeviceInfo.getVersion(),
+              DeviceInfo.getBuildNumber(),
+            ].join('.')}
           </Text>
         </Button>
       </TransitionView>
