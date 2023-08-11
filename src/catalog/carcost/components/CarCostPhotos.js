@@ -140,12 +140,7 @@ export default class CarCostPhotos extends Component {
           <TouchableOpacity
             style={styles.removeIconContainer}
             onPress={this[`onPressRemovePhoto${photoIndex}`]}>
-            <Icon
-              name="md-close-circle"
-              as={Ionicons}
-              size={12}
-              color="white"
-            />
+            <Icon name="close-circle" as={Ionicons} size={12} color="white" />
           </TouchableOpacity>
         ) : null}
         <TouchableOpacity

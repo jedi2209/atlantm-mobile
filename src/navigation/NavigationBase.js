@@ -215,7 +215,7 @@ export const Base = ({navigation, route}) => {
             headerRight: null,
             // headerRight: () => {
             //   return ArrowBack(navigation, route, {
-            //     icon: 'md-close',
+            //     icon: 'close',
             //     IconStyle: {
             //       fontSize: 42,
             //       width: 40,
