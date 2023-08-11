@@ -112,11 +112,16 @@ const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
               country={'by'}
               type="button"
               leftIcon={<></>}
-              shadow={null}
-              variant={'outline'}
+              // shadow={null}
+              variant={'solid'}
+              style={{
+                backgroundColor: styleConst.color.white,
+                width: '40%',
+                height: 70,
+              }}
               styleText={{
                 fontSize: 20,
-                color: styleConst.color.bg,
+                color: styleConst.color.blueNew,
               }}
             />
           )}
@@ -125,11 +130,16 @@ const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
             country={'ru'}
             type="button"
             leftIcon={<></>}
-            shadow={null}
-            variant={'outline'}
+            // shadow={null}
+            variant={'solid'}
+            style={{
+              backgroundColor: styleConst.color.white,
+              width: '40%',
+              height: 70,
+            }}
             styleText={{
               fontSize: 20,
-              color: styleConst.color.bg,
+              color: styleConst.color.blueNew,
             }}
           />
         </HStack>
