@@ -105,11 +105,11 @@ export default {
   },
 
   setExternalUserId(userID) {
-    OneSignal.User.login(userID);
+    OneSignal.login(userID);
   },
 
   removeExternalUserId() {
-    OneSignal.User.logout();
+    OneSignal.logout();
   },
 
   addTag(name, value) {
