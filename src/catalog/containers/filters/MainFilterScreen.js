@@ -350,6 +350,7 @@ const MainFilterScreen = ({
                     type: 'model',
                   });
                 });
+                modelsTmp[brandID].sort((a, b) => (a.label > b.label ? 1 : -1));
                 modelsAccordionTmp.push({
                   label: brandName,
                   id: brandID,
@@ -357,6 +358,8 @@ const MainFilterScreen = ({
                   type: 'brand',
                 });
               });
+              modelsAccordionTmp.sort((a, b) => (a.label > b.label ? 1 : -1));
+              brandsTmp.sort((a, b) => (a.label > b.label ? 1 : -1));
               setAccordion(modelsAccordionTmp);
               res.payload.data.brand = brandsTmp;
               res.payload.data.model = modelsTmp;
@@ -1042,7 +1045,7 @@ const MainFilterScreen = ({
                     values={_getSelectedLabels(get(stateFilters, 'colorType'))}
                     icon={{
                       as: Ionicons,
-                      name: 'md-color-palette-outline',
+                      name: 'color-palette-outline',
                       size: 'lg',
                     }}
                     bounceable={true}
