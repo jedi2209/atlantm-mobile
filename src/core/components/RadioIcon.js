@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 const RadioIcon = ({containerStyle, selected}) => {
   return (
     <Icon
-      name={selected ? 'md-radio-button-on' : 'md-radio-button-off'}
+      name={selected ? 'radio-button-on' : 'radio-button-off'}
       style={[styles.icon, containerStyle]}
       as={Ionicons}
     />
