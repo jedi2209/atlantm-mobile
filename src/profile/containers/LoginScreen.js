@@ -84,6 +84,31 @@ const mapDispatchToProps = {
   actionGetPhoneCode,
 };
 
+const backgrounds = {
+  // day: [
+  //   require('../../../assets/lkk/day_1.png'),
+  //   require('../../../assets/lkk/day_2.png'),
+  //   require('../../../assets/lkk/day_3.png'),
+  //   require('../../../assets/lkk/day_4.png'),
+  //   require('../../../assets/lkk/day_5.png'),
+  //   require('../../../assets/lkk/day_6.png'),
+  // ],
+  // sunset: [
+  //   require('../../../assets/lkk/sunset_1.png'),
+  //   require('../../../assets/lkk/sunset_2.png'),
+  // ],
+  all: [
+    require('../../../assets/lkk/day_1.png'),
+    require('../../../assets/lkk/day_2.png'),
+    require('../../../assets/lkk/day_3.png'),
+    require('../../../assets/lkk/day_4.png'),
+    require('../../../assets/lkk/day_5.png'),
+    require('../../../assets/lkk/day_6.png'),
+    require('../../../assets/lkk/sunset_1.png'),
+    require('../../../assets/lkk/sunset_2.png'),
+  ],
+};
+
 const LoginScreen = props => {
   const toast = useToast();
   const [isSigninInProgress, setSigninInProgress] = useState(false);
@@ -444,9 +469,14 @@ const LoginScreen = props => {
     <View testID="LoginScreen.Wrapper" style={{flex: 1}}>
       <ImageBackground
         resizeMode="cover"
+        // source={
+        //   {uri: get(props.dealerSelected, 'img.thumb') + '1000x1000'} ||
+        //   backgrounds.all[Math.floor(Math.random() * (backgrounds.all.length + 1))]
+        // }
         source={
-          {uri: get(props.dealerSelected, 'img.thumb') + '1000x1000'} ||
-          require('./bg.jpg')
+          backgrounds.all[
+            Math.floor(Math.random() * (backgrounds.all.length + 1))
+          ]
         }
         style={{
           width: '100%',
