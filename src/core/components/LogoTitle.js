@@ -41,6 +41,7 @@ const LogoTitle = props => {
         resizeMode="contain"
         style={[styles.Image, props?.styleImage]}
         source={logoPath}
+        {...props?.ImageProps}
       />
     </View>
   );

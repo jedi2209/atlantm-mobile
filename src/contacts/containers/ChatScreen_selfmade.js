@@ -44,11 +44,11 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.light,
   },
   messageText: {
-    color: 'white',
+    color: styleConst.color.white,
     fontSize: 16,
   },
   dateText: {
-    color: 'white',
+    color: styleConst.color.white,
     fontSize: 11,
     marginTop: 5,
     fontFamily: styleConst.font.light,

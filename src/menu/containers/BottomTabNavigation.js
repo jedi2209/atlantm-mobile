@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {Icon, useDisclose, Image, Pressable, Text, HStack} from 'native-base';
+import {Platform} from 'react-native';
+import {useDisclose, Icon} from 'native-base';
 import orderFunctions from '../../utils/orders';
 import Analytics from '../../utils/amplitude-analytics';
 import {connect} from 'react-redux';
@@ -39,6 +40,7 @@ import {
   ClassicHeaderBlue,
   BigCloseButton,
 } from '../../navigation/const';
+import { shadow } from 'react-native-paper';
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
@@ -55,6 +57,7 @@ const StackContacts = createStackNavigator();
 
 const iconSize = 7;
 const iconSizeFocused = 9;
+const isApple = Platform.OS === 'ios';
 
 const ProfileStackView = ({navigation, route}) => (
   <ProfileStack.Navigator
@@ -140,7 +143,15 @@ const ContactsStackView = ({navigation, route}) => (
       name="ContactsScreen"
       component={MainScreen}
       options={{
-        headerShown: false,
+        headerTitle: () => (
+          <LogoTitle containerStyle={{marginTop: isApple ? 10 : 0}} />
+        ),
+        headerStyle: {
+          height: 80,
+          backgroundColor: '#F8F8F8',
+          elevation: 0,
+          shadowOpacity: 0,
+        },
       }}
     />
   </StackContacts.Navigator>
@@ -195,14 +206,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             },
           }}
           options={{
-            headerShown: true,
-            headerTitle: () => <LogoTitle containerStyle={{marginTop: 0}} />,
-            headerStyle: {
-              height: 70,
-              backgroundColor: '#F8F8F8',
-              elevation: 0,
-              shadowOpacity: 0,
-            },
+            headerShown: false,
             tabBarLabel: strings.Menu.bottom.main,
             tabBarLabelStyle: {
               fontSize: 14,

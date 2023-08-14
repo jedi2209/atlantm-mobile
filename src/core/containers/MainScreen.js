@@ -503,13 +503,11 @@ const MainScreen = props => {
                   size={55}
                   as={Ionicons}
                   name={
-                    Platform.OS === 'android'
-                      ? 'logo-google-playstore'
-                      : 'logo-apple-appstore'
+                    isApple ? 'logo-apple-appstore' : 'logo-google-playstore'
                   }
-                  color="white"
+                  color={styleConst.color.white}
                   _dark={{
-                    color: 'white',
+                    color: styleConst.color.white,
                   }}
                   selectable={false}
                 />
@@ -548,9 +546,9 @@ const MainScreen = props => {
                   size={12}
                   as={Ionicons}
                   name={'mail-outline'}
-                  color="white"
+                  color={styleConst.color.white}
                   _dark={{
-                    color: 'white',
+                    color: styleConst.color.white,
                   }}
                   selectable={false}
                 />

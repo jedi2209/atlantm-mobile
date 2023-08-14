@@ -228,7 +228,7 @@ const BrandModelFilterScreen = ({
   }
 
   return (
-    <View flex={1} backgroundColor={'white'}>
+    <View flex={1} backgroundColor={styleConst.color.white}>
       <View style={{paddingBottom: 70}}>
         <NestedListView
           data={accordionModels}

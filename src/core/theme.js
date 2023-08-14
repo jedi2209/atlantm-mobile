@@ -28,6 +28,18 @@ export const theme = extendTheme({
       800: styleConst.color.systemBlue,
       900: styleConst.color.systemBlue,
     },
+    white: {
+      50: '#f0f0f0',
+      100: '#f2f2f2',
+      200: '#f2f3f4',
+      300: '#e7e7e7',
+      400: '#d1d1d1',
+      500: '#b6b6b6',
+      600: '#ffffff',
+      700: '#9b9b9b',
+      800: '#d1d1d1',
+      900: '#e7e7e7',
+    },
     // Redefining only one shade, rest of the color will remain same.
     amber: {
       400: '#d97706',
@@ -36,6 +48,7 @@ export const theme = extendTheme({
   config: {
     // Changing initialColorMode to 'dark'
     initialColorMode: 'light',
+    // useSystemColorMode: true,
   },
-  components: {},
+  // components: {},
 });

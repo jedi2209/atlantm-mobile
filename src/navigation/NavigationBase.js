@@ -809,9 +809,9 @@ const CarsStock = ({navigation, route}) => {
                     size={7}
                     as={MaterialCommunityIcons}
                     name="sort"
-                    color="white"
+                    color={styleConst.color.white}
                     _dark={{
-                      color: 'white',
+                      color: styleConst.color.white,
                     }}
                     style={styles.sortHeaderButton}
                   />

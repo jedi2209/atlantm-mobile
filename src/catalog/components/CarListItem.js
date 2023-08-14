@@ -722,7 +722,7 @@ const styles = StyleSheet.create({
     height: 15,
   },
   priceSpecialText: {
-    color: 'white',
+    color: styleConst.color.white,
     fontSize: 10,
     lineHeight: 10,
   },

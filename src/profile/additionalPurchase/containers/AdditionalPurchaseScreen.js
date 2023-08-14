@@ -328,7 +328,7 @@ const AdditionalPurchaseScreen = ({
                     variant={activeTab === val ? 'solid' : 'outline'}
                     // isLoading={activeTab === val && isLoading ? true : false}
                     // isLoadingText={strings.AdditionalPurchaseScreen.tabs[val]}
-                    _spinner={{color: 'white'}}
+                    _spinner={{color: styleConst.color.white}}
                     _text={{textTransform: 'uppercase'}}>
                     {strings.AdditionalPurchaseScreen.tabs[val]}
                   </Button>

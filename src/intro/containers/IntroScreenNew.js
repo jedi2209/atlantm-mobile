@@ -112,10 +112,12 @@ const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
               country={'by'}
               type="button"
               leftIcon={<></>}
-              // shadow={null}
+              _pressed={{
+                shadow: null,
+              }}
               variant={'solid'}
+              colorScheme={'white'}
               style={{
-                backgroundColor: styleConst.color.white,
                 width: '40%',
                 height: 70,
               }}
@@ -130,10 +132,12 @@ const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
             country={'ru'}
             type="button"
             leftIcon={<></>}
-            // shadow={null}
+            _pressed={{
+              shadow: null,
+            }}
             variant={'solid'}
+            colorScheme={'white'}
             style={{
-              backgroundColor: styleConst.color.white,
               width: '40%',
               height: 70,
             }}

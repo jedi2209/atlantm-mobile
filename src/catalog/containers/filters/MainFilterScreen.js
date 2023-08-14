@@ -676,7 +676,7 @@ const MainFilterScreen = ({
               variant={stockType === 'New' ? 'solid' : 'outline'}
               isLoading={stockType === 'New' && stockLoading ? true : false}
               isLoadingText={strings.NewCarListScreen.titleShort}
-              _spinner={{color: 'white'}}
+              _spinner={{color: styleConst.color.white}}
               width="45%"
               _text={{textTransform: 'uppercase'}}
               onPress={() => updateStock('New')}>
@@ -688,7 +688,7 @@ const MainFilterScreen = ({
               isLoading={stockType === 'Used' && stockLoading ? true : false}
               isLoadingText={strings.UsedCarListScreen.titleShort}
               spinnerPlacement="end"
-              _spinner={{color: 'white'}}
+              _spinner={{color: styleConst.color.white}}
               width="45%"
               _text={{textTransform: 'uppercase'}}
               onPress={() => updateStock('Used')}>

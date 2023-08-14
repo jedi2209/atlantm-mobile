@@ -65,9 +65,9 @@ const ImageCarousel = ({
                     size={5}
                     as={MaterialCommunityIcons}
                     name="wallet-giftcard"
-                    color="white"
+                    color={styleConst.color.white}
                     _dark={{
-                      color: 'white',
+                      color: styleConst.color.white,
                     }}
                   />
                 }
@@ -82,9 +82,9 @@ const ImageCarousel = ({
                     size={5}
                     as={MaterialCommunityIcons}
                     name="steering"
-                    color="white"
+                    color={styleConst.color.white}
                     _dark={{
-                      color: 'white',
+                      color: styleConst.color.white,
                     }}
                   />
                 }
@@ -112,9 +112,9 @@ const ImageCarousel = ({
                           size={5}
                           as={MaterialCommunityIcons}
                           name="phone-incoming"
-                          color="white"
+                          color={styleConst.color.white}
                           _dark={{
-                            color: 'white',
+                            color: styleConst.color.white,
                           }}
                         />
                       }
@@ -136,9 +136,9 @@ const ImageCarousel = ({
                           size={5}
                           as={MaterialCommunityIcons}
                           name="phone-outgoing"
-                          color="white"
+                          color={styleConst.color.white}
                           _dark={{
-                            color: 'white',
+                            color: styleConst.color.white,
                           }}
                         />
                       }
@@ -158,9 +158,9 @@ const ImageCarousel = ({
                       size={8}
                       as={MaterialCommunityIcons}
                       name="wallet-giftcard"
-                      color="white"
+                      color={styleConst.color.white}
                       _dark={{
-                        color: 'white',
+                        color: styleConst.color.white,
                       }}
                     />
                   }
@@ -251,7 +251,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
-    backgroundColor: 'white',
+    backgroundColor: styleConst.color.white,
     borderRadius: 5,
   },
   iconText: {
