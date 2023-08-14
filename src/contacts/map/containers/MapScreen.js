@@ -424,7 +424,7 @@ class MapScreen extends Component {
                 size={22}
                 as={MaterialCommunityIcons}
                 name="navigation"
-                color="white"
+                color={styleConst.color.white}
                 _dark={{
                   color: styleConst.color.white,
                 }}

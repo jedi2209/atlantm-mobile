@@ -666,7 +666,7 @@ const MainFilterScreen = ({
   return (
     <>
       <ScrollView style={styles.container}>
-        <Box px="3" py="3" bg="white">
+        <Box px="3" py="3" bg={styleConst.color.white}>
           <Button.Group
             isAttached
             colorScheme={'blue'}
@@ -709,7 +709,7 @@ const MainFilterScreen = ({
                 py="3"
                 borderColor={'gray.100'}
                 borderTopWidth="5"
-                bg="white">
+                bg={styleConst.color.white}>
                 <FilterRow
                   onPress={() => {
                     _showHideModal(true, modals.city);
@@ -731,7 +731,7 @@ const MainFilterScreen = ({
                 py="3"
                 borderColor={'gray.100'}
                 borderTopWidth="5"
-                bg="white">
+                bg={styleConst.color.white}>
                 <FilterRow
                   onPress={() => {
                     navigation.navigate('BrandModelFilterScreen', {
@@ -754,7 +754,7 @@ const MainFilterScreen = ({
               </Box>
             ) : null}
             {stockType === 'Used' && dataFilters && dataFilters.data ? (
-              <Box px="3" py="3" mt="1" bg="white">
+              <Box px="3" py="3" mt="1" bg={styleConst.color.white}>
                 <VStack
                   space="4"
                   divider={<Divider bg="gray.100" thickness="1" />}>
@@ -828,7 +828,7 @@ const MainFilterScreen = ({
               py="2"
               borderColor={'gray.100'}
               borderTopWidth="5"
-              bg="white">
+              bg={styleConst.color.white}>
               <VStack
                 space="2"
                 divider={<Divider bg="gray.100" thickness="1" />}>
@@ -901,7 +901,7 @@ const MainFilterScreen = ({
               py="2"
               borderColor={'gray.100'}
               borderTopWidth="5"
-              bg="white">
+              bg={styleConst.color.white}>
               <VStack
                 space="2"
                 divider={<Divider bg="gray.100" thickness="1" />}>
@@ -1064,7 +1064,7 @@ const MainFilterScreen = ({
               py="2"
               borderColor={'gray.100'}
               borderTopWidth="5"
-              bg="white">
+              bg={styleConst.color.white}>
               {stockType === 'Used' ? (
                 <VStack
                   space="2"

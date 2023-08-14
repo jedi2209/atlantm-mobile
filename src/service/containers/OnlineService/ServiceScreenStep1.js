@@ -661,7 +661,7 @@ class ServiceScreenStep1 extends Component {
                             alignItems={'center'}
                             alignSelf={'center'}>
                             <Icon
-                              name="ios-information-circle-outline"
+                              name="information-circle-outline"
                               size={8}
                               as={Ionicons}
                               style={styles.textPriceIcon}

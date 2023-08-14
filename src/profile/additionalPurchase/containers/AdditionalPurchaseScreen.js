@@ -297,18 +297,17 @@ const AdditionalPurchaseScreen = ({
   };
 
   async function getDataAdditionalPurchase(val, SAPuser) {
-    const res = await API.fetchAdditionalPurchaseItem({
+    return await API.fetchAdditionalPurchaseItem({
       item: val.doc,
       userid: SAPuser.id,
       token: SAPuser.token,
       dealer: val.dealer.id,
     });
-    return res;
   }
 
   return (
     <PaperProvider theme={theme}>
-      <View bg="white" flex={1}>
+      <View bg={styleConst.color.white} flex={1}>
         {allDataFilter.length > 1 ? (
           <Box px="3" py="2" position={'absolute'} w="100%" zIndex={1000}>
             <Button.Group

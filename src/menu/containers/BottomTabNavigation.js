@@ -146,8 +146,11 @@ const ContactsStackView = ({navigation, route}) => (
         headerTitle: () => (
           <LogoTitle containerStyle={{marginTop: isApple ? 10 : 0}} />
         ),
+        headerBackButtonMenuEnabled: false,
+        headerBackVisible: false,
+        headerBackTitleVisible: false,
         headerStyle: {
-          height: 80,
+          height: 90,
           backgroundColor: '#F8F8F8',
           elevation: 0,
           shadowOpacity: 0,
@@ -207,6 +210,9 @@ const BottomTabNavigation = ({navigation, route, region}) => {
           }}
           options={{
             headerShown: false,
+            headerBackButtonMenuEnabled: false,
+            headerBackVisible: false,
+            headerBackTitleVisible: false,
             tabBarLabel: strings.Menu.bottom.main,
             tabBarLabelStyle: {
               fontSize: 14,

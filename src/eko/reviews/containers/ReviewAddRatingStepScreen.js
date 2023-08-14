@@ -27,6 +27,7 @@ import {
   REVIEW_ADD_RATING_1,
 } from '../../constants';
 import {strings} from '../../../core/lang/const';
+import styleConst from '../../../core/style-const';
 
 const mapStateToProps = ({dealer, eko, nav, profile}) => {
   return {
@@ -116,7 +117,7 @@ const ReviewAddRatingStepScreen = props => {
 
   const _renderPublicAgree = isChecked => {
     return (
-      <View py={5} backgroundColor="white" px={3}>
+      <View py={5} backgroundColor={styleConst.color.white} px={3}>
         <Checkbox
           aria-label={strings.ReviewAddRatingStepScreen.approve}
           isChecked={isChecked}

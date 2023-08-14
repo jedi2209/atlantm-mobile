@@ -55,7 +55,7 @@ export default class InfoLine extends Component {
       <View style={[styles.container, gap ? styles.gap : null]}>
         {infoIcon ? (
           <Icon
-            name="ios-information-circle-outline"
+            name="information-circle-outline"
             as={Ionicons}
             style={styles.icon}
           />

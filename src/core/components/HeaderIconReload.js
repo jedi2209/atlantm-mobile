@@ -40,7 +40,7 @@ export default class HeaderIconReload extends Component {
         <Icon
           size={22}
           as={Ionicons}
-          name="ios-refresh"
+          name="refresh"
           color="primary.600"
           _dark={{
             color: 'warmGray.50',

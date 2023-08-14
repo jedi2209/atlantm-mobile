@@ -178,7 +178,7 @@ export default class Review extends Component {
       return (
         <Box
           shadow={3}
-          backgroundColor="white"
+          backgroundColor={styleConst.color.white}
           p={2}
           pb={2}
           mb={5}
