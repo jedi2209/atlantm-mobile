@@ -460,48 +460,50 @@ const MainScreen = props => {
             />
           );
         })}
-        <Pressable px={2} pt={2} onPress={() => {}}>
-          <HStack justifyContent={'space-between'}>
-            <Text py={2} fontSize={16} fontFamily={styleConst.font.regular}>
-              {strings.Menu.main.autocenters}
-            </Text>
-          </HStack>
-          <Box
-            borderWidth="1"
-            borderColor="coolGray.300"
-            bg={styleConst.color.green}
-            borderRadius={styleConst.borderRadius}
-            shadow={styleConst.shadow.default}
-            style={[styles.block]}>
-            <MapView
-              key={'map' + colorScheme}
-              provider={PROVIDER_GOOGLE}
-              mapType={isApple ? 'mutedStandard' : 'none'}
-              scrollEnabled={false}
-              rotateEnabled={false}
-              zoomControlEnabled={false}
-              zoomTapEnabled={false}
-              scrollDuringRotateOrZoomEnabled={false}
-              pitchEnabled={false}
-              toolbarEnabled={false}
-              loadingEnabled={true}
-              showsCompass={false}
-              liteMode={true}
-              showsIndoors={false}
-              userInterfaceStyle={colorScheme}
-              initialRegion={{
-                latitude: 53.893009,
-                longitude: 27.567444,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
-              style={{
-                height: 300,
-                borderRadius: styleConst.borderRadius,
-              }}
-            />
-          </Box>
-        </Pressable>
+        {false ? (
+          <Pressable px={2} pt={2} onPress={() => {}}>
+            <HStack justifyContent={'space-between'}>
+              <Text py={2} fontSize={16} fontFamily={styleConst.font.regular}>
+                {strings.Menu.main.autocenters}
+              </Text>
+            </HStack>
+            <Box
+              borderWidth="1"
+              borderColor="coolGray.300"
+              bg={styleConst.color.green}
+              borderRadius={styleConst.borderRadius}
+              shadow={styleConst.shadow.default}
+              style={[styles.block]}>
+              <MapView
+                key={'map' + colorScheme}
+                provider={PROVIDER_GOOGLE}
+                mapType={isApple ? 'mutedStandard' : 'none'}
+                scrollEnabled={false}
+                rotateEnabled={false}
+                zoomControlEnabled={false}
+                zoomTapEnabled={false}
+                scrollDuringRotateOrZoomEnabled={false}
+                pitchEnabled={false}
+                toolbarEnabled={false}
+                loadingEnabled={true}
+                showsCompass={false}
+                liteMode={true}
+                showsIndoors={false}
+                userInterfaceStyle={colorScheme}
+                initialRegion={{
+                  latitude: 53.893009,
+                  longitude: 27.567444,
+                  latitudeDelta: 0.0922,
+                  longitudeDelta: 0.0421,
+                }}
+                style={{
+                  height: 300,
+                  borderRadius: styleConst.borderRadius,
+                }}
+              />
+            </Box>
+          </Pressable>
+        ) : null}
         {_renderActions({isFetchInfoList, infoList, navigation})}
         <View px={2} mt={4}>
           <MainScreenButton

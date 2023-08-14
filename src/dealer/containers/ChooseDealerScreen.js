@@ -131,7 +131,7 @@ const _renderItem = ({item, props}) => {
             mt="2"
             mx="2"
             shadow="1"
-            backgroundColor="white"
+            backgroundColor={styleConst.color.white}
             borderRadius="md"
             style={{
               transform: [

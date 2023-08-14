@@ -87,7 +87,7 @@ export default class AppIsDeprecated extends Component {
                     'itms-apps://apps.apple.com/app/apple-store/id1492492166',
                   );
                 }}>
-                <Icon name="ios-appstore" />
+                <Icon name="appstore" />
                 <Text>Скачать новое приложение</Text>
               </Button>
             </View>

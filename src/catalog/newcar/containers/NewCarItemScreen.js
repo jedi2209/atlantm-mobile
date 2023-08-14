@@ -867,7 +867,9 @@ const NewCarItemScreen = ({
 
   return (
     <>
-      <ScrollView backgroundColor="white" testID="NewCarItemScreen.Wrapper">
+      <ScrollView
+        backgroundColor={styleConst.color.white}
+        testID="NewCarItemScreen.Wrapper">
         <View>
           {get(carDetails, 'color.picker.codes.hex', null) ? (
             <ColorBox
@@ -1007,7 +1009,7 @@ const NewCarItemScreen = ({
                 justifyContent={'space-between'}
                 alignItems={'center'}
                 px="2%"
-                backgroundColor="white"
+                backgroundColor={styleConst.color.white}
                 testID={'NewCarItemScreen.AccordionTitle_' + item.title}
                 style={styles.accordionHeader}>
                 <Text style={styles.accordionHeaderTitle}>{item.title}</Text>
@@ -1066,7 +1068,7 @@ const NewCarItemScreen = ({
                   as={MaterialCommunityIcons}
                   name="steering"
                   size={6}
-                  color="white"
+                  color={styleConst.color.white}
                 />
               }
               style={[

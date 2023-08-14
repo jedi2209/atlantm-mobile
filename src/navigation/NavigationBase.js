@@ -1043,7 +1043,10 @@ const UsedCars = ({navigation, route}) => {
                     name="sort"
                     style={styles.sortHeaderButton}
                     size={7}
-                    color="white"
+                    color={styleConst.color.white}
+                    _dark={{
+                      color: styleConst.color.white,
+                    }}
                   />
                 </Pressable>
               </View>

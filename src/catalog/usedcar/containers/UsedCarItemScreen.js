@@ -264,7 +264,7 @@ const UsedCarItemScreen = props => {
         <Icon
           as={MaterialCommunityIcons}
           name="car-multiple"
-          color="white"
+          color={styleConst.color.white}
           size="6xl"
           style={{
             position: 'absolute',
@@ -439,7 +439,9 @@ const UsedCarItemScreen = props => {
 
   return (
     <>
-      <ScrollView backgroundColor="white" testID="UsedCarItemScreen.Wrapper">
+      <ScrollView
+        backgroundColor={styleConst.color.white}
+        testID="UsedCarItemScreen.Wrapper">
         <View>
           <View
             style={[
@@ -904,7 +906,7 @@ const UsedCarItemScreen = props => {
                   justifyContent={'space-between'}
                   alignItems={'center'}
                   px="2%"
-                  backgroundColor="white"
+                  backgroundColor={styleConst.color.white}
                   testID={'NewCarItemScreen.AccordionTitle_' + item.title}
                   style={styles.accordionHeader}>
                   <Text style={styles.accordionHeaderTitle}>{item.title}</Text>
@@ -988,7 +990,7 @@ const UsedCarItemScreen = props => {
                 <Icon
                   as={MaterialCommunityIcons}
                   name="steering"
-                  color="white"
+                  color={styleConst.color.white}
                   size={6}
                 />
               }
