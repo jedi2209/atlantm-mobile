@@ -8,11 +8,12 @@ import styleConst from '../../core/style-const';
 import LogoTitle from '../../core/components/LogoTitle';
 import LogoLoader from '../../core/components/LogoLoader';
 import FlagButton from '../../core/components/FlagButton';
+import PushNotifications from '../../core/components/PushNotifications';
 import {year} from '../../utils/date';
 
 // actions
 import {connect} from 'react-redux';
-import {selectDealer} from '../../dealer/actions';
+import {selectDealer, selectRegion} from '../../dealer/actions';
 
 const mapDispatchToProps = {
   selectDealer,
@@ -35,6 +36,12 @@ const styles = StyleSheet.create({
   },
 });
 
+const dealersList = {
+  ru: 'listRussia',
+  by: 'listBelarussia',
+  ua: 'listUkraine',
+};
+
 const mapStateToProps = ({dealer}) => {
   return {
     dealer,
@@ -47,14 +54,17 @@ const currYearSubstract = year - 1991;
 const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
   const [isLoading, setLoading] = useState(false);
 
-  const onPressButton = async dealers => {
+  const onPressButton = async regionSelected => {
     setLoading(true);
     selectDealer({
-      dealerBaseData: dealer[dealers][0],
-      dealerSelected: dealer[dealers][0],
+      dealerBaseData: dealer[dealersList[regionSelected]][0],
+      dealerSelected: dealer[dealersList[regionSelected]][0],
       isLocal: false,
     })
       .then(action => {
+        selectRegion(regionSelected);
+        PushNotifications.addTag('region', regionSelected);
+        PushNotifications.removeTag('dealer');
         navigation.navigate('BottomTabNavigation', {screen: 'ContactsScreen'});
         // setLoading(false);
       })
@@ -102,13 +112,13 @@ const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
         <HStack alignContent={'center'} justifyContent={'space-around'}>
           {countLogoClick === currYearSubstract && false ? (
             <FlagButton
-              onPress={() => onPressButton('listBelarussia')}
+              onPress={() => onPressButton('by')}
               country={'belarusFree'}
               type="flag"
             />
           ) : (
             <FlagButton
-              onPress={() => onPressButton('listBelarussia')}
+              onPress={() => onPressButton('by')}
               country={'by'}
               type="button"
               leftIcon={<></>}
@@ -128,7 +138,7 @@ const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
             />
           )}
           <FlagButton
-            onPress={() => onPressButton('listRussia')}
+            onPress={() => onPressButton('ru')}
             country={'ru'}
             type="button"
             leftIcon={<></>}

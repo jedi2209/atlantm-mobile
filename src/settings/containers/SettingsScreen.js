@@ -188,10 +188,10 @@ const SettingsScreen = props => {
             </View>
             <View style={{marginTop: 10}}>
               <Text selectable={false} style={styles.pushText}>
-                {strings.SettingsScreen.pushText +
-                  ' ' +
-                  props.dealerSelected.name +
-                  strings.SettingsScreen.pushText2}
+                {[
+                  strings.SettingsScreen.pushText,
+                  strings.SettingsScreen.pushText2,
+                ].join(' ')}
               </Text>
             </View>
           </VStack>

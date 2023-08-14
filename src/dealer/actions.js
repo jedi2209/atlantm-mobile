@@ -248,7 +248,7 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
           // dispatch(fetchInfoList(dealer.region, dealer.id));
         }
 
-        PushNotifications.addTag('dealer', dealer.id);
+        PushNotifications.addTag('region', dealer.region);
 
         if (!isLocal) {
           // обновляем дилера глобально
