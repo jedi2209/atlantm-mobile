@@ -177,6 +177,7 @@ const CarCostScreen = ({
                   isLocal: true,
                   returnScreen: navigation.state?.routeName,
                   readonly: dealerFromNavigation ? true : false,
+                  showBrands: false,
                 },
               },
               {

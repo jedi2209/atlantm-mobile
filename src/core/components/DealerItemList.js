@@ -96,13 +96,14 @@ const MainWrapper = props => {
 };
 
 const DealerItemList = props => {
-  const {city, dealer, style, wrapperProps, placeholder} = props;
+  const {city, dealer, style, wrapperProps, placeholder, showBrands} = props;
   const navigation = useNavigation();
 
   const deviceWidth = Dimensions.get('window').width;
   const dealerBrand = get(dealer, 'brand', []);
   let nameWidth = '4/6';
   let logoWidth = '2/6';
+
   if (deviceWidth <= 480) {
     if (dealerBrand && dealerBrand?.length > 1) {
       nameWidth = '64%';
@@ -117,6 +118,11 @@ const DealerItemList = props => {
       nameWidth = '63%';
       logoWidth = '37%';
     }
+  }
+
+  if (!showBrands) {
+    nameWidth = 'auto';
+    logoWidth = '0';
   }
 
   return (
@@ -163,7 +169,7 @@ const DealerItemList = props => {
               {dealer.city.name}
             </Text>
           ) : null}
-          {props.showBrands &&
+          {showBrands &&
           dealerBrand &&
           dealerBrand?.length > 2 &&
           !placeholder ? (
@@ -175,7 +181,7 @@ const DealerItemList = props => {
             </View>
           ) : null}
         </VStack>
-        {props.showBrands &&
+        {showBrands &&
         dealerBrand &&
         dealerBrand?.length <= 2 &&
         !placeholder ? (
@@ -214,7 +220,7 @@ DealerItemList.defaultProps = {
   goBack: false,
   isLocal: false,
   readonly: false,
-  showBrands: true,
+  showBrands: false,
   placeholder: null,
 };
 
