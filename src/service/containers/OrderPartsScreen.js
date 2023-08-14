@@ -269,6 +269,7 @@ class OrderPartsScreen extends Component {
                 value: this.props.dealerSelected,
                 props: {
                   goBack: false,
+                  showBrands: false,
                 },
               },
             ],

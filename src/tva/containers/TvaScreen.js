@@ -72,6 +72,7 @@ const TvaScreen = props => {
               value: dealerSelected,
               props: {
                 goBack: false,
+                showBrands: false,
               },
             },
           ],

@@ -150,6 +150,7 @@ const CallMeBackScreen = ({
               props: {
                 goBack: true,
                 isLocal: true,
+                showBrands: false,
               },
             },
           ],

@@ -132,6 +132,7 @@ class ReviewsScreen extends Component {
           dealer={dealerSelected}
           goBack={true}
           style={{marginHorizontal: 8}}
+          showBrands={false}
         />
 
         <ReviewsList
