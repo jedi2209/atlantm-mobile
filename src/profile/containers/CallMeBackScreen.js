@@ -57,10 +57,11 @@ const CallMeBackScreen = ({
   const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
 
   useEffect(() => {
-    if (route?.params && route.params?.dealerCustom) {
-      setDealerSelectedLocal(route?.params?.dealerCustom);
-    }
+    //if (route?.params && route.params?.dealerCustom) {
+    //setDealerSelectedLocal(route?.params?.dealerCustom);
+    //} else {
     setDealerSelectedLocal(dealerSelected);
+    //}
     return () => {
       localDealerClear();
     };

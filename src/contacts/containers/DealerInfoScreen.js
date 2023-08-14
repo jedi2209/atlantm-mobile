@@ -474,7 +474,7 @@ const DealerInfoScreen = ({
         contentContainerStyle={{paddingRight: 30}}
         style={styles.scrollView}>
         <HStack>
-          {false ? (
+          {true ? (
             <Plate
               title={strings.ContactsScreen.call}
               status={callAvailable ? 'enabled' : 'disabled'}
@@ -533,7 +533,7 @@ const DealerInfoScreen = ({
               }}
             />
           ) : null}
-          {false ? (
+          {true ? (
             <Plate
               testID="ContactsScreen.ButtonCallMe"
               title={strings.ContactsScreen.callOrder}
@@ -732,7 +732,7 @@ const DealerInfoScreen = ({
   };
 
   const onPressCallMe = async () => {
-    navigation.navigate('CallMeBackScreen');
+    navigation.navigate('CallMeBackScreen', {dealerCustom: dealerSelected.id});
   };
 
   const onPressChat = () => {
