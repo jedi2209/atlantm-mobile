@@ -119,7 +119,10 @@ const SettingsScreen = props => {
     let text,
       title = '';
     if (value === true) {
-      PushNotifications.subscribeToTopic('actions', dealerSelected.id).then(
+      PushNotifications.unsubscribeFromTopic('actions');
+      PushNotifications.subscribeToTopic(
+        'actionsRegion',
+        dealerSelected.region,
         isPermission => {
           console.info('isPermission', isPermission);
           props.actionSetPushActionSubscribe(isPermission);
@@ -131,6 +134,7 @@ const SettingsScreen = props => {
         },
       );
     } else {
+      PushNotifications.unsubscribeFromTopic('actionsRegion');
       PushNotifications.unsubscribeFromTopic('actions');
       props.actionSetPushActionSubscribe(value);
       title = strings.Notifications.success.titleSad;
