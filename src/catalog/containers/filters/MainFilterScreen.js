@@ -350,7 +350,12 @@ const MainFilterScreen = ({
                     type: 'model',
                   });
                 });
-                modelsTmp[brandID].sort((a, b) => (a.label > b.label ? 1 : -1));
+                modelsTmp[brandID].sort((a, b) => {
+                  if (isNaN(a.label)) {
+                    return a.label - b.label;
+                  }
+                  return a.label > b.label ? 1 : -1;
+                });
                 modelsAccordionTmp.push({
                   label: brandName,
                   id: brandID,
