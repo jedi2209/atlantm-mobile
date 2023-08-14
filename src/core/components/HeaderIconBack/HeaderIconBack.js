@@ -80,9 +80,9 @@ const HeaderBackButton = props => {
           size={props.iconSize}
           as={fontType}
           name={props.icon}
-          color="white"
+          color={styleConst.color.white}
           _dark={{
-            color: 'white',
+            color: styleConst.color.white,
           }}
           style={[
             {

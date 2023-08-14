@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {StyleSheet} from 'react-native';
-import {Button, HStack, Icon, IconButton, useToast} from 'native-base';
+import {IconButton} from 'native-base';
 import {
   appleAuth,
   AppleButton,
@@ -12,6 +12,8 @@ import Google from '../auth/Google';
 import VK from '../auth/VK';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
+import styleConst from '../../core/style-const';
 
 export const SocialAuthButton = props => {
   const extStyle = props.style;
@@ -40,7 +42,7 @@ export const SocialAuthButton = props => {
             as: FontAwesome5,
             name: 'facebook',
             size: 10,
-            color: 'white',
+            color: styleConst.color.white,
           }}
           shadow={3}
           {...propsData}
@@ -55,7 +57,7 @@ export const SocialAuthButton = props => {
             as: FontAwesome5,
             name: 'google',
             size: 7,
-            color: 'white',
+            color: styleConst.color.white,
           }}
           shadow={3}
           {...propsData}
@@ -70,7 +72,7 @@ export const SocialAuthButton = props => {
             as: FontAwesome5,
             name: 'vk',
             size: 8,
-            color: 'white',
+            color: styleConst.color.white,
           }}
           shadow={3}
           {...propsData}

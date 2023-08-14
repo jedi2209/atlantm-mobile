@@ -180,7 +180,7 @@ const SettingsScreen = props => {
                     false: '#767577',
                     true: styleConst.color.darkBg,
                   }}
-                  thumbColor={'white'}
+                  thumbColor={styleConst.color.white}
                   ios_backgroundColor={styleConst.color.darkBg}
                   onToggle={_onSwitchActionSubscribe}
                 />
@@ -238,10 +238,7 @@ const SettingsScreen = props => {
                     ? 'logo-google-playstore'
                     : 'logo-apple-appstore'
                 }
-                color="white"
-                _dark={{
-                  color: 'white',
-                }}
+                color={styleConst.color.white}
                 selectable={false}
               />
             </HStack>
@@ -281,10 +278,7 @@ const SettingsScreen = props => {
                 size={55}
                 as={Ionicons}
                 name={'mail-outline'}
-                color="white"
-                _dark={{
-                  color: 'white',
-                }}
+                color={styleConst.color.white}
                 selectable={false}
               />
             </HStack>

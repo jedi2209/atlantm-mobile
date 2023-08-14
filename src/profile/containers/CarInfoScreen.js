@@ -172,7 +172,7 @@ const CarInfoScreen = props => {
 
   return (
     <Box
-      backgroundColor={'white'}
+      backgroundColor={styleConst.color.white}
       flex={1}
       bg={{
         linearGradient: {

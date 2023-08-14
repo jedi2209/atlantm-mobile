@@ -367,16 +367,14 @@ const DealerInfoScreen = ({
                   color: 'warmGray.50',
                 }}
               />
-              <Text style={{color: 'white', fontSize: 10, lineHeight: 12}}>
+              <Text
+                style={{
+                  color: styleConst.color.white,
+                  fontSize: 10,
+                  lineHeight: 12,
+                }}>
                 {strings.ContactsScreen.timework}
               </Text>
-              {/* <VStack alignItems={'center'}>
-                  <Text style={{color: 'white', fontSize: 12}}>вторник</Text>
-                  <Text style={{color: 'white', fontSize: 13}}>
-                    с 9 до 17
-                  </Text>
-                </VStack> */}
-              {/* </HStack> */}
             </Pressable>
           </HStack>
           <View
@@ -435,16 +433,14 @@ const DealerInfoScreen = ({
                   color: 'warmGray.50',
                 }}
               />
-              <Text style={{color: 'white', fontSize: 10, lineHeight: 12}}>
+              <Text
+                style={{
+                  color: styleConst.color.white,
+                  fontSize: 10,
+                  lineHeight: 12,
+                }}>
                 {strings.ContactsScreen.timework}
               </Text>
-              {/* <VStack alignItems={'center'}>
-                  <Text style={{color: 'white', fontSize: 12}}>вторник</Text>
-                  <Text style={{color: 'white', fontSize: 13}}>
-                    с 9 до 17
-                  </Text>
-                </VStack> */}
-              {/* </HStack> */}
             </Pressable>
           </HStack>
           <View

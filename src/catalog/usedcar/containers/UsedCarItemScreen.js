@@ -616,7 +616,7 @@ const UsedCarItemScreen = props => {
                       size={6}
                     />
                   }
-                  _text={{fontSize: 16, color: 'white'}}
+                  _text={{fontSize: 16, color: styleConst.color.white}}
                   style={[
                     !phone ? stylesFooter.buttonOnlyOne : null,
                     styles.itemOrderCallBack,
@@ -638,7 +638,7 @@ const UsedCarItemScreen = props => {
                         size={6}
                       />
                     }
-                    _text={{fontSize: 16, color: 'white'}}
+                    _text={{fontSize: 16, color: styleConst.color.white}}
                     style={[styles.itemOrderCall, {width: '48%'}]}>
                     {strings.ContactsScreen.call}
                   </Button>

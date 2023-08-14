@@ -284,7 +284,7 @@ const InfoPostScreen = ({
   }
 
   return (
-    <View style={{flex: 1}} backgroundColor={'white'}>
+    <View style={{flex: 1}} backgroundColor={styleConst.color.white}>
       <ScrollView style={{margin: 0, padding: 0, flex: 1}}>
         {!text || isLoading ? (
           <LogoLoader
@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: styleConst.color.lightBlue,
-    color: 'white',
+    color: styleConst.color.white,
     borderTopWidth: 0,
     width: '47%',
     borderRadius: 0,

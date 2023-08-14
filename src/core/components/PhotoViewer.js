@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   errorText: {
-    color: 'white',
+    color: styleConst.color.white,
     fontStyle: 'italic',
     fontSize: 18,
     fontFamily: styleConst.font.regular,

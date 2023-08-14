@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
   },
   groupFields: {
     borderRadius: 4,
-    backgroundColor: 'white',
+    backgroundColor: styleConst.color.white,
   },
   field: {
     paddingRight: 15,

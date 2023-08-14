@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 18,
     color: '#bababa',
-    backgroundColor: 'white',
+    backgroundColor: '#ffffff',
     zIndex: 10,
     width: '100%',
   },

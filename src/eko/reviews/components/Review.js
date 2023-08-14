@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
   itemInList: {
     paddingBottom: 3,
     minHeight: 150,
-    backgroundColor: 'white',
+    backgroundColor: styleConst.color.white,
     marginBottom: 10,
     width: '96%',
     marginHorizontal: '2%',

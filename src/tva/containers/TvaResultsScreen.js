@@ -304,7 +304,7 @@ const TvaResultsScreen = props => {
                       paddingBottom: 0,
                       paddingHorizontal: 0,
                       maxHeight: 150,
-                      backgroundColor: 'white',
+                      backgroundColor: styleConst.color.white,
                       fontSize: 18,
                     }}
                     label={strings.TvaResultsScreen.messageToServiceMan}

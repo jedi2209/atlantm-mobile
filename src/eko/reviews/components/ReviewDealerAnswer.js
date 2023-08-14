@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 1.5,
     elevation: 3,
-    backgroundColor: 'white',
+    backgroundColor: styleConst.color.white,
     marginBottom: 10,
     marginHorizontal: 7,
     borderRadius: 5,
@@ -56,7 +56,7 @@ export default class ReviewDealerAnswer extends Component {
         mb={10}
         mx={3}
         borderRadius={5}
-        backgroundColor={'white'}>
+        backgroundColor={styleConst.color.white}>
         <Text style={styles.title}>
           {strings.ReviewDealerAnswer.dealerAnswer}
         </Text>

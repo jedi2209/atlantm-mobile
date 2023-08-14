@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   titleBackgroundbottom: {
     borderBottomRightRadius: styleConst.borderRadius,
     borderBottomLeftRadius: styleConst.borderRadius,
-    bottom: 0,
+    bottom: -0.1,
   },
 });
 
