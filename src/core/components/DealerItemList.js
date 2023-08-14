@@ -154,7 +154,7 @@ const DealerItemList = props => {
           <Text
             style={stylesDealerItemList.name}
             ellipsizeMode="tail"
-            numberOfLines={1}>
+            numberOfLines={2}>
             {placeholder
               ? placeholder
               : dealer && dealer.name
