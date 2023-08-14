@@ -185,9 +185,11 @@ const _onPressDealerItem = ({
     ) {
       if (action.type === DEALER__SUCCESS) {
         if (pushActionSubscribeState) {
-          PushNotifications.subscribeToTopic('actions', newDealer.id);
+          PushNotifications.unsubscribeFromTopic('actions');
+          PushNotifications.subscribeToTopic('actionsRegion', newDealer.region);
         } else {
           PushNotifications.unsubscribeFromTopic('actions');
+          PushNotifications.unsubscribeFromTopic('actionsRegion');
         }
       }
       if (returnScreen) {
