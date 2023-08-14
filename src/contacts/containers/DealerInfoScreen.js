@@ -146,7 +146,7 @@ const mapDispatchToProps = {
 };
 
 const _renderInfoList = params => {
-  const {isFetchInfoList, infoList, navigation} = params;
+  const {isFetchInfoList, infoList, navigation, dealerID} = params;
   if (isFetchInfoList) {
     return (
       <View style={styles.spinnerContainer}>
@@ -177,7 +177,7 @@ const _renderInfoList = params => {
             {strings.ContactsScreen.currentActions}
           </Text>
           <Text
-            onPress={() => navigation.navigate('InfoList')}
+            onPress={() => navigation.navigate('InfoList', {dealerID})}
             style={{
               color: styleConst.color.lightBlue,
               fontSize: 14,
@@ -832,7 +832,12 @@ const DealerInfoScreen = ({
               emergencyManagerInfo: dealerSelected.emergencyManagerInfo,
               navigation,
             })} */}
-            {_renderInfoList({isFetchInfoList, infoList, navigation})}
+            {_renderInfoList({
+              isFetchInfoList,
+              infoList,
+              navigation,
+              dealerID: dealerSelected.id,
+            })}
           </View>
         </ScrollView>
       </View>

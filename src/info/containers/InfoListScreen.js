@@ -87,6 +87,7 @@ const InfoListScreen = ({
   actionListReset,
   list,
   filters,
+  route,
   currLang,
 }) => {
   const [isRefreshing, setRefreshing] = useState(false);
@@ -110,9 +111,13 @@ const InfoListScreen = ({
 
   useEffect(() => {
     console.info('== InfoListScreen ==');
+    let dealerAPIRequest = null;
+    if (route.params?.dealerID) {
+      dealerAPIRequest = route.params?.dealerID;
+    }
     if (!isFetchInfoList) {
       actionListReset();
-      fetchInfoList(region, null, filterType).then(action => {
+      fetchInfoList(region, dealerAPIRequest, filterType).then(action => {
         if (action.type === INFO_LIST__FAIL) {
           let message = get(
             action,
@@ -221,7 +226,7 @@ const InfoListScreen = ({
                                 <Icon
                                   size={4}
                                   as={Ionicons}
-                                  name="ios-close-outline"
+                                  name="close-outline"
                                   color="warmGray.50"
                                   _dark={{
                                     color: 'warmGray.50',
