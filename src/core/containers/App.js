@@ -181,8 +181,7 @@ const App = props => {
       } else {
         actionSetPushGranted(false);
         actionSetPushActionSubscribe(false);
-        PushNotifications.unsubscribeFromTopic('actions');
-        PushNotifications.unsubscribeFromTopic('actionsRegion');
+        PushNotifications.unsubscribeFromTopic(['actionsRegion', 'actions']);
         OneSignal.User.PushSubscription.optOut();
       }
     }

@@ -117,14 +117,18 @@ export default {
   },
 
   removeTag(name) {
-    OneSignal.User.removeTag(name);
+    if (typeof name === 'object') {
+      OneSignal.User.removeTags(name);
+    } else if (typeof name === 'string') {
+      OneSignal.User.removeTag(name);
+    }
   },
 
   async subscribeToTopic(topic, id) {
     const isPermission = await this.checkPermission();
     if (isPermission) {
       this.unsubscribeFromTopic(topic);
-      OneSignal.User.addTag(topic, id.toString());
+      this.addTag(topic, id.toString());
     }
     return isPermission;
   },
