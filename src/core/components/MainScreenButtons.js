@@ -9,6 +9,11 @@ import PropTypes from 'prop-types';
 
 const {width: widthDefault, height: heightDefault} = Dimensions.get('screen');
 
+let smallScreen = false;
+if (widthDefault < 340) {
+  smallScreen = true;
+}
+
 const defaultOpacity = 1;
 
 const BackGroundComponent = props => {
@@ -97,15 +102,15 @@ const stylesTitle = StyleSheet.create({
     bottom: 0,
   },
   full: {
-    fontSize: 24,
+    fontSize: smallScreen ? 21 : 24,
     lineHeight: 45,
   },
   half: {
-    fontSize: 12.5,
+    fontSize: smallScreen ? 10 : 12.5,
     lineHeight: 16,
   },
   small: {
-    fontSize: 12.5,
+    fontSize: smallScreen ? 10.5 : 12.5,
     lineHeight: 16,
   },
 });
@@ -219,6 +224,7 @@ export const MainScreenButton = ({
           </View>
         ) : null}
         <Text
+          adjustsFontSizeToFit={true}
           numberOfLines={2}
           ellipsizeMode={'tail'}
           style={[
@@ -236,6 +242,7 @@ export const MainScreenButton = ({
         {subTitle ? (
           <Text
             numberOfLines={2}
+            adjustsFontSizeToFit={true}
             ellipsizeMode={'tail'}
             style={[
               stylesTitle.main,

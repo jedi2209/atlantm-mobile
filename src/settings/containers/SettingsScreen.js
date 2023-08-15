@@ -3,7 +3,6 @@ import {PureComponent, useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import {
   ScrollView,
-  View,
   Alert,
   StyleSheet,
   Platform,
@@ -17,6 +16,7 @@ import {
   Button,
   Box,
   Pressable,
+  View,
   HStack,
   VStack,
 } from 'native-base';
@@ -61,7 +61,6 @@ const styles = StyleSheet.create({
   langHeading: {
     color: styleConst.color.white,
     fontFamily: styleConst.font.medium,
-    fontSize: 24,
   },
   pushHeading: {
     fontSize: 16,
@@ -69,7 +68,6 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.medium,
   },
   pushText: {
-    fontSize: 14,
     color: styleConst.color.white,
     fontFamily: styleConst.font.light,
   },
@@ -164,19 +162,17 @@ const SettingsScreen = props => {
             space={3}
             justifyContent="space-between"
             alignItems="flex-start">
-            <View style={{flexDirection: 'row'}}>
-              <View style={{width: '80%'}}>
+            <HStack>
+              <View w={'3/4'}>
                 <Text selectable={false} style={styles.pushHeading}>
                   {strings.SettingsScreen.pushTitle}
                 </Text>
               </View>
               <View
-                style={{
-                  width: '20%',
-                  alignItems: 'center',
-                  alignContent: 'center',
-                  justifyContent: 'center',
-                }}>
+                w={'1/4'}
+                alignContent={'center'}
+                justifyContent={'center'}
+                alignItems={'center'}>
                 <Switch
                   style={styles.pushButton}
                   value={props.pushActionSubscribeState}
@@ -189,9 +185,14 @@ const SettingsScreen = props => {
                   onToggle={_onSwitchActionSubscribe}
                 />
               </View>
-            </View>
-            <View style={{marginTop: 10}}>
-              <Text selectable={false} style={styles.pushText}>
+            </HStack>
+            <View w={'100%'} mt={2}>
+              <Text
+                selectable={false}
+                style={styles.pushText}
+                fontSize={12}
+                adjustsFontSizeToFit={true}
+                numberOfLines={3}>
                 {[
                   strings.SettingsScreen.pushText,
                   strings.SettingsScreen.pushText2,
@@ -231,7 +232,11 @@ const SettingsScreen = props => {
               alignItems="center">
               <Text
                 selectable={false}
-                style={[styles.langHeading, {fontSize: 20, lineHeight: 20}]}>
+                // fontSize={18}
+                // lineHeight={20}
+                adjustsFontSizeToFit={true}
+                numberOfLines={2}
+                style={[styles.langHeading]}>
                 {strings.SettingsScreen.rateAppTitleTwoRows}
               </Text>
               <Icon
@@ -275,7 +280,11 @@ const SettingsScreen = props => {
               alignItems="center">
               <Text
                 selectable={false}
-                style={[styles.langHeading, {fontSize: 20, lineHeight: 20}]}>
+                // fontSize={18}
+                // lineHeight={20}
+                adjustsFontSizeToFit={true}
+                numberOfLines={2}
+                style={[styles.langHeading]}>
                 {strings.SettingsScreen.mailtoUs}
               </Text>
               <Icon
@@ -295,11 +304,7 @@ const SettingsScreen = props => {
         index={6}>
         <Pressable onPress={() => props.navigation.navigate('IntroScreenNew')}>
           <FlagButton
-            style={[
-              styleConst.shadow.default,
-              styles.block,
-              {width: cardWidth},
-            ]}
+            style={[styles.block, {width: cardWidth}]}
             styleText={{
               textAlign: 'center',
               fontFamily: styleConst.font.light,
