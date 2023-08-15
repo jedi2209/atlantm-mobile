@@ -179,12 +179,11 @@ const RowConstruct = props => {
   } else if (rowLength > 2) {
     return (
       <ScrollView
-        p={2}
         mt={firstRow ? firstRowMarginTop : 0}
         showsHorizontalScrollIndicator={false}
         bounces={false}
         horizontal={true}>
-        <HStack justifyContent={'space-around'} space={3}>
+        <HStack justifyContent={'space-around'} space={3} p={2}>
           {_processRow({rowData: json, rowNum, navigation, ...props})}
         </HStack>
       </ScrollView>
