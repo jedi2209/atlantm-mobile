@@ -63,10 +63,12 @@ const mapStateToProps = ({dealer, info, nav, core}) => {
   return {
     nav,
     list: info.list,
+    listDealer: info.listDealer,
     filters: info.filters,
+    filtersDealer: info.filtersDealer,
     visited: info.visited,
     dealerSelected: dealer.selected,
-    isFetchInfoList: info.meta.isFetchInfoList,
+    isFetchInfoList: info.meta.isFetchInfoListDealer,
     pushActionSubscribeState: core.pushActionSubscribeState,
     currLang: core.language.selected,
   };
@@ -86,7 +88,9 @@ const InfoListScreen = ({
   isFetchInfoList,
   actionListReset,
   list,
+  listDealer,
   filters,
+  filtersDealer,
   route,
   currLang,
 }) => {
@@ -108,15 +112,20 @@ const InfoListScreen = ({
   };
   const {region, id: dealer} = dealerSelected;
   const fabEnable = region === 'by' ? true : false;
+  let listRender = list;
+  let filtersRender = filters;
+
+  let dealerAPIRequest = null;
+  if (route.params?.dealerID) {
+    dealerAPIRequest = route.params?.dealerID;
+    filtersRender = filtersDealer;
+    listRender = listDealer;
+  }
 
   useEffect(() => {
     console.info('== InfoListScreen ==');
-    let dealerAPIRequest = null;
-    if (route.params?.dealerID) {
-      dealerAPIRequest = route.params?.dealerID;
-    }
     if (!isFetchInfoList) {
-      actionListReset();
+      actionListReset(dealerAPIRequest);
       fetchInfoList(region, dealerAPIRequest, filterType).then(action => {
         if (action.type === INFO_LIST__FAIL) {
           let message = get(
@@ -136,8 +145,12 @@ const InfoListScreen = ({
   }, [filterType]);
 
   const _onRefresh = () => {
+    let dealerAPIRequest = null;
+    if (route.params?.dealerID) {
+      dealerAPIRequest = route.params?.dealerID;
+    }
     setRefreshing(true);
-    fetchInfoList(region, null, filterType).then(() => {
+    fetchInfoList(region, dealerAPIRequest, filterType).then(() => {
       setRefreshing(false);
     });
   };
@@ -190,15 +203,15 @@ const InfoListScreen = ({
       <Box style={styles.container}>
         {!isRefreshing ? (
           <>
-            {filters ? (
+            {filtersRender ? (
               <View
                 style={{
                   marginBottom: 5,
                   marginHorizontal: 10,
                   flexDirection: 'row',
                 }}>
-                {filters.length > 1
-                  ? filters.map((el, i) => {
+                {filtersRender.length > 1
+                  ? filtersRender.map((el, i) => {
                       return (
                         <Pressable
                           onPress={() => {
@@ -244,7 +257,7 @@ const InfoListScreen = ({
               </View>
             ) : null}
             <FlatList
-              data={list}
+              data={listRender}
               extraData={isFetchInfoList}
               onRefresh={_onRefresh}
               refreshing={isRefreshing}
@@ -295,7 +308,6 @@ InfoListScreen.defaultProps = {
 
 InfoListScreen.propTypes = {
   dealerSelected: PropTypes.object.isRequired,
-  list: PropTypes.array.isRequired,
   visited: PropTypes.array.isRequired,
   fetchInfoList: PropTypes.func.isRequired,
   isFetchInfoList: PropTypes.bool.isRequired,

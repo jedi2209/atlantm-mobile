@@ -38,7 +38,7 @@ import {connect} from 'react-redux';
 import {callMe} from '../actions';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
-import {fetchInfoList, actionListReset} from '../../info/actions';
+import {fetchInfoList} from '../../info/actions';
 import {actionMenuOpenedCount, actionAppRated} from '../../core/actions';
 import Offer from '../../core/components/Offer';
 
@@ -119,7 +119,7 @@ const cardWidth = deviceWidth - 50;
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
-    infoList: info.list,
+    infoList: info.listDealer,
     isFetchInfoList: info.meta.isFetchInfoList,
     nav,
     profile,
@@ -140,7 +140,6 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
 const mapDispatchToProps = {
   callMe,
   fetchInfoList,
-  actionListReset,
   actionAppRated,
   actionMenuOpenedCount,
 };
