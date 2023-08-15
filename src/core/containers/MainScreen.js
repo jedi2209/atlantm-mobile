@@ -34,7 +34,7 @@ import RateThisApp from '../components/RateThisApp';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
-import {fetchInfoList, actionListReset} from '../../info/actions';
+import {fetchInfoList} from '../../info/actions';
 import {
   actionMenuOpenedCount,
   actionAppRated,
@@ -79,7 +79,6 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
 
 const mapDispatchToProps = {
   fetchInfoList,
-  actionListReset,
   actionAppRated,
   actionMenuOpenedCount,
   actionFetchMainScreenSettings,

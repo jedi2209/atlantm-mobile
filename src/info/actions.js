@@ -2,12 +2,15 @@ import _ from 'lodash';
 
 import {
   INFO_LIST__REQUEST,
+  INFO_LIST__REQUEST_DEALER,
   INFO_LIST__SUCCESS,
   INFO_LIST__FAIL,
   INFO_POST__REQUEST,
   INFO_POST__SUCCESS,
+  INFO_LIST__SUCCESS_DEALER,
   INFO_POST__FAIL,
   INFO_LIST__RESET,
+  INFO_LIST__RESET_DEALER,
   CALL_ME_INFO__REQUEST,
   CALL_ME_INFO__SUCCESS,
   CALL_ME_INFO__FAIL,
@@ -24,7 +27,7 @@ export const fetchInfoList = (
 ) => {
   return dispatch => {
     dispatch({
-      type: INFO_LIST__REQUEST,
+      type: dealer ? INFO_LIST__REQUEST_DEALER : INFO_LIST__REQUEST,
       payload: {
         region,
         dealer,
@@ -42,7 +45,7 @@ export const fetchInfoList = (
             },
           });
         }
-        if (res && res.error) {
+        if (res?.error) {
           return dispatch({
             type: INFO_LIST__FAIL,
             payload: {
@@ -54,7 +57,7 @@ export const fetchInfoList = (
 
         if (res) {
           return dispatch({
-            type: INFO_LIST__SUCCESS,
+            type: dealer ? INFO_LIST__SUCCESS_DEALER : INFO_LIST__SUCCESS,
             payload: {data: res.data || [], filters: res.filters || []},
           });
         }
@@ -155,8 +158,10 @@ export const callMeForInfo = props => {
   };
 };
 
-export const actionListReset = () => {
+export const actionListReset = (dealer = null) => {
   return dispatch => {
-    return dispatch({type: INFO_LIST__RESET});
+    return dispatch({
+      type: dealer ? INFO_LIST__RESET_DEALER : INFO_LIST__RESET,
+    });
   };
 };
