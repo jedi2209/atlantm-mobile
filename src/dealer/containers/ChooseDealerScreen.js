@@ -31,7 +31,6 @@ import {verticalScale} from '../../utils/scale';
 
 // components
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
-import PushNotifications from '../../core/components/PushNotifications';
 import DealerCard from '../../core/components/DealerCard';
 import LogoLoader from '../../core/components/LogoLoader';
 
@@ -178,20 +177,19 @@ const _onPressDealerItem = ({
     dealerSelected: dealerSelectedItem,
     isLocal,
   }).then(action => {
-    const newDealer = get(action, 'payload.newDealer');
+    // const newDealer = get(action, 'payload.newDealer');
     if (
       action &&
       [DEALER__SUCCESS, DEALER__SUCCESS__LOCAL].includes(action.type)
     ) {
-      if (action.type === DEALER__SUCCESS) {
-        if (pushActionSubscribeState) {
-          PushNotifications.unsubscribeFromTopic('actions');
-          PushNotifications.subscribeToTopic('actionsRegion', newDealer.region);
-        } else {
-          PushNotifications.unsubscribeFromTopic('actions');
-          PushNotifications.unsubscribeFromTopic('actionsRegion');
-        }
-      }
+      // if (action.type === DEALER__SUCCESS) {
+      //   PushNotifications.unsubscribeFromTopic('actions');
+      //   if (pushActionSubscribeState) {
+      //     PushNotifications.subscribeToTopic('actionsRegion', regionXXX);
+      //   } else {
+      //     PushNotifications.unsubscribeFromTopic('actionsRegion');
+      //   }
+      // }
       if (returnScreen) {
         if (goBack) {
           navigation.goBack();
