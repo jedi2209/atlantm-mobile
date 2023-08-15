@@ -228,7 +228,7 @@ const TvaResultsScreen = props => {
 
   return (
     <ScrollView flex={1}>
-      <View style={styles.container}>
+      <View flex={1} style={styles.container}>
         <HStack justifyContent="space-between" mb={2}>
           <Text style={styles.heading}>{titleCar}</Text>
           <Text style={styles.heading}>{titleCarNumber}</Text>
@@ -288,6 +288,14 @@ const TvaResultsScreen = props => {
                 </VStack>
               </Box>
             ))}
+            <Button
+              variant="solid"
+              _text={styles.buttonText}
+              size="lg"
+              shadow={4}
+              onPress={() => navigation.navigate('BottomTabNavigation')}>
+              {strings.ModalView.close}
+            </Button>
             {TVAMessagingEnabled ? (
               <>
                 {' '}

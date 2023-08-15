@@ -26,6 +26,7 @@ const mapStateToProps = ({dealer, profile, tva, core}) => {
   return {
     dealerSelected: dealer.selected,
     dealerSelectedLocal: dealer.selectedLocal,
+    region: dealer.region,
     isTvaRequest: tva.meta.isRequest,
     pushGranted: core.pushGranted,
     pushTracking: tva.pushTracking,
@@ -62,21 +63,21 @@ const TvaScreen = props => {
   const FormConfig = {
     fields: {
       groups: [
-        {
-          name: strings.Form.group.dealer,
-          fields: [
-            {
-              name: 'DEALER',
-              type: 'dealerSelect',
-              label: strings.Form.field.label.dealer,
-              value: dealerSelected,
-              props: {
-                goBack: false,
-                showBrands: false,
-              },
-            },
-          ],
-        },
+        // {
+        //   name: strings.Form.group.dealer,
+        //   fields: [
+        //     {
+        //       name: 'DEALER',
+        //       type: 'dealerSelect',
+        //       label: strings.Form.field.label.dealer,
+        //       value: dealerSelected,
+        //       props: {
+        //         goBack: false,
+        //         showBrands: false,
+        //       },
+        //     },
+        //   ],
+        // },
         {
           name: strings.Form.group.car,
           fields: [
@@ -114,7 +115,7 @@ const TvaScreen = props => {
   }, []);
 
   const _onPressButton = async pushProps => {
-    const dealerId = pushProps.DEALER.id;
+    // const dealerId = pushProps.DEALER.id;
     const carNumber = pushProps.CARNUMBER;
 
     let pushTracking = false;
@@ -122,8 +123,8 @@ const TvaScreen = props => {
 
     const action = await actionFetchTva({
       number: carNumber,
-      region: pushProps.DEALER.region,
-      dealer: dealerId,
+      region: props.region,
+      // dealer: dealerId,
       pushTracking,
     });
 
