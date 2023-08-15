@@ -85,28 +85,58 @@ const mapDispatchToProps = {
 };
 
 const backgrounds = {
-  // day: [
-  //   require('../../../assets/lkk/day_1.png'),
-  //   require('../../../assets/lkk/day_2.png'),
-  //   require('../../../assets/lkk/day_3.png'),
-  //   require('../../../assets/lkk/day_4.png'),
-  //   require('../../../assets/lkk/day_5.png'),
-  //   require('../../../assets/lkk/day_6.png'),
-  // ],
-  // sunset: [
-  //   require('../../../assets/lkk/sunset_1.png'),
-  //   require('../../../assets/lkk/sunset_2.png'),
-  // ],
-  all: [
+  day: [
     require('../../../assets/lkk/day_1.png'),
     require('../../../assets/lkk/day_2.png'),
     require('../../../assets/lkk/day_3.png'),
     require('../../../assets/lkk/day_4.png'),
     require('../../../assets/lkk/day_5.png'),
     require('../../../assets/lkk/day_6.png'),
+  ],
+  sunset: [
     require('../../../assets/lkk/sunset_1.png'),
     require('../../../assets/lkk/sunset_2.png'),
+    require('../../../assets/lkk/sunset_3.png'),
+    require('../../../assets/lkk/sunset_4.png'),
+    require('../../../assets/lkk/sunset_5.png'),
+    require('../../../assets/lkk/sunset_6.png'),
   ],
+  night: [
+    require('../../../assets/lkk/night_1.png'),
+    require('../../../assets/lkk/night_2.png'),
+    require('../../../assets/lkk/night_3.png'),
+    require('../../../assets/lkk/night_4.png'),
+    require('../../../assets/lkk/night_5.png'),
+    require('../../../assets/lkk/night_6.png'),
+  ],
+  // all: [
+  //   require('../../../assets/lkk/day_1.png'),
+  //   require('../../../assets/lkk/day_2.png'),
+  //   require('../../../assets/lkk/day_3.png'),
+  //   require('../../../assets/lkk/day_4.png'),
+  //   require('../../../assets/lkk/day_5.png'),
+  //   require('../../../assets/lkk/day_6.png'),
+  //   require('../../../assets/lkk/sunset_1.png'),
+  //   require('../../../assets/lkk/sunset_2.png'),
+  //   require('../../../assets/lkk/sunset_3.png'),
+  //   require('../../../assets/lkk/sunset_4.png'),
+  //   require('../../../assets/lkk/sunset_5.png'),
+  //   require('../../../assets/lkk/sunset_6.png'),
+  // ],
+};
+
+const getBackground = (hrs = 12) => {
+  let currArray = backgrounds.day;
+  // if (hrs >= 7 && hrs < 17) {
+  //   currArray = backgrounds.day;
+  // }
+  if (hrs >= 17 && hrs < 22) {
+    currArray = backgrounds.sunset;
+  }
+  if (hrs < 7 || hrs >= 22) {
+    currArray = backgrounds.night;
+  }
+  return currArray[Math.floor(Math.random() * (currArray.length + 1))];
 };
 
 const LoginScreen = props => {
@@ -406,7 +436,7 @@ const LoginScreen = props => {
       res.push(
         <View
           key={'backgroundInputCode' + index}
-          rounded={'md'}
+          rounded={'lg'}
           style={{
             height: 75,
             backgroundColor: 'rgba(255, 255, 255, 0.9)',
@@ -431,7 +461,7 @@ const LoginScreen = props => {
               backgroundColor: 'rgba(255, 255, 255, 0.9)',
               width: '100%',
             }}
-            rounded={'sm'}
+            rounded={'lg'}
           />
         </HStack>
         <OtpAutoFillViewManager
@@ -465,26 +495,24 @@ const LoginScreen = props => {
     );
   }
 
+  const currHours = new Date().getHours(); //To get the Current Hours
+
   return (
     <View testID="LoginScreen.Wrapper" style={{flex: 1}}>
       <ImageBackground
         resizeMode="cover"
         // source={
         //   {uri: get(props.dealerSelected, 'img.thumb') + '1000x1000'} ||
-        //   backgrounds.all[Math.floor(Math.random() * (backgrounds.all.length + 1))]
+        //   getBackground(currHours)
         // }
-        source={
-          backgrounds.all[
-            Math.floor(Math.random() * (backgrounds.all.length + 1))
-          ]
-        }
+        source={getBackground(currHours)}
         style={{
           width: '100%',
           height: '100%',
           flex: 1,
           justifyContent: 'flex-start',
         }}>
-        <View style={{marginBottom: 10}}>
+        <View mb={5} flex={1}>
           <LinearGradient
             start={{x: 0, y: 0}}
             end={{x: 0, y: 1}}
@@ -501,12 +529,9 @@ const LoginScreen = props => {
             ? _renderLoginButtons(props.dealerSelected.region || APP_REGION)
             : null}
           <View
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              opacity: code ? 0 : 1,
-            }}>
+            justifyContent={'center'}
+            alignItems={'center'}
+            opacity={code ? 0 : 1}>
             <HStack
               mt={2}
               mb={3}
@@ -573,7 +598,7 @@ const LoginScreen = props => {
                   isLoadingText={strings.PhoneChangeScreen.isLoading}
                   isLoading={loadingVerify}
                   _text={{color: styleConst.color.white}}
-                  rounded={'sm'}
+                  rounded={'lg'}
                   style={[styleConst.shadow.default, styles.ApproveButton]}>
                   {strings.ProfileScreen.approve}
                 </Button>
@@ -582,29 +607,30 @@ const LoginScreen = props => {
                     disabled={loadingVerify}
                     onPress={_cancelVerify}
                     size="md"
-                    rounded={'sm'}
+                    rounded={'lg'}
                     style={styles.CancelButton}
                     _text={{color: styleConst.color.greyText}}>
                     {strings.Base.cancel.toLowerCase()}
                   </Button>
                 ) : null}
               </>
-            ) : (
-              <Button
-                onPress={() => {
-                  props.navigation.navigate('BonusScreenInfo', {
-                    refererScreen: 'LoginScreen',
-                    returnScreen: 'LoginScreen',
-                  });
-                }}
-                _text={styles.BonusInfoButtonText}
-                leftIcon={<Icon name="info" as={SimpleLineIcons} size={5} />}
-                rounded={'sm'}
-                style={styles.BonusInfoButton}>
-                {strings.Menu.main.bonus}
-              </Button>
-            )}
+            ) : null}
           </VStack>
+          {!code ? (
+            <Button
+              onPress={() => {
+                props.navigation.navigate('BonusScreenInfo', {
+                  refererScreen: 'LoginScreen',
+                  returnScreen: 'LoginScreen',
+                });
+              }}
+              _text={styles.BonusInfoButtonText}
+              leftIcon={<Icon name="info" as={SimpleLineIcons} size={5} />}
+              rounded={'lg'}
+              style={styles.BonusInfoButton}>
+              {strings.Menu.main.bonus}
+            </Button>
+          ) : null}
         </View>
       </ImageBackground>
     </View>
@@ -666,6 +692,8 @@ const styles = StyleSheet.create({
     width: '80%',
     marginVertical: 10,
     marginHorizontal: '10%',
+    position: 'absolute',
+    bottom: 80,
   },
   BonusInfoButtonText: {
     fontFamily: styleConst.font.medium,
