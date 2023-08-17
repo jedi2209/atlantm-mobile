@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {Platform, Keyboard} from 'react-native';
-import {useDisclose, Icon} from 'native-base';
+import {useDisclose, Icon, View} from 'native-base';
 import orderFunctions from '../../utils/orders';
 import Analytics from '../../utils/amplitude-analytics';
 import {connect} from 'react-redux';
@@ -62,6 +62,7 @@ const ProfileStackView = ({navigation, route}) => (
   <ProfileStack.Navigator
     initialRouteName="LoginScreen"
     screenOptions={{
+      tabBarHideOnKeyboard: true,
       headerShown: false,
       presentation: 'modal',
     }}>
@@ -69,6 +70,7 @@ const ProfileStackView = ({navigation, route}) => (
       name="LoginScreen"
       component={AuthContainer}
       options={{
+        tabBarHideOnKeyboard: true,
         headerShown: false,
         presentation: 'card',
       }}
@@ -181,18 +183,18 @@ const BottomTabNavigation = ({navigation, route, region}) => {
   };
 
   useEffect(() => {
-    const keyboardWillShowListener = Keyboard.addListener(
-      'keyboardWillShow',
-      () => {
-        setKeyboardShow(true);
-      },
-    );
-    const keyboardWillHideListener = Keyboard.addListener(
-      'keyboardWillHide',
-      () => {
-        setKeyboardShow(false);
-      },
-    );
+    // const keyboardWillShowListener = Keyboard.addListener(
+    //   'keyboardWillShow',
+    //   () => {
+    //     setKeyboardShow(true);
+    //   },
+    // );
+    // const keyboardWillHideListener = Keyboard.addListener(
+    //   'keyboardWillHide',
+    //   () => {
+    //     setKeyboardShow(false);
+    //   },
+    // );
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
@@ -207,8 +209,8 @@ const BottomTabNavigation = ({navigation, route, region}) => {
     );
 
     return () => {
-      keyboardWillHideListener.remove();
-      keyboardWillShowListener.remove();
+      // keyboardWillHideListener.remove();
+      // keyboardWillShowListener.remove();
       keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
     };
@@ -224,8 +226,8 @@ const BottomTabNavigation = ({navigation, route, region}) => {
           tabBarHideOnKeyboard: true,
           tabBarStyle: {
             position: 'absolute',
-            bottom: keyboardShow ? -100 : 25,
-            opacity: keyboardShow ? 0 : 1,
+            bottom: keyboardShow ? 0 : 25,
+            opacity: 1,
             left: 7,
             right: 7,
             borderRadius: 15,
