@@ -37,13 +37,18 @@ import {
 import PushNotifications from '../../core/components/PushNotifications';
 import Analytics from '../../utils/amplitude-analytics';
 import PhoneDetect from '../../utils/phoneDetect';
+import API from '../../utils/api';
 
 import {strings} from '../../core/lang/const';
 
 import {verticalScale} from '../../utils/scale';
-import {get} from 'lodash';
 import UserData from '../../utils/user';
-import {APP_PHONE_RESTRICTED, APP_REGION, UKRAINE} from '../../core/const';
+import {
+  APP_PHONE_RESTRICTED,
+  APP_REGION,
+  COORDS_DEFAULT,
+  UKRAINE,
+} from '../../core/const';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -125,7 +130,22 @@ const backgrounds = {
   // ],
 };
 
+const getSunrise = async (
+  lat = COORDS_DEFAULT.lat,
+  lng = COORDS_DEFAULT.lon,
+) => {
+  const url =
+    'http://api.sunrise-sunset.org/json?lat=' +
+    lat +
+    '&lng=' +
+    lng +
+    '&formatted=1';
+  return await API.apiGetData(url);
+};
+
 const getBackground = (hrs = 12) => {
+  // const res = await getSunrise();
+  // console.log('res', res);
   let currArray = backgrounds.day;
   // if (hrs >= 7 && hrs < 17) {
   //   currArray = backgrounds.day;
@@ -136,7 +156,8 @@ const getBackground = (hrs = 12) => {
   if (hrs < 7 || hrs >= 22) {
     currArray = backgrounds.night;
   }
-  return currArray[Math.floor(Math.random() * (currArray.length + 1))];
+  const num = Math.floor(Math.random() * currArray.length);
+  return currArray[num];
 };
 
 const LoginScreen = props => {
@@ -149,6 +170,8 @@ const LoginScreen = props => {
   const [codeSize, setCodeSize] = useState(4);
   const [loading, setLoading] = useState(false);
   const [loadingVerify, setLoadingVerify] = useState(false);
+  const [keyboardShow, setKeyboardShow] = useState(false);
+  const [background, setBackground] = useState(backgrounds.day[0]);
 
   const FormConfig = {
     fields: [
@@ -478,6 +501,26 @@ const LoginScreen = props => {
   useEffect(() => {
     Analytics.logEvent('screen', 'profile/login');
     LoginManager.logOut();
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardShow(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardShow(false);
+      },
+    );
+
+    const currHours = new Date().getHours(); //To get the Current Hours
+    setBackground(getBackground(currHours));
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
   }, []);
 
   if (loading) {
@@ -495,8 +538,6 @@ const LoginScreen = props => {
     );
   }
 
-  const currHours = new Date().getHours(); //To get the Current Hours
-
   return (
     <View testID="LoginScreen.Wrapper" style={{flex: 1}}>
       <ImageBackground
@@ -505,141 +546,143 @@ const LoginScreen = props => {
         //   {uri: get(props.dealerSelected, 'img.thumb') + '1000x1000'} ||
         //   getBackground(currHours)
         // }
-        source={getBackground(currHours)}
-        style={{
-          width: '100%',
-          height: '100%',
-          flex: 1,
-          justifyContent: 'flex-start',
-        }}>
-        <View mb={5} flex={1}>
-          <LinearGradient
-            start={{x: 0, y: 0}}
-            end={{x: 0, y: 1}}
-            colors={['rgba(0, 0, 0, 0.60)', 'rgba(51, 51, 51, 0)']}
-            style={styles.LinearGradient}
+        source={background}
+        style={styles.imageBackground}
+      />
+      <LinearGradient
+        start={{x: 0, y: 0}}
+        end={{x: 0, y: 1}}
+        colors={['rgba(0, 0, 0, 0.60)', 'rgba(51, 51, 51, 0)']}
+        style={styles.LinearGradient}
+      />
+      <View mb={5} flex={1}>
+        <View style={styles.ImageWrapper}>
+          <Image
+            resizeMode="contain"
+            source={require('../../menu/assets/logo-horizontal-white.svg')}
           />
-          <View style={styles.ImageWrapper}>
-            <Image
-              resizeMode="contain"
-              source={require('../../menu/assets/logo-horizontal-white.svg')}
-            />
-          </View>
-          {!code
-            ? _renderLoginButtons(props.dealerSelected.region || APP_REGION)
-            : null}
-          <View
-            justifyContent={'center'}
-            alignItems={'center'}
-            opacity={code ? 0 : 1}>
-            <HStack
-              mt={2}
-              mb={3}
-              w={'4/5'}
-              alignItems={'center'}
-              justifyContent={'space-around'}>
-              <View style={styles.LoginTextORLine} />
-              <Text
-                style={{
-                  color: styleConst.color.accordeonGrey1,
-                  fontSize: 16,
-                  lineHeight: 16,
-                }}>
-                {strings.Base.or}
-              </Text>
-              <View style={styles.LoginTextORLine} />
-            </HStack>
-          </View>
-          <VStack
-            alignItems={'center'}
-            justifyContent={'center'}
-            mt={code ? '5%' : 0}>
-            <HStack w={'80%'} mt={code ? '20%' : 0}>
-              {code ? (
-                !loadingVerify ? (
-                  _show_background_code(codeSize)
-                ) : null
-              ) : (
-                <Form
-                  keyboardAvoidingViewProps={{
-                    enableAutomaticScroll: false,
-                  }}
-                  contentContainerStyle={{
-                    marginTop: 20,
-                    justifyContent: 'center',
-                  }}
-                  formScrollViewStyle={{
-                    backgroundColor: 'none',
-                  }}
-                  key="loginPhoneForm"
-                  fields={FormConfig.fields}
-                  SubmitButton={{
-                    text: strings.Form.button.receiveCode,
-                    rightIcon: <Icon name="sms" as={MaterialIcons} />,
-                    noAgreement: false,
-                  }}
-                  AgreementCheckbox={
-                    APP_REGION === UKRAINE
-                      ? {
-                          defaultIsChecked: true,
-                          isDisabled: true,
-                          isChecked: true,
-                        }
-                      : {}
-                  }
-                  onSubmit={_verifyCode}
-                />
-              )}
-            </HStack>
-            {code ? (
-              <>
-                <Button
-                  onPress={_verifyCodeStepTwo}
-                  isLoadingText={strings.PhoneChangeScreen.isLoading}
-                  isLoading={loadingVerify}
-                  _text={{color: styleConst.color.white}}
-                  rounded={'lg'}
-                  style={[styleConst.shadow.default, styles.ApproveButton]}>
-                  {strings.ProfileScreen.approve}
-                </Button>
-                {!loadingVerify ? (
-                  <Button
-                    disabled={loadingVerify}
-                    onPress={_cancelVerify}
-                    size="md"
-                    rounded={'lg'}
-                    style={styles.CancelButton}
-                    _text={{color: styleConst.color.greyText}}>
-                    {strings.Base.cancel.toLowerCase()}
-                  </Button>
-                ) : null}
-              </>
-            ) : null}
-          </VStack>
-          {!code ? (
-            <Button
-              onPress={() => {
-                props.navigation.navigate('BonusScreenInfo', {
-                  refererScreen: 'LoginScreen',
-                  returnScreen: 'LoginScreen',
-                });
-              }}
-              _text={styles.BonusInfoButtonText}
-              leftIcon={<Icon name="info" as={SimpleLineIcons} size={5} />}
-              rounded={'lg'}
-              style={styles.BonusInfoButton}>
-              {strings.Menu.main.bonus}
-            </Button>
-          ) : null}
         </View>
-      </ImageBackground>
+        {!code
+          ? _renderLoginButtons(props.dealerSelected.region || APP_REGION)
+          : null}
+        <View
+          justifyContent={'center'}
+          alignItems={'center'}
+          opacity={code ? 0 : 1}>
+          <HStack
+            mt={2}
+            mb={3}
+            w={'4/5'}
+            alignItems={'center'}
+            justifyContent={'space-around'}>
+            <View style={styles.LoginTextORLine} />
+            <Text
+              style={{
+                color: styleConst.color.accordeonGrey1,
+                fontSize: 16,
+                lineHeight: 16,
+              }}>
+              {strings.Base.or}
+            </Text>
+            <View style={styles.LoginTextORLine} />
+          </HStack>
+        </View>
+        <VStack
+          alignItems={'center'}
+          justifyContent={'center'}
+          mt={code ? '5%' : 0}>
+          <HStack w={'80%'} mt={code ? '20%' : 0}>
+            {code ? (
+              !loadingVerify ? (
+                _show_background_code(codeSize)
+              ) : null
+            ) : (
+              <Form
+                keyboardAvoidingViewProps={{
+                  enableAutomaticScroll: false,
+                }}
+                contentContainerStyle={{
+                  marginTop: 20,
+                  justifyContent: 'center',
+                }}
+                formScrollViewStyle={{
+                  backgroundColor: 'none',
+                }}
+                key="loginPhoneForm"
+                fields={FormConfig.fields}
+                SubmitButton={{
+                  text: strings.Form.button.receiveCode,
+                  rightIcon: <Icon name="sms" as={MaterialIcons} />,
+                  noAgreement: false,
+                }}
+                AgreementCheckbox={
+                  APP_REGION === UKRAINE
+                    ? {
+                        defaultIsChecked: true,
+                        isDisabled: true,
+                        isChecked: true,
+                      }
+                    : {}
+                }
+                onSubmit={_verifyCode}
+              />
+            )}
+          </HStack>
+          {code ? (
+            <>
+              <Button
+                onPress={_verifyCodeStepTwo}
+                isLoadingText={strings.PhoneChangeScreen.isLoading}
+                isLoading={loadingVerify}
+                _text={{color: styleConst.color.white}}
+                rounded={'lg'}
+                style={[styleConst.shadow.default, styles.ApproveButton]}>
+                {strings.ProfileScreen.approve}
+              </Button>
+              {!loadingVerify ? (
+                <Button
+                  disabled={loadingVerify}
+                  onPress={_cancelVerify}
+                  size="md"
+                  rounded={'lg'}
+                  style={styles.CancelButton}
+                  _text={{color: styleConst.color.greyText}}>
+                  {strings.Base.cancel.toLowerCase()}
+                </Button>
+              ) : null}
+            </>
+          ) : null}
+        </VStack>
+        {!code && !keyboardShow ? (
+          <Button
+            onPress={() => {
+              props.navigation.navigate('BonusScreenInfo', {
+                refererScreen: 'LoginScreen',
+                returnScreen: 'LoginScreen',
+              });
+            }}
+            _text={styles.BonusInfoButtonText}
+            leftIcon={<Icon name="info" as={SimpleLineIcons} size={5} />}
+            rounded={'lg'}
+            style={styles.BonusInfoButton}>
+            {strings.Menu.main.bonus}
+          </Button>
+        ) : null}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  imageBackground: {
+    width: '100%',
+    height: Dimensions.get('window').height,
+    flex: 1,
+    justifyContent: 'center',
+    position: 'absolute',
+  },
   LinearGradient: {
-    height: '80%',
+    height: Dimensions.get('window').height,
     width: '100%',
     position: 'absolute',
   },

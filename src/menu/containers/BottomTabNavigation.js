@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState} from 'react';
-import {Platform} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {Platform, Keyboard} from 'react-native';
 import {useDisclose, Icon} from 'native-base';
 import orderFunctions from '../../utils/orders';
 import Analytics from '../../utils/amplitude-analytics';
@@ -40,7 +40,6 @@ import {
   ClassicHeaderBlue,
   BigCloseButton,
 } from '../../navigation/const';
-import { shadow } from 'react-native-paper';
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
@@ -167,6 +166,8 @@ const CleanStackView = () => {
 const BottomTabNavigation = ({navigation, route, region}) => {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [actionSheetData, setActionSheetData] = useState({});
+  const [keyboardShow, setKeyboardShow] = useState(false);
+
   const _showOrdersMenu = () => {
     orderFunctions.getOrders().then(data => {
       setActionSheetData({
@@ -179,6 +180,40 @@ const BottomTabNavigation = ({navigation, route, region}) => {
     });
   };
 
+  useEffect(() => {
+    const keyboardWillShowListener = Keyboard.addListener(
+      'keyboardWillShow',
+      () => {
+        setKeyboardShow(true);
+      },
+    );
+    const keyboardWillHideListener = Keyboard.addListener(
+      'keyboardWillHide',
+      () => {
+        setKeyboardShow(false);
+      },
+    );
+    const keyboardDidShowListener = Keyboard.addListener(
+      'keyboardDidShow',
+      () => {
+        setKeyboardShow(true);
+      },
+    );
+    const keyboardDidHideListener = Keyboard.addListener(
+      'keyboardDidHide',
+      () => {
+        setKeyboardShow(false);
+      },
+    );
+
+    return () => {
+      keyboardWillHideListener.remove();
+      keyboardWillShowListener.remove();
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
+
   return (
     <>
       <Tab.Navigator
@@ -189,7 +224,8 @@ const BottomTabNavigation = ({navigation, route, region}) => {
           tabBarHideOnKeyboard: true,
           tabBarStyle: {
             position: 'absolute',
-            bottom: 25,
+            bottom: keyboardShow ? -100 : 25,
+            opacity: keyboardShow ? 0 : 1,
             left: 7,
             right: 7,
             borderRadius: 15,

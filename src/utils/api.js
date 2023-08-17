@@ -1067,7 +1067,7 @@ export default {
     return this.request('/service/order/', requestParams);
   },
 
-  async request(path, requestParams) {
+  async request(path, requestParams = baseRequestParams) {
     const url = `${API_MAIN_URL}${path}`;
 
     // Если включен debug режим, добавляем в каждый запрос заголовок `Debug`
@@ -1079,7 +1079,7 @@ export default {
     return await this.apiGetData(url, requestParams);
   },
 
-  async apiGetData(url, requestParams) {
+  async apiGetData(url, requestParams = baseRequestParams) {
     const method = requestParams.method.toString().toLowerCase();
     let body = requestParams?.body;
     requestParams.headers['x-auth'] = await JWTToken();
