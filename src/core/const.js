@@ -81,6 +81,24 @@ switch (bundle) {
     break;
 }
 
+export const COORDS_DEFAULT = {
+  by: {
+    // Minsk
+    lat: 53.893009,
+    lon: 27.567444,
+  },
+  ru: {
+    // Moscow
+    lat: 55.751244,
+    lon: 37.618423,
+  },
+  ua: {
+    // Kiev
+    lat: 50.450001,
+    lon: 30.523333,
+  },
+};
+
 export const APP_LOCALE = {
   ru: 'ru-RU',
   by: 'ru-RU',
