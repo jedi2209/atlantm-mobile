@@ -94,27 +94,27 @@ async function getOrders(type = 'default') {
       },
     );
     tmpArr.push(3, 7);
-    if (storeState.dealer.selected.region === 'by') {
-      res.android.BUTTONS.push({
-        priority: 6,
-        id: 'TOCalculator',
-        text: strings.UserCars.menu.tocalc,
-        icon: {
-          name: 'calculator-outline',
-          color: '#2c8ef4',
-        },
-      });
-      res.ios.BUTTONS.push({
-        priority: 6,
-        id: 'TOCalculator',
-        text: strings.UserCars.menu.tocalc,
-        icon: {
-          name: 'calculator-outline',
-          color: '#2c8ef4',
-        },
-      });
-      tmpArr.push(6);
-    }
+    // if (storeState.dealer.selected.region === 'by') {
+    //   res.android.BUTTONS.push({
+    //     priority: 6,
+    //     id: 'TOCalculator',
+    //     text: strings.UserCars.menu.tocalc,
+    //     icon: {
+    //       name: 'calculator-outline',
+    //       color: '#2c8ef4',
+    //     },
+    //   });
+    //   res.ios.BUTTONS.push({
+    //     priority: 6,
+    //     id: 'TOCalculator',
+    //     text: strings.UserCars.menu.tocalc,
+    //     icon: {
+    //       name: 'calculator-outline',
+    //       color: '#2c8ef4',
+    //     },
+    //   });
+    //   tmpArr.push(6);
+    // }
     res.android.CANCEL_INDEX =
       res.android.CANCEL_INDEX + res.ios.BUTTONS.length;
     res.ios.CANCEL_INDEX = res.ios.CANCEL_INDEX + res.ios.BUTTONS.length;
