@@ -91,6 +91,7 @@ const BonusInfoScreen = props => {
               key={moment().unix()}
               style={[styles.webView, route.params?.webViewStyle]}
               source={{html: bonusInfo}}
+              dataDetectorTypes={['link', 'address']}
             />
           </View>
         ) : (

@@ -197,7 +197,6 @@ const WebViewAutoHeight = ({
 
   return (
     <WebView
-      {...otherProps}
       source={sourceModified}
       scrollEnabled={false}
       style={[
@@ -218,6 +217,7 @@ const WebViewAutoHeight = ({
       allowsInlineMediaPlayback={true}
       // incognito={true}
       originWhitelist={['http://', 'https://', 'tel://', 'mailto://']}
+      {...otherProps}
     />
   );
 };
