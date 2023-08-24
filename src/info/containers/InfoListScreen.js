@@ -68,7 +68,8 @@ const mapStateToProps = ({dealer, info, nav, core}) => {
     filtersDealer: info.filtersDealer,
     visited: info.visited,
     dealerSelected: dealer.selected,
-    isFetchInfoList: info.meta.isFetchInfoListDealer,
+    isFetchInfoList: info.meta.isFetchInfoList,
+    isFetchInfoListDealer: info.meta.isFetchInfoListDealer,
     pushActionSubscribeState: core.pushActionSubscribeState,
     currLang: core.language.selected,
   };
@@ -86,6 +87,7 @@ const InfoListScreen = ({
   dealerSelected,
   fetchInfoList,
   isFetchInfoList,
+  isFetchInfoListDealer,
   actionListReset,
   list,
   listDealer,
@@ -124,7 +126,7 @@ const InfoListScreen = ({
 
   useEffect(() => {
     console.info('== InfoListScreen ==');
-    if (!isFetchInfoList) {
+    if (!isFetchInfoList && !isFetchInfoListDealer) {
       actionListReset(dealerAPIRequest);
       fetchInfoList(region, dealerAPIRequest, filterType).then(action => {
         if (action.type === INFO_LIST__FAIL) {
@@ -185,7 +187,7 @@ const InfoListScreen = ({
   };
 
   const renderEmptyComponent = () => {
-    return isFetchInfoList ? (
+    return isFetchInfoList || isFetchInfoListDealer ? (
       <View style={styles.spinnerContainer}>
         <LogoLoader
           style={{
@@ -258,7 +260,7 @@ const InfoListScreen = ({
             ) : null}
             <FlatList
               data={listRender}
-              extraData={isFetchInfoList}
+              extraData={isFetchInfoList || isFetchInfoListDealer}
               onRefresh={_onRefresh}
               refreshing={isRefreshing}
               ListEmptyComponent={renderEmptyComponent}
@@ -275,7 +277,7 @@ const InfoListScreen = ({
           />
         )}
       </Box>
-      {fabEnable && !isFetchInfoList ? (
+      {fabEnable && !isFetchInfoList && !isFetchInfoListDealer ? (
         <Fab
           renderInPortal={false}
           size="sm"
