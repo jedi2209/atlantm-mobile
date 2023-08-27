@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import {Alert} from 'react-native';
 import {get} from 'lodash';
 
@@ -44,6 +44,7 @@ const mapStateToProps = ({dealer, service, nav}) => {
       : carLocalNumber,
     carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
     dealerSelected: dealer.selected,
+    dealerSelectedLocal: dealer.selectedLocal,
   };
 };
 
@@ -52,62 +53,78 @@ const mapDispatchToProps = {
   localDealerClear,
 };
 
-class ServiceScreenNonAuth extends Component {
-  constructor(props) {
-    super(props);
-    const {
-      lastName,
-      firstName,
-      phone,
-      email,
-      carBrand,
-      carModel,
-      carVIN,
-      carNumber,
-    } = props;
+const ServiceScreenNonAuth = props => {
+  const {
+    lastName,
+    firstName,
+    phone,
+    email,
+    carBrand,
+    carModel,
+    carVIN,
+    carNumber,
+    localDealerClear,
+    dealerSelected,
+    dealerSelectedLocal,
+  } = props;
 
-    this.state = {
-      isModalVisible: false,
-      email: email,
-      phone: phone,
-      name: firstName && lastName ? `${firstName} ${lastName}` : '',
-      carBrand: carBrand,
-      carModel: carModel,
-      carVIN: carVIN,
-      carNumber: carNumber,
-      orderLead: true,
-    };
+  const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+  const [isSuccess, setSuccess] = useState(false);
+  const [orderLead, setLead] = useState(true);
+  const [car, setCar] = useState({
+    carBrand: carBrand,
+    carModel: carModel,
+    carVIN: carVIN,
+    carNumber: carNumber,
+  });
+  const [user, setUser] = useState({
+    email: email,
+    phone: phone,
+    name: firstName && lastName ? `${firstName} ${lastName}` : '',
+  });
 
-    const carFromNavigation = get(this.props.route, 'params.car');
+  useEffect(() => {
+    const carFromNavigation = get(props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
-      this.state.carVIN = carFromNavigation.vin;
-      this.state.carBrand = get(carFromNavigation, 'brand');
-      this.state.carModel = get(carFromNavigation, 'model');
-      this.state.carNumber = get(carFromNavigation, 'number');
-      this.state.carName = [
-        get(carFromNavigation, 'brand'),
-        get(carFromNavigation, 'model'),
-      ].join(' ');
+      setCar({
+        carVIN: carFromNavigation.vin,
+        carBrand: get(carFromNavigation, 'brand'),
+        carModel: get(carFromNavigation, 'model'),
+        carNumber: get(carFromNavigation, 'number'),
+        carName: [
+          get(carFromNavigation, 'brand'),
+          get(carFromNavigation, 'model'),
+        ].join(' '),
+      });
     }
 
-    this.props.localDealerClear();
-  }
+    setDealerSelectedLocal(
+      dealerSelectedLocal ? dealerSelectedLocal : dealerSelected,
+    );
 
-  onPressOrder = async dataFromForm => {
-    const {navigation, route} = this.props;
+    return () => {
+      localDealerClear();
+    };
+  }, []);
+
+  useEffect(() => {
+    setDealerSelectedLocal(dealerSelectedLocal);
+  }, [dealerSelectedLocal]);
+
+  const _onPressOrder = async dataFromForm => {
+    const {navigation, route} = props;
 
     let dateFromForm = get(dataFromForm, 'DATETIME', null);
     const actionID = get(route, 'params.actionID', null);
 
     if (get(dateFromForm, 'noTimeAlways', false)) {
       // хак для Лексуса
-      this.setState({
-        orderLead: true,
-      });
+      setLead(true);
     }
 
     let data = {
-      dealer: this.props.dealerSelected.id,
+      dealer: props.dealerSelected.id,
       time: {
         from:
           dateFromForm && dateFromForm.time
@@ -121,7 +138,7 @@ class ServiceScreenNonAuth extends Component {
       email: dataFromForm.EMAIL || null,
       tech_place: (dateFromForm && dateFromForm.tech_place) || null,
       serviceName: dataFromForm.SERVICE || null,
-      vin: dataFromForm.CARVIN || this.state.carVIN,
+      vin: dataFromForm.CARVIN || car.carVIN,
       car: {
         brand: dataFromForm.CARBRAND || null,
         model: dataFromForm.CARMODEL || null,
@@ -130,7 +147,7 @@ class ServiceScreenNonAuth extends Component {
       text: dataFromForm.COMMENT || null,
     };
 
-    if (this.state.orderLead) {
+    if (orderLead) {
       // отправляем ЛИД
       const dataToSend = {
         brand: get(data, 'car.brand', ''),
@@ -148,7 +165,7 @@ class ServiceScreenNonAuth extends Component {
         dealerID: data.dealer,
         actionID,
       };
-      const action = await this.props.orderService(dataToSend);
+      const action = await props.orderService(dataToSend);
 
       if (action && action.type) {
         switch (action.type) {
@@ -211,174 +228,368 @@ class ServiceScreenNonAuth extends Component {
         );
       }
     }
-    this.setState({success: true, loading: false});
+    // setLoading(false);
+    setSuccess(true);
   };
 
-  render() {
-    const FormConfig = {
-      fields: {
-        groups: [
-          {
-            name: strings.Form.group.dealer,
-            fields: [
-              {
-                name: 'DEALER',
-                type: 'dealerSelect',
-                label: strings.Form.field.label.dealer,
-                value: this.props.dealerSelected,
-                props: {
-                  goBack: false,
-                  showBrands: false,
-                },
+  const FormConfig = {
+    fields: {
+      groups: [
+        {
+          name: strings.Form.group.dealer,
+          fields: [
+            {
+              name: 'DEALER',
+              type: 'dealerSelect',
+              label: strings.Form.field.label.dealer,
+              value: dealerSelectedLocalState,
+              props: {
+                goBack: true,
+                isLocal: true,
+                showBrands: false,
               },
-              {
-                name: 'DATETIME',
-                type: this.state.orderLead ? 'date' : 'dateTime',
-                label: strings.Form.field.label.date,
-                value: null,
-                props: {
-                  placeholder:
-                    strings.Form.field.placeholder.date +
-                    dayMonthYear(addDays(2)),
-                  required: true,
-                  type: 'service',
-                  minimumDate: new Date(addDays(2)),
-                  maximumDate: new Date(addDays(62)),
-                  dealer: this.props.dealerSelected,
-                },
+            },
+            {
+              name: 'DATETIME',
+              type: orderLead ? 'date' : 'dateTime',
+              label: strings.Form.field.label.date,
+              value: null,
+              props: {
+                placeholder:
+                  strings.Form.field.placeholder.date +
+                  dayMonthYear(addDays(2)),
+                required: true,
+                type: 'service',
+                minimumDate: new Date(addDays(2)),
+                maximumDate: new Date(addDays(62)),
+                dealer: props.dealerSelected,
               },
-            ],
-          },
-          {
-            name: strings.Form.group.car,
-            fields: [
-              {
-                name: 'CARBRAND',
-                type: 'input',
-                label: strings.Form.field.label.carBrand,
-                value: this.props.carBrand,
-                props: {
-                  required: true,
-                  placeholder: null,
-                },
+            },
+          ],
+        },
+        {
+          name: strings.Form.group.car,
+          fields: [
+            {
+              name: 'CARBRAND',
+              type: 'input',
+              label: strings.Form.field.label.carBrand,
+              value: props.carBrand,
+              props: {
+                required: true,
+                placeholder: null,
               },
-              {
-                name: 'CARMODEL',
-                type: 'input',
-                label: strings.Form.field.label.carModel,
-                value: this.props.carModel,
-                props: {
-                  required: true,
-                  placeholder: null,
-                },
+            },
+            {
+              name: 'CARMODEL',
+              type: 'input',
+              label: strings.Form.field.label.carModel,
+              value: props.carModel,
+              props: {
+                required: true,
+                placeholder: null,
               },
-              {
-                name: 'CARNUMBER',
-                type: 'input',
-                label: strings.Form.field.label.carNumber,
-                value: this.props.carNumber,
-                props: {
-                  required: true,
-                  placeholder: null,
-                },
+            },
+            {
+              name: 'CARNUMBER',
+              type: 'input',
+              label: strings.Form.field.label.carNumber,
+              value: props.carNumber,
+              props: {
+                required: true,
+                placeholder: null,
               },
-              {
-                name: 'CARVIN',
-                type: 'input',
-                label: strings.Form.field.label.carVIN,
-                value: this.props.carVIN,
-                props: {
-                  placeholder: null,
-                  autoCapitalize: 'characters',
-                },
+            },
+            {
+              name: 'CARVIN',
+              type: 'input',
+              label: strings.Form.field.label.carVIN,
+              value: props.carVIN,
+              props: {
+                placeholder: null,
+                autoCapitalize: 'characters',
               },
-            ],
-          },
-          {
-            name: strings.Form.group.contacts,
-            fields: [
-              {
-                name: 'NAME',
-                type: 'input',
-                label: strings.Form.field.label.name,
-                value: this.props.firstName,
-                props: {
-                  required: true,
-                  textContentType: 'name',
-                },
+            },
+          ],
+        },
+        {
+          name: strings.Form.group.contacts,
+          fields: [
+            {
+              name: 'NAME',
+              type: 'input',
+              label: strings.Form.field.label.name,
+              value: props.firstName,
+              props: {
+                required: true,
+                textContentType: 'name',
               },
-              {
-                name: 'SECOND_NAME',
-                type: 'input',
-                label: strings.Form.field.label.secondName,
-                value: this.props.secondName,
-                props: {
-                  textContentType: 'middleName',
-                },
+            },
+            {
+              name: 'SECOND_NAME',
+              type: 'input',
+              label: strings.Form.field.label.secondName,
+              value: props.secondName,
+              props: {
+                textContentType: 'middleName',
               },
-              {
-                name: 'LAST_NAME',
-                type: 'input',
-                label: strings.Form.field.label.lastName,
-                value: this.props.lastName,
-                props: {
-                  textContentType: 'familyName',
-                },
+            },
+            {
+              name: 'LAST_NAME',
+              type: 'input',
+              label: strings.Form.field.label.lastName,
+              value: props.lastName,
+              props: {
+                textContentType: 'familyName',
               },
-              {
-                name: 'PHONE',
-                type: 'phone',
-                label: strings.Form.field.label.phone,
-                value: this.props.phone,
-                props: {
-                  required: true,
-                },
+            },
+            {
+              name: 'PHONE',
+              type: 'phone',
+              label: strings.Form.field.label.phone,
+              value: props.phone,
+              props: {
+                required: true,
               },
-              {
-                name: 'EMAIL',
-                type: 'email',
-                label: strings.Form.field.label.email,
-                value: this.props.email,
-                props: {
-                  required: false,
-                },
+            },
+            {
+              name: 'EMAIL',
+              type: 'email',
+              label: strings.Form.field.label.email,
+              value: props.email,
+              props: {
+                required: false,
               },
-            ],
-          },
-          {
-            name: strings.Form.group.additional,
-            fields: [
-              {
-                name: 'COMMENT',
-                type: 'textarea',
-                label: strings.Form.field.label.comment,
-                value: this.props.Text,
-                props: {
-                  placeholder: strings.Form.field.placeholder.comment,
-                },
+            },
+          ],
+        },
+        {
+          name: strings.Form.group.additional,
+          fields: [
+            {
+              name: 'COMMENT',
+              type: 'textarea',
+              label: strings.Form.field.label.comment,
+              value: props.Text,
+              props: {
+                placeholder: strings.Form.field.placeholder.comment,
               },
-            ],
-          },
-        ],
-      },
-    };
-    return (
-      <Form
-        contentContainerStyle={{
-          paddingHorizontal: 14,
-          marginTop: 20,
-        }}
-        key="ServiceNonAuthForm"
-        fields={FormConfig.fields}
-        barStyle={'light-content'}
-        defaultCountryCode={this.props.dealerSelected.region}
-        onSubmit={this.onPressOrder}
-        SubmitButton={{text: strings.Form.button.send}}
-        parentState={this.state}
-      />
-    );
-  }
-}
+            },
+          ],
+        },
+      ],
+    },
+  };
+
+  return (
+    <Form
+      contentContainerStyle={{
+        paddingHorizontal: 14,
+        marginTop: 20,
+      }}
+      key="ServiceNonAuthForm"
+      fields={FormConfig.fields}
+      barStyle={'light-content'}
+      defaultCountryCode={props.dealerSelected.region}
+      onSubmit={_onPressOrder}
+      SubmitButton={{text: strings.Form.button.send}}
+      // parentState={this.state}
+    />
+  );
+};
+
+// class ServiceScreenNonAuth extends Component {
+//   constructor(props) {
+//     super(props);
+//     const {
+//       lastName,
+//       firstName,
+//       phone,
+//       email,
+//       carBrand,
+//       carModel,
+//       carVIN,
+//       carNumber,
+//     } = props;
+
+//     this.state = {
+//       isModalVisible: false,
+//       email: email,
+//       phone: phone,
+//       name: firstName && lastName ? `${firstName} ${lastName}` : '',
+//       carBrand: carBrand,
+//       carModel: carModel,
+//       carVIN: carVIN,
+//       carNumber: carNumber,
+//       orderLead: true,
+//     };
+//   }
+
+//   render() {
+//     const FormConfig = {
+//       fields: {
+//         groups: [
+//           {
+//             name: strings.Form.group.dealer,
+//             fields: [
+//               {
+//                 name: 'DEALER',
+//                 type: 'dealerSelect',
+//                 label: strings.Form.field.label.dealer,
+//                 value: this.props.dealerSelected,
+//                 props: {
+//                   goBack: false,
+//                   showBrands: false,
+//                 },
+//               },
+//               {
+//                 name: 'DATETIME',
+//                 type: this.state.orderLead ? 'date' : 'dateTime',
+//                 label: strings.Form.field.label.date,
+//                 value: null,
+//                 props: {
+//                   placeholder:
+//                     strings.Form.field.placeholder.date +
+//                     dayMonthYear(addDays(2)),
+//                   required: true,
+//                   type: 'service',
+//                   minimumDate: new Date(addDays(2)),
+//                   maximumDate: new Date(addDays(62)),
+//                   dealer: this.props.dealerSelected,
+//                 },
+//               },
+//             ],
+//           },
+//           {
+//             name: strings.Form.group.car,
+//             fields: [
+//               {
+//                 name: 'CARBRAND',
+//                 type: 'input',
+//                 label: strings.Form.field.label.carBrand,
+//                 value: this.props.carBrand,
+//                 props: {
+//                   required: true,
+//                   placeholder: null,
+//                 },
+//               },
+//               {
+//                 name: 'CARMODEL',
+//                 type: 'input',
+//                 label: strings.Form.field.label.carModel,
+//                 value: this.props.carModel,
+//                 props: {
+//                   required: true,
+//                   placeholder: null,
+//                 },
+//               },
+//               {
+//                 name: 'CARNUMBER',
+//                 type: 'input',
+//                 label: strings.Form.field.label.carNumber,
+//                 value: this.props.carNumber,
+//                 props: {
+//                   required: true,
+//                   placeholder: null,
+//                 },
+//               },
+//               {
+//                 name: 'CARVIN',
+//                 type: 'input',
+//                 label: strings.Form.field.label.carVIN,
+//                 value: this.props.carVIN,
+//                 props: {
+//                   placeholder: null,
+//                   autoCapitalize: 'characters',
+//                 },
+//               },
+//             ],
+//           },
+//           {
+//             name: strings.Form.group.contacts,
+//             fields: [
+//               {
+//                 name: 'NAME',
+//                 type: 'input',
+//                 label: strings.Form.field.label.name,
+//                 value: this.props.firstName,
+//                 props: {
+//                   required: true,
+//                   textContentType: 'name',
+//                 },
+//               },
+//               {
+//                 name: 'SECOND_NAME',
+//                 type: 'input',
+//                 label: strings.Form.field.label.secondName,
+//                 value: this.props.secondName,
+//                 props: {
+//                   textContentType: 'middleName',
+//                 },
+//               },
+//               {
+//                 name: 'LAST_NAME',
+//                 type: 'input',
+//                 label: strings.Form.field.label.lastName,
+//                 value: this.props.lastName,
+//                 props: {
+//                   textContentType: 'familyName',
+//                 },
+//               },
+//               {
+//                 name: 'PHONE',
+//                 type: 'phone',
+//                 label: strings.Form.field.label.phone,
+//                 value: this.props.phone,
+//                 props: {
+//                   required: true,
+//                 },
+//               },
+//               {
+//                 name: 'EMAIL',
+//                 type: 'email',
+//                 label: strings.Form.field.label.email,
+//                 value: this.props.email,
+//                 props: {
+//                   required: false,
+//                 },
+//               },
+//             ],
+//           },
+//           {
+//             name: strings.Form.group.additional,
+//             fields: [
+//               {
+//                 name: 'COMMENT',
+//                 type: 'textarea',
+//                 label: strings.Form.field.label.comment,
+//                 value: this.props.Text,
+//                 props: {
+//                   placeholder: strings.Form.field.placeholder.comment,
+//                 },
+//               },
+//             ],
+//           },
+//         ],
+//       },
+//     };
+//     return (
+//       <Form
+//         contentContainerStyle={{
+//           paddingHorizontal: 14,
+//           marginTop: 20,
+//         }}
+//         key="ServiceNonAuthForm"
+//         fields={FormConfig.fields}
+//         barStyle={'light-content'}
+//         defaultCountryCode={this.props.dealerSelected.region}
+//         onSubmit={this.onPressOrder}
+//         SubmitButton={{text: strings.Form.button.send}}
+//         parentState={this.state}
+//       />
+//     );
+//   }
+// }
 
 export default connect(
   mapStateToProps,
