@@ -25,13 +25,13 @@ import Form from '../../../core/components/Form/Form';
 // redux
 import {connect} from 'react-redux';
 import {actionCarCostOrder} from '../../actions';
+import {localDealerClear} from '../../../dealer/actions';
 import {CAR_COST__SUCCESS, CAR_COST__FAIL} from '../../actionTypes';
 
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
 import {get, orderBy, valuesIn} from 'lodash';
 import {ERROR_NETWORK} from '../../../core/const';
-import isInternet from '../../../utils/internet';
 
 import {strings} from '../../../core/lang/const';
 
@@ -89,6 +89,7 @@ const mapStateToProps = ({dealer, profile, catalog}) => {
 
 const mapDispatchToProps = {
   actionCarCostOrder,
+  localDealerClear,
 };
 
 const styles = StyleSheet.create({
@@ -103,8 +104,11 @@ const styles = StyleSheet.create({
   },
 });
 
+let isInternet = null;
+
 const CarCostScreen = ({
   dealerSelected,
+  dealerSelectedLocal,
   firstName,
   secondName,
   lastName,
@@ -120,6 +124,7 @@ const CarCostScreen = ({
   navigation,
   route,
   actionCarCostOrder,
+  localDealerClear,
 }) => {
   const [carSelected, setCarData] = useState({
     carBrand,
@@ -136,6 +141,7 @@ const CarCostScreen = ({
   });
 
   const [photos, setPhotos] = useState([]);
+  const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
 
   const [FormConfig, setFormConfig] = useState({});
 
@@ -145,11 +151,27 @@ const CarCostScreen = ({
   useEffect(() => {
     console.info('== CarCost ==');
     Analytics.logEvent('screen', 'catalog/carcost');
-
+    console.log(
+      'dealerSelectedLocal default',
+      dealerSelectedLocal?.id,
+      dealerSelected?.id,
+      dealerFromNavigation?.id,
+    );
+    setDealerSelectedLocal(
+      dealerSelectedLocal ? dealerSelectedLocal : dealerSelected,
+    );
     if (cars.length === 1) {
       _selectCar(cars[0]);
     }
+    return () => {
+      localDealerClear();
+    };
   }, []);
+
+  useEffect(() => {
+    console.log('dealerSelectedLocal', dealerSelectedLocal?.id);
+    setDealerSelectedLocal(dealerSelectedLocal);
+  }, [dealerSelectedLocal]);
 
   useEffect(() => {
     const carFromNavigation = get(route, 'params.car');
@@ -169,15 +191,13 @@ const CarCostScreen = ({
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: strings.Form.field.label.dealer,
-                value: dealerFromNavigation
-                  ? dealerFromNavigation
-                  : dealerSelected,
+                value: dealerSelectedLocalState,
                 props: {
-                  goBack: false,
+                  goBack: true,
                   isLocal: true,
+                  showBrands: false,
                   returnScreen: navigation.state?.routeName,
                   readonly: dealerFromNavigation ? true : false,
-                  showBrands: false,
                 },
               },
               {
@@ -283,7 +303,7 @@ const CarCostScreen = ({
         ],
       },
     });
-  }, [carSelected, photos, dealerFromNavigation]);
+  }, [carSelected, photos, dealerSelectedLocalState, dealerFromNavigation]);
 
   const _selectCar = item => {
     setCarData({
@@ -298,11 +318,21 @@ const CarCostScreen = ({
   };
 
   const _onPressOrder = async dataFromForm => {
+    if (isInternet == null) {
+      isInternet = require('../../../utils/internet').default;
+    }
     const isInternetExist = await isInternet();
-
-    const dealerId = get(dealerFromNavigation, 'id', dealerSelected.id);
-
     if (!isInternetExist) {
+      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+    }
+
+    let dealerId = get(dealerFromNavigation, 'id', dealerSelected.id);
+
+    if (dealerSelectedLocalState) {
+      dealerId = dealerSelectedLocalState.id;
+    }
+
+    if (!isInternet) {
       return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
     } else {
       const photoForUpload = valuesIn(photos);
