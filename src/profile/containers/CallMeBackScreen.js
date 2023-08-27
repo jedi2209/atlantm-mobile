@@ -60,7 +60,9 @@ const CallMeBackScreen = ({
     //if (route?.params && route.params?.dealerCustom) {
     //setDealerSelectedLocal(route?.params?.dealerCustom);
     //} else {
-    setDealerSelectedLocal(dealerSelected);
+    setDealerSelectedLocal(
+      dealerSelectedLocal ? dealerSelectedLocal : dealerSelected,
+    );
     //}
     return () => {
       localDealerClear();
@@ -147,7 +149,7 @@ const CallMeBackScreen = ({
               name: 'DEALER',
               type: 'dealerSelect',
               label: strings.Form.group.dealer,
-              value: dealerSelectedLocalState || dealerSelected,
+              value: dealerSelectedLocalState,
               props: {
                 goBack: true,
                 isLocal: true,
