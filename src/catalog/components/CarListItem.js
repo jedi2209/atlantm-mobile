@@ -34,7 +34,7 @@ const {width: screenWidth} = Dimensions.get('window');
 const mapStateToProps = ({dealer, profile}) => {
   return {
     dealerList: dealer.listDealers,
-    dealerSelected: dealer.selected,
+    region: dealer.region,
     profile,
   };
 };
@@ -44,7 +44,7 @@ const CarListItem = ({
   prices,
   itemScreen,
   resizeMode,
-  dealerSelected,
+  region,
   dealerList,
   profile,
   currency,
@@ -108,7 +108,7 @@ const CarListItem = ({
         ordered,
         dealer: get(car, 'dealer'),
       },
-      region: dealerSelected.region,
+      region: region,
       carId: car.id.api,
       isNewCar: isNewCar,
     });
@@ -144,7 +144,7 @@ const CarListItem = ({
                 },
                 styles.priceSpecial,
               ]}>
-              {showPrice(CarPrices.sale, dealerSelected.region)}
+              {showPrice(CarPrices.sale, region)}
             </Text>
           </View>
         ) : null}
@@ -160,7 +160,7 @@ const CarListItem = ({
               isSale ? styles.priceDefault : null,
             ]}>
             {CarPrices.standart
-              ? showPrice(CarPrices.standart, dealerSelected.region)
+              ? showPrice(CarPrices.standart, region)
               : strings.CarList.price.byRequest}
           </Text>
         </View>
@@ -220,7 +220,7 @@ const CarListItem = ({
               year: get(car, 'year'),
               dealer: get(car, 'dealer'),
             },
-            region: dealerSelected.region,
+            region: region,
             carId: car.id.api,
             testDriveCars: car.testDriveCars,
             isNewCar: true,
@@ -277,7 +277,7 @@ const CarListItem = ({
                         year: get(car, 'year'),
                         dealer: get(car, 'dealer'),
                       },
-                      region: dealerSelected.region,
+                      region: region,
                       carId: car.id.api,
                       isNewCar: true,
                     });
@@ -310,7 +310,7 @@ const CarListItem = ({
                 year: get(car, 'year'),
                 dealer: get(car, 'dealer'),
               },
-              region: dealerSelected.region,
+              region: region,
               carId: car.id.api,
               isNewCar: true,
             });
@@ -333,7 +333,7 @@ const CarListItem = ({
               year: get(car, 'year'),
               dealer: get(car, 'dealer'),
             },
-            region: dealerSelected.region,
+            region: region,
             carId: car.id.api,
             isNewCar: false,
           });
@@ -347,7 +347,7 @@ const CarListItem = ({
               year: get(car, 'year'),
               dealer: get(car, 'dealer'),
             },
-            region: dealerSelected.region,
+            region: region,
             carId: car.id.api,
             isNewCar: false,
           });
@@ -377,7 +377,7 @@ const CarListItem = ({
               year: get(car, 'year'),
               dealer: get(car, 'dealer'),
             },
-            region: dealerSelected.region,
+            region: region,
             carId: car.id.api,
             isNewCar: false,
           });

@@ -71,6 +71,7 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
     profile,
     dealerSelected: dealer.selected,
     region: dealer.region,
+    listDealers: dealer.listDealers,
 
     isAppRated: core.isAppRated,
     menuOpenedCount: core.menuOpenedCount,
@@ -265,6 +266,7 @@ const _processRow = props => {
                 ? item?.link?.params?.returnScreen
                 : route.name,
               goBack: true,
+              updateDealers: true,
             })
           }
         />
@@ -390,6 +392,8 @@ const MainScreen = props => {
     infoList,
     fetchInfoList,
     fetchBrands,
+    fetchDealers,
+    listDealers,
   } = props;
   const [isLoading, setLoading] = useState(false);
   const colorScheme = useColorScheme() || 'light';
@@ -402,14 +406,17 @@ const MainScreen = props => {
 
   useEffect(() => {
     Analytics.logEvent('screen', 'main screen');
-  }, [region, fetchInfoList, colorScheme]);
+    if (Object.keys(listDealers).length === 0) {
+      fetchDealers();
+    }
+  }, [region, fetchInfoList, colorScheme, listDealers, fetchDealers]);
 
   useEffect(() => {
     if (isLoading === false) {
       fetchInfoData({region, fetchInfoList});
       fetchBrands(); // обновляем бренды при первом открытии экрана
     }
-  }, [fetchInfoList, isLoading, region]);
+  }, [fetchBrands, fetchInfoList, isLoading, region]);
 
   const _onRefresh = async () => {
     setLoading(true);

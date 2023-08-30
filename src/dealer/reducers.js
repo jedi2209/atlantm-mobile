@@ -89,6 +89,8 @@ function listRussia(state = [], action) {
       return get(action.payload, 'dealer.listRussia', []);
     case DEALERS__SUCCESS:
       return [...action.payload[RUSSIA]];
+    case APP_STORE_UPDATED:
+      return [];
     default:
       return state;
   }
@@ -100,6 +102,8 @@ function listBelarussia(state = [], action) {
       return get(action.payload, 'dealer.listBelarussia', []);
     case DEALERS__SUCCESS:
       return [...action.payload[BELARUSSIA]];
+    case APP_STORE_UPDATED:
+      return [];
     default:
       return state;
   }
@@ -111,6 +115,8 @@ function listUkraine(state = [], action) {
       return get(action.payload, 'dealer.listUkraine', []);
     case DEALERS__SUCCESS:
       return [...action.payload[UKRAINE]];
+    case APP_STORE_UPDATED:
+      return [];
     default:
       return state;
   }
@@ -122,6 +128,8 @@ function listBrands(state = [], action) {
       return get(action.payload, 'dealer.listBrands', []);
     case BRANDS__SUCCESS:
       return action.payload;
+    case APP_STORE_UPDATED:
+      return [];
     default:
       return state;
   }
@@ -133,6 +141,8 @@ function listCities(state = {}, action) {
       return get(action.payload, 'dealer.listCities', {});
     case CITIES__SUCCESS:
       return action.payload;
+    case APP_STORE_UPDATED:
+      return {};
     default:
       return state;
   }
@@ -144,6 +154,8 @@ function listDealers(state = {}, action) {
       return get(action.payload, 'dealer.listDealers', {});
     case ALL_DEALERS__SUCCESS:
       return action.payload;
+    case APP_STORE_UPDATED:
+      return {};
     default:
       return state;
   }
@@ -218,6 +230,8 @@ const listRussiaByCities = (state = [], action) => {
     case DEALERS__SUCCESS: // устанавливается при выборе дилера
     case DEALERS_BY_CITIES__SET: // нужно для обновления 4.2.0
       return processListsByCities(action, RUSSIA);
+    case APP_STORE_UPDATED:
+      return [];
     default:
       return state;
   }
@@ -230,6 +244,8 @@ const listBelarussiaByCities = (state = [], action) => {
     case DEALERS__SUCCESS:
     case DEALERS_BY_CITIES__SET:
       return processListsByCities(action, BELARUSSIA);
+    case APP_STORE_UPDATED:
+      return [];
     default:
       return state;
   }
@@ -242,6 +258,8 @@ const listUkraineByCities = (state = [], action) => {
     case DEALERS__SUCCESS:
     case DEALERS_BY_CITIES__SET:
       return processListsByCities(action, BELARUSSIA);
+    case APP_STORE_UPDATED:
+      return [];
     default:
       return state;
   }
