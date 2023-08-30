@@ -17,7 +17,6 @@ import {
   actionSettingsLoaded,
   actionFetchMainScreenSettings,
 } from '../actions';
-import {fetchDealers, selectDealer} from '../../dealer/actions';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 import {APP_STORE_UPDATED} from '../actionTypes';
@@ -55,14 +54,11 @@ const mapDispatchToProps = {
   actionMenuOpenedCount,
   actionStoreUpdated,
   actionSettingsLoaded,
-  fetchDealers,
-  selectDealer,
   actionFetchMainScreenSettings,
 };
 
 const mainScreen = 'BottomTabNavigation';
 const storeVersion = '2023-08-01';
-const isNewIntroScreen = true;
 
 const _awaitStoreToUpdate = async props => {
   const storeData = store.getState();

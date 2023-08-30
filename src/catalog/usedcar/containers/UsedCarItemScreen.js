@@ -46,7 +46,7 @@ import styles from '../../CarStyles';
 const mapStateToProps = ({catalog, dealer, nav}) => {
   return {
     nav,
-    dealerSelected: dealer.selected,
+    region: dealer.region,
     listCities: dealer.listCities,
     listDealers: dealer.listDealers,
     carDetails: catalog.usedCar.carDetails.data,
@@ -76,7 +76,7 @@ const UsedCarItemScreen = props => {
   const {
     navigation,
     carDetails,
-    dealerSelected,
+    region,
     listDealers,
     listCities,
     isFetchingCarDetails,
@@ -98,7 +98,7 @@ const UsedCarItemScreen = props => {
         year: get(carDetails, 'year'),
         dealer: get(carDetails, 'dealer'),
       },
-      region: dealerSelected.region,
+      region: dealer.region,
       carId: carDetails.id.api,
       isNewCar: false,
     });
@@ -112,7 +112,7 @@ const UsedCarItemScreen = props => {
         complectation: get(carDetails, 'complectation.name'),
         year: get(carDetails, 'year'),
       },
-      region: dealerSelected.region,
+      region,
       dealerId: get(carDetails, 'dealer.id'),
       carId: carDetails.id.api,
       isNewCar: false,
@@ -129,7 +129,7 @@ const UsedCarItemScreen = props => {
         price:
           get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
       },
-      region: dealerSelected.region,
+      region,
       dealerId: get(carDetails, 'dealer.id'),
       carId: carDetails.id.api,
       isNewCar: false,
@@ -146,14 +146,14 @@ const UsedCarItemScreen = props => {
         year: get(carDetails, 'year'),
         dealer: [get(carDetails, 'dealer')],
       },
-      region: dealerSelected.region,
+      region,
       carId: carDetails.id.api,
       isNewCar: false,
     });
   };
 
   const onPressCall = phone => {
-    if (!getStatusWorktime(dealerSelected, 'RC', true)) {
+    if (!getStatusWorktime(listDealers[carDetails.dealer.id], 'RC', true)) {
       Alert.alert(
         strings.ContactsScreen.closedDealer.title,
         strings.ContactsScreen.closedDealer.text,
@@ -189,7 +189,7 @@ const UsedCarItemScreen = props => {
         complectation: get(carDetails, 'complectation.name'),
         year: get(carDetails, 'year'),
       },
-      region: dealerSelected.region,
+      region,
       dealerId: get(carDetails, 'dealer.id'),
       carId: carDetails.id.api,
       isNewCar: false,
@@ -958,10 +958,10 @@ const UsedCarItemScreen = props => {
               ]}>
               <Text
                 style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
-                {showPrice(CarPrices.sale, dealerSelected.region)}
+                {showPrice(CarPrices.sale, region)}
               </Text>
               <Text style={[styles.orderPriceText, styles.orderPriceSmallText]}>
-                {showPrice(CarPrices.standart, dealerSelected.region)}
+                {showPrice(CarPrices.standart, region)}
               </Text>
             </View>
           ) : (
@@ -972,7 +972,7 @@ const UsedCarItemScreen = props => {
               ]}>
               <Text
                 style={[styles.orderPriceText, styles.orderPriceDefaultText]}>
-                {showPrice(CarPrices.standart, dealerSelected.region)}
+                {showPrice(CarPrices.standart, region)}
               </Text>
             </View>
           )
@@ -1050,7 +1050,7 @@ const UsedCarItemScreen = props => {
 };
 
 UsedCarItemScreen.propTypes = {
-  dealerSelected: PropTypes.object,
+  region: PropTypes.string,
 };
 
 const stylesFooter = StyleSheet.create({

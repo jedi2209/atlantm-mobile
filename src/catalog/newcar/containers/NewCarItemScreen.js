@@ -58,7 +58,7 @@ const mapStateToProps = ({catalog, dealer, profile, nav}) => {
       by: dealer.listBelarussia,
       ua: dealer.listUkraine,
     },
-    dealerSelected: dealer.selected,
+    region: dealer.region,
     carDetails: catalog.newCar.carDetails.data,
     profile,
   };
@@ -306,7 +306,7 @@ const _renderComplectationItem = (title, data) => {
   );
 };
 
-const _renderPrice = ({carDetails, currency, isPriceShow, dealerSelected}) => {
+const _renderPrice = ({carDetails, currency, isPriceShow, region}) => {
   if (!isPriceShow) {
     return;
   }
@@ -336,7 +336,7 @@ const _renderPrice = ({carDetails, currency, isPriceShow, dealerSelected}) => {
             fontWeight: '600',
             color: '#D0021B',
           }}>
-          {showPrice(CarPrices.sale, dealerSelected.region)}
+          {showPrice(CarPrices.sale, region)}
         </Text>
       )}
       <Text
@@ -347,18 +347,13 @@ const _renderPrice = ({carDetails, currency, isPriceShow, dealerSelected}) => {
           color: '#000',
           textDecorationLine: isSale ? 'line-through' : 'none',
         }}>
-        {showPrice(CarPrices.standart, dealerSelected.region)}
+        {showPrice(CarPrices.standart, region)}
       </Text>
     </View>
   );
 };
 
-const _renderPriceFooter = ({
-  carDetails,
-  currency,
-  isPriceShow,
-  dealerSelected,
-}) => {
+const _renderPriceFooter = ({carDetails, currency, isPriceShow, region}) => {
   if (!isPriceShow) {
     return;
   }
@@ -380,7 +375,7 @@ const _renderPriceFooter = ({
       ]}>
       {isSale ? (
         <Text style={[styles.orderPriceText, styles.orderPriceSpecialText]}>
-          {showPrice(CarPrices.sale, dealerSelected.region)}
+          {showPrice(CarPrices.sale, region)}
         </Text>
       ) : null}
       <Text
@@ -389,7 +384,7 @@ const _renderPriceFooter = ({
           !isSale ? styles.orderPriceDefaultText : styles.orderPriceSmallText,
         ]}>
         {CarPrices.standart
-          ? showPrice(CarPrices.standart, dealerSelected.region)
+          ? showPrice(CarPrices.standart, region)
           : strings.CarList.price.byRequest}
       </Text>
     </View>
@@ -409,7 +404,7 @@ const _onPressMap = ({carDetails, navigation}) => {
   });
 };
 
-const _onPressOrder = ({carDetails, profile, navigation, dealerSelected}) => {
+const _onPressOrder = ({carDetails, profile, navigation, region}) => {
   const CarPrices = {
     sale: get(carDetails, 'price.app.sale') || 0,
     standart:
@@ -457,7 +452,7 @@ const _onPressOrder = ({carDetails, profile, navigation, dealerSelected}) => {
                 year: get(carDetails, 'year'),
                 dealer: get(carDetails, 'dealer'),
               },
-              region: dealerSelected.region,
+              region: region,
               carId: carDetails.id.api,
               isNewCar: true,
             });
@@ -488,14 +483,14 @@ const _onPressOrder = ({carDetails, profile, navigation, dealerSelected}) => {
         year: get(carDetails, 'year'),
         dealer: get(carDetails, 'dealer'),
       },
-      region: dealerSelected.region,
+      region: region,
       carId: carDetails.id.api,
       isNewCar: true,
     });
   }
 };
 
-const _onPressTestDrive = ({carDetails, navigation, dealerSelected}) => {
+const _onPressTestDrive = ({carDetails, navigation, region}) => {
   const CarPrices = {
     sale: get(carDetails, 'price.app.sale') || 0,
     standart:
@@ -513,7 +508,7 @@ const _onPressTestDrive = ({carDetails, navigation, dealerSelected}) => {
       year: get(carDetails, 'year'),
       dealer: get(carDetails, 'dealer'),
     },
-    region: dealerSelected.region,
+    region: region,
     carId: carDetails.id.api,
     testDriveCars: carDetails.testDriveCars,
     isNewCar: true,
@@ -525,7 +520,7 @@ const NewCarItemScreen = ({
   route,
   carDetails,
   profile,
-  dealerSelected,
+  region,
   actionFetchNewCarDetails,
 }) => {
   const [tabName, setTabName] = useState('base');
@@ -678,7 +673,7 @@ const NewCarItemScreen = ({
     carDetails,
     currency,
     isPriceShow,
-    dealerSelected,
+    region,
   });
 
   const SECTIONS = [
@@ -863,7 +858,7 @@ const NewCarItemScreen = ({
     },
   ];
 
-  const fabEnable = dealerSelected.region === 'by' ? true : false;
+  const fabEnable = region === 'by' ? true : false;
 
   return (
     <>
@@ -947,7 +942,7 @@ const NewCarItemScreen = ({
                 carDetails,
                 currency,
                 isPriceShow,
-                dealerSelected,
+                region,
               })}
             </View>
 
@@ -1059,7 +1054,7 @@ const NewCarItemScreen = ({
             <Button
               testID="NewCarItemScreen.Button.TestDrive"
               onPress={() =>
-                _onPressTestDrive({carDetails, navigation, dealerSelected})
+                _onPressTestDrive({carDetails, navigation, region})
               }
               size="full"
               _text={styles.buttonText}
@@ -1084,7 +1079,7 @@ const NewCarItemScreen = ({
             <Button
               testID="NewCarItemScreen.Button.Order"
               onPress={() =>
-                _onPressOrder({carDetails, profile, navigation, dealerSelected})
+                _onPressOrder({carDetails, profile, navigation, region})
               }
               size="sm"
               _text={styles.buttonText}
@@ -1143,7 +1138,7 @@ const NewCarItemScreen = ({
 };
 
 NewCarItemScreen.propTypes = {
-  dealerSelected: PropTypes.object,
+  region: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewCarItemScreen);

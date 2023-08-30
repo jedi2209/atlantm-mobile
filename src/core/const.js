@@ -105,6 +105,21 @@ export const APP_LOCALE = {
   ua: 'uk-UK',
 };
 
+export const DEFAULT_CITY = {
+  by: {
+    id: 5,
+    name: 'Минск',
+  },
+  ru: {
+    id: 1,
+    name: 'Москва',
+  },
+  ua: {
+    id: 7,
+    name: 'Київ',
+  },
+};
+
 export const APP_LANG = appLang;
 
 export const API_LANG = apiLang;

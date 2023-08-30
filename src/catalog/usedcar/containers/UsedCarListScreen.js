@@ -19,6 +19,7 @@ import LogoLoader from '../../../core/components/LogoLoader';
 import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
+import {DEFAULT_CITY} from '../../../core/const';
 import {EVENT_REFRESH} from '../../../core/actionTypes';
 
 const styles = StyleSheet.create({
@@ -34,7 +35,7 @@ const mapStateToProps = ({dealer, catalog}) => {
     pages: catalog.usedCar.pages,
     prices: catalog.usedCar.prices,
     isFetchItems: catalog.usedCar.meta.isFetchItems,
-    dealerSelected: dealer.selected,
+    region: dealer.region,
     filters: catalog.usedCar.filters,
   };
 };
@@ -47,13 +48,13 @@ const UsedCarListScreen = ({
   route,
   actionFetchUsedCarByFilter,
   actionSaveUsedCarFilters,
-  dealerSelected,
+  region,
   filters,
   items,
 }) => {
   const [loading, setLoading] = useState(false);
 
-  const fabEnable = dealerSelected.region === 'by' ? true : false;
+  const fabEnable = region === 'by' ? true : false;
 
   const _fetchUsedCar = type => {
     if (type === EVENT_REFRESH) {
@@ -62,8 +63,8 @@ const UsedCarListScreen = ({
 
     return actionFetchUsedCarByFilter({
       type,
-      city: dealerSelected.city[0].id,
-      region: dealerSelected.region,
+      city: DEFAULT_CITY[region].id,
+      region: region,
       nextPage: pages?.next || null,
       filters: filters.filters,
       sortBy: filters.sorting.sortBy,
@@ -96,7 +97,7 @@ const UsedCarListScreen = ({
   useEffect(() => {
     console.info('== UsedCarListScreen ==');
     Analytics.logEvent('screen', 'catalog/usedcar/list');
-  }, [dealerSelected.city[0].id]);
+  }, [DEFAULT_CITY[region].id]);
 
   return (
     <View style={styles.content} testID="UserCarListSreen.Wrapper">
@@ -111,7 +112,6 @@ const UsedCarListScreen = ({
             prices={prices}
             itemScreen="UsedCarItemScreen"
             dataHandler={_fetchUsedCar}
-            dealerSelected={dealerSelected}
             isFetchItems={isFetchItems}
           />
           {fabEnable ? (

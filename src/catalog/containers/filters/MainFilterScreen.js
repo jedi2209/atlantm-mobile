@@ -31,6 +31,7 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import CheckboxList from '../../../core/components/CheckboxList';
 
 import styleConst from '../../../core/style-const';
+import {DEFAULT_CITY} from '../../../core/const';
 // redux
 import {connect} from 'react-redux';
 import {substractYears} from '../../../utils/date';
@@ -120,7 +121,7 @@ const pickerSelectStyles = StyleSheet.create({
 
 const mapStateToProps = ({catalog, dealer}) => {
   return {
-    dealerSelected: dealer.selected,
+    region: dealer.region,
     listRussiaByCities: dealer.listRussiaByCities,
     listBelarussiaByCities: dealer.listBelarussiaByCities,
     listUkraineByCities: dealer.listUkraineByCities,
@@ -247,7 +248,7 @@ const _makeFilterData = (field, value) => {
 const MainFilterScreen = ({
   navigation,
   route,
-  dealerSelected,
+  region,
   stockTypeDefault,
   updateFromApiDefault,
   actionFetchNewCar,
@@ -326,7 +327,7 @@ const MainFilterScreen = ({
     switch (stockType) {
       case 'New':
         actionFetchNewCarFilters({
-          city: dealerSelected.city[0].id,
+          city: DEFAULT_CITY[region].id,
         }).then(res => {
           const totalCarsCount = get(res, 'payload.total.count', 0);
           setTotalCars(totalCarsCount);
@@ -423,8 +424,8 @@ const MainFilterScreen = ({
         break;
       case 'Used':
         actionFetchUsedCarFilters({
-          city: dealerSelected.city[0].id,
-          region: dealerSelected.region,
+          city: DEFAULT_CITY[region].id,
+          region: region,
         }).then(res => {
           const totalCarsCount = get(res, 'payload.total.count', 0);
           setTotalCars(totalCarsCount);
@@ -572,7 +573,7 @@ const MainFilterScreen = ({
     setTotalCars(null);
     _showHideSubmitButton(false);
     clearBrandModelFilters();
-  }, [dealerSelected]);
+  }, [region]);
 
   useEffect(() => {
     _fetchFiltersAPI(stockType);
@@ -642,7 +643,7 @@ const MainFilterScreen = ({
       case 'New':
         actionFetchNewCar({
           filters: filtersLocal,
-          city: dealerSelected.city[0].id,
+          city: DEFAULT_CITY[region].id,
         }).then(res => {
           const totalCarsCount = get(res, 'payload.total.count', 0);
           setTotalCars(totalCarsCount);
@@ -652,8 +653,8 @@ const MainFilterScreen = ({
       case 'Used':
         actionFetchUsedCar({
           filters: filtersLocal,
-          region: dealerSelected.region,
-          city: dealerSelected.city[0].id,
+          region: region,
+          city: DEFAULT_CITY[region].id,
         }).then(res => {
           const totalCarsCount = get(res, 'payload.total.count', 0);
           setTotalCars(totalCarsCount);
@@ -1110,7 +1111,7 @@ const MainFilterScreen = ({
                     type="singleCheckbox"
                   />
                 </VStack>
-              ) : dealerSelected.region === 'by' ? (
+              ) : region === 'by' ? (
                 <VStack
                   space="2"
                   divider={<Divider bg="gray.100" thickness="1" />}>

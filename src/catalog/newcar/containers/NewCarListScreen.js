@@ -19,6 +19,7 @@ import LogoLoader from '../../../core/components/LogoLoader';
 import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
+import {DEFAULT_CITY} from '../../../core/const';
 import {EVENT_REFRESH} from '../../../core/actionTypes';
 
 const styles = StyleSheet.create({
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({dealer, catalog}) => {
   return {
-    dealerSelected: dealer.selected,
+    region: dealer.region,
     brands: dealer.listBrands,
     items: catalog.newCar.items,
     filters: catalog.newCar.filters,
@@ -45,14 +46,14 @@ const NewCarListScreen = ({
   filters,
   actionFetchNewCarByFilter,
   actionSaveNewCarFilters,
-  dealerSelected,
+  region,
   isFetchingNewCarByFilter,
 }) => {
   const [loading, setLoading] = useState(true);
 
   const {data, pages, prices} = items;
 
-  const fabEnable = dealerSelected.region === 'by' ? true : false;
+  const fabEnable = region === 'by' ? true : false;
 
   const _fetchNewCars = type => {
     if (type === EVENT_REFRESH) {
@@ -61,7 +62,7 @@ const NewCarListScreen = ({
 
     return actionFetchNewCarByFilter({
       type,
-      city: dealerSelected.city[0].id,
+      city: DEFAULT_CITY[region].id,
       nextPage: pages?.next || null,
       filters: filters.filters,
       sortBy: filters.sorting.sortBy,
@@ -93,9 +94,9 @@ const NewCarListScreen = ({
   // Аналогично componentDidMount и componentDidUpdate:
   useEffect(() => {
     Analytics.logEvent('screen', 'catalog/newcar/list', {
-      search_url: `/stock/new/cars/get/city/${dealerSelected.city[0].id}/`,
+      search_url: `/stock/new/cars/get/city/${DEFAULT_CITY[region].id}/`,
     });
-  }, [dealerSelected.city[0].id]);
+  }, [DEFAULT_CITY[region].id]);
 
   return (
     <View style={styles.content} testID="NewCarsListSreen.Wrapper">
@@ -111,7 +112,6 @@ const NewCarListScreen = ({
             resizeMode="contain"
             itemScreen="NewCarItemScreen"
             dataHandler={_fetchNewCars}
-            dealerSelected={dealerSelected}
             isFetchItems={isFetchingNewCarByFilter}
           />
           {fabEnable ? (

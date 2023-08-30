@@ -448,12 +448,21 @@ const makeLists = props => {
 };
 
 const ChooseDealerScreen = props => {
-  const {isFetchDealer, region, route, fetchDealers} = props;
+  const {
+    isFetchDealer,
+    region,
+    route,
+    fetchDealers,
+    listRussia,
+    listBelarussia,
+    listUkraine,
+  } = props;
 
   const [isRefreshing, setRefreshing] = useState(false);
   const layout = useWindowDimensions();
   const [index, setIndex] = useState(0);
 
+  const needToUpdate = get(route, 'params.updateDealers', false);
   const goBack = get(route, 'params.goBack', true);
   const isLocal = get(route, 'params.isLocal', false);
   const returnScreen = get(route, 'params.returnScreen', null);
@@ -465,60 +474,96 @@ const ChooseDealerScreen = props => {
   const [renderSceneData, setRenderScene] = useState({});
 
   useEffect(() => {
-    setRefreshing(true);
-    fetchDealers()
-      .then(res => {
-        const listBelarussia = get(res, 'payload.by', []);
-        const listRussia = get(res, 'payload.ru', []);
-        const listUkraine = get(res, 'payload.ua', []);
+    if (needToUpdate) {
+      setRefreshing(true);
+      fetchDealers()
+        .then(res => {
+          if (res.type === 'DEALERS__SUCCESS') {
+            const tabsDataLocal = makeLists({
+              ...props,
+              listUkraine: get(res, 'payload.ua', []),
+              listRussia: get(res, 'payload.ru', []),
+              listBelarussia: get(res, 'payload.by', []),
+              listAll,
+              regions,
+              isRefreshing,
+              setRefreshing,
+              _renderItem,
+              goBack,
+              isLocal,
+              returnScreen,
+              returnState,
+            });
 
-        if (res.type === 'DEALERS__SUCCESS') {
-          const tabsDataLocal = makeLists({
-            ...props,
-            listUkraine,
-            listRussia,
-            listBelarussia,
-            listAll,
-            regions,
-            isRefreshing,
-            setRefreshing,
-            _renderItem,
-            goBack,
-            isLocal,
-            returnScreen,
-            returnState,
-            // itemLayout: 'dealer',
-          });
+            setTabsData(tabsDataLocal);
 
-          setTabsData(tabsDataLocal);
+            let sceneMap = {};
 
-          let sceneMap = {};
+            switch (APP_REGION) {
+              case BELARUSSIA:
+                if (tabsDataLocal.TabBY) {
+                  sceneMap.by = tabsDataLocal.TabBY;
+                }
+                if (tabsDataLocal.TabRU) {
+                  sceneMap.ru = tabsDataLocal.TabRU;
+                }
+                break;
+              case UKRAINE:
+                if (tabsDataLocal.TabUA) {
+                  sceneMap.ua = tabsDataLocal.TabUA;
+                }
+                break;
+            }
 
-          switch (APP_REGION) {
-            case BELARUSSIA:
-              if (tabsDataLocal.TabBY) {
-                sceneMap.by = tabsDataLocal.TabBY;
-              }
-              if (tabsDataLocal.TabRU) {
-                sceneMap.ru = tabsDataLocal.TabRU;
-              }
-              break;
-            case UKRAINE:
-              if (tabsDataLocal.TabUA) {
-                sceneMap.ua = tabsDataLocal.TabUA;
-              }
-              break;
+            setRenderScene(sceneMap);
+            setRefreshing(false);
           }
-
-          setRenderScene(sceneMap);
+        })
+        .catch(err => {
+          console.error('ChooseDealerScreen error', err);
           setRefreshing(false);
-        }
-      })
-      .catch(err => {
-        console.error('ChooseDealerScreen error', err);
-        setRefreshing(false);
+        });
+    } else {
+      const tabsDataLocal = makeLists({
+        ...props,
+        listUkraine,
+        listRussia,
+        listBelarussia,
+        listAll,
+        regions,
+        isRefreshing,
+        setRefreshing,
+        _renderItem,
+        goBack,
+        isLocal,
+        returnScreen,
+        returnState,
       });
-  }, []);
+
+      setTabsData(tabsDataLocal);
+
+      let sceneMap = {};
+
+      switch (APP_REGION) {
+        case BELARUSSIA:
+          if (tabsDataLocal.TabBY) {
+            sceneMap.by = tabsDataLocal.TabBY;
+          }
+          if (tabsDataLocal.TabRU) {
+            sceneMap.ru = tabsDataLocal.TabRU;
+          }
+          break;
+        case UKRAINE:
+          if (tabsDataLocal.TabUA) {
+            sceneMap.ua = tabsDataLocal.TabUA;
+          }
+          break;
+      }
+
+      setRenderScene(sceneMap);
+      setRefreshing(false);
+    }
+  }, [needToUpdate]);
 
   if (!tabsData || !renderSceneData || isRefreshing) {
     return _EmptyComponent();
