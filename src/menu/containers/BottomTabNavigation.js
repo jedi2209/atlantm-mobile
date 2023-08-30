@@ -150,6 +150,7 @@ const ContactsStackView = ({navigation, route}) => (
         headerBackButtonMenuEnabled: false,
         headerBackVisible: false,
         headerBackTitleVisible: false,
+        headerLeft: null,
         headerStyle: {
           height: 90,
           backgroundColor: '#F8F8F8',

@@ -35,6 +35,7 @@ import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList} from '../../info/actions';
+import {fetchDealers, fetchBrands} from '../../dealer/actions';
 import {
   actionMenuOpenedCount,
   actionAppRated,
@@ -82,6 +83,8 @@ const mapDispatchToProps = {
   actionAppRated,
   actionMenuOpenedCount,
   actionFetchMainScreenSettings,
+  fetchDealers,
+  fetchBrands,
 };
 
 const styles = StyleSheet.create({
@@ -217,7 +220,7 @@ const _processRow = props => {
     const isDealerButton =
       screenName === 'ChooseDealerScreen' || screenName === 'DealerInfoScreen';
     if (isDealerButton) {
-      item.img = dealerSelected.img.main[0];
+      // item.img = dealerSelected.img.main[0];
       if (!item.title.text) {
         item.title.text = strings.Menu.main.autocenters;
       }
@@ -386,6 +389,7 @@ const MainScreen = props => {
     isFetchInfoList,
     infoList,
     fetchInfoList,
+    fetchBrands,
   } = props;
   const [isLoading, setLoading] = useState(false);
   const colorScheme = useColorScheme() || 'light';
@@ -403,6 +407,7 @@ const MainScreen = props => {
   useEffect(() => {
     if (isLoading === false) {
       fetchInfoData({region, fetchInfoList});
+      fetchBrands(); // обновляем бренды при первом открытии экрана
     }
   }, [fetchInfoList, isLoading, region]);
 

@@ -13,10 +13,10 @@ import {year} from '../../utils/date';
 
 // actions
 import {connect} from 'react-redux';
-import {selectDealer, selectRegion} from '../../dealer/actions';
+import {selectRegion} from '../../dealer/actions';
 
 const mapDispatchToProps = {
-  selectDealer,
+  selectRegion,
 };
 
 const styles = StyleSheet.create({
@@ -51,26 +51,15 @@ const mapStateToProps = ({dealer}) => {
 
 const currYearSubstract = year - 1991;
 
-const IntroScreenNew = ({navigation, dealer, selectDealer, region}) => {
+const IntroScreenNew = ({navigation, dealer, selectRegion, region}) => {
   const [isLoading, setLoading] = useState(false);
 
   const onPressButton = async regionSelected => {
     setLoading(true);
-    selectDealer({
-      dealerBaseData: dealer[dealersList[regionSelected]][0],
-      dealerSelected: dealer[dealersList[regionSelected]][0],
-      isLocal: false,
-    })
-      .then(action => {
-        selectRegion(regionSelected);
-        PushNotifications.addTag('region', regionSelected);
-        PushNotifications.unsubscribeFromTopic(['dealer', 'actions']);
-        navigation.navigate('BottomTabNavigation', {screen: 'ContactsScreen'});
-        // setLoading(false);
-      })
-      .catch(error => {
-        console.error('IntroScreenNew onPressButton', error);
-      });
+    selectRegion(regionSelected);
+    PushNotifications.addTag('region', regionSelected);
+    PushNotifications.unsubscribeFromTopic(['dealer', 'actions']);
+    navigation.navigate('BottomTabNavigation', {screen: 'ContactsScreen'});
   };
 
   const [countLogoClick, setCountLogoClick] = useState(0);

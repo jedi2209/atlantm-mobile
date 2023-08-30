@@ -117,10 +117,10 @@ const StackOrders = createStackNavigator();
 const StackContacts = createStackNavigator();
 
 export const Base = ({navigation, route}) => {
-  const dealerSelected = useSelector(state => state.dealer.selected);
+  const regionSelected = useSelector(state => state.dealer.region);
   let initialRouteName = 'BottomTabNavigation';
 
-  if (!dealerSelected || !dealerSelected.id) {
+  if (!regionSelected) {
     initialRouteName = 'IntroScreenNew';
   }
   return (

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   StyleSheet,
@@ -448,7 +448,7 @@ const makeLists = props => {
 };
 
 const ChooseDealerScreen = props => {
-  const {route, isFetchDealer, region} = props;
+  const {isFetchDealer, region, route, fetchDealers} = props;
 
   const [isRefreshing, setRefreshing] = useState(false);
   const layout = useWindowDimensions();
@@ -461,36 +461,70 @@ const ChooseDealerScreen = props => {
   const listAll = get(route, 'params.listAll', null);
   const regions = get(route, 'params.regions', [region]);
 
-  const tabsData = makeLists({
-    ...props,
-    listAll,
-    regions,
-    isRefreshing,
-    setRefreshing,
-    _renderItem,
-    goBack,
-    isLocal,
-    returnScreen,
-    returnState,
-  });
+  const [tabsData, setTabsData] = useState(null);
+  const [renderSceneData, setRenderScene] = useState({});
 
-  const [routes] = useState(tabsData.routesHead);
+  useEffect(() => {
+    setRefreshing(true);
+    fetchDealers()
+      .then(res => {
+        const listBelarussia = get(res, 'payload.by', []);
+        const listRussia = get(res, 'payload.ru', []);
+        const listUkraine = get(res, 'payload.ua', []);
 
-  let renderScene = null;
+        if (res.type === 'DEALERS__SUCCESS') {
+          const tabsDataLocal = makeLists({
+            ...props,
+            listUkraine,
+            listRussia,
+            listBelarussia,
+            listAll,
+            regions,
+            isRefreshing,
+            setRefreshing,
+            _renderItem,
+            goBack,
+            isLocal,
+            returnScreen,
+            returnState,
+            // itemLayout: 'dealer',
+          });
 
-  switch (APP_REGION) {
-    case BELARUSSIA:
-      renderScene = SceneMap({
-        by: tabsData.TabBY,
-        ru: tabsData.TabRU,
+          setTabsData(tabsDataLocal);
+
+          let sceneMap = {};
+
+          switch (APP_REGION) {
+            case BELARUSSIA:
+              if (tabsDataLocal.TabBY) {
+                sceneMap.by = tabsDataLocal.TabBY;
+              }
+              if (tabsDataLocal.TabRU) {
+                sceneMap.ru = tabsDataLocal.TabRU;
+              }
+              break;
+            case UKRAINE:
+              if (tabsDataLocal.TabUA) {
+                sceneMap.ua = tabsDataLocal.TabUA;
+              }
+              break;
+          }
+
+          setRenderScene(sceneMap);
+          setRefreshing(false);
+        }
+      })
+      .catch(err => {
+        console.error('ChooseDealerScreen error', err);
+        setRefreshing(false);
       });
-      break;
-    case UKRAINE:
-      renderScene = SceneMap({
-        ua: tabsData.TabUA,
-      });
-      break;
+  }, []);
+
+  if (!tabsData || !renderSceneData || isRefreshing) {
+    return _EmptyComponent();
   }
+
+  const renderScene = SceneMap(renderSceneData);
 
   return (
     <>
@@ -501,13 +535,13 @@ const ChooseDealerScreen = props => {
           height={layout.height}
           w={layout.width}
           opacity={0.9}>
-          <LogoLoader />
+          {_EmptyComponent()}
         </View>
       ) : null}
       <TabView
-        navigationState={{index, routes}}
+        navigationState={{index, routes: tabsData.routesHead}}
         renderTabBar={
-          tabsData.routesHead.length === 1 ? () => {} : renderTabBar
+          tabsData?.routesHead.length === 1 ? () => {} : renderTabBar
         }
         renderScene={renderScene}
         onIndexChange={setIndex}
