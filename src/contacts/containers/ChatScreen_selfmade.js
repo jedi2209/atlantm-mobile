@@ -489,12 +489,10 @@ const ChatScreen = ({
   useEffect(() => {
     setLoadingHistory(true);
     if (session === null) {
-      PushNotifications.deviceState().then(res => {
-        let senderIDNew = getUserID(res.userId);
-        setUser({id: senderIDNew});
-        actionChatIDSave(senderIDNew);
-        updateChat(senderIDNew);
-      });
+      let senderIDNew = getUserID(PushNotifications.getUserID());
+      setUser({id: senderIDNew});
+      actionChatIDSave(senderIDNew);
+      updateChat(senderIDNew);
     } else {
       setUser({id: session});
       updateChat(session);
@@ -517,12 +515,10 @@ const ChatScreen = ({
     if (chatClient.readyState === 3) {
       chatSocket.start();
       setLoadingHistory(true);
-      PushNotifications.deviceState().then(res => {
-        const senderID = getUserID(res.userId);
-        setUser({id: senderID});
-        actionChatIDSave(senderID);
-        updateChat(senderID);
-      });
+      const senderID = getUserID(PushNotifications.getUserID());
+      setUser({id: senderID});
+      actionChatIDSave(senderID);
+      updateChat(senderID);
     }
   }, [isConnected, navigation]);
 

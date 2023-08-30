@@ -116,6 +116,10 @@ export default {
     OneSignal.User.addTag(name, value.toString());
   },
 
+  getUserID() {
+    return OneSignal.User.PushSubscription.getPushSubscriptionId();
+  },
+
   removeTag(name) {
     if (typeof name === 'object') {
       OneSignal.User.removeTags(name);
@@ -141,45 +145,40 @@ export default {
     OneSignal.User.addEmail(value);
   },
 
-  async deviceState() {
-    return await OneSignal.Notifications.hasPermission();
+  deviceState() {
+    return OneSignal.Notifications.hasPermission();
   },
 
   checkPermission() {
     return new Promise((resolve, reject) => {
       // Check push notification and OneSignal subscription statuses
       OneSignal.Notifications.requestPermission();
-      this.deviceState().then(deviceState => {
-        if (deviceState.hasNotificationPermission === false) {
-          switch (Platform.OS) {
-            case 'ios':
-              setTimeout(() => {
-                return Alert.alert(
-                  strings.Notifications.PushAlert.title,
-                  strings.Notifications.PushAlert.text,
-                  [
-                    {
-                      text: strings.Notifications.PushAlert.later,
-                      style: 'destructive',
+      if (this.deviceState() === false) {
+        switch (Platform.OS) {
+          case 'ios':
+            setTimeout(() => {
+              return Alert.alert(
+                strings.Notifications.PushAlert.title,
+                strings.Notifications.PushAlert.text,
+                [
+                  {
+                    text: strings.Notifications.PushAlert.later,
+                    style: 'destructive',
+                  },
+                  {
+                    text: strings.Notifications.PushAlert.approve,
+                    onPress: () => {
+                      Linking.openURL('app-settings://notification/' + bundle);
                     },
-                    {
-                      text: strings.Notifications.PushAlert.approve,
-                      onPress: () => {
-                        Linking.openURL(
-                          'app-settings://notification/' + bundle,
-                        );
-                      },
-                      style: 'cancel',
-                    },
-                  ],
-                );
-              }, 100);
-              break;
-          }
-          return resolve(false);
+                    style: 'cancel',
+                  },
+                ],
+              );
+            }, 100);
+            break;
         }
-        return resolve(true);
-      });
+        return resolve(false);
+      }
     });
   },
 };

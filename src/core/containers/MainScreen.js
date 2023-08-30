@@ -406,7 +406,7 @@ const MainScreen = props => {
 
   useEffect(() => {
     Analytics.logEvent('screen', 'main screen');
-    if (Object.keys(listDealers).length === 0) {
+    if (listDealers && Object.keys(listDealers).length === 0) {
       fetchDealers();
     }
   }, [region, fetchInfoList, colorScheme, listDealers, fetchDealers]);

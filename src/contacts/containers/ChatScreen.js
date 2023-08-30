@@ -78,12 +78,10 @@ const ChatScreen = ({route, SubmitButton, profile, session, saveCookies}) => {
     console.info('== ChatScreen ==');
     let userID = get(userTmp, 'id');
     if (userID === null || userID === undefined) {
-      PushNotifications.deviceState().then(res => {
-        let senderIDNew = getUserID(res.userId);
-        setSenderID(senderIDNew);
-        actionChatIDSave(senderIDNew);
-        makeUserToken(senderIDNew);
-      });
+      let senderIDNew = getUserID(PushNotifications.getUserID());
+      setSenderID(senderIDNew);
+      actionChatIDSave(senderIDNew);
+      makeUserToken(senderIDNew);
     } else {
       makeUserToken(userID);
     }
@@ -98,21 +96,19 @@ const ChatScreen = ({route, SubmitButton, profile, session, saveCookies}) => {
     const userID = get(profile, 'login.ID', '');
     const ebdk = get(profile, 'login.SAP.ID', '');
     const pageName = get(route, 'params.prevScreen', '');
-    PushNotifications.deviceState().then(res => {
-      const urlJivo =
-        JIVO_CHAT.chatPage +
-        '?' +
-        new URLSearchParams({
-          userID,
-          ebdk,
-          userToken,
-          userDevice: res.userId,
-          utm_source: 'mobile',
-          utm_campaign: 'chat',
-          pageName,
-        });
-      setData({uri: urlJivo});
-    });
+    const urlJivo =
+      JIVO_CHAT.chatPage +
+      '?' +
+      new URLSearchParams({
+        userID,
+        ebdk,
+        userToken,
+        userDevice: PushNotifications.getUserID(),
+        utm_source: 'mobile',
+        utm_campaign: 'chat',
+        pageName,
+      });
+    setData({uri: urlJivo});
   }, [profile, route, userToken]);
 
   const loadCookies = async () => {

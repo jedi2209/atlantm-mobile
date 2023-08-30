@@ -647,9 +647,9 @@ export const Base = ({navigation, route}) => {
 };
 
 const EKO = ({navigation, route}) => (
-  <StackEKO.Navigator initialRouteName="ReviewsScreen">
+  <StackEKO.Navigator initialRouteName="ReviewsScreenMain">
     <StackEKO.Screen
-      name="ReviewsScreen"
+      name="ReviewsScreenMain"
       component={ReviewsScreen}
       options={BigCloseButton(navigation, route, {
         ...TransitionPresets.ScaleFromCenterAndroid,
