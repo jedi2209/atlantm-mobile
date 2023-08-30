@@ -76,6 +76,8 @@ function region(state = APP_REGION, action) {
       return action.payload;
     case DEALER__SUCCESS:
       return action.payload.newDealer.region;
+    case APP_STORE_UPDATED:
+      return null;
     default:
       return state;
   }

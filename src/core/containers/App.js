@@ -17,7 +17,7 @@ import {
   actionSettingsLoaded,
   actionFetchMainScreenSettings,
 } from '../actions';
-import {fetchDealers, selectDealer, fetchBrands} from '../../dealer/actions';
+import {fetchDealers, selectDealer} from '../../dealer/actions';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 import {APP_STORE_UPDATED} from '../actionTypes';
@@ -57,18 +57,17 @@ const mapDispatchToProps = {
   actionSettingsLoaded,
   fetchDealers,
   selectDealer,
-  fetchBrands,
   actionFetchMainScreenSettings,
 };
 
 const mainScreen = 'BottomTabNavigation';
-const storeVersion = '2023-07-29';
+const storeVersion = '2023-08-01';
 const isNewIntroScreen = true;
 
 const _awaitStoreToUpdate = async props => {
   const storeData = store.getState();
 
-  const currentDealer = get(storeData, 'dealer.selected.id', false);
+  const currentRegion = get(storeData, 'dealer.region', false);
   const isStoreUpdatedCurrent = get(storeData, 'core.isStoreUpdated', false);
 
   const currentVersion = DeviceInfo.getVersion();
@@ -77,42 +76,42 @@ const _awaitStoreToUpdate = async props => {
     props.actionSettingsLoaded(settings);
   }
 
-  if (currentDealer && isStoreUpdatedCurrent === storeVersion) {
+  if (currentRegion && isStoreUpdatedCurrent === storeVersion) {
+    console.info(
+      'isStoreUpdatedCurrent\tactionFetchMainScreenSettings\t\tstart',
+      moment().format('YYYY-MM-DD HH:mm:ss'),
+    );
     // если мы уже выбрали регион и стор обновлен
-    await props.fetchBrands(); // обновляем бренды при каждом открытии прилаги
     await props.actionFetchMainScreenSettings(APP_REGION); // обновляем настройки главного экрана при каждом открытии прилаги
-    const actionDealer = await props.fetchDealers(); // обновляем дилеров при каждом открытии прилаги
-    const currDealerItem = get(storeData, 'dealer.selected');
-    const currentDealerUpdated = await props.selectDealer({
-      dealerBaseData: currDealerItem,
-      dealerSelected: undefined,
-      isLocal: false,
-    });
-    if (currentDealerUpdated && actionDealer?.type) {
-      // уже всё обновлено, открываем экран автоцентра
-      return mainScreen;
-    }
+    console.info(
+      'isStoreUpdatedCurrent\tactionFetchMainScreenSettings\t\tfinish',
+      moment().format('YYYY-MM-DD HH:mm:ss'),
+    );
+    return mainScreen;
   }
 
   try {
     // если мы ещё не очищали стор
     props.actionMenuOpenedCount(0);
+    console.info(
+      'actionStoreUpdated\t\tstart',
+      moment().format('YYYY-MM-DD HH:mm:ss'),
+    );
     const action = await props.actionStoreUpdated(storeVersion);
     if (action && action.type) {
-      await props.fetchBrands();
+      console.info(
+        'actionStoreUpdated\t\tfinish',
+        moment().format('YYYY-MM-DD HH:mm:ss'),
+      );
+      console.info(
+        'actionFetchMainScreenSettings\t\tstart',
+        moment().format('YYYY-MM-DD HH:mm:ss'),
+      );
       await props.actionFetchMainScreenSettings(APP_REGION); // обновляем настройки главного экрана при каждом открытии прилаги
-      const actionDealer = await props.fetchDealers();
-      if (actionDealer && actionDealer.type) {
-        let result;
-        if (action.type === APP_STORE_UPDATED) {
-          if (isNewIntroScreen) {
-            result = 'IntroScreenNew';
-          } else {
-            result = 'IntroScreen';
-          }
-        }
-        return result;
-      }
+      console.info(
+        'actionFetchMainScreenSettings\t\tfinish',
+        moment().format('YYYY-MM-DD HH:mm:ss'),
+      );
     }
   } catch (error) {
     console.error('_awaitStoreToUpdate error', error);
@@ -143,17 +142,18 @@ const App = props => {
 
   useEffect(() => {
     NavigationService.setTopLevelNavigator(NavigationService.navigationRef);
-
+    console.info(
+      '_awaitStoreToUpdate\t\tstart',
+      moment().format('YYYY-MM-DD HH:mm:ss'),
+    );
     setLoading(true);
     _awaitStoreToUpdate(props)
       .then(res => {
-        if (typeof res === 'undefined' || !res) {
-          if (isNewIntroScreen) {
-            res = 'IntroScreenNew';
-          } else {
-            res = 'IntroScreen';
-          }
-        }
+        console.info(
+          '_awaitStoreToUpdate\t\tfinish',
+          moment().format('YYYY-MM-DD HH:mm:ss'),
+          res,
+        );
         setLoading(false);
       })
       .catch(err => {
