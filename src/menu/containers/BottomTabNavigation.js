@@ -40,6 +40,7 @@ import {
   ClassicHeaderBlue,
   BigCloseButton,
 } from '../../navigation/const';
+import {BELARUSSIA} from '../../core/const';
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
@@ -361,36 +362,38 @@ const BottomTabNavigation = ({navigation, route, region}) => {
           }}
         />
 
-        <Tab.Screen
-          name="Chat"
-          component={CleanStackView}
-          listeners={{
-            tabPress: e => {
-              e.preventDefault();
-              Analytics.logEvent('click', 'bottomMenu/chat');
-              navigation.navigate('ChatScreen');
-            },
-          }}
-          options={{
-            headerShown: false,
-            tabBarLabel: strings.Menu.bottom.chat,
-            tabBarLabelStyle: {
-              fontSize: 14,
-            },
-            tabBarTestID: 'BottomMenu.Chat',
-            tabBarIcon: ({color, focused}) => (
-              <Icon
-                size={focused ? iconSizeFocused : iconSize}
-                as={AntDesign}
-                name="message1"
-                color={color}
-                _dark={{
-                  color: color,
-                }}
-              />
-            ),
-          }}
-        />
+        {region === BELARUSSIA ? (
+          <Tab.Screen
+            name="Chat"
+            component={CleanStackView}
+            listeners={{
+              tabPress: e => {
+                e.preventDefault();
+                Analytics.logEvent('click', 'bottomMenu/chat');
+                navigation.navigate('ChatScreen');
+              },
+            }}
+            options={{
+              headerShown: false,
+              tabBarLabel: strings.Menu.bottom.chat,
+              tabBarLabelStyle: {
+                fontSize: 14,
+              },
+              tabBarTestID: 'BottomMenu.Chat',
+              tabBarIcon: ({color, focused}) => (
+                <Icon
+                  size={focused ? iconSizeFocused : iconSize}
+                  as={AntDesign}
+                  name="message1"
+                  color={color}
+                  _dark={{
+                    color: color,
+                  }}
+                />
+              ),
+            }}
+          />
+        ) : null}
       </Tab.Navigator>
       <ActionSheetMenu
         onOpen={onOpen}
