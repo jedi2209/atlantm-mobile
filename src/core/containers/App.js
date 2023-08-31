@@ -45,6 +45,7 @@ const mapStateToProps = ({core, dealer, modal}) => {
     modal,
     currentLanguage: core.language.selected,
     dealerSelected: dealer.selected,
+    region: dealer.region,
   };
 };
 
@@ -63,7 +64,11 @@ const storeVersion = '2023-08-01';
 const _awaitStoreToUpdate = async props => {
   const storeData = store.getState();
 
-  const currentRegion = get(storeData, 'dealer.region', false);
+  const currentRegion = get(
+    storeData,
+    'dealer.region',
+    get(props, 'region', false),
+  );
   const isStoreUpdatedCurrent = get(storeData, 'core.isStoreUpdated', false);
 
   const currentVersion = DeviceInfo.getVersion();
@@ -78,7 +83,7 @@ const _awaitStoreToUpdate = async props => {
       moment().format('YYYY-MM-DD HH:mm:ss'),
     );
     // если мы уже выбрали регион и стор обновлен
-    await props.actionFetchMainScreenSettings(APP_REGION); // обновляем настройки главного экрана при каждом открытии прилаги
+    await props.actionFetchMainScreenSettings(currentRegion || APP_REGION); // обновляем настройки главного экрана при каждом открытии прилаги
     console.info(
       'isStoreUpdatedCurrent\tactionFetchMainScreenSettings\t\tfinish',
       moment().format('YYYY-MM-DD HH:mm:ss'),
@@ -103,7 +108,12 @@ const _awaitStoreToUpdate = async props => {
         'actionFetchMainScreenSettings\t\tstart',
         moment().format('YYYY-MM-DD HH:mm:ss'),
       );
-      await props.actionFetchMainScreenSettings(APP_REGION); // обновляем настройки главного экрана при каждом открытии прилаги
+      const currentRegion = get(
+        storeData,
+        'dealer.region',
+        get(props, 'region', false),
+      );
+      await props.actionFetchMainScreenSettings(currentRegion || APP_REGION); // обновляем настройки главного экрана при каждом открытии прилаги
       console.info(
         'actionFetchMainScreenSettings\t\tfinish',
         moment().format('YYYY-MM-DD HH:mm:ss'),
