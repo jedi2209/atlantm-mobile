@@ -654,7 +654,21 @@ const EKO = ({navigation, route}) => (
       options={BigCloseButton(navigation, route, {
         ...TransitionPresets.ScaleFromCenterAndroid,
         headerTitle: strings.ReviewsScreen.title,
-        headerRight: () => <></>,
+        headerRight: () => (
+          <Pressable
+            onPress={() => navigation.navigate('ReviewAddMessageStepScreen')}>
+            <Icon
+              size={7}
+              style={styles.sortHeaderButton}
+              as={MaterialCommunityIcons}
+              name="pencil-plus"
+              color={styleConst.color.blue}
+              _dark={{
+                color: styleConst.color.white,
+              }}
+            />
+          </Pressable>
+        ),
         headerTitleStyle: [
           stylesHeader.transparentHeaderTitle,
           {color: '#222B45'},
@@ -711,20 +725,44 @@ const EKO = ({navigation, route}) => (
     <StackEKOAddReview.Screen
       name="ReviewAddMessageStepScreen"
       component={ReviewAddMessageStepScreen}
-      options={ClassicHeaderBlue(
-        strings.ReviewAddMessageStepScreen.title + '\t[1 / 2]',
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ModalTransition,
+        presentation: 'modal',
+        headerTitle: strings.ReviewAddMessageStepScreen.title + '\t[1 / 2]',
+        headerRight: () => <></>,
+        headerTitleStyle: stylesHeader.blueHeaderTitle,
+        headerStyle: [stylesHeader.common, stylesHeader.blueHeader],
+        headerLeft: () => {
+          return ArrowBack(navigation, route, {
+            icon: 'close-outline',
+            iconSize: 10,
+            IconStyle: {
+              color: styleConst.color.white,
+            },
+          });
+        },
+      })}
     />
     <StackEKOAddReview.Screen
       name="ReviewAddRatingStepScreen"
       component={ReviewAddRatingStepScreen}
-      options={ClassicHeaderBlue(
-        strings.ReviewAddRatingStepScreen.title + '\t[2 / 2]',
-        navigation,
-        route,
-      )}
+      options={BigCloseButton(navigation, route, {
+        ...TransitionPresets.ModalTransition,
+        presentation: 'modal',
+        headerTitle: strings.ReviewAddMessageStepScreen.title + '\t[2 / 2]',
+        headerRight: () => <></>,
+        headerTitleStyle: stylesHeader.blueHeaderTitle,
+        headerStyle: [stylesHeader.common, stylesHeader.blueHeader],
+        headerLeft: () => {
+          return ArrowBack(navigation, route, {
+            icon: 'close-outline',
+            iconSize: 10,
+            IconStyle: {
+              color: styleConst.color.white,
+            },
+          });
+        },
+      })}
     />
   </StackEKO.Navigator>
 );
@@ -1037,7 +1075,7 @@ const UsedCars = ({navigation, route}) => {
             },
             headerRight: () => (
               <View style={stylesHeader.headerRightStyle}>
-                <Pressable onPress={() => onOpen()}>
+                <Pressable onPress={onOpen}>
                   <Icon
                     as={MaterialCommunityIcons}
                     name="sort"
