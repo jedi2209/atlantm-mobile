@@ -22,6 +22,7 @@ const mapStateToProps = ({dealer, profile, contacts, nav}) => {
   return {
     nav,
     dealerSelectedLocal: dealer.selectedLocal,
+    allDealers: dealer.listDealers,
     firstName: profile.login.NAME
       ? profile.login.NAME
       : profile.localUserData.NAME
@@ -52,9 +53,34 @@ const CallMeBackScreen = ({
   firstName,
   callMe,
   localDealerClear,
+  allDealers,
 }) => {
-
   const dealer = get(route, 'params.dealerCustom', dealerSelectedLocal);
+  const isDealerHide = get(route, 'params.dealerHide', false);
+
+  let listDealers = [];
+  if (dealer) {
+    if (dealer.length) {
+      dealer.map(el => {
+        if (typeof el === 'string' || typeof el === 'number') {
+          el = allDealers[el];
+        }
+        listDealers.push({
+          label: el.name,
+          value: el.id,
+          key: el.id,
+        });
+      });
+    } else {
+      if (typeof dealer == 'object') {
+        listDealers.push({
+          label: dealer.name,
+          value: dealer.id,
+          key: dealer.id,
+        });
+      }
+    }
+  }
 
   useEffect(() => {
     return () => {
@@ -84,10 +110,10 @@ const CallMeBackScreen = ({
 
     const dataToSend = {
       dealerID: dealer?.id,
-      name: firstName || '',
+      name: get(dataFromForm, 'NAME', firstName),
       actionID,
       carID,
-      phone: dataFromForm.PHONE || phone,
+      phone: get(dataFromForm, 'PHONE', phone),
     };
 
     const action = await callMe(dataToSend);
@@ -127,8 +153,28 @@ const CallMeBackScreen = ({
   const FormConfig = {
     fields: {
       groups: [
-        !route?.params?.dealerCustom
+        listDealers && listDealers.length > 1
           ? {
+              name: strings.Form.group.dealer,
+              fields: [
+                {
+                  name: 'DEALER',
+                  type: 'select',
+                  label: strings.Form.field.label.dealer,
+                  value: null,
+                  props: {
+                    items: listDealers,
+                    required: true,
+                    placeholder: {
+                      label: strings.Form.field.placeholder.dealer,
+                      value: null,
+                      color: '#9EA0A4',
+                    },
+                  },
+                },
+              ],
+            }
+          : {
               name: strings.Form.group.dealer,
               fields: [
                 {
@@ -141,11 +187,11 @@ const CallMeBackScreen = ({
                     goBack: true,
                     isLocal: true,
                     showBrands: false,
+                    readonly: isDealerHide,
                   },
                 },
               ],
-            }
-          : {},
+            },
         {
           name: strings.Form.group.contacts,
           fields: [

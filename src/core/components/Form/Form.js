@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import PropTypes, { bool } from 'prop-types';
 
 import {
   Animated,
@@ -383,7 +383,6 @@ class Form extends Component {
   _validate = () => {
     let requredLabels = [];
     let valid = true;
-    console.log('this.state', this.state);
     if (this.state.required) {
       // проверка обязательных полей
       this.state.required.map((val, index) => {
@@ -406,7 +405,17 @@ class Form extends Component {
             break;
           case 'dealerselect':
             valid = false;
-            if (get(this.props, 'dealerSelectedLocal', false)) {
+            valid = get(this.props, 'dealerSelectedLocal', false);
+            if (!valid) {
+              valid = this.state[val.name] ? true : false;
+            }
+            if (
+              get(
+                this.props,
+                'dealerSelectedLocal',
+                this.state[val.name] ? true : false,
+              )
+            ) {
               valid = true;
             }
             break;
@@ -444,13 +453,8 @@ class Form extends Component {
             valid = validateDate(this.state[val.name]);
             break;
           case 'component':
-            valid = true;
-            break;
           case 'dealerselect':
-            valid = false;
-            if (get(this.props, 'dealerSelectedLocal', false)) {
-              valid = true;
-            }
+            valid = true;
             break;
           default:
             if (
@@ -1240,6 +1244,9 @@ class Form extends Component {
       let fieldStyle = [];
       if (totalFields?.length > 1) {
         fieldStyle = [styles.dealerSelect];
+      }
+      if (data.props?.readonly) {
+        this.state[name] = value?.id;
       }
       return (
         <DealerItemList
