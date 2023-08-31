@@ -271,24 +271,6 @@ const _processRow = props => {
           }
         />
       );
-      // return (
-      //   <DealerItemList
-      //     key={'dealerSelect'}
-      //     dealer={dealerSelected}
-      //     placeholder={item.title.text}
-      //     showBrands={
-      //       get(DEALERS_SETTINGS, 'hideBrands', []).includes(dealerSelected.id)
-      //         ? false
-      //         : true
-      //     }
-      //     goBack={true}
-      //     returnScreen={
-      //       item?.link?.params?.returnScreen
-      //         ? item?.link?.params?.returnScreen
-      //         : route.name
-      //     }
-      //   />
-      // );
     }
 
     return (
@@ -420,7 +402,7 @@ const MainScreen = props => {
 
   const _onRefresh = async () => {
     setLoading(true);
-    await props.actionFetchMainScreenSettings(APP_REGION);
+    await props.actionFetchMainScreenSettings(region);
     setLoading(false);
   };
 
