@@ -151,12 +151,6 @@ const CarCostScreen = ({
   useEffect(() => {
     console.info('== CarCost ==');
     Analytics.logEvent('screen', 'catalog/carcost');
-    console.log(
-      'dealerSelectedLocal default',
-      dealerSelectedLocal?.id,
-      dealerSelected?.id,
-      dealerFromNavigation?.id,
-    );
     setDealerSelectedLocal(
       dealerSelectedLocal ? dealerSelectedLocal : dealerSelected,
     );
@@ -169,7 +163,6 @@ const CarCostScreen = ({
   }, []);
 
   useEffect(() => {
-    console.log('dealerSelectedLocal', dealerSelectedLocal?.id);
     setDealerSelectedLocal(dealerSelectedLocal);
   }, [dealerSelectedLocal]);
 

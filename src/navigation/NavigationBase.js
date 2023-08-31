@@ -174,7 +174,7 @@ export const Base = ({navigation, route}) => {
                 stylesHeader.transparentHeaderTitle,
                 {color: '#222B45'},
               ],
-              presentation: 'modal',
+              presentation: 'card',
             },
             {
               icon: 'close',

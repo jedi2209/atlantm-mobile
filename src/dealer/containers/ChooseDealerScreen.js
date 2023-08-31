@@ -162,7 +162,7 @@ const _onRefresh = ({props, setRefreshing}) => {
   });
 };
 
-const _onPressDealerItem = ({
+const _onPressDealerItem = async ({
   dealerSelectedItem,
   isLocal,
   pushActionSubscribeState,
@@ -172,11 +172,20 @@ const _onPressDealerItem = ({
   returnScreen,
   returnState,
 }) => {
-  const action = selectDealer({
-    dealerBaseData: dealerSelectedItem,
-    dealerSelected: dealerSelectedItem,
-    isLocal,
-  });
+  let action = null;
+  if (!isLocal) {
+    action = await selectDealer({
+      dealerBaseData: dealerSelectedItem,
+      dealerSelected: dealerSelectedItem,
+      isLocal,
+    });
+  } else {
+    action = selectDealer({
+      dealerBaseData: dealerSelectedItem,
+      dealerSelected: dealerSelectedItem,
+      isLocal,
+    });
+  }
   if (
     action &&
     [DEALER__SUCCESS, DEALER__SUCCESS__LOCAL].includes(action.type)
