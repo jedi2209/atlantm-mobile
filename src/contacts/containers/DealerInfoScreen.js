@@ -495,7 +495,9 @@ const DealerInfoScreen = ({
                       {
                         text: strings.ContactsScreen.closedDealer.yes,
                         onPress: () => {
-                          navigation.navigate('CallMeBackScreen');
+                          navigation.navigate('CallMeBackScreen', {
+                            dealerCustom: dealerSelected,
+                          });
                         },
                       },
                     ],
@@ -674,7 +676,7 @@ const DealerInfoScreen = ({
   };
 
   const _showOrdersMenu = () => {
-    orderFunctions.getOrders().then(data => {
+    orderFunctions.getOrders('default', dealerSelected).then(data => {
       setActionSheetData({
         options: data.BUTTONS,
         cancelButtonIndex: data.CANCEL_INDEX,

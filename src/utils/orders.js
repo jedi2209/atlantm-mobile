@@ -3,7 +3,7 @@ import {get} from 'lodash';
 import {store} from '../core/store';
 import {strings} from '../core/lang/const';
 
-async function getOrders(type = 'default') {
+async function getOrders(type = 'default', dealerData = null) {
   let storeState = store.getState();
   let tmpArr = [];
   let res = {
@@ -48,7 +48,15 @@ async function getOrders(type = 'default') {
       CANCEL_INDEX: 0,
     },
   };
-  const divisions = get(storeState, 'dealer.selected.divisionTypes');
+  let divisions = ['ST', 'ZZ', 'TI'];
+  let navigateOptions = {};
+  if (dealerData && typeof dealerData === 'object') {
+    divisions = dealerData.divisionTypes;
+    navigateOptions = {dealerCustom: dealerData.id};
+  }
+  if (dealerData && typeof dealerData === 'string') {
+    divisions = get(storeState, 'dealer.selected.divisionTypes');
+  }
   Object.keys(ORDERS[Platform.OS].BUTTONS).map(el => {
     tmpArr.push(ORDERS[Platform.OS].BUTTONS[el].priority);
   });
@@ -138,6 +146,7 @@ async function getOrders(type = 'default') {
         color: '#2c8ef4',
       },
       navigate: 'CallMeBackScreen',
+      navigateOptions,
     });
     tmpArr.push(1);
     res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;
