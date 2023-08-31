@@ -56,6 +56,7 @@ import {get} from 'lodash';
 import Analytics from '../../utils/amplitude-analytics';
 import TransitionView from '../components/TransitionView';
 import style from '../components/Footer/style';
+import LogoLoader from '../components/LogoLoader';
 
 const {width, height} = Dimensions.get('screen');
 const isApple = Platform.OS === 'ios';
@@ -393,18 +394,31 @@ const MainScreen = props => {
     }
   }, [region, fetchInfoList, colorScheme, listDealers, fetchDealers]);
 
+  // useEffect(() => {
+  //   if (isLoading === false) {
+  //     fetchInfoData({region, fetchInfoList});
+  //     fetchBrands(); // обновляем бренды при первом открытии экрана
+  //   }
+  // }, [fetchBrands, fetchInfoList, isLoading, region]);
+
   useEffect(() => {
-    if (isLoading === false) {
-      fetchInfoData({region, fetchInfoList});
-      fetchBrands(); // обновляем бренды при первом открытии экрана
-    }
-  }, [fetchBrands, fetchInfoList, isLoading, region]);
+    setLoading(true);
+    fetchInfoData({region, fetchInfoList});
+    fetchBrands(); // обновляем бренды при первом открытии экрана
+    props.actionFetchMainScreenSettings(region).then(() => {
+      setLoading(false);
+    });
+  }, [region]);
 
   const _onRefresh = async () => {
     setLoading(true);
     await props.actionFetchMainScreenSettings(region);
     setLoading(false);
   };
+
+  if (isLoading) {
+    return <LogoLoader />;
+  }
 
   if (!mainScreenSettings) {
     return (

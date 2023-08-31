@@ -29,7 +29,7 @@ import {INFO_LIST__FAIL} from '../actionTypes';
 
 // helpers
 import {get} from 'lodash';
-import {ERROR_NETWORK} from '../../core/const';
+import {BELARUSSIA, ERROR_NETWORK} from '../../core/const';
 import styleConst from '../../core/style-const';
 import {verticalScale} from '../../utils/scale';
 import {strings} from '../../core/lang/const';
@@ -67,7 +67,7 @@ const mapStateToProps = ({dealer, info, nav, core}) => {
     filters: info.filters,
     filtersDealer: info.filtersDealer,
     visited: info.visited,
-    dealerSelected: dealer.selected,
+    region: dealer.region,
     isFetchInfoList: info.meta.isFetchInfoList,
     isFetchInfoListDealer: info.meta.isFetchInfoListDealer,
     pushActionSubscribeState: core.pushActionSubscribeState,
@@ -84,7 +84,7 @@ const mapDispatchToProps = {
 
 const InfoListScreen = ({
   navigation,
-  dealerSelected,
+  region,
   fetchInfoList,
   isFetchInfoList,
   isFetchInfoListDealer,
@@ -112,8 +112,7 @@ const InfoListScreen = ({
       scale: 0,
     },
   };
-  const {region, id: dealer} = dealerSelected;
-  const fabEnable = region === 'by' ? true : false;
+  const fabEnable = region === BELARUSSIA ? true : false;
   let listRender = list;
   let filtersRender = filters;
 
@@ -309,7 +308,7 @@ InfoListScreen.defaultProps = {
 };
 
 InfoListScreen.propTypes = {
-  dealerSelected: PropTypes.object.isRequired,
+  region: PropTypes.string.isRequired,
   visited: PropTypes.array.isRequired,
   fetchInfoList: PropTypes.func.isRequired,
   isFetchInfoList: PropTypes.bool.isRequired,

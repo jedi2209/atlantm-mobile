@@ -60,6 +60,7 @@ const IntroScreenNew = ({navigation, dealer, selectRegion, region}) => {
     PushNotifications.addTag('region', regionSelected);
     PushNotifications.unsubscribeFromTopic(['dealer', 'actions']);
     navigation.navigate('BottomTabNavigation', {screen: 'ContactsScreen'});
+    setLoading(false);
   };
 
   const [countLogoClick, setCountLogoClick] = useState(0);

@@ -57,7 +57,7 @@ const mapStateToProps = ({dealer, info, core}) => {
       by: dealer.listBelarussia,
       ua: dealer.listUkraine,
     },
-    dealerSelectedLocal: dealer.selectedLocal,
+    region: dealer.region,
     currLang: core.language.selected,
   };
 };
@@ -70,7 +70,7 @@ const InfoPostScreen = ({
   currLang,
   navigation,
   dealersList,
-  dealerSelectedLocal,
+  region,
   posts,
   route,
   fetchInfoPost,
@@ -127,12 +127,17 @@ const InfoPostScreen = ({
   }, []);
 
   const _onPressCallMe = () => {
-    navigation.navigate('CallMeBackScreen', {actionID: postID, goBack: true});
+    const dealers = get(postData, 'dealers');
+    navigation.navigate('CallMeBackScreen', {
+      actionID: postID,
+      goBack: true,
+      dealerCustom: dealers,
+    });
   };
 
   const _onPressOrder = ({dealers}) => {
     let customDealersList = [];
-    dealersList[dealerSelectedLocal.region].forEach(element => {
+    dealersList[region].forEach(element => {
       if (dealers.includes(element.id)) {
         customDealersList.push({
           id: element.id,
@@ -145,14 +150,14 @@ const InfoPostScreen = ({
         dealer: customDealersList,
       },
       actionID: postID,
-      region: dealerSelectedLocal.region,
+      region: region,
       isNewCar: true,
     });
   };
 
   const _onPressParts = ({dealers}) => {
     let customDealersList = [];
-    dealersList[dealerSelectedLocal.region].forEach(element => {
+    dealersList[region].forEach(element => {
       if (dealers.includes(element.id)) {
         customDealersList.push({
           id: element.id,
@@ -165,13 +170,13 @@ const InfoPostScreen = ({
         dealer: customDealersList,
       },
       actionID: postID,
-      region: dealerSelectedLocal.region,
+      region: region,
     });
   };
 
   const _onPressService = ({dealers}) => {
     let customDealersList = [];
-    dealersList[dealerSelectedLocal.region].forEach(element => {
+    dealersList[region].forEach(element => {
       if (dealers.includes(element.id)) {
         customDealersList.push({
           id: element.id,
@@ -184,7 +189,7 @@ const InfoPostScreen = ({
         dealer: customDealersList,
       },
       actionID: postID,
-      region: dealerSelectedLocal.region,
+      region: region,
     });
   };
 
