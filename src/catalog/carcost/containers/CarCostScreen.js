@@ -82,7 +82,6 @@ const mapStateToProps = ({dealer, profile, catalog}) => {
       ? UserData.get('CARNUMBER')
       : carLocalNumber,
     carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
-    dealerSelected: dealer.selected,
     dealerSelectedLocal: dealer.selectedLocal,
   };
 };
@@ -107,7 +106,6 @@ const styles = StyleSheet.create({
 let isInternet = null;
 
 const CarCostScreen = ({
-  dealerSelected,
   dealerSelectedLocal,
   firstName,
   secondName,
@@ -148,12 +146,12 @@ const CarCostScreen = ({
   const dealerFromNavigation = get(route, 'params.dealer', false);
   const userTextFromNavigation = get(route, 'params.Text', '');
 
+  console.log('dealerSelectedLocal', dealerSelectedLocal);
+
   useEffect(() => {
     console.info('== CarCost ==');
     Analytics.logEvent('screen', 'catalog/carcost');
-    setDealerSelectedLocal(
-      dealerSelectedLocal ? dealerSelectedLocal : dealerSelected,
-    );
+    // setDealerSelectedLocal(dealerSelectedLocal);
     if (cars.length === 1) {
       _selectCar(cars[0]);
     }
@@ -162,9 +160,9 @@ const CarCostScreen = ({
     };
   }, []);
 
-  useEffect(() => {
-    setDealerSelectedLocal(dealerSelectedLocal);
-  }, [dealerSelectedLocal]);
+  // useEffect(() => {
+  //   setDealerSelectedLocal(dealerSelectedLocal);
+  // }, [dealerSelectedLocal]);
 
   useEffect(() => {
     const carFromNavigation = get(route, 'params.car');
@@ -184,7 +182,7 @@ const CarCostScreen = ({
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: strings.Form.field.label.dealer,
-                value: dealerSelectedLocalState,
+                value: dealerSelectedLocal,
                 props: {
                   goBack: true,
                   isLocal: true,
@@ -296,7 +294,7 @@ const CarCostScreen = ({
         ],
       },
     });
-  }, [carSelected, photos, dealerSelectedLocalState, dealerFromNavigation]);
+  }, [carSelected, photos, dealerSelectedLocal, dealerFromNavigation]);
 
   const _selectCar = item => {
     setCarData({
@@ -319,7 +317,7 @@ const CarCostScreen = ({
       return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
     }
 
-    let dealerId = get(dealerFromNavigation, 'id', dealerSelected.id);
+    let dealerId = get(dealerFromNavigation, 'id', dealerSelectedLocal.id);
 
     if (dealerSelectedLocalState) {
       dealerId = dealerSelectedLocalState.id;
@@ -708,7 +706,7 @@ const CarCostScreen = ({
 };
 
 CarCostScreen.propTypes = {
-  dealerSelected: PropTypes.object,
+  dealerSelectedLocal: PropTypes.object,
   name: PropTypes.string,
   phone: PropTypes.string,
   email: PropTypes.string,

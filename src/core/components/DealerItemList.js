@@ -11,9 +11,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 // helpers
 import {get} from 'lodash';
 import styleConst from '../../core/style-const';
-// import stylesList from '../../core/components/Lists/style';
 import {strings} from '../lang/const';
-// import style from '../../core/components/Lists/style';
 
 const stylesDealerItemList = StyleSheet.create({
   wrapper: {

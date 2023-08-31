@@ -218,6 +218,7 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
   return {
     nav,
     dealerSelected: dealer.selected,
+    dealerSelectedLocal: dealer.selectedLocal,
     region: dealer.region,
     profile,
     settings: core.settings,
@@ -252,9 +253,7 @@ class Form extends Component {
   constructor(props) {
     super(props);
     this.defaultCountryCode =
-      this.props.defaultCountryCode ||
-      this.props.dealerSelected.region ||
-      APP_REGION;
+      this.props.defaultCountryCode || this.props.region || APP_REGION;
     this.state = {
       parentState: props.parentState,
       required: [],
@@ -384,6 +383,7 @@ class Form extends Component {
   _validate = () => {
     let requredLabels = [];
     let valid = true;
+    console.log('this.state', this.state);
     if (this.state.required) {
       // проверка обязательных полей
       this.state.required.map((val, index) => {
@@ -403,6 +403,12 @@ class Form extends Component {
             break;
           case 'component':
             valid = true;
+            break;
+          case 'dealerselect':
+            valid = false;
+            if (get(this.props, 'dealerSelectedLocal', false)) {
+              valid = true;
+            }
             break;
           default:
             if (
@@ -439,6 +445,12 @@ class Form extends Component {
             break;
           case 'component':
             valid = true;
+            break;
+          case 'dealerselect':
+            valid = false;
+            if (get(this.props, 'dealerSelectedLocal', false)) {
+              valid = true;
+            }
             break;
           default:
             if (

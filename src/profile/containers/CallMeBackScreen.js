@@ -10,6 +10,7 @@ import Analytics from '../../utils/amplitude-analytics';
 
 import Form from '../../core/components/Form/Form';
 
+import {get} from 'lodash';
 import {localDealerClear} from '../../dealer/actions';
 
 import {ERROR_NETWORK} from '../../core/const';
@@ -20,7 +21,6 @@ let callMe = require('../../contacts/actions').callMe;
 const mapStateToProps = ({dealer, profile, contacts, nav}) => {
   return {
     nav,
-    dealerSelected: dealer.selected,
     dealerSelectedLocal: dealer.selectedLocal,
     firstName: profile.login.NAME
       ? profile.login.NAME
@@ -46,7 +46,6 @@ const mapDispatchToProps = {
 let isInternet = null;
 
 const CallMeBackScreen = ({
-  dealerSelected,
   dealerSelectedLocal,
   route,
   phone,
@@ -54,24 +53,14 @@ const CallMeBackScreen = ({
   callMe,
   localDealerClear,
 }) => {
-  const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
+
+  const dealer = get(route, 'params.dealerCustom', dealerSelectedLocal);
 
   useEffect(() => {
-    if (route.params?.dealerCustom) {
-      setDealerSelectedLocal(route.params.dealerCustom);
-    } else {
-      setDealerSelectedLocal(
-        dealerSelectedLocal ? dealerSelectedLocal : dealerSelected,
-      );
-    }
     return () => {
       localDealerClear();
     };
-  }, []);
-
-  useEffect(() => {
-    setDealerSelectedLocal(dealerSelectedLocal);
-  }, [dealerSelectedLocal]);
+  }, [localDealerClear, route.params]);
 
   const _onPressCallMe = async dataFromForm => {
     if (isInternet == null) {
@@ -93,14 +82,8 @@ const CallMeBackScreen = ({
       carID = route?.params?.carId;
     }
 
-    let dealerID = dealerSelected.id;
-
-    if (dealerSelectedLocalState) {
-      dealerID = dealerSelectedLocalState.id;
-    }
-
     const dataToSend = {
-      dealerID,
+      dealerID: dealer?.id,
       name: firstName || '',
       actionID,
       carID,
@@ -152,8 +135,9 @@ const CallMeBackScreen = ({
                   name: 'DEALER',
                   type: 'dealerSelect',
                   label: strings.Form.group.dealer,
-                  value: dealerSelectedLocalState,
+                  value: dealer,
                   props: {
+                    required: true,
                     goBack: true,
                     isLocal: true,
                     showBrands: false,

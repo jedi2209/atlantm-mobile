@@ -57,7 +57,7 @@ const mapStateToProps = ({dealer, info, core}) => {
       by: dealer.listBelarussia,
       ua: dealer.listUkraine,
     },
-    dealerSelected: dealer.selected,
+    dealerSelectedLocal: dealer.selectedLocal,
     currLang: core.language.selected,
   };
 };
@@ -70,7 +70,7 @@ const InfoPostScreen = ({
   currLang,
   navigation,
   dealersList,
-  dealerSelected,
+  dealerSelectedLocal,
   posts,
   route,
   fetchInfoPost,
@@ -132,7 +132,7 @@ const InfoPostScreen = ({
 
   const _onPressOrder = ({dealers}) => {
     let customDealersList = [];
-    dealersList[dealerSelected.region].forEach(element => {
+    dealersList[dealerSelectedLocal.region].forEach(element => {
       if (dealers.includes(element.id)) {
         customDealersList.push({
           id: element.id,
@@ -145,14 +145,14 @@ const InfoPostScreen = ({
         dealer: customDealersList,
       },
       actionID: postID,
-      region: dealerSelected.region,
+      region: dealerSelectedLocal.region,
       isNewCar: true,
     });
   };
 
   const _onPressParts = ({dealers}) => {
     let customDealersList = [];
-    dealersList[dealerSelected.region].forEach(element => {
+    dealersList[dealerSelectedLocal.region].forEach(element => {
       if (dealers.includes(element.id)) {
         customDealersList.push({
           id: element.id,
@@ -165,13 +165,13 @@ const InfoPostScreen = ({
         dealer: customDealersList,
       },
       actionID: postID,
-      region: dealerSelected.region,
+      region: dealerSelectedLocal.region,
     });
   };
 
   const _onPressService = ({dealers}) => {
     let customDealersList = [];
-    dealersList[dealerSelected.region].forEach(element => {
+    dealersList[dealerSelectedLocal.region].forEach(element => {
       if (dealers.includes(element.id)) {
         customDealersList.push({
           id: element.id,
@@ -184,7 +184,7 @@ const InfoPostScreen = ({
         dealer: customDealersList,
       },
       actionID: postID,
-      region: dealerSelected.region,
+      region: dealerSelectedLocal.region,
     });
   };
 

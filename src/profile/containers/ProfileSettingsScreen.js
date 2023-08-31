@@ -20,7 +20,7 @@ import {strings} from '../../core/lang/const';
 const mapStateToProps = ({profile, dealer}) => {
   return {
     profile: profile.login,
-    dealerSelected: dealer.selected,
+    region: dealer.region,
   };
 };
 
@@ -128,7 +128,7 @@ const ProfileSettingsScreen = props => {
               label: strings.Form.field.label.social,
               value: (
                 <SocialAuth
-                  region={props.dealerSelected.region}
+                  region={props.region}
                   style={{
                     width: '80%',
                     marginHorizontal: '10%',

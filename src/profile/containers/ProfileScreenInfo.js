@@ -136,7 +136,7 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
     listRussia: dealer.listRussia,
     listUkraine: dealer.listUkraine,
     listBelarussia: dealer.listBelarussia,
-    dealerSelected: dealer.selected,
+    region: dealer.region,
     name: profile.name,
     phone: profile.phone,
     email: profile.email,
@@ -166,17 +166,11 @@ const mapDispatchToProps = {
 };
 
 const ProfileScreenInfo = props => {
-  const {
-    dealerSelected,
-    login,
-    navigation,
-    insurance,
-    additionalPurchase,
-    bonus,
-  } = props;
+  const {region, login, navigation, insurance, additionalPurchase, bonus} =
+    props;
   const [loading, setLoading] = useState(false);
 
-  // const fabEnable = dealerSelected.region === 'by' ? true : false;
+  // const fabEnable = region === 'by' ? true : false;
   const fabEnable = false;
 
   useEffect(() => {
@@ -192,11 +186,10 @@ const ProfileScreenInfo = props => {
   const _getUserData = () => {
     setLoading(true);
     const {ID, SAP} = login;
-    const userRegion = get(dealerSelected, 'region', null);
 
     let curr = null;
 
-    switch (userRegion.toLowerCase()) {
+    switch (region.toLowerCase()) {
       case 'by':
         curr = 'BYN';
         break;
@@ -421,7 +414,7 @@ const ProfileScreenInfo = props => {
       strings.ProfileScreenInfo.bonus.current.bonuses,
     );
 
-    switch (region) {
+    switch (region.toLowerCase()) {
       case 'by':
         return {
           saldoValue: saldoValue,
@@ -444,7 +437,7 @@ const ProfileScreenInfo = props => {
   };
 
   const _renderBonus = () => {
-    const bonusData = _renderBonusSaldo(dealerSelected.region);
+    const bonusData = _renderBonusSaldo(region);
     if (bonus) {
       if (bonus.data && bonus.data.saldo) {
         return (
