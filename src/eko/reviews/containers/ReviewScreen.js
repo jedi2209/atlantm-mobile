@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet} from 'react-native';
 
 // redux
@@ -31,7 +31,7 @@ const mapStateToProps = ({dealer, eko, nav}) => {
     nav,
     reviewDealerRating: eko.reviews.reviewDealerRating,
     isFetchDealerRating: eko.reviews.meta.isFetchDealerRating,
-    dealerSelected: dealer.selected,
+    dealerSelected: dealer.selectedLocal,
   };
 };
 
@@ -39,61 +39,52 @@ const mapDispatchToProps = {
   actionFetchDealerRating,
 };
 
-class ReviewScreen extends Component {
-  componentDidMount() {
-    const {dealerSelected, reviewDealerRating, actionFetchDealerRating} =
-      this.props;
+const ReviewScreen = ({
+  dealerSelected,
+  reviewDealerRating,
+  actionFetchDealerRating,
+  route,
+  isFetchDealerRating,
+}) => {
+  const review = get(route, 'params.review');
 
+  useEffect(() => {
+    console.info('== ReviewScreen ==');
     if (!reviewDealerRating) {
       actionFetchDealerRating({
         dealerId: dealerSelected.id,
       });
     }
+  }, [actionFetchDealerRating, dealerSelected.id, reviewDealerRating]);
+
+  if (!review) {
+    return null;
   }
 
-  getReview = () => get(this.props.route, 'params.review');
-
-  render() {
-    const {
-      navigation,
-      dealerSelected,
-      reviewDealerRating,
-      isFetchDealerRating,
-    } = this.props;
-
-    const review = this.getReview();
-
-    if (!review) {
-      return null;
-    }
-
-    console.info('== ReviewScreen ==');
-
-    if (isFetchDealerRating) {
-      return <LogoLoader />;
-    }
-
-    const subtitle = [
-      dealerSelected.name,
-      `${strings.ReviewScreen.rating} ${reviewDealerRating} из 10`,
-    ];
-
-    return (
-      <ScrollView>
-        <VStack>
-          <View style={{marginTop: 10}}>
-            <HeaderSubtitle content={subtitle} isBig={true} />
-          </View>
-
-          <View mb={2} style={styles.review}>
-            <Review review={review} />
-          </View>
-
-          {review.answer ? <ReviewDealerAnswer text={review.answer} /> : null}
-        </VStack>
-      </ScrollView>
-    );
+  if (isFetchDealerRating) {
+    return <LogoLoader />;
   }
-}
+
+  const subtitle = [
+    dealerSelected.name,
+    `${strings.ReviewScreen.rating} ${reviewDealerRating} из 10`,
+  ];
+
+  return (
+    <ScrollView>
+      <VStack>
+        <View style={{marginTop: 10}}>
+          <HeaderSubtitle content={subtitle} isBig={true} />
+        </View>
+
+        <View mb={2} style={styles.review}>
+          <Review review={review} />
+        </View>
+
+        {review.answer ? <ReviewDealerAnswer text={review.answer} /> : null}
+      </VStack>
+    </ScrollView>
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReviewScreen);

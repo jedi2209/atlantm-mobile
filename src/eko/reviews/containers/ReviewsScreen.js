@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState, useEffect} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 
 // redux
@@ -22,6 +22,9 @@ import DealerItemList from '../../../core/components/DealerItemList';
 import styleConst from '../../../core/style-const';
 import {substractYears} from '../../../utils/date';
 import {strings} from '../../../core/lang/const';
+import LogoLoader from '../../../core/components/LogoLoader';
+
+import {EVENT_DEFAULT} from '../../../core/actionTypes';
 
 const styles = StyleSheet.create({
   content: {
@@ -33,7 +36,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({dealer, nav, eko}) => {
   return {
     nav,
-    dealerSelected: dealer.selected,
+    dealerSelected: dealer.selectedLocal,
     reviews: eko.reviews.items,
     pages: eko.reviews.pages,
     total: eko.reviews.total,
@@ -56,30 +59,41 @@ const mapDispatchToProps = {
   actionSelectFilterRatingTo,
 };
 
-class ReviewsScreen extends Component {
-  componentDidUpdate(prevProps) {
-    const {needFetchReviews, isFetchReviews} = this.props;
-    const isFilterWillUpdate =
-      prevProps.dateTo !== this.props.dateTo ||
-      prevProps.dateFrom !== this.props.dateFrom ||
-      prevProps.filterRatingFrom !== this.props.filterRatingFrom ||
-      prevProps.filterRatingTo !== this.props.filterRatingTo;
+const ReviewsScreen = props => {
+  const {
+    pages,
+    reviews,
+    navigation,
+    dealerSelected,
+    isFetchReviews,
+    actionReviewVisit,
+  } = props;
 
-    if (isFilterWillUpdate && needFetchReviews && !isFetchReviews) {
-      this.fetchReviews();
-    }
-  }
+  const [isLoading, setLoading] = useState(false);
 
-  onPressItem = review => {
-    const {navigation} = this.props;
+  useEffect(() => {
+    setLoading(true);
+    _fetchReviews(EVENT_DEFAULT).then(res => {
+      setTimeout(() => {
+        setLoading(false);
+      }, 500);
+    });
+  }, [dealerSelected]);
+
+  const _onPressItem = review => {
     navigation.navigate('ReviewScreen', {
       review,
       returnScreen: 'ReviewsScreen',
     });
-    this.props.actionReviewVisit(review.id);
+    actionReviewVisit(review?.id);
   };
 
-  fetchReviews = type => {
+  // const _onPressRating = () => navigation.navigate('ReviewsFilterRatingScreen');
+  // const _onPressDate = () => navigation.navigate('ReviewsFilterDateScreen');
+  // const _onPressAddReview = () =>
+  //   navigation.navigate('ReviewAddMessageStepScreen');
+
+  const _fetchReviews = type => {
     let {
       pages,
       dateTo,
@@ -92,7 +106,7 @@ class ReviewsScreen extends Component {
       actionSelectFilterDatePeriod,
       actionSelectFilterRatingFrom,
       actionSelectFilterRatingTo,
-    } = this.props;
+    } = props;
 
     if (!dateFrom) {
       dateFrom = substractYears(10);
@@ -116,41 +130,51 @@ class ReviewsScreen extends Component {
     });
   };
 
-  onPressRating = () =>
-    this.props.navigation.navigate('ReviewsFilterRatingScreen');
-  onPressDate = () => this.props.navigation.navigate('ReviewsFilterDateScreen');
-  onPressAddReview = () =>
-    this.props.navigation.navigate('ReviewAddMessageStepScreen');
-
-  render() {
-    const {pages, reviews, navigation, dealerSelected, isFetchReviews} =
-      this.props;
-
-    return (
-      <SafeAreaView style={styles.content}>
-        <DealerItemList
-          dealer={dealerSelected}
-          goBack={true}
-          style={{marginHorizontal: 8}}
-          showBrands={false}
-        />
-
-        <ReviewsList
-          items={reviews}
-          pages={pages}
-          dataHandler={this.fetchReviews}
-          onPressItemHandler={this.onPressItem}
-          isFetchItems={isFetchReviews}
-        />
-
-        <ReviewsFilter
-          onPressRating={this.onPressRating}
-          onPressDate={this.onPressDate}
-          onPressAddReview={this.onPressAddReview}
-        />
-      </SafeAreaView>
-    );
+  if (isLoading) {
+    return <LogoLoader />;
   }
-}
+
+  return (
+    <SafeAreaView style={styles.content}>
+      <DealerItemList
+        dealer={dealerSelected}
+        goBack={true}
+        isLocal={true}
+        style={{marginHorizontal: 8}}
+        showBrands={false}
+      />
+
+      <ReviewsList
+        items={reviews}
+        pages={pages}
+        extraData={dealerSelected.id}
+        dataHandler={_fetchReviews}
+        onPressItemHandler={_onPressItem}
+        isFetchItems={isFetchReviews}
+      />
+
+      {/* <ReviewsFilter
+        onPressRating={_onPressRating}
+        onPressDate={_onPressDate}
+        onPressAddReview={_onPressAddReview}
+      /> */}
+    </SafeAreaView>
+  );
+};
+
+// class ReviewsScreen extends Component {
+//   componentDidUpdate(prevProps) {
+//     const {needFetchReviews, isFetchReviews} = this.props;
+//     const isFilterWillUpdate =
+//       prevProps.dateTo !== this.props.dateTo ||
+//       prevProps.dateFrom !== this.props.dateFrom ||
+//       prevProps.filterRatingFrom !== this.props.filterRatingFrom ||
+//       prevProps.filterRatingTo !== this.props.filterRatingTo;
+
+//     if (isFilterWillUpdate && needFetchReviews && !isFetchReviews) {
+//       this.fetchReviews();
+//     }
+//   }
+// }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReviewsScreen);

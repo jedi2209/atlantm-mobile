@@ -33,7 +33,6 @@ const mapStateToProps = ({dealer, eko, nav, profile}) => {
   return {
     nav,
     login: profile.login,
-    dealerSelected: dealer.selected,
     publicAgree: eko.reviews.publicAgree,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
@@ -66,7 +65,7 @@ const ReviewAddRatingStepScreen = props => {
   }, []);
 
   const _onPressButton = dataFromForm => {
-    const {dealerSelected, navigation} = props;
+    const {navigation} = props;
 
     const name = [
       dataFromForm.NAME,
@@ -77,7 +76,7 @@ const ReviewAddRatingStepScreen = props => {
       .join(' ');
 
     const dataToSend = {
-      dealerId: dealerSelected.id,
+      dealerId: get(reviewData, 'DEALER.id'),
       firstName: get(dataFromForm, 'NAME', ''),
       secondName: get(dataFromForm, 'SECOND_NAME', ''),
       lastName: get(dataFromForm, 'LAST_NAME', ''),

@@ -123,7 +123,7 @@ export default class ReviewsList extends Component {
   };
 
   render() {
-    const {items} = this.props;
+    const {items, extraData} = this.props;
 
     return (
       <View style={styles.container}>
@@ -134,6 +134,7 @@ export default class ReviewsList extends Component {
           initialNumToRender={10}
           maxToRenderPerBatch={10}
           data={items}
+          extraData={extraData}
           onRefresh={this.onRefresh}
           refreshing={this.state.isRefreshing}
           ListEmptyComponent={this.renderEmptyComponent}
