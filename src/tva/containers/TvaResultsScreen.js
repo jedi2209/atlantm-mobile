@@ -88,7 +88,6 @@ const processDate = date => dayMonthYearTime(date);
 
 const mapStateToProps = ({dealer, tva}) => {
   return {
-    dealerSelected: dealer.selected,
     results: tva.results,
     comment: tva.message,
     activeOrderId: tva.activeOrderId,
@@ -105,7 +104,6 @@ const mapDispatchToProps = {
 
 const TvaResultsScreen = props => {
   const {
-    dealerSelected,
     results,
     actionTvaMessageFill,
     actionSetActiveTvaOrderId,
@@ -177,7 +175,6 @@ const TvaResultsScreen = props => {
       actionTvaMessageSend({
         text: comment,
         id: activeOrderId,
-        dealer: dealerSelected.id,
       }).then(action => {
         const {type, payload} = action;
 
@@ -344,7 +341,6 @@ const TvaResultsScreen = props => {
 };
 
 TvaResultsScreen.propTypes = {
-  dealerSelected: PropTypes.object,
   isMessageSending: PropTypes.bool,
   actionTvaMessageFill: PropTypes.func,
   actionTvaMessageSend: PropTypes.func,

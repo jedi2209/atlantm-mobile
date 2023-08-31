@@ -21,11 +21,10 @@ import {get} from 'lodash';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
 import styleConst from '../../core/style-const';
+import {BELARUSSIA} from '../../core/const';
 
 const mapStateToProps = ({dealer, profile, tva, core}) => {
   return {
-    dealerSelected: dealer.selected,
-    dealerSelectedLocal: dealer.selectedLocal,
     region: dealer.region,
     isTvaRequest: tva.meta.isRequest,
     pushGranted: core.pushGranted,
@@ -46,8 +45,7 @@ const mapDispatchToProps = {
 
 const TvaScreen = props => {
   const {
-    dealerSelectedLocal,
-    dealerSelected,
+    region,
     route,
     carNumber,
     actionFetchTva,
@@ -58,26 +56,11 @@ const TvaScreen = props => {
   const toast = useToast();
   const navigation = useNavigation();
 
-  const fabEnable = dealerSelected.region === 'by' ? true : false;
+  const fabEnable = region === BELARUSSIA ? true : false;
 
   const FormConfig = {
     fields: {
       groups: [
-        // {
-        //   name: strings.Form.group.dealer,
-        //   fields: [
-        //     {
-        //       name: 'DEALER',
-        //       type: 'dealerSelect',
-        //       label: strings.Form.field.label.dealer,
-        //       value: dealerSelected,
-        //       props: {
-        //         goBack: false,
-        //         showBrands: false,
-        //       },
-        //     },
-        //   ],
-        // },
         {
           name: strings.Form.group.car,
           fields: [
@@ -296,7 +279,7 @@ const TvaScreen = props => {
 };
 
 TvaScreen.propTypes = {
-  dealerSelected: PropTypes.object,
+  region: PropTypes.string,
   isTvaRequest: PropTypes.bool,
   actionFetchTva: PropTypes.func,
   pushTracking: PropTypes.bool,

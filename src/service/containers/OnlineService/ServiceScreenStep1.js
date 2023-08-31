@@ -76,6 +76,7 @@ const mapStateToProps = ({dealer, profile, nav}) => {
       : carLocalNumber,
     carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
     dealerSelected: dealer.selected,
+    region: dealer.region,
   };
 };
 
@@ -622,7 +623,7 @@ class ServiceScreenStep1 extends Component {
                                     this.state.serviceInfo.summary[0].summ
                                       .required,
                                   ),
-                                  this.props.dealerSelected.region,
+                                  this.props.region,
                                 )}
                               </Text>
                             </Text>
@@ -675,7 +676,7 @@ class ServiceScreenStep1 extends Component {
                                     this.state.serviceInfo.summary[0].summ
                                       .recommended,
                                   ),
-                                  this.props.dealerSelected.region,
+                                  this.props.region,
                                 )}
                               </Text>
                             </Text>
@@ -732,7 +733,7 @@ class ServiceScreenStep1 extends Component {
                                     : this.state.serviceInfo.summary[0].summ
                                         .required,
                                 ),
-                                this.props.dealerSelected.region,
+                                this.props.region,
                               )}
                             </Text>
                           </Text>
@@ -762,7 +763,7 @@ class ServiceScreenStep1 extends Component {
         }}
         key="ServiceStep1Form"
         fields={this.FormConfig.fields}
-        defaultCountryCode={this.props.dealerSelected.region}
+        defaultCountryCode={this.props.region}
         onSubmit={this.onPressOrder}
         SubmitButton={{
           text: get(this.props.route, 'params.settings.submitButtonText', false)

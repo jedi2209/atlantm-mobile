@@ -31,7 +31,7 @@ const mapStateToProps = ({dealer, eko, nav}) => {
     nav,
     reviewDealerRating: eko.reviews.reviewDealerRating,
     isFetchDealerRating: eko.reviews.meta.isFetchDealerRating,
-    dealerSelected: dealer.selectedLocal,
+    dealerSelectedLocal: dealer.selectedLocal,
   };
 };
 
@@ -40,7 +40,7 @@ const mapDispatchToProps = {
 };
 
 const ReviewScreen = ({
-  dealerSelected,
+  dealerSelectedLocal,
   reviewDealerRating,
   actionFetchDealerRating,
   route,
@@ -52,10 +52,10 @@ const ReviewScreen = ({
     console.info('== ReviewScreen ==');
     if (!reviewDealerRating) {
       actionFetchDealerRating({
-        dealerId: dealerSelected.id,
+        dealerId: dealerSelectedLocal.id,
       });
     }
-  }, [actionFetchDealerRating, dealerSelected.id, reviewDealerRating]);
+  }, [actionFetchDealerRating, dealerSelectedLocal.id, reviewDealerRating]);
 
   if (!review) {
     return null;
@@ -66,7 +66,7 @@ const ReviewScreen = ({
   }
 
   const subtitle = [
-    dealerSelected.name,
+    dealerSelectedLocal.name,
     `${strings.ReviewScreen.rating} ${reviewDealerRating} из 10`,
   ];
 

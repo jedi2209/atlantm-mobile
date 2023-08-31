@@ -733,7 +733,7 @@ const DealerInfoScreen = ({
   };
 
   const onPressCallMe = async () => {
-    navigation.navigate('CallMeBackScreen', {dealerCustom: dealerSelected.id});
+    navigation.navigate('CallMeBackScreen', {dealerCustom: dealerSelected});
   };
 
   const onPressChat = () => {

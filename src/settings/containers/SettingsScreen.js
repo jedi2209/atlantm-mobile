@@ -87,7 +87,6 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({dealer, info, nav, core}) => {
   return {
     nav,
-    dealerSelected: dealer.selected,
     region: dealer.region,
     pushActionSubscribeState: core.pushActionSubscribeState,
     currentLang: core.language.selected || APP_REGION,
@@ -103,6 +102,8 @@ const deviceWidth = Dimensions.get('window').width;
 const cardWidth = deviceWidth - 20;
 
 const SettingsScreen = props => {
+  const {region} = props;
+
   useEffect(() => {
     Analytics.logEvent('screen', 'settings');
   }, []);
@@ -112,15 +113,13 @@ const SettingsScreen = props => {
   };
 
   const _onSwitchActionSubscribe = value => {
-    const {dealerSelected} = props;
-
     let text,
       title = '';
     if (value === true) {
       PushNotifications.unsubscribeFromTopic('actions');
       PushNotifications.subscribeToTopic(
         'actionsRegion',
-        dealerSelected.region,
+        region,
         isPermission => {
           console.info('isPermission', isPermission);
           props.actionSetPushActionSubscribe(isPermission);
@@ -363,7 +362,6 @@ const SettingsScreen = props => {
 };
 
 SettingsScreen.propTypes = {
-  dealerSelected: PropTypes.object,
   isMessageSending: PropTypes.bool,
   actionTvaMessageFill: PropTypes.func,
   actionTvaMessageSend: PropTypes.func,

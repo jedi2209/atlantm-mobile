@@ -58,7 +58,7 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
     listRussia: dealer.listRussia,
     listUkraine: dealer.listUkraine,
     listBelarussia: dealer.listBelarussia,
-    dealerSelected: dealer.selected,
+    region: dealer.region,
     name: profile.name,
     phone: UserData.get('PHONE')
       ? UserData.get('PHONE')
@@ -161,6 +161,8 @@ const getBackground = (hrs = 12) => {
 };
 
 const LoginScreen = props => {
+  const {region, navigation, actionSavePofile, actionGetPhoneCode} = props;
+
   const toast = useToast();
   const [isSigninInProgress, setSigninInProgress] = useState(false);
   const [code, setCode] = useState(false);
@@ -210,8 +212,7 @@ const LoginScreen = props => {
       return;
     }
     setLoadingVerify(true);
-    props
-      .actionGetPhoneCode({phone, code: codeValueVal})
+    actionGetPhoneCode({phone, code: codeValueVal})
       .then(data => {
         Keyboard.dismiss();
         PushNotifications.addTag('login', data.user.ID);
@@ -219,12 +220,12 @@ const LoginScreen = props => {
           PushNotifications.addTag('sapID', data.user.SAP.ID);
           PushNotifications.setExternalUserId(data.user.SAP.ID);
         }
-        return props.actionSavePofile(data.user);
+        return actionSavePofile(data.user);
       })
       .then(() => {
         setLoadingVerify(false);
         setCodeValue('');
-        props.navigation.navigate('LoginScreen');
+        navigation.navigate('LoginScreen');
       })
       .catch(message => {
         setLoadingVerify(false);
@@ -259,7 +260,7 @@ const LoginScreen = props => {
     }
     setLoadingVerify(true);
     setPhone(phone);
-    return props.actionGetPhoneCode({phone}).then(response => {
+    return actionGetPhoneCode({phone}).then(response => {
       if (response.code >= 300) {
         _cancelVerify();
 
@@ -290,7 +291,7 @@ const LoginScreen = props => {
 
   const _sendDataToApi = profile => {
     setLoading(true);
-    return props.actionSavePofile(profile);
+    return actionSavePofile(profile);
   };
 
   const _checkPhone = async data => {
@@ -302,12 +303,12 @@ const LoginScreen = props => {
           if (res.payload && res.payload.ID && res.payload.PHONE) {
             // нашли юзверя в CRM и у него есть телефон
             setLoading(false);
-            props.navigation.navigate('LoginScreen');
+            navigation.navigate('LoginScreen');
           }
           break;
         case 'SAVE_PROFILE__NOPHONE':
           setLoading(false);
-          props.navigation.navigate('PhoneChangeScreen', {
+          navigation.navigate('PhoneChangeScreen', {
             refererScreen: 'LoginScreen',
             returnScreen: 'LoginScreen',
             userSocialProfile: data,
@@ -320,7 +321,7 @@ const LoginScreen = props => {
               case 100: // Пользователь не зарегистрирован
                 delete data.update; // теперь будем регать пользователя по серьёзке
                 setLoading(false);
-                props.navigation.navigate('PhoneChangeScreen', {
+                navigation.navigate('PhoneChangeScreen', {
                   refererScreen: 'LoginScreen',
                   returnScreen: 'LoginScreen',
                   userSocialProfile: data,
@@ -562,9 +563,7 @@ const LoginScreen = props => {
             source={require('../../menu/assets/logo-horizontal-white.svg')}
           />
         </View>
-        {!code
-          ? _renderLoginButtons(props.dealerSelected.region || APP_REGION)
-          : null}
+        {!code ? _renderLoginButtons(region || APP_REGION) : null}
         <View
           justifyContent={'center'}
           alignItems={'center'}
@@ -656,7 +655,7 @@ const LoginScreen = props => {
         {!code && !keyboardShow ? (
           <Button
             onPress={() => {
-              props.navigation.navigate('BonusScreenInfo', {
+              navigation.navigate('BonusScreenInfo', {
                 refererScreen: 'LoginScreen',
                 returnScreen: 'LoginScreen',
               });

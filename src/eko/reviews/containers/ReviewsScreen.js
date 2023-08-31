@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = ({dealer, nav, eko}) => {
   return {
     nav,
-    dealerSelected: dealer.selectedLocal,
+    dealerSelectedLocal: dealer.selectedLocal,
     reviews: eko.reviews.items,
     pages: eko.reviews.pages,
     total: eko.reviews.total,
@@ -64,7 +64,7 @@ const ReviewsScreen = props => {
     pages,
     reviews,
     navigation,
-    dealerSelected,
+    dealerSelectedLocal,
     isFetchReviews,
     actionReviewVisit,
   } = props;
@@ -78,7 +78,7 @@ const ReviewsScreen = props => {
         setLoading(false);
       }, 500);
     });
-  }, [dealerSelected]);
+  }, [dealerSelectedLocal]);
 
   const _onPressItem = review => {
     navigation.navigate('ReviewScreen', {
@@ -100,7 +100,7 @@ const ReviewsScreen = props => {
       dateFrom,
       filterRatingFrom,
       filterRatingTo,
-      dealerSelected,
+      dealerSelectedLocal,
       actionFetchReviews,
       actionDateFromFill,
       actionSelectFilterDatePeriod,
@@ -126,7 +126,7 @@ const ReviewsScreen = props => {
       ratingFrom: filterRatingFrom,
       ratingTo: filterRatingTo,
       nextPage: pages.next,
-      dealerId: dealerSelected.id,
+      dealerId: dealerSelectedLocal.id,
     });
   };
 
@@ -137,7 +137,7 @@ const ReviewsScreen = props => {
   return (
     <SafeAreaView style={styles.content}>
       <DealerItemList
-        dealer={dealerSelected}
+        dealer={dealerSelectedLocal}
         goBack={true}
         isLocal={true}
         style={{marginHorizontal: 8}}
@@ -147,7 +147,7 @@ const ReviewsScreen = props => {
       <ReviewsList
         items={reviews}
         pages={pages}
-        extraData={dealerSelected.id}
+        extraData={dealerSelectedLocal.id}
         dataHandler={_fetchReviews}
         onPressItemHandler={_onPressItem}
         isFetchItems={isFetchReviews}
