@@ -17,6 +17,9 @@ const stylesDealerItemList = StyleSheet.create({
   wrapper: {
     backgroundColor: styleConst.color.white,
   },
+  readonly: {
+    shadowOpacity: 0,
+  },
   brandLogo: {
     minWidth: 24,
     height: 28,
@@ -41,8 +44,19 @@ const stylesDealerItemList = StyleSheet.create({
 });
 
 const _onPressDealer = props => {
-  const {isLocal, goBack, returnScreen, listAll, returnState, navigation} =
-    props;
+  const {
+    isLocal,
+    goBack,
+    returnScreen,
+    listAll,
+    returnState,
+    navigation,
+    readonly,
+  } = props;
+
+  if (readonly) {
+    return;
+  }
 
   return navigation.navigate('ChooseDealerScreen', {
     returnScreen,
@@ -94,7 +108,8 @@ const MainWrapper = props => {
 };
 
 const DealerItemList = props => {
-  const {city, dealer, style, wrapperProps, placeholder, showBrands} = props;
+  const {city, dealer, style, wrapperProps, placeholder, showBrands, readonly} =
+    props;
   const navigation = useNavigation();
 
   const deviceWidth = Dimensions.get('window').width;
@@ -128,9 +143,13 @@ const DealerItemList = props => {
       rounded={'lg'}
       px="2"
       py="3"
-      readonly={props.readonly}
-      shadow={'1'}
-      style={[stylesDealerItemList.wrapper, style]}
+      readonly={readonly}
+      shadow={readonly ? 0 : 1}
+      style={[
+        stylesDealerItemList.wrapper,
+        readonly ? stylesDealerItemList.readonly : null,
+        style,
+      ]}
       onPress={() => {
         return _onPressDealer({...props, navigation});
       }}
@@ -184,7 +203,7 @@ const DealerItemList = props => {
         dealerBrand?.length <= 2 &&
         !placeholder ? (
           _renderBrands({logoWidth, dealerBrand})
-        ) : (
+        ) : !readonly ? (
           <Icon
             size="sm"
             as={FontAwesome5}
@@ -192,7 +211,7 @@ const DealerItemList = props => {
             name={'angle-right'}
             mr={1}
           />
-        )}
+        ) : null}
       </HStack>
     </MainWrapper>
   );
