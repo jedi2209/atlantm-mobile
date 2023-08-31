@@ -57,13 +57,13 @@ const CallMeBackScreen = ({
   const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
 
   useEffect(() => {
-    //if (route?.params && route.params?.dealerCustom) {
-    //setDealerSelectedLocal(route?.params?.dealerCustom);
-    //} else {
-    setDealerSelectedLocal(
-      dealerSelectedLocal ? dealerSelectedLocal : dealerSelected,
-    );
-    //}
+    if (route.params?.dealerCustom) {
+      setDealerSelectedLocal(route.params.dealerCustom);
+    } else {
+      setDealerSelectedLocal(
+        dealerSelectedLocal ? dealerSelectedLocal : dealerSelected,
+      );
+    }
     return () => {
       localDealerClear();
     };
@@ -73,7 +73,7 @@ const CallMeBackScreen = ({
     setDealerSelectedLocal(dealerSelectedLocal);
   }, [dealerSelectedLocal]);
 
-  const _onPressCallMe = async () => {
+  const _onPressCallMe = async dataFromForm => {
     if (isInternet == null) {
       isInternet = require('../../utils/internet').default;
     }
@@ -99,13 +99,15 @@ const CallMeBackScreen = ({
       dealerID = dealerSelectedLocalState.id;
     }
 
-    const action = await callMe({
+    const dataToSend = {
       dealerID,
       name: firstName || '',
       actionID,
       carID,
-      phone: phone || '',
-    });
+      phone: dataFromForm.PHONE || phone,
+    };
+
+    const action = await callMe(dataToSend);
 
     if (action.type === CALL_ME__SUCCESS) {
       Analytics.logEvent('order', 'contacts/callme');
@@ -142,22 +144,24 @@ const CallMeBackScreen = ({
   const FormConfig = {
     fields: {
       groups: [
-        {
-          name: strings.Form.group.dealer,
-          fields: [
-            {
-              name: 'DEALER',
-              type: 'dealerSelect',
-              label: strings.Form.group.dealer,
-              value: dealerSelectedLocalState,
-              props: {
-                goBack: true,
-                isLocal: true,
-                showBrands: false,
-              },
-            },
-          ],
-        },
+        !route?.params?.dealerCustom
+          ? {
+              name: strings.Form.group.dealer,
+              fields: [
+                {
+                  name: 'DEALER',
+                  type: 'dealerSelect',
+                  label: strings.Form.group.dealer,
+                  value: dealerSelectedLocalState,
+                  props: {
+                    goBack: true,
+                    isLocal: true,
+                    showBrands: false,
+                  },
+                },
+              ],
+            }
+          : {},
         {
           name: strings.Form.group.contacts,
           fields: [
