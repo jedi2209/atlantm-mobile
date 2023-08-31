@@ -46,6 +46,17 @@ export const selectDealer = ({dealerBaseData, dealerSelected, isLocal}) => {
       type: DEALER__REQUEST,
     });
 
+    if (isLocal) {
+      PushNotifications.addTag('region', dealerBaseData.region);
+      return dispatch({
+        type: DEALER__SUCCESS__LOCAL,
+        payload: {
+          newDealer: dealerBaseData,
+          prevDealer: dealerSelected,
+        },
+      });
+    }
+
     return API.fetchDealer(dealerBaseData.id)
       .then(response => {
         if (get(response, 'error') || get(response, 'status') === 'error') {
