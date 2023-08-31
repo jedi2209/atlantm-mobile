@@ -172,52 +172,47 @@ const _onPressDealerItem = ({
   returnScreen,
   returnState,
 }) => {
-  selectDealer({
+  const action = selectDealer({
     dealerBaseData: dealerSelectedItem,
     dealerSelected: dealerSelectedItem,
     isLocal,
-  }).then(action => {
-    // const newDealer = get(action, 'payload.newDealer');
-    if (
-      action &&
-      [DEALER__SUCCESS, DEALER__SUCCESS__LOCAL].includes(action.type)
-    ) {
-      // if (action.type === DEALER__SUCCESS) {
-      //   PushNotifications.unsubscribeFromTopic('actions');
-      //   if (pushActionSubscribeState) {
-      //     PushNotifications.subscribeToTopic('actionsRegion', regionXXX);
-      //   } else {
-      //     PushNotifications.unsubscribeFromTopic('actionsRegion');
-      //   }
-      // }
-      if (returnScreen) {
-        if (goBack) {
-          navigation.goBack();
-        }
-        return navigation.navigate(
-          returnScreen,
-          returnState ? returnState : {},
-        );
-      } else {
-        if (goBack) {
-          return navigation.goBack();
-        }
-        if (!isLocal) {
-          return navigation.reset({
-            index: 0,
-            routes: [{name: 'BottomTabNavigation'}],
-          });
-        }
+  });
+  if (
+    action &&
+    [DEALER__SUCCESS, DEALER__SUCCESS__LOCAL].includes(action.type)
+  ) {
+    // if (action.type === DEALER__SUCCESS) {
+    //   PushNotifications.unsubscribeFromTopic('actions');
+    //   if (pushActionSubscribeState) {
+    //     PushNotifications.subscribeToTopic('actionsRegion', regionXXX);
+    //   } else {
+    //     PushNotifications.unsubscribeFromTopic('actionsRegion');
+    //   }
+    // }
+    if (returnScreen) {
+      if (goBack) {
+        navigation.goBack();
+      }
+      return navigation.navigate(returnScreen, returnState || {});
+    } else {
+      if (goBack) {
+        return navigation.goBack();
+      }
+      if (!isLocal) {
+        return navigation.reset({
+          index: 0,
+          routes: [{name: 'BottomTabNavigation'}],
+        });
       }
     }
+  }
 
-    if (action && action.type === DEALER__FAIL) {
-      Alert.alert(
-        strings.SelectItemByCountry.error.title,
-        strings.SelectItemByCountry.error.text,
-      );
-    }
-  });
+  if (action && action.type === DEALER__FAIL) {
+    Alert.alert(
+      strings.SelectItemByCountry.error.title,
+      strings.SelectItemByCountry.error.text,
+    );
+  }
 };
 
 const _EmptyComponent = () => <LogoLoader />;
