@@ -146,8 +146,6 @@ const CarCostScreen = ({
   const dealerFromNavigation = get(route, 'params.dealer', false);
   const userTextFromNavigation = get(route, 'params.Text', '');
 
-  console.log('dealerSelectedLocal', dealerSelectedLocal);
-
   useEffect(() => {
     console.info('== CarCost ==');
     Analytics.logEvent('screen', 'catalog/carcost');
