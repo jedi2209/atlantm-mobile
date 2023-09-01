@@ -12,6 +12,7 @@ import {
   actionSelectFilterRatingFrom,
   actionSelectFilterRatingTo,
 } from '../../actions';
+import {localDealerClear} from '../../../dealer/actions';
 
 // components
 import ReviewsList from '../components/ReviewsList';
@@ -57,6 +58,7 @@ const mapDispatchToProps = {
   actionSelectFilterDatePeriod,
   actionSelectFilterRatingFrom,
   actionSelectFilterRatingTo,
+  localDealerClear,
 };
 
 const ReviewsScreen = props => {
@@ -67,17 +69,21 @@ const ReviewsScreen = props => {
     dealerSelectedLocal,
     isFetchReviews,
     actionReviewVisit,
+    localDealerClear,
   } = props;
 
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    setLoading(true);
-    _fetchReviews(EVENT_DEFAULT).then(res => {
-      setTimeout(() => {
-        setLoading(false);
-      }, 500);
-    });
+    if (dealerSelectedLocal) {
+      setLoading(true);
+      _fetchReviews(EVENT_DEFAULT).then(res => {
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
+      });
+    }
+    return () => localDealerClear();
   }, [dealerSelectedLocal]);
 
   const _onPressItem = review => {
@@ -142,16 +148,19 @@ const ReviewsScreen = props => {
         isLocal={true}
         style={{marginHorizontal: 8}}
         showBrands={false}
+        placeholder={strings.ChooseDealerScreen.title}
       />
 
-      <ReviewsList
-        items={reviews}
-        pages={pages}
-        extraData={dealerSelectedLocal.id}
-        dataHandler={_fetchReviews}
-        onPressItemHandler={_onPressItem}
-        isFetchItems={isFetchReviews}
-      />
+      {dealerSelectedLocal ? (
+        <ReviewsList
+          items={reviews}
+          pages={pages}
+          extraData={dealerSelectedLocal.id}
+          dataHandler={_fetchReviews}
+          onPressItemHandler={_onPressItem}
+          isFetchItems={isFetchReviews}
+        />
+      ) : null}
 
       {/* <ReviewsFilter
         onPressRating={_onPressRating}
