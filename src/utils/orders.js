@@ -49,10 +49,10 @@ async function getOrders(type = 'default', dealerData = null) {
     },
   };
   let divisions = ['ST', 'ZZ', 'TI'];
-  let navigateOptions = {};
+  let navigateOptions = {dealerHide: false};
   if (dealerData && typeof dealerData === 'object') {
     divisions = dealerData.divisionTypes;
-    navigateOptions = {dealerCustom: dealerData.id};
+    navigateOptions = {dealerCustom: dealerData, dealerHide: false};
   }
   if (dealerData && typeof dealerData === 'string') {
     divisions = get(storeState, 'dealer.selected.divisionTypes');
@@ -136,6 +136,7 @@ async function getOrders(type = 'default', dealerData = null) {
         color: '#2c8ef4',
       },
       navigate: 'CallMeBackScreen',
+      navigateOptions,
     });
     res.ios.BUTTONS.push({
       priority: 1,

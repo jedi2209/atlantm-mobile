@@ -98,7 +98,7 @@ const UsedCarItemScreen = props => {
         year: get(carDetails, 'year'),
         dealer: get(carDetails, 'dealer'),
       },
-      region: dealer.region,
+      region,
       carId: carDetails.id.api,
       isNewCar: false,
     });
@@ -167,6 +167,7 @@ const UsedCarItemScreen = props => {
             onPress: () => {
               navigation.navigate('CallMeBackScreen', {
                 dealerCustom: listDealers[carDetails.dealer.id],
+                dealerHide: true,
                 goBack: true,
               });
             },

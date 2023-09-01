@@ -60,35 +60,33 @@ const ImageCarousel = ({
               <Button
                 onPress={item.onPressWantACar}
                 style={[styles.itemOrder, styles.itemOrderWantACar, {height}]}
-                leftIcon={
-                  <Icon
-                    size={5}
-                    as={MaterialCommunityIcons}
-                    name="wallet-giftcard"
-                    color={styleConst.color.white}
-                    _dark={{
-                      color: styleConst.color.white,
-                    }}
-                  />
-                }
                 _text={styles.iconText}>
+                <Icon
+                  size={12}
+                  as={MaterialCommunityIcons}
+                  name="wallet-giftcard"
+                  alignSelf="center"
+                  color={styleConst.color.white}
+                  _dark={{
+                    color: styleConst.color.white,
+                  }}
+                />
                 {strings.NewCarItemScreen.wannaCar}
               </Button>
               <Button
                 onPress={item.onPressTD}
                 style={[styles.itemOrder, styles.itemOrderTestDrive, {height}]}
-                leftIcon={
-                  <Icon
-                    size={5}
-                    as={MaterialCommunityIcons}
-                    name="steering"
-                    color={styleConst.color.white}
-                    _dark={{
-                      color: styleConst.color.white,
-                    }}
-                  />
-                }
                 _text={styles.iconText}>
+                <Icon
+                  size={12}
+                  as={MaterialCommunityIcons}
+                  name="steering"
+                  alignSelf="center"
+                  color={styleConst.color.white}
+                  _dark={{
+                    color: styleConst.color.white,
+                  }}
+                />
                 {strings.NewCarItemScreen.testDrive}
               </Button>
             </View>
@@ -152,19 +150,18 @@ const ImageCarousel = ({
                 <Button
                   onPress={item.onPressWantACar}
                   style={[styles.itemOrder, styles.itemOrderWantACar, {height}]}
-                  leftIcon={
-                    <Icon
-                      selectable={false}
-                      size={8}
-                      as={MaterialCommunityIcons}
-                      name="wallet-giftcard"
-                      color={styleConst.color.white}
-                      _dark={{
-                        color: styleConst.color.white,
-                      }}
-                    />
-                  }
                   _text={styles.iconText}>
+                  <Icon
+                    selectable={false}
+                    size={12}
+                    as={MaterialCommunityIcons}
+                    name="wallet-giftcard"
+                    alignSelf="center"
+                    color={styleConst.color.white}
+                    _dark={{
+                      color: styleConst.color.white,
+                    }}
+                  />
                   {strings.NewCarItemScreen.wannaCar}
                 </Button>
               ) : null}
@@ -226,7 +223,6 @@ const styles = StyleSheet.create({
   },
   itemOrder: {
     width: screenWidth / 1.7 / 2,
-    flexDirection: 'column',
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
@@ -248,6 +244,8 @@ const styles = StyleSheet.create({
   },
   itemOrderWantACar: {
     backgroundColor: styleConst.color.lightBlue,
+    alignSelf: 'center',
+    textAlign: 'center',
   },
   imageContainer: {
     marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue
