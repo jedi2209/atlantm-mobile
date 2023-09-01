@@ -70,7 +70,6 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
     isFetchInfoList: info.meta.isFetchInfoList,
     nav,
     profile,
-    dealerSelected: dealer.selected,
     region: dealer.region,
     listDealers: dealer.listDealers,
 
@@ -176,7 +175,7 @@ const RowConstruct = props => {
         mt={firstRow ? firstRowMarginTop : 0}
         p={2}
         key={'containerRow' + rowNum}>
-        <HStack justifyContent={'space-between'} space={1}>
+        <HStack justifyContent={'left'} space={3}>
           {_processRow({rowData: json, rowNum, navigation, ...props})}
         </HStack>
       </View>
@@ -206,7 +205,7 @@ const RowConstruct = props => {
 };
 
 const _processRow = props => {
-  const {dealerSelected, rowData, rowNum, navigation, route} = props;
+  const {rowData, rowNum, navigation, route} = props;
   let i = 0;
   let onPressBlockButton = () => {};
 
@@ -222,7 +221,6 @@ const _processRow = props => {
     const isDealerButton =
       screenName === 'ChooseDealerScreen' || screenName === 'DealerInfoScreen';
     if (isDealerButton) {
-      // item.img = dealerSelected.img.main[0];
       if (!item.title.text) {
         item.title.text = strings.Menu.main.autocenters;
       }
