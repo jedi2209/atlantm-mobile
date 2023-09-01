@@ -10,6 +10,7 @@ import * as NavigationService from '../../../navigation/NavigationService';
 import moment from 'moment';
 import styleConst from '../../style-const';
 import {strings} from '../../lang/const';
+import LogoLoader from '../LogoLoader';
 
 const mapStateToProps = ({dealer, profile}) => {
   return {
@@ -45,12 +46,7 @@ const UserAgreementScreen = ({region, SubmitButton}) => {
       </>
     );
   } else {
-    return (
-      <ActivityIndicator
-        color={styleConst.color.blue}
-        style={styleConst.spinner}
-      />
-    );
+    return <LogoLoader />;
   }
 };
 
