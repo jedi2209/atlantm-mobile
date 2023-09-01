@@ -75,7 +75,7 @@ const mapStateToProps = ({dealer, profile, nav}) => {
       ? UserData.get('CARNUMBER')
       : carLocalNumber,
     carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
-    dealerSelected: dealer.selected,
+    dealerSelectedLocal: dealer.selectedLocal,
     region: dealer.region,
   };
 };
@@ -220,7 +220,7 @@ class ServiceScreenStep1 extends Component {
           name: 'DEALER',
           type: 'dealerSelect',
           label: strings.Form.field.label.dealer,
-          value: this.props.dealerSelected,
+          value: this.props.dealerSelectedLocal,
           props: {
             goBack: false,
             showBrands: false,
@@ -259,7 +259,7 @@ class ServiceScreenStep1 extends Component {
       servicesFetch: true,
     });
     const data = await API.getServiceAvailable({
-      dealer: this.props.dealerSelected.id,
+      dealer: this.props.dealerSelectedLocal.id,
       vin: this.state.carVIN,
     });
 
@@ -333,7 +333,7 @@ class ServiceScreenStep1 extends Component {
     });
     const data = await API.getServiceInfo({
       id,
-      dealer: this.props.dealerSelected.id,
+      dealer: this.props.dealerSelectedLocal.id,
       vin: this.state.carVIN,
     });
 
@@ -388,8 +388,8 @@ class ServiceScreenStep1 extends Component {
   componentDidMount() {
     if (
       this.state.carVIN &&
-      this.props.dealerSelected &&
-      this.props.dealerSelected.id
+      this.props.dealerSelectedLocal &&
+      this.props.dealerSelectedLocal.id
     ) {
       this._getServices();
     }
@@ -420,7 +420,7 @@ class ServiceScreenStep1 extends Component {
     }
 
     let data = {
-      dealer: this.props.dealerSelected,
+      dealer: this.props.dealerSelectedLocal,
       service: service || null,
       serviceInfo: this.state.serviceInfo || null,
       orderLead: this.state.orderLead,

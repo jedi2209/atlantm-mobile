@@ -108,7 +108,7 @@ const CarListItem = ({
         ordered,
         dealer: get(car, 'dealer'),
       },
-      region: region,
+      region,
       carId: car.id.api,
       isNewCar: isNewCar,
     });
@@ -220,7 +220,7 @@ const CarListItem = ({
               year: get(car, 'year'),
               dealer: get(car, 'dealer'),
             },
-            region: region,
+            region,
             carId: car.id.api,
             testDriveCars: car.testDriveCars,
             isNewCar: true,
@@ -277,7 +277,7 @@ const CarListItem = ({
                         year: get(car, 'year'),
                         dealer: get(car, 'dealer'),
                       },
-                      region: region,
+                      region,
                       carId: car.id.api,
                       isNewCar: true,
                     });
@@ -310,7 +310,7 @@ const CarListItem = ({
                 year: get(car, 'year'),
                 dealer: get(car, 'dealer'),
               },
-              region: region,
+              region,
               carId: car.id.api,
               isNewCar: true,
             });
@@ -333,7 +333,7 @@ const CarListItem = ({
               year: get(car, 'year'),
               dealer: get(car, 'dealer'),
             },
-            region: region,
+            region,
             carId: car.id.api,
             isNewCar: false,
           });
@@ -347,7 +347,7 @@ const CarListItem = ({
               year: get(car, 'year'),
               dealer: get(car, 'dealer'),
             },
-            region: region,
+            region,
             carId: car.id.api,
             isNewCar: false,
           });
@@ -377,7 +377,7 @@ const CarListItem = ({
               year: get(car, 'year'),
               dealer: get(car, 'dealer'),
             },
-            region: region,
+            region,
             carId: car.id.api,
             isNewCar: false,
           });

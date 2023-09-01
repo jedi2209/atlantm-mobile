@@ -44,7 +44,6 @@ import {BELARUSSIA} from '../../core/const';
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
-    dealerSelected: dealer.selected,
     region: dealer.region,
   };
 };

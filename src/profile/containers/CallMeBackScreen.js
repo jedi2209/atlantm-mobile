@@ -56,7 +56,7 @@ const CallMeBackScreen = ({
   allDealers,
 }) => {
   const dealer = get(route, 'params.dealerCustom', dealerSelectedLocal);
-  const isDealerHide = get(route, 'params.dealerHide', false);
+  const isDealerHide = get(route, 'params.dealerHide', true);
 
   let listDealers = [];
   if (dealer) {

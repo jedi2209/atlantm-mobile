@@ -268,8 +268,8 @@ export default {
       main: 'Заводская комплектация',
       additional: 'Дополнительные опции',
     },
-    testDrive: 'тест-драйв',
-    wannaCar: 'хочу это авто!',
+    testDrive: 'Тест-драйв',
+    wannaCar: 'Хочу это авто!',
   },
   NewCarListScreen: {
     title: 'Новые автомобили',
