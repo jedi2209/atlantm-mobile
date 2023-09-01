@@ -20,6 +20,7 @@ import {
   APP_ACTION_RATED,
   APP_STORE_UPDATED,
   APP_SETTINGS_LOADED,
+  APP_LOADED,
   MAIN_SCREEN__SUCCESS,
   MAIN_SCREEN__FAIL,
 } from './actionTypes';
@@ -75,6 +76,17 @@ const isAppRated = (state = false, action) => {
   }
 };
 
+const isAppLoaded = (state = false, action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return false;
+    case APP_LOADED:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 const isStoreUpdated = (state = false, action) => {
   switch (action.type) {
     case REHYDRATE:
@@ -125,6 +137,7 @@ const coreReducer = combineReducers({
   pushActionSubscribeState,
   menuOpenedCount,
   isAppRated,
+  isAppLoaded,
   isStoreUpdated,
   language,
   settings,
