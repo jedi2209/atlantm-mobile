@@ -62,6 +62,8 @@ const mainScreen = 'BottomTabNavigation';
 const storeVersion = '2023-08-01';
 
 const _awaitStoreToUpdate = async props => {
+  const {actionSettingsLoaded, actionMenuOpenedCount, actionStoreUpdated} =
+    props;
   const storeData = store.getState();
 
   const currentRegion = get(
@@ -74,51 +76,17 @@ const _awaitStoreToUpdate = async props => {
   const currentVersion = DeviceInfo.getVersion();
   const {settings} = await API.fetchVersion(currentVersion || null);
   if (settings) {
-    props.actionSettingsLoaded(settings);
+    actionSettingsLoaded(settings);
   }
 
   if (currentRegion && isStoreUpdatedCurrent === storeVersion) {
-    console.info(
-      'isStoreUpdatedCurrent\tactionFetchMainScreenSettings\t\tstart',
-      moment().format('YYYY-MM-DD HH:mm:ss'),
-    );
-    // если мы уже выбрали регион и стор обновлен
-    await props.actionFetchMainScreenSettings(currentRegion || APP_REGION); // обновляем настройки главного экрана при каждом открытии прилаги
-    console.info(
-      'isStoreUpdatedCurrent\tactionFetchMainScreenSettings\t\tfinish',
-      moment().format('YYYY-MM-DD HH:mm:ss'),
-    );
     return mainScreen;
   }
 
   try {
     // если мы ещё не очищали стор
-    props.actionMenuOpenedCount(0);
-    console.info(
-      'actionStoreUpdated\t\tstart',
-      moment().format('YYYY-MM-DD HH:mm:ss'),
-    );
-    const action = await props.actionStoreUpdated(storeVersion);
-    if (action && action.type) {
-      console.info(
-        'actionStoreUpdated\t\tfinish',
-        moment().format('YYYY-MM-DD HH:mm:ss'),
-      );
-      console.info(
-        'actionFetchMainScreenSettings\t\tstart',
-        moment().format('YYYY-MM-DD HH:mm:ss'),
-      );
-      const currentRegion = get(
-        storeData,
-        'dealer.region',
-        get(props, 'region', false),
-      );
-      await props.actionFetchMainScreenSettings(currentRegion || APP_REGION); // обновляем настройки главного экрана при каждом открытии прилаги
-      console.info(
-        'actionFetchMainScreenSettings\t\tfinish',
-        moment().format('YYYY-MM-DD HH:mm:ss'),
-      );
-    }
+    actionMenuOpenedCount(0);
+    await actionStoreUpdated(storeVersion);
   } catch (error) {
     console.error('_awaitStoreToUpdate error', error);
   }

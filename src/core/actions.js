@@ -3,6 +3,7 @@ import {
   APP_PUSH_ACTION_SUBSCRIBE__SET,
   APP_MENU_OPENED_COUNTER,
   APP_ACTION_RATED,
+  APP_LOADED,
   APP_STORE_UPDATED,
   APP_SETTINGS_LOADED,
   MAIN_SCREEN__REQUEST,
@@ -36,6 +37,15 @@ export const actionAppRated = () => {
   return dispatch => {
     dispatch({
       type: APP_ACTION_RATED,
+    });
+  };
+};
+
+export const actionAppLoaded = (status = false) => {
+  return dispatch => {
+    dispatch({
+      type: APP_LOADED,
+      payload: status,
     });
   };
 };

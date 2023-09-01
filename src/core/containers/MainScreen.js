@@ -39,6 +39,7 @@ import {fetchDealers, fetchBrands} from '../../dealer/actions';
 import {
   actionMenuOpenedCount,
   actionAppRated,
+  actionAppLoaded,
   actionFetchMainScreenSettings,
 } from '../actions';
 
@@ -74,6 +75,7 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
     listDealers: dealer.listDealers,
 
     isAppRated: core.isAppRated,
+    isAppLoaded: core.isAppLoaded,
     menuOpenedCount: core.menuOpenedCount,
     mainScreenSettings: core.mainScreenSettings,
   };
@@ -84,6 +86,7 @@ const mapDispatchToProps = {
   actionAppRated,
   actionMenuOpenedCount,
   actionFetchMainScreenSettings,
+  actionAppLoaded,
   fetchDealers,
   fetchBrands,
 };
@@ -375,6 +378,7 @@ const MainScreen = props => {
     fetchBrands,
     fetchDealers,
     listDealers,
+    isAppLoaded,
   } = props;
   const [isLoading, setLoading] = useState(false);
   const colorScheme = useColorScheme() || 'light';
@@ -400,13 +404,16 @@ const MainScreen = props => {
   // }, [fetchBrands, fetchInfoList, isLoading, region]);
 
   useEffect(() => {
-    setLoading(true);
-    fetchInfoData({region, fetchInfoList});
-    fetchBrands(); // обновляем бренды при первом открытии экрана
-    props.actionFetchMainScreenSettings(region).then(() => {
-      setLoading(false);
-    });
-  }, [region]);
+    if (!isAppLoaded) {
+      setLoading(true);
+      fetchInfoData({region, fetchInfoList});
+      fetchBrands(); // обновляем бренды при первом открытии экрана
+      props.actionFetchMainScreenSettings(region).then(() => {
+        setLoading(false);
+        props.actionAppLoaded(true);
+      });
+    }
+  }, [region, isAppLoaded]);
 
   const _onRefresh = async () => {
     setLoading(true);
@@ -414,19 +421,8 @@ const MainScreen = props => {
     setLoading(false);
   };
 
-  if (isLoading) {
+  if (isLoading || !mainScreenSettings || !mainScreenSettings.length) {
     return <LogoLoader />;
-  }
-
-  if (!mainScreenSettings) {
-    return (
-      <View style={styles.spinnerContainer}>
-        <ActivityIndicator
-          color={styleConst.color.blue}
-          style={styleConst.spinner}
-        />
-      </View>
-    );
   }
 
   return (
