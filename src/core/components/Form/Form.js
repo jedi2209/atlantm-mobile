@@ -147,6 +147,9 @@ const styles = StyleSheet.create({
     borderBottomWidth: 0,
     paddingLeft: 14,
   },
+  dealerSelectReadonly: {
+    opacity: 0.8,
+  },
   select: {
     marginVertical: 0,
     height: platformStyle[Platform.OS].select.height,
@@ -1247,6 +1250,7 @@ class Form extends Component {
       }
       if (data.props?.readonly) {
         this.state[name] = value?.id;
+        fieldStyle = [styles.dealerSelectReadonly];
       }
       return (
         <DealerItemList

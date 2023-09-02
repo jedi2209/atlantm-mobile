@@ -109,7 +109,7 @@ const CallMeBackScreen = ({
     }
 
     const dataToSend = {
-      dealerID: dealer?.id,
+      dealerID: get(dataFromForm, 'DEALER', dealer?.id),
       name: get(dataFromForm, 'NAME', firstName),
       actionID,
       carID,
@@ -150,48 +150,76 @@ const CallMeBackScreen = ({
     }
   };
 
+  let dealerGroup = {};
+  if (listDealers) {
+    if (listDealers.length < 1) {
+      dealerGroup = {
+        name: strings.Form.group.dealer,
+        fields: [
+          {
+            name: 'DEALER',
+            type: 'dealerSelect',
+            label: strings.Form.group.dealer,
+            value: dealer,
+            props: {
+              required: true,
+              goBack: true,
+              isLocal: true,
+              showBrands: false,
+              readonly: isDealerHide,
+            },
+          },
+        ],
+      };
+    }
+    if (listDealers.length === 1) {
+      dealerGroup = {
+        name: strings.Form.group.dealer,
+        fields: [
+          {
+            name: 'DEALER',
+            type: 'dealerSelect',
+            label: strings.Form.group.dealer,
+            value: dealerSelectedLocal || allDealers[dealer] || dealer,
+            props: {
+              required: true,
+              goBack: true,
+              isLocal: true,
+              showBrands: false,
+              readonly: isDealerHide,
+            },
+          },
+        ],
+      };
+    }
+    if (listDealers.length > 1) {
+      dealerGroup = {
+        name: strings.Form.group.dealer,
+        fields: [
+          {
+            name: 'DEALER',
+            type: 'select',
+            label: strings.Form.field.label.dealer,
+            value: null,
+            props: {
+              items: listDealers,
+              required: true,
+              placeholder: {
+                label: strings.Form.field.placeholder.dealer,
+                value: null,
+                color: '#9EA0A4',
+              },
+            },
+          },
+        ],
+      };
+    }
+  }
+
   const FormConfig = {
     fields: {
       groups: [
-        listDealers && listDealers.length > 1
-          ? {
-              name: strings.Form.group.dealer,
-              fields: [
-                {
-                  name: 'DEALER',
-                  type: 'select',
-                  label: strings.Form.field.label.dealer,
-                  value: null,
-                  props: {
-                    items: listDealers,
-                    required: true,
-                    placeholder: {
-                      label: strings.Form.field.placeholder.dealer,
-                      value: null,
-                      color: '#9EA0A4',
-                    },
-                  },
-                },
-              ],
-            }
-          : {
-              name: strings.Form.group.dealer,
-              fields: [
-                {
-                  name: 'DEALER',
-                  type: 'dealerSelect',
-                  label: strings.Form.group.dealer,
-                  value: dealer,
-                  props: {
-                    required: true,
-                    goBack: true,
-                    isLocal: true,
-                    showBrands: false,
-                    readonly: isDealerHide,
-                  },
-                },
-              ],
-            },
+        dealerGroup,
         {
           name: strings.Form.group.contacts,
           fields: [
