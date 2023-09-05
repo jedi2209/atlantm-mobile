@@ -172,10 +172,10 @@ const DealerItemList = props => {
             style={stylesDealerItemList.name}
             ellipsizeMode="tail"
             numberOfLines={2}>
-            {placeholder
-              ? placeholder
-              : dealer && dealer.name
+            {dealer && dealer.name
               ? dealer.name
+              : placeholder
+              ? placeholder
               : strings.DealerItemList.chooseDealer}
           </Text>
           {false && dealer && dealer.city && !placeholder ? (
