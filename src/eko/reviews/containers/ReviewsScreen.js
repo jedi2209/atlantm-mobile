@@ -83,7 +83,6 @@ const ReviewsScreen = props => {
         }, 500);
       });
     }
-    return () => localDealerClear();
   }, [dealerSelectedLocal]);
 
   const _onPressItem = review => {
