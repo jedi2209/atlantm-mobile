@@ -55,6 +55,7 @@ import {strings} from '../lang/const';
 
 import {get} from 'lodash';
 import Analytics from '../../utils/amplitude-analytics';
+import {usePrevious} from '../../utils/hooks';
 import TransitionView from '../components/TransitionView';
 import style from '../components/Footer/style';
 import LogoLoader from '../components/LogoLoader';
@@ -380,8 +381,9 @@ const MainScreen = props => {
     listDealers,
     isAppLoaded,
   } = props;
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   const colorScheme = useColorScheme() || 'light';
+  const prevRegion = usePrevious(region);
 
   const _onAppRateSuccess = () => {
     !props.isAppRated && props.actionAppRated();
@@ -394,23 +396,23 @@ const MainScreen = props => {
     if (listDealers && Object.keys(listDealers).length === 0) {
       fetchDealers();
     }
+    setLoading(false);
+    return () => {
+      setLoading(true);
+    };
   }, [region, fetchInfoList, colorScheme, listDealers, fetchDealers]);
 
-  // useEffect(() => {
-  //   if (isLoading === false) {
-  //     fetchInfoData({region, fetchInfoList});
-  //     fetchBrands(); // обновляем бренды при первом открытии экрана
-  //   }
-  // }, [fetchBrands, fetchInfoList, isLoading, region]);
-
   useEffect(() => {
-    if (!isAppLoaded) {
+    if (
+      !isAppLoaded ||
+      (typeof prevRegion !== 'undefined' && prevRegion !== region)
+    ) {
       setLoading(true);
       fetchInfoData({region, fetchInfoList});
       fetchBrands(); // обновляем бренды при первом открытии экрана
       props.actionFetchMainScreenSettings(region).then(() => {
-        setLoading(false);
         props.actionAppLoaded(true);
+        setLoading(false);
       });
     }
   }, [region, isAppLoaded]);
