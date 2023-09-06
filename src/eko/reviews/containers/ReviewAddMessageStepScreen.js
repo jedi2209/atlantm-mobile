@@ -87,7 +87,7 @@ const ReviewAddMessageStepScreen = ({
     navigation.navigate('ReviewAddRatingStepScreen', {
       COMMENT_PLUS,
       COMMENT_MINUS,
-      DEALER: dealerSelectedLocal?.id || DEALER,
+      DEALER: dealerSelectedLocal || DEALER,
     });
   };
 
