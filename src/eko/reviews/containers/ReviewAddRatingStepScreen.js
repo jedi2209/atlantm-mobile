@@ -64,7 +64,7 @@ const ReviewAddRatingStepScreen = props => {
     console.info('== ReviewAddRatingStepScreen ==');
   }, []);
 
-  const _onPressButton = dataFromForm => {
+  const _onPressButton = async dataFromForm => {
     const {navigation} = props;
 
     const name = [
