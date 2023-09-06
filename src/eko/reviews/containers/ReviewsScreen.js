@@ -66,6 +66,7 @@ const ReviewsScreen = props => {
     pages,
     reviews,
     navigation,
+    route,
     dealerSelectedLocal,
     isFetchReviews,
     actionReviewVisit,
@@ -81,6 +82,12 @@ const ReviewsScreen = props => {
         setTimeout(() => {
           setLoading(false);
         }, 500);
+      });
+    } else {
+      navigation.navigate('ChooseDealerScreen', {
+        returnScreen: route.name,
+        goBack: true,
+        isLocal: true,
       });
     }
   }, [dealerSelectedLocal]);
