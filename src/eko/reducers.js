@@ -1,5 +1,5 @@
 import {combineReducers} from 'redux';
-import { REHYDRATE } from 'redux-persist/es/constants';
+import {REHYDRATE} from 'redux-persist/es/constants';
 import {
   REVIEWS__REQUEST,
   REVIEWS__SUCCESS,
@@ -75,6 +75,7 @@ function reviewsItems(state = [], action) {
     case REVIEWS_DATE_PERIOD__SELECT:
     case REVIEWS_RATING_FROM__SELECT:
     case REVIEWS_RATING_TO__SELECT:
+    case REVIEWS__FAIL:
       return [];
     case REVIEWS__SUCCESS:
       if (action.payload.type === EVENT_LOAD_MORE) {

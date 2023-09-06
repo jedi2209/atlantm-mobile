@@ -12,7 +12,7 @@ import {strings} from '../../../core/lang/const';
 const mapStateToProps = ({dealer, eko, nav}) => {
   return {
     nav,
-    dealerSelected: dealer.selectedLocal,
+    dealerSelectedLocal: dealer.selectedLocal,
     messagePlus: eko.reviews.messagePlus,
     messageMinus: eko.reviews.messageMinus,
   };
@@ -23,68 +23,71 @@ const mapDispatchToProps = {
   actionAddReviewMinusFill,
 };
 
-const ReviewAddMessageStepScreen = ({navigation, dealerSelected, Text}) => {
+const ReviewAddMessageStepScreen = ({
+  navigation,
+  dealerSelectedLocal,
+  Text,
+}) => {
   useEffect(() => {
     console.info('== ReviewAddMessageStepScreen ==');
   }, []);
 
   const FormConfig = {
-    fields: {
-      groups: [
-        {
-          name: strings.Form.field.label.dealer,
-          fields: [
-            {
-              name: 'DEALER',
-              type: 'dealerSelect',
-              label: strings.Form.field.label.dealer,
-              value: dealerSelected,
-              props: {
-                goBack: true,
-                isLocal: true,
-                showBrands: false,
-                returnScreen: navigation.state?.routeName,
-              },
+    groups: [
+      {
+        name: strings.Form.field.label.dealer,
+        fields: [
+          {
+            name: 'DEALER',
+            type: 'dealerSelect',
+            label: strings.Form.field.label.dealer,
+            value: dealerSelectedLocal,
+            props: {
+              goBack: true,
+              isLocal: true,
+              showBrands: false,
+              returnScreen: navigation.state?.routeName,
             },
-          ],
-        },
-        {
-          name: strings.ReviewAddMessageForm.label.plus,
-          fields: [
-            {
-              name: 'COMMENT_PLUS',
-              type: 'textarea',
-              label: '',
-              value: Text,
-              props: {
-                placeholder: strings.ReviewAddMessageForm.placeholder.plus,
-              },
+          },
+        ],
+      },
+      {
+        name: strings.ReviewAddMessageForm.label.plus,
+        fields: [
+          {
+            name: 'COMMENT_PLUS',
+            type: 'textarea',
+            label: '',
+            value: Text,
+            props: {
+              placeholder: strings.ReviewAddMessageForm.placeholder.plus,
             },
-          ],
-        },
-        {
-          name: strings.ReviewAddMessageForm.label.minus,
-          fields: [
-            {
-              name: 'COMMENT_MINUS',
-              type: 'textarea',
-              label: '',
-              value: Text,
-              props: {
-                placeholder: strings.ReviewAddMessageForm.placeholder.minus,
-              },
+          },
+        ],
+      },
+      {
+        name: strings.ReviewAddMessageForm.label.minus,
+        fields: [
+          {
+            name: 'COMMENT_MINUS',
+            type: 'textarea',
+            label: '',
+            value: Text,
+            props: {
+              placeholder: strings.ReviewAddMessageForm.placeholder.minus,
             },
-          ],
-        },
-      ],
-    },
+          },
+        ],
+      },
+    ],
   };
 
-  const _onPressOrder = async ({COMMENT_MINUS, COMMENT_PLUS, DEALER}) => {
+  const _onPressOrder = async props => {
+    const {COMMENT_MINUS, COMMENT_PLUS, DEALER} = props;
     navigation.navigate('ReviewAddRatingStepScreen', {
       COMMENT_PLUS,
       COMMENT_MINUS,
-      DEALER,
+      DEALER: dealerSelectedLocal?.id || DEALER,
     });
   };
 
@@ -95,7 +98,7 @@ const ReviewAddMessageStepScreen = ({navigation, dealerSelected, Text}) => {
         marginTop: 20,
       }}
       key="ReviewAddForm"
-      fields={FormConfig.fields}
+      fields={FormConfig}
       barStyle={'light-content'}
       SubmitButton={{
         text: strings.MessageForm.continue,
