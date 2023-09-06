@@ -62,6 +62,7 @@ function selectedLocal(state = {}, action) {
     case TVA__SUCCESS:
     case CAR_COST__SUCCESS:
     case CLEAR_LOCAL_DEALER:
+    case DEALERS_REGION__SELECT:
       return null;
     default:
       return state;
