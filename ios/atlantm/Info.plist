@@ -84,6 +84,7 @@
 		<string>comgooglemaps</string>
 		<string>comgooglemaps-x-callback</string>
 		<string>maps</string>
+		<string>x-apple-data-detectors</string>
 		<string>fbXXXX</string>
 		<string>fbapi</string>
 		<string>fb-messenger-share-api</string>

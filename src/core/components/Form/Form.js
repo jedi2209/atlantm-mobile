@@ -104,12 +104,12 @@ const styles = StyleSheet.create({
     paddingBottom: 1,
   },
   fieldRequiredFalse: {
-    borderRightColor: 'red',
-    borderRightWidth: 0.5,
+    borderLeftColor: 'red',
+    borderLeftWidth: 0.5,
   },
   fieldRequiredTrue: {
-    borderRightColor: 'green',
-    borderRightWidth: 0.5,
+    borderLeftColor: 'green',
+    borderLeftWidth: 0.5,
   },
   labelRequiredFalse: {
     color: 'red',
@@ -1244,13 +1244,20 @@ class Form extends Component {
     },
     dealerSelect: (data, num, totalFields, groupNum) => {
       const {name, value} = data;
+      this.state[name] = value?.id;
       let fieldStyle = [];
       if (totalFields?.length > 1) {
         fieldStyle = [styles.dealerSelect];
       }
       if (data.props?.readonly) {
-        this.state[name] = value?.id;
         fieldStyle = [styles.dealerSelectReadonly];
+      }
+      if (data.props?.required) {
+        if (value) {
+          fieldStyle = [styles.fieldRequiredTrue];
+        } else {
+          fieldStyle = [styles.fieldRequiredFalse];
+        }
       }
       return (
         <DealerItemList
