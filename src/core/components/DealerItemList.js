@@ -108,8 +108,16 @@ const MainWrapper = props => {
 };
 
 const DealerItemList = props => {
-  const {city, dealer, style, wrapperProps, placeholder, showBrands, readonly} =
-    props;
+  const {
+    city,
+    dealer,
+    style,
+    wrapperProps,
+    placeholder,
+    showBrands,
+    readonly,
+    required,
+  } = props;
   const navigation = useNavigation();
 
   const deviceWidth = Dimensions.get('window').width;
@@ -136,6 +144,15 @@ const DealerItemList = props => {
   if (!showBrands) {
     nameWidth = 'auto';
     logoWidth = '0';
+  }
+
+  let dealerPlaceholder = get(dealer, 'name', placeholder);
+  if (!dealerPlaceholder) {
+    dealerPlaceholder = strings.DealerItemList.chooseDealer;
+  }
+
+  if (required && !get(dealer, 'name', false)) {
+    dealerPlaceholder = dealerPlaceholder + '*';
   }
 
   return (
@@ -172,11 +189,7 @@ const DealerItemList = props => {
             style={stylesDealerItemList.name}
             ellipsizeMode="tail"
             numberOfLines={2}>
-            {dealer && dealer.name
-              ? dealer.name
-              : placeholder
-              ? placeholder
-              : strings.DealerItemList.chooseDealer}
+            {dealerPlaceholder}
           </Text>
           {false && dealer && dealer.city && !placeholder ? (
             <Text
