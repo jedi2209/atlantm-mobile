@@ -128,8 +128,8 @@ const WebViewAutoHeight = ({
     minHeight = 400;
   }
   const [contentHeight, setContentHeight] = useState(minHeight);
-  const [isLoading, setLoading] = useState(false);
-  const [sourceModified, setSource] = useState(false);
+  const [isLoading, setLoading] = useState(true);
+  const [sourceModified, setSource] = useState(null);
   let webviewRef = useRef(null);
 
   const _handleNavigationChange = navState => {
@@ -161,25 +161,20 @@ const WebViewAutoHeight = ({
   };
 
   useEffect(() => {
-    setLoading(sourceModified ? false : true);
-    return () => {
-      setLoading(false);
-    };
-  }, [sourceModified]);
-
-  useEffect(() => {
     if (source?.html) {
       setSource({
         html: codeInject(source.html),
       });
-    }
-    if (source?.uri) {
+      setLoading(false);
+    } else if (source?.uri) {
       if (fetchURL) {
         _fetchURL(source?.uri).then(res => {
           setSource({html: res});
+          setLoading(false);
         });
       } else {
         setSource({uri: source?.uri});
+        setLoading(false);
       }
     }
   }, [fetchURL, source.html, source?.uri]);
@@ -223,7 +218,7 @@ const WebViewAutoHeight = ({
 };
 
 WebViewAutoHeight.defaultProps = {
-  minHeight: 200,
+  minHeight: 400,
   fetchURL: false,
 };
 
