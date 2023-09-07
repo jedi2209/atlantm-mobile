@@ -1,10 +1,10 @@
-import React, {PureComponent, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import Form from '../../../core/components/Form/Form';
-import DealerCard from '../../../core/components/DealerCard';
 
 // redux
 import {connect} from 'react-redux';
 import {actionAddReviewPlusFill, actionAddReviewMinusFill} from '../../actions';
+import {localDealerClear} from '../../../dealer/actions';
 
 // helpers
 import {strings} from '../../../core/lang/const';
@@ -21,16 +21,21 @@ const mapStateToProps = ({dealer, eko, nav}) => {
 const mapDispatchToProps = {
   actionAddReviewPlusFill,
   actionAddReviewMinusFill,
+  localDealerClear,
 };
 
 const ReviewAddMessageStepScreen = ({
   navigation,
   dealerSelectedLocal,
   Text,
+  localDealerClear,
 }) => {
   useEffect(() => {
     console.info('== ReviewAddMessageStepScreen ==');
-  }, []);
+    return () => {
+      localDealerClear();
+    };
+  }, [localDealerClear]);
 
   const FormConfig = {
     groups: [

@@ -651,126 +651,134 @@ export const Base = ({navigation, route}) => {
   );
 };
 
-const EKO = ({navigation, route}) => (
-  <StackEKO.Navigator initialRouteName="ReviewsScreenMain">
-    <StackEKO.Screen
-      name="ReviewsScreenMain"
-      component={ReviewsScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.ReviewsScreen.title,
-        headerRight: () => (
-          <Pressable
-            onPress={() => navigation.navigate('ReviewAddMessageStepScreen')}>
-            <Icon
-              size={7}
-              style={styles.sortHeaderButton}
-              as={MaterialCommunityIcons}
-              name="pencil-plus"
-              color={styleConst.color.blue}
-              _dark={{
-                color: styleConst.color.white,
-              }}
-            />
-          </Pressable>
-        ),
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <StackEKO.Screen
-      name="ReviewScreen"
-      component={ReviewScreen}
-      options={ClassicHeaderBlue(
-        strings.ReviewScreen.title,
-        navigation,
-        route,
-        {
+const EKO = ({navigation, route}) => {
+  return (
+    <StackEKO.Navigator initialRouteName="ReviewsScreenMain">
+      <StackEKO.Screen
+        name="ReviewsScreenMain"
+        component={ReviewsScreen}
+        options={BigCloseButton(
+          navigation,
+          {...route, params: {...route.params, dealerClear: true}},
+          {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.ReviewsScreen.title,
+            headerRight: () => (
+              <Pressable
+                onPress={() =>
+                  navigation.navigate('ReviewAddMessageStepScreen')
+                }>
+                <Icon
+                  size={7}
+                  style={styles.sortHeaderButton}
+                  as={MaterialCommunityIcons}
+                  name="pencil-plus"
+                  color={styleConst.color.blue}
+                  _dark={{
+                    color: styleConst.color.white,
+                  }}
+                />
+              </Pressable>
+            ),
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          },
+        )}
+      />
+      <StackEKO.Screen
+        name="ReviewScreen"
+        component={ReviewScreen}
+        options={ClassicHeaderBlue(
+          strings.ReviewScreen.title,
+          navigation,
+          route,
+          {
+            headerLeft: () => {
+              return ArrowBack(navigation, route, {
+                icon: 'close-outline',
+                iconSize: 12,
+                IconStyle: {
+                  color: styleConst.color.white,
+                },
+              });
+            },
+            presentation: 'modal',
+          },
+        )}
+      />
+      <StackEKO.Screen
+        name="ReviewsFilterDateScreen"
+        component={ReviewsFilterDateScreen}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ScaleFromCenterAndroid,
+          headerTitle: strings.ReviewsFilterDateScreen.title,
+          headerRight: () => <></>,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
+      />
+      <StackEKO.Screen
+        name="ReviewsFilterRatingScreen"
+        component={ReviewsFilterRatingScreen}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ScaleFromCenterAndroid,
+          headerTitle: strings.ReviewsFilterRatingScreen.title,
+          headerRight: () => <></>,
+          headerTitleStyle: [
+            stylesHeader.transparentHeaderTitle,
+            {color: '#222B45'},
+          ],
+        })}
+      />
+      <StackEKOAddReview.Screen
+        name="ReviewAddMessageStepScreen"
+        component={ReviewAddMessageStepScreen}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ModalTransition,
+          presentation: 'modal',
+          headerTitle: strings.ReviewAddMessageStepScreen.title + '\t[1 / 2]',
+          headerRight: () => <></>,
+          headerTitleStyle: stylesHeader.blueHeaderTitle,
+          headerStyle: [stylesHeader.common, stylesHeader.blueHeader],
           headerLeft: () => {
             return ArrowBack(navigation, route, {
               icon: 'close-outline',
-              iconSize: 12,
+              iconSize: 10,
               IconStyle: {
                 color: styleConst.color.white,
               },
             });
           },
+        })}
+      />
+      <StackEKOAddReview.Screen
+        name="ReviewAddRatingStepScreen"
+        component={ReviewAddRatingStepScreen}
+        options={BigCloseButton(navigation, route, {
+          ...TransitionPresets.ModalTransition,
           presentation: 'modal',
-        },
-      )}
-    />
-    <StackEKO.Screen
-      name="ReviewsFilterDateScreen"
-      component={ReviewsFilterDateScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.ReviewsFilterDateScreen.title,
-        headerRight: () => <></>,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <StackEKO.Screen
-      name="ReviewsFilterRatingScreen"
-      component={ReviewsFilterRatingScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ScaleFromCenterAndroid,
-        headerTitle: strings.ReviewsFilterRatingScreen.title,
-        headerRight: () => <></>,
-        headerTitleStyle: [
-          stylesHeader.transparentHeaderTitle,
-          {color: '#222B45'},
-        ],
-      })}
-    />
-    <StackEKOAddReview.Screen
-      name="ReviewAddMessageStepScreen"
-      component={ReviewAddMessageStepScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ModalTransition,
-        presentation: 'modal',
-        headerTitle: strings.ReviewAddMessageStepScreen.title + '\t[1 / 2]',
-        headerRight: () => <></>,
-        headerTitleStyle: stylesHeader.blueHeaderTitle,
-        headerStyle: [stylesHeader.common, stylesHeader.blueHeader],
-        headerLeft: () => {
-          return ArrowBack(navigation, route, {
-            icon: 'close-outline',
-            iconSize: 10,
-            IconStyle: {
-              color: styleConst.color.white,
-            },
-          });
-        },
-      })}
-    />
-    <StackEKOAddReview.Screen
-      name="ReviewAddRatingStepScreen"
-      component={ReviewAddRatingStepScreen}
-      options={BigCloseButton(navigation, route, {
-        ...TransitionPresets.ModalTransition,
-        presentation: 'modal',
-        headerTitle: strings.ReviewAddMessageStepScreen.title + '\t[2 / 2]',
-        headerRight: () => <></>,
-        headerTitleStyle: stylesHeader.blueHeaderTitle,
-        headerStyle: [stylesHeader.common, stylesHeader.blueHeader],
-        headerLeft: () => {
-          return ArrowBack(navigation, route, {
-            icon: 'close-outline',
-            iconSize: 10,
-            IconStyle: {
-              color: styleConst.color.white,
-            },
-          });
-        },
-      })}
-    />
-  </StackEKO.Navigator>
-);
+          headerTitle: strings.ReviewAddMessageStepScreen.title + '\t[2 / 2]',
+          headerRight: () => <></>,
+          headerTitleStyle: stylesHeader.blueHeaderTitle,
+          headerStyle: [stylesHeader.common, stylesHeader.blueHeader],
+          headerLeft: () => {
+            return ArrowBack(navigation, route, {
+              icon: 'close-outline',
+              iconSize: 10,
+              IconStyle: {
+                color: styleConst.color.white,
+              },
+            });
+          },
+        })}
+      />
+    </StackEKO.Navigator>
+  );
+};
 
 const CarsStock = ({navigation, route}) => {
   const {isOpen, onOpen, onClose} = useDisclose();

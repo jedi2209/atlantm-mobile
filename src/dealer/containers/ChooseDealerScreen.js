@@ -173,6 +173,9 @@ const _onPressDealerItem = async ({
   returnState,
 }) => {
   let action = null;
+  if (!returnState) {
+    returnState = {};
+  }
   if (!isLocal) {
     action = await selectDealer({
       dealerBaseData: dealerSelectedItem,
@@ -202,7 +205,8 @@ const _onPressDealerItem = async ({
       if (goBack) {
         navigation.goBack();
       }
-      return navigation.navigate(returnScreen, returnState || {});
+      returnState.prevScreen = 'ChooseDealerScreen';
+      return navigation.navigate(returnScreen, returnState);
     } else {
       if (goBack) {
         return navigation.goBack();
