@@ -8,6 +8,7 @@ const ArrowBack = (navigation, route, AdditionalProps) => {
   return (
     <HeaderIconBack
       returnScreen={route?.params?.returnScreen}
+      dealerClear={route?.params?.dealerClear}
       {...AdditionalProps}
     />
   );

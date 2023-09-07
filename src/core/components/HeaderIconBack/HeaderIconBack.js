@@ -1,16 +1,18 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {View, Keyboard, StyleSheet, TouchableOpacity} from 'react-native';
+import {connect} from 'react-redux';
 
 // components
 import * as NavigationService from '../../../navigation/NavigationService';
 import {Icon} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
 import PropTypes from 'prop-types';
 import styleConst from '../../style-const';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {localDealerClear} from '../../../dealer/actions';
 
 const containerSize = 40;
 const styles = StyleSheet.create({
@@ -32,11 +34,16 @@ const styles = StyleSheet.create({
   },
 });
 
+const mapDispatchToProps = {
+  localDealerClear,
+};
+
 const MENU_SCREEN_NAME = 'BottomTabNavigation';
 
 const HeaderBackButton = props => {
   const onPressBack = () => {
-    const {returnScreen, onPressBackCallBack} = props;
+    const {returnScreen, onPressBackCallBack, dealerClear, localDealerClear} =
+      props;
 
     if (onPressBackCallBack && typeof onPressBackCallBack === 'function') {
       onPressBackCallBack();
@@ -50,6 +57,12 @@ const HeaderBackButton = props => {
     returnScreen
       ? NavigationService.navigate(returnScreen)
       : NavigationService.goBack();
+
+    if (dealerClear) {
+      setTimeout(() => {
+        localDealerClear();
+      }, 500);
+    }
   };
 
   const _onPressBackHome = () => {
@@ -110,4 +123,4 @@ HeaderBackButton.defaultProps = {
   theme: 'blue',
 };
 
-export default HeaderBackButton;
+export default connect(null, mapDispatchToProps)(HeaderBackButton);

@@ -20,6 +20,7 @@ import ReviewsFilter from '../components/ReviewsFilter';
 import DealerItemList from '../../../core/components/DealerItemList';
 
 // helpers
+import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
 import {substractYears} from '../../../utils/date';
 import {strings} from '../../../core/lang/const';
@@ -83,6 +84,12 @@ const ReviewsScreen = props => {
           setLoading(false);
         }, 500);
       });
+      // console.log('params.prevScreen', get(route, 'params.prevScreen', null));
+      // return () => {
+      //   if (get(route, 'params.prevScreen', null) !== 'ChooseDealerScreen') {
+      //     localDealerClear();
+      //   }
+      // };
     } else {
       navigation.navigate('ChooseDealerScreen', {
         returnScreen: route.name,
@@ -152,6 +159,7 @@ const ReviewsScreen = props => {
         dealer={dealerSelectedLocal}
         goBack={true}
         isLocal={true}
+        returnScreen={route.name}
         style={{marginHorizontal: 8}}
         showBrands={false}
         placeholder={strings.ChooseDealerScreen.title}

@@ -148,7 +148,7 @@ const OrderPartsScreen = props => {
     return () => {
       localDealerClear();
     };
-  }, []);
+  }, [localDealerClear, props.route]);
 
   useEffect(() => {
     setHaveCar(Boolean(props.cars.length > 0));
