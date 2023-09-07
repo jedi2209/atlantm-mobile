@@ -193,10 +193,18 @@ export default {
     if (!region && !dealerID) {
       return false;
     }
-    return this.request(
-      `/info/bonus/get/?region=${region}&dealer=${dealerID}`,
-      baseRequestParams,
-    );
+    const url =
+      '/info/bonus/get/?' +
+      new URLSearchParams(
+        _.omitBy(
+          {
+            region,
+            dealer: dealerID,
+          },
+          _.isNil,
+        ),
+      );
+    return this.request(url, baseRequestParams);
   },
 
   fetchDiscounts({token, userid}) {
@@ -1094,6 +1102,9 @@ export default {
         body = new URLSearchParams(body).toString();
       }
     }
+    if (__DEV__) {
+      console.info('apiGetData', requestParams?.method, url);
+    }
     if (method === 'delete' || method === 'patch') {
       const res = await fetch(url, {
         method: method,
@@ -1120,9 +1131,15 @@ export default {
           switch (res.info().respType) {
             case 'json':
               answer = res.json();
+              if (__DEV__) {
+                console.info('apiGetData JSON result', answer);
+              }
               break;
             case 'text':
               answer = res?.data;
+              if (__DEV__) {
+                console.info('apiGetData JSON text', answer);
+              }
               break;
             default:
               if (res?.data) {
