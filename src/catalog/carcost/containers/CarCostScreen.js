@@ -34,6 +34,7 @@ import {get, orderBy, valuesIn} from 'lodash';
 import {ERROR_NETWORK} from '../../../core/const';
 
 import {strings} from '../../../core/lang/const';
+import { RotationGestureHandler } from 'react-native-gesture-handler';
 
 const mapStateToProps = ({dealer, profile, catalog}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
@@ -156,7 +157,7 @@ const CarCostScreen = ({
     return () => {
       localDealerClear();
     };
-  }, []);
+  }, [localDealerClear]);
 
   // useEffect(() => {
   //   setDealerSelectedLocal(dealerSelectedLocal);
@@ -180,7 +181,9 @@ const CarCostScreen = ({
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: strings.Form.field.label.dealer,
-                value: dealerSelectedLocal,
+                value: dealerFromNavigation
+                  ? dealerFromNavigation
+                  : dealerSelectedLocal,
                 props: {
                   goBack: true,
                   isLocal: true,
@@ -315,7 +318,7 @@ const CarCostScreen = ({
       return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
     }
 
-    let dealerId = get(dealerFromNavigation, 'id', dealerSelectedLocal.id);
+    let dealerId = get(dealerFromNavigation, 'id', dealerSelectedLocal?.id);
 
     if (dealerSelectedLocalState) {
       dealerId = dealerSelectedLocalState.id;
