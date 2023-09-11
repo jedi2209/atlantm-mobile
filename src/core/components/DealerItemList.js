@@ -52,6 +52,7 @@ const _onPressDealer = props => {
     returnState,
     navigation,
     readonly,
+    dealerFilter,
   } = props;
 
   if (readonly) {
@@ -64,6 +65,7 @@ const _onPressDealer = props => {
     goBack,
     isLocal,
     listAll,
+    dealerFilter,
   });
 };
 

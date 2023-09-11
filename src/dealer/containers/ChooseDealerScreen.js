@@ -233,7 +233,6 @@ const _EmptyComponent = () => <LogoLoader />;
 const makeLists = props => {
   const {
     settings,
-    listAll,
     regions,
     listBelarussia,
     listRussia,
@@ -241,6 +240,7 @@ const makeLists = props => {
     itemLayout,
     isRefreshing,
     setRefreshing,
+    dealerFilter,
   } = props;
 
   let customListBYN = [];
@@ -249,6 +249,19 @@ const makeLists = props => {
   let routesHead = [];
   let TabBY, TabRU, TabUA;
   const countrySettings = get(settings, 'country', []);
+
+  let listAll = props.listAll;
+
+  // console.log('dealerFilter', dealerFilter);
+
+  // if (dealerFilter) {
+  //   listAll = [];
+  //   listAll.push({
+  //     label: el.name,
+  //     value: el.id,
+  //     key: el.id,
+  //   });
+  // }
 
   if (listAll && listAll.length) {
     // выводим кастомные автоцентры
@@ -477,6 +490,7 @@ const ChooseDealerScreen = props => {
   const returnState = get(route, 'params.returnState', null);
   const listAll = get(route, 'params.listAll', null);
   const regions = get(route, 'params.regions', [region]);
+  const dealerFilter = get(route, 'params.dealerFilter', null);
 
   const [tabsData, setTabsData] = useState(null);
   const [renderSceneData, setRenderScene] = useState({});
@@ -501,6 +515,7 @@ const ChooseDealerScreen = props => {
               isLocal,
               returnScreen,
               returnState,
+              dealerFilter,
             });
 
             setTabsData(tabsDataLocal);
@@ -546,6 +561,7 @@ const ChooseDealerScreen = props => {
         isLocal,
         returnScreen,
         returnState,
+        dealerFilter,
       });
 
       setTabsData(tabsDataLocal);
