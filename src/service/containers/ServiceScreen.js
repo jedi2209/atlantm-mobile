@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {get, orderBy} from 'lodash';
 import {
@@ -51,7 +51,6 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
   return {
     cars,
     nav,
-    dealerSelected: dealer.selected,
     dealerSelectedLocal: dealer.selectedLocal,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
@@ -91,67 +90,55 @@ const styles = StyleSheet.create({
   },
 });
 
-class ServiceScreen extends Component {
-  static propTypes = {
-    dealerSelected: PropTypes.object,
-    localUserDataUpdate: PropTypes.func,
-    isOrderServiceRequest: PropTypes.bool,
-  };
+const ServiceScreen = props => {
+  const {route, cars, dealerSelectedLocal} = props;
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: false,
-      success: false,
-      isHaveCar: Boolean(props.cars.length > 0),
-    };
+  const [carSelected, selectCar] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+  const [isSuccess, setSuccess] = useState(false);
+  const isHaveCar = Boolean(props.cars.length > 0);
 
-    this.myCars = [];
-    this.props.cars.map(item => {
-      if (!item.hidden) {
-        this.myCars.push(item);
-      }
+  let myCars = [];
+  cars.map(item => {
+    if (!item.hidden) {
+      myCars.push(item);
+    }
+  });
+  if (myCars.length === 1) {
+    selectCar({
+      carBrand: myCars[0]?.brand,
+      carModel: myCars[0]?.model,
+      carName: [myCars[0]?.brand, myCars[0]?.model].join(' '),
+      carVIN: myCars[0]?.vin,
     });
-
-    if (this.myCars.length === 1) {
-      this.state.carBrand = this.myCars[0]?.brand;
-      this.state.carModel = this.myCars[0]?.model;
-      this.state.carName = [this.myCars[0]?.brand, this.myCars[0]?.model].join(
-        ' ',
-      );
-      this.state.carVIN = this.myCars[0]?.vin;
-    }
-
-    const carFromNavigation = get(this.props.route, 'params.car');
-    if (carFromNavigation && get(carFromNavigation, 'vin')) {
-      this.state.carBrand = get(carFromNavigation, 'brand');
-      this.state.carModel = get(carFromNavigation, 'model');
-      this.state.carName = [
-        get(carFromNavigation, 'brand'),
-        get(carFromNavigation, 'model'),
-      ].join(' ');
-      this.state.carVIN = carFromNavigation.vin;
-    }
   }
 
-  _selectCar = item => {
-    this.setState({
-      carBrand: item.brand,
-      carModel: item.model,
-      carName: [item.brand, item.model].join(' '),
-      carVIN: item.vin,
-    });
-  };
+  useEffect(() => {
+    const carFromNavigation = get(route, 'params.car');
+    if (carFromNavigation && get(carFromNavigation, 'vin')) {
+      selectCar({
+        carBrand: get(carFromNavigation, 'brand'),
+        carModel: get(carFromNavigation, 'model'),
+        carName: [
+          get(carFromNavigation, 'brand'),
+          get(carFromNavigation, 'model'),
+        ].join(' '),
+        carVIN: carFromNavigation.vin,
+      });
+    }
+  }, [route]);
 
-  onPressOrder = async dataFromForm => {
-    if (!dataFromForm.CARBRAND && this.state.carBrand) {
-      dataFromForm.CARBRAND = this.state.carBrand;
+  const _onPressOrder = async dataFromForm => {
+    const {navigation, route, localUserDataUpdate} = props;
+
+    if (!dataFromForm.CARBRAND && carSelected.carBrand) {
+      dataFromForm.CARBRAND = carSelected.carBrand;
     }
-    if (!dataFromForm.CARMODEL && this.state.carModel) {
-      dataFromForm.CARMODEL = this.state.carModel;
+    if (!dataFromForm.CARMODEL && carSelected.carModel) {
+      dataFromForm.CARMODEL = carSelected.carModel;
     }
-    if (!dataFromForm.CAR && this.state.carName) {
-      dataFromForm.CAR = this.state.carName;
+    if (!dataFromForm.CAR && carSelected.carName) {
+      dataFromForm.CAR = carSelected.carName;
     }
 
     const isInternetExist = await isInternet();
@@ -160,8 +147,6 @@ class ServiceScreen extends Component {
       setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
       return;
     }
-
-    const {navigation, route, localUserDataUpdate} = this.props;
 
     const name = [
       dataFromForm.NAME,
@@ -191,9 +176,9 @@ class ServiceScreen extends Component {
       actionID,
     };
     try {
-      this.setState({loading: true});
+      setLoading(true);
 
-      const action = await this.props.orderService(dataToSend);
+      const action = await props.orderService(dataToSend);
 
       if (action && action.type) {
         switch (action.type) {
@@ -222,7 +207,8 @@ class ServiceScreen extends Component {
                 },
               ],
             );
-            this.setState({success: true, loading: false});
+            setLoading(false);
+            setSuccess(true);
             break;
           case SERVICE_ORDER__FAIL:
             Alert.alert(
@@ -235,238 +221,254 @@ class ServiceScreen extends Component {
     } catch (error) {}
   };
 
-  render() {
-    this.FormConfig = {
-      fields: {
-        groups: [
+  const FormConfig = {
+    groups: [
+      {
+        name: strings.Form.group.dealer,
+        fields: [
           {
-            name: strings.Form.group.dealer,
-            fields: [
-              {
-                name: 'DEALER',
-                type: 'dealerSelect',
-                label: strings.Form.field.label.dealer,
-                value: this.props.dealerSelected,
-                props: {
-                  goBack: false,
-                  showBrands: false,
-                },
+            name: 'DEALER',
+            type: 'dealerSelect',
+            label: strings.Form.field.label.dealer,
+            value: dealerSelectedLocal,
+            props: {
+              required: true,
+              goBack: true,
+              showBrands: false,
+              isLocal: true,
+              dealerFilter: {
+                type: 'ST',
               },
-              {
-                name: 'DATE',
-                type: 'date',
-                label: strings.Form.field.label.date,
-                value: null,
-                props: {
-                  placeholder:
-                    strings.Form.field.placeholder.date +
-                    dayMonthYear(addDays(2)),
-                  required: true,
-                  minimumDate: new Date(addDays(2)),
-                  maximumDate: new Date(addDays(62)),
-                },
-              },
-            ],
+            },
           },
           {
-            name: strings.Form.group.car,
-            fields: this.state.isHaveCar
-              ? [
-                  {
-                    name: 'CARNAME',
-                    type: 'component',
-                    label: strings.Form.field.label.car2,
-                    value:
-                      this.myCars && this.myCars.length ? (
-                        <ScrollView
-                          showsHorizontalScrollIndicator={false}
-                          horizontal
-                          style={styles.carContainer}
-                          contentContainerStyle={styles.carContainerContent}>
-                          {(this.myCars || []).map(item => {
-                            return (
-                              <TouchableWithoutFeedback
-                                activeOpacity={0.7}
-                                key={item.vin}
-                                onPress={() => {
-                                  this._selectCar(item);
-                                }}>
-                                <View>
-                                  <CarCard
-                                    key={item.vin}
-                                    data={item}
-                                    type="check"
-                                    checked={this.state.carVIN === item.vin}
-                                    onPress={() => {
-                                      this._selectCar(item);
-                                    }}
-                                  />
-                                </View>
-                              </TouchableWithoutFeedback>
-                            );
-                          })}
-                        </ScrollView>
-                      ) : (
-                        <View
-                          style={[
-                            styles.scrollViewInner,
-                            {
-                              flex: 1,
-                              paddingLeft: 24,
-                              paddingRight: 5,
-                              marginVertical: 29.5,
-                              textAlign: 'center',
-                              alignContent: 'center',
-                              width: '100%',
-                              alignItems: 'center',
-                            },
-                          ]}
-                          useNativeDriver>
-                          <Icon
-                            as={MaterialCommunityIcons}
-                            name="car-off"
-                            fontSize={20}
-                          />
-                          <Text
-                            style={{
-                              marginTop: 5,
-                              marginLeft: 10,
-                              lineHeight: 20,
-                            }}>
-                            {strings.UserCars.empty.text + '\r\n'}
-                          </Text>
-                          <Button
-                            variant="outline"
-                            rounded={'lg'}
-                            onPress={() => {
-                              this.props.navigation.navigate('About', {
-                                screen: 'LoginScreen',
-                                activePanel: 'hidden',
-                              });
-                            }}>
-                            <Text style={{padding: 5}}>
-                              {strings.UserCars.archiveCheck}
-                            </Text>
-                          </Button>
-                        </View>
-                      ),
-                  },
-                ]
-              : [
-                  {
-                    name: 'CARBRAND',
-                    type: 'input',
-                    label: strings.Form.field.label.carBrand,
-                    value: this.props.carBrand,
-                    props: {
-                      required: true,
-                      placeholder: null,
-                    },
-                  },
-                  {
-                    name: 'CARMODEL',
-                    type: 'input',
-                    label: strings.Form.field.label.carModel,
-                    value: this.props.carModel,
-                    props: {
-                      required: true,
-                      placeholder: null,
-                    },
-                  },
-                  {
-                    name: 'CARVIN',
-                    type: 'input',
-                    label: strings.Form.field.label.carVIN,
-                    value: this.props.carVIN,
-                    props: {
-                      placeholder: null,
-                      autoCapitalize: 'characters',
-                      onSubmitEditing: () => {},
-                      returnKeyType: 'done',
-                      blurOnSubmit: true,
-                    },
-                  },
-                ],
-          },
-          {
-            name: strings.Form.group.contacts,
-            fields: [
-              {
-                name: 'NAME',
-                type: 'input',
-                label: strings.Form.field.label.name,
-                value: this.props.firstName,
-                props: {
-                  required: true,
-                  textContentType: 'name',
-                },
-              },
-              {
-                name: 'SECOND_NAME',
-                type: 'input',
-                label: strings.Form.field.label.secondName,
-                value: this.props.secondName,
-                props: {
-                  textContentType: 'middleName',
-                },
-              },
-              {
-                name: 'LAST_NAME',
-                type: 'input',
-                label: strings.Form.field.label.lastName,
-                value: this.props.lastName,
-                props: {
-                  textContentType: 'familyName',
-                },
-              },
-              {
-                name: 'PHONE',
-                type: 'phone',
-                label: strings.Form.field.label.phone,
-                value: this.props.phone,
-                props: {
-                  required: true,
-                },
-              },
-              {
-                name: 'EMAIL',
-                type: 'email',
-                label: strings.Form.field.label.email,
-                value: this.props.email,
-              },
-            ],
-          },
-          {
-            name: strings.Form.group.additional,
-            fields: [
-              {
-                name: 'COMMENT',
-                type: 'textarea',
-                label: strings.Form.field.label.comment,
-                value: this.props.Text,
-                props: {
-                  placeholder: strings.Form.field.placeholder.comment,
-                },
-              },
-            ],
+            name: 'DATE',
+            type: 'date',
+            label: strings.Form.field.label.date,
+            value: null,
+            props: {
+              placeholder:
+                strings.Form.field.placeholder.date + dayMonthYear(addDays(2)),
+              required: true,
+              minimumDate: new Date(addDays(2)),
+              maximumDate: new Date(addDays(62)),
+            },
           },
         ],
       },
-    };
-    return (
-      <Form
-        contentContainerStyle={{
-          paddingHorizontal: 14,
-          marginTop: 20,
-        }}
-        key="ServiceForm"
-        fields={this.FormConfig.fields}
-        barStyle={'light-content'}
-        SubmitButton={{text: strings.Form.button.send}}
-        onSubmit={this.onPressOrder}
-      />
-    );
-  }
-}
+      {
+        name: strings.Form.group.car,
+        fields: this.state.isHaveCar
+          ? [
+              {
+                name: 'CARNAME',
+                type: 'component',
+                label: strings.Form.field.label.car2,
+                value:
+                  this.myCars && this.myCars.length ? (
+                    <ScrollView
+                      showsHorizontalScrollIndicator={false}
+                      horizontal
+                      style={styles.carContainer}
+                      contentContainerStyle={styles.carContainerContent}>
+                      {(this.myCars || []).map(item => {
+                        return (
+                          <TouchableWithoutFeedback
+                            activeOpacity={0.7}
+                            key={item.vin}
+                            onPress={() => {
+                              selectCar({
+                                carBrand: item.brand,
+                                carModel: item.model,
+                                carName: [item.brand, item.model].join(' '),
+                                carVIN: item.vin,
+                              });
+                            }}>
+                            <View>
+                              <CarCard
+                                key={item.vin}
+                                data={item}
+                                type="check"
+                                checked={this.state.carVIN === item.vin}
+                                onPress={() => {
+                                  selectCar({
+                                    carBrand: item.brand,
+                                    carModel: item.model,
+                                    carName: [item.brand, item.model].join(' '),
+                                    carVIN: item.vin,
+                                  });
+                                }}
+                              />
+                            </View>
+                          </TouchableWithoutFeedback>
+                        );
+                      })}
+                    </ScrollView>
+                  ) : (
+                    <View
+                      style={[
+                        styles.scrollViewInner,
+                        {
+                          flex: 1,
+                          paddingLeft: 24,
+                          paddingRight: 5,
+                          marginVertical: 29.5,
+                          textAlign: 'center',
+                          alignContent: 'center',
+                          width: '100%',
+                          alignItems: 'center',
+                        },
+                      ]}
+                      useNativeDriver>
+                      <Icon
+                        as={MaterialCommunityIcons}
+                        name="car-off"
+                        fontSize={20}
+                      />
+                      <Text
+                        style={{
+                          marginTop: 5,
+                          marginLeft: 10,
+                          lineHeight: 20,
+                        }}>
+                        {strings.UserCars.empty.text + '\r\n'}
+                      </Text>
+                      <Button
+                        variant="outline"
+                        rounded={'lg'}
+                        onPress={() => {
+                          this.props.navigation.navigate('About', {
+                            screen: 'LoginScreen',
+                            activePanel: 'hidden',
+                          });
+                        }}>
+                        <Text style={{padding: 5}}>
+                          {strings.UserCars.archiveCheck}
+                        </Text>
+                      </Button>
+                    </View>
+                  ),
+              },
+            ]
+          : [
+              {
+                name: 'CARBRAND',
+                type: 'input',
+                label: strings.Form.field.label.carBrand,
+                value: this.props.carBrand,
+                props: {
+                  required: true,
+                  placeholder: null,
+                },
+              },
+              {
+                name: 'CARMODEL',
+                type: 'input',
+                label: strings.Form.field.label.carModel,
+                value: this.props.carModel,
+                props: {
+                  required: true,
+                  placeholder: null,
+                },
+              },
+              {
+                name: 'CARVIN',
+                type: 'input',
+                label: strings.Form.field.label.carVIN,
+                value: this.props.carVIN,
+                props: {
+                  placeholder: null,
+                  autoCapitalize: 'characters',
+                  onSubmitEditing: () => {},
+                  returnKeyType: 'done',
+                  blurOnSubmit: true,
+                },
+              },
+            ],
+      },
+      {
+        name: strings.Form.group.contacts,
+        fields: [
+          {
+            name: 'NAME',
+            type: 'input',
+            label: strings.Form.field.label.name,
+            value: this.props.firstName,
+            props: {
+              required: true,
+              textContentType: 'name',
+            },
+          },
+          {
+            name: 'SECOND_NAME',
+            type: 'input',
+            label: strings.Form.field.label.secondName,
+            value: this.props.secondName,
+            props: {
+              textContentType: 'middleName',
+            },
+          },
+          {
+            name: 'LAST_NAME',
+            type: 'input',
+            label: strings.Form.field.label.lastName,
+            value: this.props.lastName,
+            props: {
+              textContentType: 'familyName',
+            },
+          },
+          {
+            name: 'PHONE',
+            type: 'phone',
+            label: strings.Form.field.label.phone,
+            value: this.props.phone,
+            props: {
+              required: true,
+            },
+          },
+          {
+            name: 'EMAIL',
+            type: 'email',
+            label: strings.Form.field.label.email,
+            value: this.props.email,
+          },
+        ],
+      },
+      {
+        name: strings.Form.group.additional,
+        fields: [
+          {
+            name: 'COMMENT',
+            type: 'textarea',
+            label: strings.Form.field.label.comment,
+            value: this.props.Text,
+            props: {
+              placeholder: strings.Form.field.placeholder.comment,
+            },
+          },
+        ],
+      },
+    ],
+  };
+
+  return (
+    <Form
+      contentContainerStyle={{
+        paddingHorizontal: 14,
+        marginTop: 20,
+      }}
+      key="ServiceForm"
+      fields={FormConfig.fields}
+      barStyle={'light-content'}
+      SubmitButton={{text: strings.Form.button.send}}
+      onSubmit={_onPressOrder}
+    />
+  );
+};
+
+ServiceScreen.propTypes = {
+  localUserDataUpdate: PropTypes.func,
+  isOrderServiceRequest: PropTypes.bool,
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServiceScreen);

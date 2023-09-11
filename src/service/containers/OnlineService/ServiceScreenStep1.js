@@ -211,7 +211,7 @@ class ServiceScreenStep1 extends Component {
       }
     });
 
-    this.props.localDealerClear();
+    // this.props.localDealerClear();
 
     this.dealerBlock = {
       name: strings.Form.group.dealer,
@@ -222,8 +222,13 @@ class ServiceScreenStep1 extends Component {
           label: strings.Form.field.label.dealer,
           value: this.props.dealerSelectedLocal,
           props: {
-            goBack: false,
+            required: true,
+            goBack: true,
             showBrands: false,
+            isLocal: true,
+            dealerFilter: {
+              type: 'ST',
+            },
           },
         },
       ],
