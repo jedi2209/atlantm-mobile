@@ -282,6 +282,9 @@ const OrderPartsScreen = props => {
                 goBack: true,
                 isLocal: true,
                 showBrands: false,
+                dealerFilter: {
+                  type: 'ZZ',
+                },
               },
             },
           ],
@@ -331,7 +334,7 @@ const OrderPartsScreen = props => {
                                   key={item.vin}
                                   data={item}
                                   type="check"
-                                  checked={carSelected.carVIN === item.vin}
+                                  checked={carSelected?.carVIN === item.vin}
                                   onPress={() => {
                                     _selectCar(item);
                                   }}
