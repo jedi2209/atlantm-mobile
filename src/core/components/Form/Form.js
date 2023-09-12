@@ -649,7 +649,7 @@ class Form extends Component {
     }
     let totalFields = group.fields.length;
 
-    let groupStyle = [styles.groupFields, group.style];
+    let groupStyle = [styles.groupFields, group?.style];
 
     if (
       typeof group.fields.find(e => e?.type === 'dealerSelect') !==
@@ -1245,18 +1245,21 @@ class Form extends Component {
     dealerSelect: (data, num, totalFields, groupNum) => {
       const {name, value} = data;
       this.state[name] = value?.id;
-      let fieldStyle = [];
-      if (totalFields?.length > 1) {
-        fieldStyle = [styles.dealerSelect];
+      let fieldStyle = [styles.dealerSelect];
+      if (totalFields?.length === 1) {
+        fieldStyle.push({
+          borderBottomLeftRadius: 4,
+          borderBottomRightRadius: 4,
+        });
       }
       if (data.props?.readonly) {
-        fieldStyle = [styles.dealerSelectReadonly];
+        fieldStyle.push(styles.dealerSelectReadonly);
       }
       if (data.props?.required) {
         if (value) {
-          fieldStyle = [styles.fieldRequiredTrue];
+          fieldStyle.push(styles.fieldRequiredTrue);
         } else {
-          fieldStyle = [styles.fieldRequiredFalse];
+          fieldStyle.push(styles.fieldRequiredFalse);
         }
       }
       return (
