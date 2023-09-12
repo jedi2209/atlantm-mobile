@@ -229,152 +229,150 @@ const ServiceScreenNonAuth = props => {
   };
 
   const FormConfig = {
-    fields: {
-      groups: [
-        {
-          name: strings.Form.group.dealer,
-          fields: [
-            {
-              name: 'DEALER',
-              type: 'dealerSelect',
-              label: strings.Form.field.label.dealer,
-              value: dealerSelectedLocalState,
-              props: {
-                goBack: true,
-                isLocal: true,
-                showBrands: false,
-              },
+    groups: [
+      {
+        name: strings.Form.group.dealer,
+        fields: [
+          {
+            name: 'DEALER',
+            type: 'dealerSelect',
+            label: strings.Form.field.label.dealer,
+            value: dealerSelectedLocalState,
+            props: {
+              goBack: true,
+              isLocal: true,
+              showBrands: false,
             },
-            {
-              name: 'DATETIME',
-              type: orderLead ? 'date' : 'dateTime',
-              label: strings.Form.field.label.date,
-              value: null,
-              props: {
-                placeholder:
-                  strings.Form.field.placeholder.date +
-                  dayMonthYear(addDays(2)),
-                required: true,
-                type: 'service',
-                minimumDate: new Date(addDays(2)),
-                maximumDate: new Date(addDays(62)),
-                dealer: props.dealerSelectedLocal,
-              },
+          },
+          {
+            name: 'DATETIME',
+            type: orderLead ? 'date' : 'dateTime',
+            label: strings.Form.field.label.date,
+            value: null,
+            props: {
+              placeholder:
+                strings.Form.field.placeholder.date +
+                dayMonthYear(addDays(2)),
+              required: true,
+              type: 'service',
+              minimumDate: new Date(addDays(2)),
+              maximumDate: new Date(addDays(62)),
+              dealer: props.dealerSelectedLocal,
             },
-          ],
-        },
-        {
-          name: strings.Form.group.car,
-          fields: [
-            {
-              name: 'CARBRAND',
-              type: 'input',
-              label: strings.Form.field.label.carBrand,
-              value: props.carBrand,
-              props: {
-                required: true,
-                placeholder: null,
-              },
+          },
+        ],
+      },
+      {
+        name: strings.Form.group.car,
+        fields: [
+          {
+            name: 'CARBRAND',
+            type: 'input',
+            label: strings.Form.field.label.carBrand,
+            value: props.carBrand,
+            props: {
+              required: true,
+              placeholder: null,
             },
-            {
-              name: 'CARMODEL',
-              type: 'input',
-              label: strings.Form.field.label.carModel,
-              value: props.carModel,
-              props: {
-                required: true,
-                placeholder: null,
-              },
+          },
+          {
+            name: 'CARMODEL',
+            type: 'input',
+            label: strings.Form.field.label.carModel,
+            value: props.carModel,
+            props: {
+              required: true,
+              placeholder: null,
             },
-            {
-              name: 'CARNUMBER',
-              type: 'input',
-              label: strings.Form.field.label.carNumber,
-              value: props.carNumber,
-              props: {
-                required: true,
-                placeholder: null,
-              },
+          },
+          {
+            name: 'CARNUMBER',
+            type: 'input',
+            label: strings.Form.field.label.carNumber,
+            value: props.carNumber,
+            props: {
+              required: true,
+              placeholder: null,
             },
-            {
-              name: 'CARVIN',
-              type: 'input',
-              label: strings.Form.field.label.carVIN,
-              value: props.carVIN,
-              props: {
-                placeholder: null,
-                autoCapitalize: 'characters',
-              },
+          },
+          {
+            name: 'CARVIN',
+            type: 'input',
+            label: strings.Form.field.label.carVIN,
+            value: props.carVIN,
+            props: {
+              placeholder: null,
+              autoCapitalize: 'characters',
             },
-          ],
-        },
-        {
-          name: strings.Form.group.contacts,
-          fields: [
-            {
-              name: 'NAME',
-              type: 'input',
-              label: strings.Form.field.label.name,
-              value: props.firstName,
-              props: {
-                required: true,
-                textContentType: 'name',
-              },
+          },
+        ],
+      },
+      {
+        name: strings.Form.group.contacts,
+        fields: [
+          {
+            name: 'NAME',
+            type: 'input',
+            label: strings.Form.field.label.name,
+            value: props.firstName,
+            props: {
+              required: true,
+              textContentType: 'name',
             },
-            {
-              name: 'SECOND_NAME',
-              type: 'input',
-              label: strings.Form.field.label.secondName,
-              value: props.secondName,
-              props: {
-                textContentType: 'middleName',
-              },
+          },
+          {
+            name: 'SECOND_NAME',
+            type: 'input',
+            label: strings.Form.field.label.secondName,
+            value: props.secondName,
+            props: {
+              textContentType: 'middleName',
             },
-            {
-              name: 'LAST_NAME',
-              type: 'input',
-              label: strings.Form.field.label.lastName,
-              value: props.lastName,
-              props: {
-                textContentType: 'familyName',
-              },
+          },
+          {
+            name: 'LAST_NAME',
+            type: 'input',
+            label: strings.Form.field.label.lastName,
+            value: props.lastName,
+            props: {
+              textContentType: 'familyName',
             },
-            {
-              name: 'PHONE',
-              type: 'phone',
-              label: strings.Form.field.label.phone,
-              value: props.phone,
-              props: {
-                required: true,
-              },
+          },
+          {
+            name: 'PHONE',
+            type: 'phone',
+            label: strings.Form.field.label.phone,
+            value: props.phone,
+            props: {
+              required: true,
             },
-            {
-              name: 'EMAIL',
-              type: 'email',
-              label: strings.Form.field.label.email,
-              value: props.email,
-              props: {
-                required: false,
-              },
+          },
+          {
+            name: 'EMAIL',
+            type: 'email',
+            label: strings.Form.field.label.email,
+            value: props.email,
+            props: {
+              required: false,
             },
-          ],
-        },
-        {
-          name: strings.Form.group.additional,
-          fields: [
-            {
-              name: 'COMMENT',
-              type: 'textarea',
-              label: strings.Form.field.label.comment,
-              value: props.Text,
-              props: {
-                placeholder: strings.Form.field.placeholder.comment,
-              },
+          },
+        ],
+      },
+      {
+        name: strings.Form.group.additional,
+        fields: [
+          {
+            name: 'COMMENT',
+            type: 'textarea',
+            label: strings.Form.field.label.comment,
+            value: props.Text,
+            props: {
+              placeholder: strings.Form.field.placeholder.comment,
             },
-          ],
-        },
-      ],
-    },
+          },
+        ],
+      },
+    ],
   };
 
   return (
@@ -384,7 +382,7 @@ const ServiceScreenNonAuth = props => {
         marginTop: 20,
       }}
       key="ServiceNonAuthForm"
-      fields={FormConfig.fields}
+      fields={FormConfig}
       barStyle={'light-content'}
       defaultCountryCode={region}
       onSubmit={_onPressOrder}

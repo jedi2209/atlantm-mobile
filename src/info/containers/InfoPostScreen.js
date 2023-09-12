@@ -150,7 +150,7 @@ const InfoPostScreen = ({
         dealer: customDealersList,
       },
       actionID: postID,
-      region: region,
+      region,
       isNewCar: true,
     });
   };
@@ -170,11 +170,12 @@ const InfoPostScreen = ({
         dealer: customDealersList,
       },
       actionID: postID,
-      region: region,
+      region,
     });
   };
 
-  const _onPressService = ({dealers}) => {
+  const _onPressService = () => {
+    const dealers = get(postData, 'dealers');
     let customDealersList = [];
     dealersList[region].forEach(element => {
       if (dealers.includes(element.id)) {
@@ -189,7 +190,8 @@ const InfoPostScreen = ({
         dealer: customDealersList,
       },
       actionID: postID,
-      region: region,
+      goBack: true,
+      dealerCustom: dealers,
     });
   };
 

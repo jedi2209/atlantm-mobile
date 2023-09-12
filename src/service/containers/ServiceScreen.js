@@ -51,6 +51,7 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
   return {
     cars,
     nav,
+    allDealers: dealer.listDealers,
     dealerSelectedLocal: dealer.selectedLocal,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
@@ -91,12 +92,38 @@ const styles = StyleSheet.create({
 });
 
 const ServiceScreen = props => {
-  const {route, cars, dealerSelectedLocal} = props;
+  const {route, cars, dealerSelectedLocal, navigation, allDealers} = props;
 
   const [carSelected, selectCar] = useState(null);
   const [isLoading, setLoading] = useState(false);
   const [isSuccess, setSuccess] = useState(false);
-  const isHaveCar = Boolean(props.cars.length > 0);
+  const isHaveCar = Boolean(cars.length > 0);
+  const dealer = get(route, 'params.dealerCustom', dealerSelectedLocal);
+  const isDealerHide = get(route, 'params.dealerHide', true);
+
+  let listDealers = [];
+  if (dealer) {
+    if (dealer.length) {
+      dealer.map(el => {
+        if (typeof el === 'string' || typeof el === 'number') {
+          el = allDealers[el];
+        }
+        listDealers.push({
+          label: el.name,
+          value: el.id,
+          key: el.id,
+        });
+      });
+    } else {
+      if (typeof dealer == 'object') {
+        listDealers.push({
+          label: dealer.name,
+          value: dealer.id,
+          key: dealer.id,
+        });
+      }
+    }
+  }
 
   let myCars = [];
   cars.map(item => {
@@ -111,6 +138,63 @@ const ServiceScreen = props => {
       carName: [myCars[0]?.brand, myCars[0]?.model].join(' '),
       carVIN: myCars[0]?.vin,
     });
+  }
+
+  let dealerField = {};
+  if (listDealers) {
+    if (listDealers.length < 1) {
+      dealerField = {
+        name: 'DEALER',
+        type: 'dealerSelect',
+        label: strings.Form.group.dealer,
+        value: dealer,
+        props: {
+          required: true,
+          goBack: true,
+          isLocal: true,
+          showBrands: false,
+          readonly: isDealerHide,
+          dealerFilter: {
+            type: 'ST',
+          },
+        },
+      };
+    }
+    if (listDealers.length === 1) {
+      dealerField = {
+        name: 'DEALER',
+        type: 'dealerSelect',
+        label: strings.Form.group.dealer,
+        value: dealerSelectedLocal || allDealers[dealer] || dealer,
+        props: {
+          required: true,
+          goBack: true,
+          isLocal: true,
+          showBrands: false,
+          readonly: isDealerHide,
+          dealerFilter: {
+            type: 'ST',
+          },
+        },
+      };
+    }
+    if (listDealers.length > 1) {
+      dealerField = {
+        name: 'DEALER',
+        type: 'select',
+        label: strings.Form.field.label.dealer,
+        value: null,
+        props: {
+          items: listDealers,
+          required: true,
+          placeholder: {
+            label: strings.Form.field.placeholder.dealer,
+            value: null,
+            color: '#9EA0A4',
+          },
+        },
+      };
+    }
   }
 
   useEffect(() => {
@@ -129,16 +213,16 @@ const ServiceScreen = props => {
   }, [route]);
 
   const _onPressOrder = async dataFromForm => {
-    const {navigation, route, localUserDataUpdate} = props;
+    const {localUserDataUpdate} = props;
 
-    if (!dataFromForm.CARBRAND && carSelected.carBrand) {
-      dataFromForm.CARBRAND = carSelected.carBrand;
+    if (!dataFromForm.CARBRAND && carSelected?.carBrand) {
+      dataFromForm.CARBRAND = carSelected?.carBrand;
     }
-    if (!dataFromForm.CARMODEL && carSelected.carModel) {
-      dataFromForm.CARMODEL = carSelected.carModel;
+    if (!dataFromForm.CARMODEL && carSelected?.carModel) {
+      dataFromForm.CARMODEL = carSelected?.carModel;
     }
-    if (!dataFromForm.CAR && carSelected.carName) {
-      dataFromForm.CAR = carSelected.carName;
+    if (!dataFromForm.CAR && carSelected?.carName) {
+      dataFromForm.CAR = carSelected?.carName;
     }
 
     const isInternetExist = await isInternet();
@@ -164,7 +248,7 @@ const ServiceScreen = props => {
       car: get(dataFromForm, 'CARNAME', ''),
       brand: get(dataFromForm, 'CARBRAND', ''),
       model: get(dataFromForm, 'CARMODEL', ''),
-      vin: get(dataFromForm, 'CARVIN', this.state?.carVIN),
+      vin: get(dataFromForm, 'CARVIN', carSelected?.carVIN),
       date: orderDate,
       firstName: get(dataFromForm, 'NAME', ''),
       secondName: get(dataFromForm, 'SECOND_NAME', ''),
@@ -226,21 +310,7 @@ const ServiceScreen = props => {
       {
         name: strings.Form.group.dealer,
         fields: [
-          {
-            name: 'DEALER',
-            type: 'dealerSelect',
-            label: strings.Form.field.label.dealer,
-            value: dealerSelectedLocal,
-            props: {
-              required: true,
-              goBack: true,
-              showBrands: false,
-              isLocal: true,
-              dealerFilter: {
-                type: 'ST',
-              },
-            },
-          },
+          dealerField,
           {
             name: 'DATE',
             type: 'date',
@@ -258,20 +328,20 @@ const ServiceScreen = props => {
       },
       {
         name: strings.Form.group.car,
-        fields: this.state.isHaveCar
+        fields: isHaveCar
           ? [
               {
                 name: 'CARNAME',
                 type: 'component',
                 label: strings.Form.field.label.car2,
                 value:
-                  this.myCars && this.myCars.length ? (
+                  myCars && myCars.length ? (
                     <ScrollView
                       showsHorizontalScrollIndicator={false}
                       horizontal
                       style={styles.carContainer}
                       contentContainerStyle={styles.carContainerContent}>
-                      {(this.myCars || []).map(item => {
+                      {(myCars || []).map(item => {
                         return (
                           <TouchableWithoutFeedback
                             activeOpacity={0.7}
@@ -289,7 +359,7 @@ const ServiceScreen = props => {
                                 key={item.vin}
                                 data={item}
                                 type="check"
-                                checked={this.state.carVIN === item.vin}
+                                checked={carSelected?.carVIN === item.vin}
                                 onPress={() => {
                                   selectCar({
                                     carBrand: item.brand,
@@ -337,7 +407,7 @@ const ServiceScreen = props => {
                         variant="outline"
                         rounded={'lg'}
                         onPress={() => {
-                          this.props.navigation.navigate('About', {
+                          navigation.navigate('About', {
                             screen: 'LoginScreen',
                             activePanel: 'hidden',
                           });
@@ -355,7 +425,7 @@ const ServiceScreen = props => {
                 name: 'CARBRAND',
                 type: 'input',
                 label: strings.Form.field.label.carBrand,
-                value: this.props.carBrand,
+                value: props.carBrand,
                 props: {
                   required: true,
                   placeholder: null,
@@ -365,7 +435,7 @@ const ServiceScreen = props => {
                 name: 'CARMODEL',
                 type: 'input',
                 label: strings.Form.field.label.carModel,
-                value: this.props.carModel,
+                value: props.carModel,
                 props: {
                   required: true,
                   placeholder: null,
@@ -375,7 +445,7 @@ const ServiceScreen = props => {
                 name: 'CARVIN',
                 type: 'input',
                 label: strings.Form.field.label.carVIN,
-                value: this.props.carVIN,
+                value: props.carVIN,
                 props: {
                   placeholder: null,
                   autoCapitalize: 'characters',
@@ -393,7 +463,7 @@ const ServiceScreen = props => {
             name: 'NAME',
             type: 'input',
             label: strings.Form.field.label.name,
-            value: this.props.firstName,
+            value: props.firstName,
             props: {
               required: true,
               textContentType: 'name',
@@ -403,7 +473,7 @@ const ServiceScreen = props => {
             name: 'SECOND_NAME',
             type: 'input',
             label: strings.Form.field.label.secondName,
-            value: this.props.secondName,
+            value: props.secondName,
             props: {
               textContentType: 'middleName',
             },
@@ -412,7 +482,7 @@ const ServiceScreen = props => {
             name: 'LAST_NAME',
             type: 'input',
             label: strings.Form.field.label.lastName,
-            value: this.props.lastName,
+            value: props.lastName,
             props: {
               textContentType: 'familyName',
             },
@@ -421,7 +491,7 @@ const ServiceScreen = props => {
             name: 'PHONE',
             type: 'phone',
             label: strings.Form.field.label.phone,
-            value: this.props.phone,
+            value: props.phone,
             props: {
               required: true,
             },
@@ -430,7 +500,7 @@ const ServiceScreen = props => {
             name: 'EMAIL',
             type: 'email',
             label: strings.Form.field.label.email,
-            value: this.props.email,
+            value: props.email,
           },
         ],
       },
@@ -441,7 +511,7 @@ const ServiceScreen = props => {
             name: 'COMMENT',
             type: 'textarea',
             label: strings.Form.field.label.comment,
-            value: this.props.Text,
+            value: props.Text,
             props: {
               placeholder: strings.Form.field.placeholder.comment,
             },
@@ -458,7 +528,7 @@ const ServiceScreen = props => {
         marginTop: 20,
       }}
       key="ServiceForm"
-      fields={FormConfig.fields}
+      fields={FormConfig}
       barStyle={'light-content'}
       SubmitButton={{text: strings.Form.button.send}}
       onSubmit={_onPressOrder}
