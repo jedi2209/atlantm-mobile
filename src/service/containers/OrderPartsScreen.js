@@ -158,7 +158,7 @@ const OrderPartsScreen = props => {
     };
   }, [localDealerClear, props.route]);
 
-  if (get(props, 'cars')) {
+  if (get(props, 'cars.length')) {
     isHaveCar = true;
   }
 
