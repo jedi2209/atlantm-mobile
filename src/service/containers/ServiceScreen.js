@@ -240,7 +240,11 @@ const ServiceScreen = props => {
       .filter(Boolean)
       .join(' ');
 
-    const dealerID = dataFromForm.DEALER.id;
+    const dealerID = get(
+      dataFromForm,
+      'DEALER.id',
+      get(dataFromForm, 'DEALER'),
+    );
     const orderDate = yearMonthDay(dataFromForm.DATE);
     const actionID = get(route, 'params.actionID', null);
 
@@ -406,15 +410,14 @@ const ServiceScreen = props => {
                       <Button
                         variant="outline"
                         rounded={'lg'}
+                        _text={{padding: 1}}
                         onPress={() => {
                           navigation.navigate('About', {
                             screen: 'LoginScreen',
                             activePanel: 'hidden',
                           });
                         }}>
-                        <Text style={{padding: 5}}>
-                          {strings.UserCars.archiveCheck}
-                        </Text>
+                        {strings.UserCars.archiveCheck}
                       </Button>
                     </View>
                   ),
