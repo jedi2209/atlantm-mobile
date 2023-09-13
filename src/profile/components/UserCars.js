@@ -229,6 +229,7 @@ let UserCars = ({activePanel, cars}) => {
           </Text>
           <Button
             variant="outline"
+            rounded={'lg'}
             _text={{padding: 1}}
             onPress={() => setActivePanel('hidden')}>
             {strings.UserCars.archiveCheck}

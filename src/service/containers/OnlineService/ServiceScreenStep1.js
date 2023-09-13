@@ -545,7 +545,8 @@ class ServiceScreenStep1 extends Component {
                     </Text>
                     <Button
                       variant="outline"
-                      _text={{padding: 5}}
+                      rounded={'lg'}
+                      _text={{padding: 1}}
                       onPress={() => {
                         this.props.navigation.navigate('About', {
                           screen: 'LoginScreen',
