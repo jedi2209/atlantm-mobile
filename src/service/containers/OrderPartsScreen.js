@@ -96,7 +96,13 @@ const styles = StyleSheet.create({
 let isInternet = null;
 
 const OrderPartsScreen = props => {
-  const {localDealerClear, dealerSelected, dealerSelectedLocal, cars} = props;
+  const {
+    localDealerClear,
+    dealerSelected,
+    dealerSelectedLocal,
+    cars,
+    navigation,
+  } = props;
 
   const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
   const [carSelected, setCar] = useState(null);
@@ -267,19 +273,16 @@ const OrderPartsScreen = props => {
                         {strings.UserCars.empty.text + '\r\n'}
                       </Text>
                       <Button
-                        size="full"
-                        full
                         variant="outline"
                         rounded={'lg'}
+                        _text={{padding: 1}}
                         onPress={() => {
-                          props.navigation.navigate('About', {
+                          navigation.navigate('About', {
                             screen: 'LoginScreen',
                             activePanel: 'hidden',
                           });
                         }}>
-                        <Text style={{padding: 5}}>
-                          {strings.UserCars.archiveCheck}
-                        </Text>
+                        {strings.UserCars.archiveCheck}
                       </Button>
                     </View>
                   ),

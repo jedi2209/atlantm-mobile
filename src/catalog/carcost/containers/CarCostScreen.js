@@ -465,10 +465,9 @@ const CarCostScreen = ({
                   {strings.UserCars.empty.text + '\r\n'}
                 </Text>
                 <Button
-                  size="md"
                   variant="outline"
-                  style={{borderRadius: 5}}
-                  _text={{padding: 5}}
+                  rounded={'lg'}
+                  _text={{padding: 1}}
                   onPress={() => {
                     navigation.navigate('About', {
                       screen: 'LoginScreen',
