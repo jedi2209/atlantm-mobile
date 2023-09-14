@@ -1,17 +1,21 @@
-import React, {PureComponent} from 'react';
+import React from 'react';
+import {View} from 'native-base';
 import * as Animatable from 'react-native-animatable';
 
-export default class TransitionView extends PureComponent {
-  render() {
-    const {index, duration, ...rest} = this.props;
-    return (
-      <Animatable.View
-        animation="bounceInRight"
-        duration={duration}
-        delay={index ? index * duration - duration / (index * 3) : 0}
-        useNativeDriver
-        {...rest}
-      />
-    );
-  }
-}
+const TransitionView = ({index, duration, delay, wrapperStyle, ...rest}) => {
+  // const children = rest.children;
+  // delete rest.children;
+  return (
+    <Animatable.View
+      animation="bounceInRight"
+      duration={duration}
+      useNativeDriver={true}
+      delay={
+        delay ? delay : index ? index * duration - duration / (index * 3) : 0
+      }
+      {...rest}
+    />
+  );
+};
+
+export default TransitionView;

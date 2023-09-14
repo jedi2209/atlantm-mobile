@@ -403,10 +403,7 @@ const MainScreen = props => {
   }, [region, fetchInfoList, colorScheme, listDealers, fetchDealers]);
 
   useEffect(() => {
-    if (
-      !isAppLoaded ||
-      (typeof prevRegion !== 'undefined' && prevRegion !== region)
-    ) {
+    if (prevRegion !== region) {
       setLoading(true);
       fetchInfoData({region, fetchInfoList});
       fetchBrands(); // обновляем бренды при первом открытии экрана
