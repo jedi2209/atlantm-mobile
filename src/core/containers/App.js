@@ -59,7 +59,7 @@ const mapDispatchToProps = {
 };
 
 const mainScreen = 'BottomTabNavigation';
-const storeVersion = '2023-08-01';
+const storeVersion = '2023-08-02';
 
 const _awaitStoreToUpdate = async props => {
   const {actionSettingsLoaded, actionMenuOpenedCount, actionStoreUpdated} =

@@ -389,17 +389,17 @@ const OrderPartsScreen = props => {
   const _onPressOrder = async dataFromForm => {
     const {navigation, localUserDataUpdate} = props;
 
-    if (!dataFromForm.CARBRAND && carSelected.carBrand) {
-      dataFromForm.CARBRAND = carSelected.carBrand;
+    if (!dataFromForm.CARBRAND && carSelected?.carBrand) {
+      dataFromForm.CARBRAND = carSelected?.carBrand;
     }
-    if (!dataFromForm.CARMODEL && carSelected.carModel) {
-      dataFromForm.CARMODEL = carSelected.carModel;
+    if (!dataFromForm.CARMODEL && carSelected?.carModel) {
+      dataFromForm.CARMODEL = carSelected?.carModel;
     }
-    if (!dataFromForm.CAR && carSelected.carName) {
-      dataFromForm.CAR = carSelected.carName;
+    if (!dataFromForm.CAR && carSelected?.carName) {
+      dataFromForm.CAR = carSelected?.carName;
     }
-    if (!dataFromForm.CARVIN && carSelected.carVIN) {
-      dataFromForm.CARVIN = carSelected.carVIN;
+    if (!dataFromForm.CARVIN && carSelected?.carVIN) {
+      dataFromForm.CARVIN = carSelected?.carVIN;
     }
 
     if (isInternet == null) {
@@ -443,6 +443,7 @@ const OrderPartsScreen = props => {
       dealerID,
       actionID,
     };
+
     try {
       setLoading(true);
 
