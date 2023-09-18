@@ -44,7 +44,7 @@ const mapStateToProps = ({profile, dealer, nav}) => {
     nav,
     bonusInfo: profile.bonus.info,
     isFetchBonusInfo: profile.bonus.isFetchBonusInfo,
-    dealerSelected: dealer.selected,
+    region: dealer.region,
   };
 };
 
@@ -59,13 +59,11 @@ const BonusInfoScreen = props => {
     bonusInfo,
     isFetchBonusInfo,
     actionFetchBonusInfo,
-    dealerSelected,
+    region,
     submitButton,
   } = props;
 
   useEffect(() => {
-    const {region, id} = dealerSelected;
-
     let refererScreen = get(route, 'params.refererScreen', null);
     if (!refererScreen) {
       refererScreen = get(route, 'params.returnScreen', null);
@@ -73,9 +71,8 @@ const BonusInfoScreen = props => {
 
     Analytics.logEvent('screen', `${refererScreen}/bonus_info`, {
       region,
-      dealer: id,
     });
-    actionFetchBonusInfo({region, dealerID: id});
+    actionFetchBonusInfo({region});
   }, []);
 
   if (isFetchBonusInfo) {
