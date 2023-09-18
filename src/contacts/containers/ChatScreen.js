@@ -30,7 +30,7 @@ const isAndroid = Platform.OS === 'android';
 
 const mapStateToProps = ({dealer, profile, contacts}) => {
   return {
-    region: dealer.selected.region,
+    region: dealer.region,
     profile,
     session: contacts.chat.id,
   };
