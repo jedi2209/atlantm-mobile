@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, ActivityIndicator} from 'react-native';
 import {Button, View, ScrollView} from 'native-base';
-import {connect} from 'react-redux';
 
 import WebViewAutoHeight from '../../core/components/WebViewAutoHeight';
 import * as NavigationService from '../../navigation/NavigationService';
@@ -10,13 +9,7 @@ import moment from 'moment';
 import styleConst from '../style-const';
 import {strings} from '../lang/const';
 
-const mapStateToProps = ({dealer, profile}) => {
-  return {
-    region: dealer.selected.region,
-  };
-};
-
-const WebviewScreen = ({route, region, SubmitButton, minHeight}) => {
+const WebviewScreen = ({route, SubmitButton, minHeight}) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -85,4 +78,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps)(WebviewScreen);
+export default WebviewScreen;
