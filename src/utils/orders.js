@@ -164,6 +164,7 @@ async function getOrders(type = 'default', dealerData = null) {
           color: '#2c8ef4',
         },
         navigate: 'ServiceScreen',
+        navigateOptions,
       });
       res.ios.BUTTONS.push({
         priority: 2,
@@ -174,6 +175,7 @@ async function getOrders(type = 'default', dealerData = null) {
           color: '#2c8ef4',
         },
         navigate: 'ServiceScreen',
+        navigateOptions,
       });
       tmpArr.push(2);
       res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;

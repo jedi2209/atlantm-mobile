@@ -10,7 +10,7 @@ import Analytics from '../../utils/amplitude-analytics';
 
 import Form from '../../core/components/Form/Form';
 
-import {get} from 'lodash';
+import {get, isNil} from 'lodash';
 import {localDealerClear} from '../../dealer/actions';
 
 import {ERROR_NETWORK} from '../../core/const';
@@ -56,7 +56,7 @@ const CallMeBackScreen = ({
   allDealers,
 }) => {
   const dealer = get(route, 'params.dealerCustom', dealerSelectedLocal);
-  const isDealerHide = get(route, 'params.dealerHide', true);
+  const isDealerHide = get(route, 'params.dealerHide', isNil(dealer));
 
   let listDealers = [];
   if (dealer) {
