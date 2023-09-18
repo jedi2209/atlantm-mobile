@@ -190,8 +190,8 @@ export default {
   },
 
   fetchBonusInfo({region, dealerID}) {
-    if (!region && !dealerID) {
-      return false;
+    if (!region) {
+      region = APP_REGION;
     }
     const url =
       '/info/bonus/get/?' +
