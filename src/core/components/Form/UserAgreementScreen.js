@@ -12,9 +12,9 @@ import styleConst from '../../style-const';
 import {strings} from '../../lang/const';
 import LogoLoader from '../LogoLoader';
 
-const mapStateToProps = ({dealer, profile}) => {
+const mapStateToProps = ({dealer}) => {
   return {
-    region: dealer.selected.region,
+    region: dealer.region,
   };
 };
 

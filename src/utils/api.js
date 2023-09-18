@@ -189,10 +189,7 @@ export default {
     return this.request(url, baseRequestParams);
   },
 
-  fetchBonusInfo({region, dealerID}) {
-    if (!region) {
-      region = APP_REGION;
-    }
+  fetchBonusInfo({region = APP_REGION, dealerID}) {
     const url =
       '/info/bonus/get/?' +
       new URLSearchParams(
@@ -247,7 +244,7 @@ export default {
     );
   },
 
-  fetchUserAgreement(region) {
+  fetchUserAgreement(region = APP_REGION) {
     return this.request(`/mobile/agreement/${region}/`, baseRequestParams);
   },
 
