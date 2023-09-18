@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
-import {get, orderBy} from 'lodash';
+import {get, orderBy, isNil} from 'lodash';
 import {
   StyleSheet,
   View,
@@ -99,7 +99,7 @@ const ServiceScreen = props => {
   const [isSuccess, setSuccess] = useState(false);
   const isHaveCar = Boolean(cars.length > 0);
   const dealer = get(route, 'params.dealerCustom', dealerSelectedLocal);
-  const isDealerHide = get(route, 'params.dealerHide', true);
+  const isDealerHide = get(route, 'params.dealerHide', isNil(dealer));
 
   let listDealers = [];
   if (dealer) {
