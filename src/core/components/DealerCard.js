@@ -42,6 +42,7 @@ const styles = StyleSheet.create({
     height: 110,
     borderRadius: 5,
   },
+  imageNotAvailable: {},
   body: {
     display: 'flex',
     alignItems: 'center',
@@ -51,6 +52,9 @@ const styles = StyleSheet.create({
   },
   bodyView: {
     flexBasis: '60%',
+  },
+  bodyViewNotAvailable: {
+    flexBasis: '100%',
   },
   thumb: {
     flexShrink: 1,
@@ -104,7 +108,7 @@ const drawCity = cityArr => {
 };
 
 const DealerCard = props => {
-  const {item, showBrands} = props;
+  const {item, showBrands, isAvailable} = props;
 
   const CarImg = get(item, 'img[0]');
   const hash = get(item, 'hash');
@@ -112,21 +116,28 @@ const DealerCard = props => {
   const name = get(item, 'name');
 
   return (
-    <HStack alignItems="flex-start" p="2" borderRadius="md">
-      <View style={styles.bodyView}>
+    <HStack
+      alignItems="flex-start"
+      p={2}
+      borderRadius={'md'}
+      opacity={isAvailable ? 1 : 0.2}>
+      <View
+        style={[isAvailable ? styles.bodyView : styles.bodyViewNotAvailable]}>
         {name ? (
-          <Text mt="0.5" mb="2" style={styles.name}>
+          <Text mt="0.5" mb={isAvailable ? 2 : 0} style={styles.name}>
             {name}
           </Text>
         ) : null}
-        {showBrands ? <HStack mb="2">{drawBrands(brands)}</HStack> : null}
-        {drawCity(get(item, 'city', []))}
+        {showBrands && isAvailable ? (
+          <HStack mb="2">{drawBrands(brands)}</HStack>
+        ) : null}
+        {isAvailable ? drawCity(get(item, 'city', [])) : null}
       </View>
-      {CarImg ? (
+      {CarImg && isAvailable ? (
         <View style={styles.thumb}>
           <Imager
             key={`dealer-cover-' + ${item.hash}`}
-            style={styles.image}
+            style={[styles.image, !isAvailable ? styles.imageNotAvailable : {}]}
             source={{
               uri: CarImg + '?d=500x500' + '&hash=' + hash,
               cache: 'web',
@@ -140,6 +151,7 @@ const DealerCard = props => {
 
 DealerCard.defaultProps = {
   showBrands: true,
+  isAvailable: true,
 };
 
 export default memo(DealerCard);

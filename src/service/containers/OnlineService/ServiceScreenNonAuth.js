@@ -242,6 +242,11 @@ const ServiceScreenNonAuth = props => {
               goBack: true,
               isLocal: true,
               showBrands: false,
+              readonly: false,
+              required: true,
+              dealerFilter: {
+                type: 'ST',
+              },
             },
           },
           {
@@ -251,8 +256,7 @@ const ServiceScreenNonAuth = props => {
             value: null,
             props: {
               placeholder:
-                strings.Form.field.placeholder.date +
-                dayMonthYear(addDays(2)),
+                strings.Form.field.placeholder.date + dayMonthYear(addDays(2)),
               required: true,
               type: 'service',
               minimumDate: new Date(addDays(2)),
