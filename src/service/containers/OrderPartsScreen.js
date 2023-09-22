@@ -163,8 +163,8 @@ const OrderPartsScreen = props => {
   }
 
   useEffect(() => {
-    setDealerSelectedLocal(props.dealerSelectedLocal);
-  }, [props.dealerSelectedLocal]);
+    setDealerSelectedLocal(dealerSelectedLocal);
+  }, [dealerSelectedLocal]);
 
   const formConfig = {
     groups: [

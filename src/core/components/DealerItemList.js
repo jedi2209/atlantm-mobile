@@ -243,6 +243,7 @@ DealerItemList.propTypes = {
   readonly: PropTypes.bool,
   showBrands: PropTypes.bool,
   placeholder: PropTypes.string,
+  dealerFilter: PropTypes.object,
 };
 
 DealerItemList.defaultProps = {
@@ -254,6 +255,7 @@ DealerItemList.defaultProps = {
   readonly: false,
   showBrands: false,
   placeholder: null,
+  dealerFilter: {},
 };
 
 export default DealerItemList;

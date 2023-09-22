@@ -1,12 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Text,
-  StyleSheet,
-  FlatList,
-  Alert,
-  useWindowDimensions,
-} from 'react-native';
-import {Pressable, View, Box} from 'native-base';
+import {StyleSheet, FlatList, Alert, useWindowDimensions} from 'react-native';
+import {Pressable, View, Box, Text} from 'native-base';
 import {connect} from 'react-redux';
 import {
   APP_REGION,
@@ -95,6 +89,40 @@ const renderTabBar = props => (
   />
 );
 
+const filterList = (list = [], filter = null) => {
+  const filterType = get(filter, 'type', null);
+  if (!filterType) {
+    return true;
+  }
+  let res = [];
+  list.map(el => {
+    get(el, 'locations', []).map(location => {
+      get(location, 'divisions', []).map(type => {
+        if (get(type, 'types', []).includes(filterType.toUpperCase())) {
+          res.push(el);
+        }
+      });
+    });
+  });
+  return res;
+};
+
+const filterDealer = (dealer, filter) => {
+  const filterType = get(filter, 'type', null);
+  if (!filterType) {
+    return true;
+  }
+  let res = false;
+  get(dealer, 'locations', []).map(location => {
+    get(location, 'divisions', []).map(type => {
+      if (get(type, 'types', []).includes(filterType.toUpperCase())) {
+        res = true;
+      }
+    });
+  });
+  return res;
+};
+
 const _renderItem = ({item, props}) => {
   const {
     isLocal,
@@ -104,26 +132,36 @@ const _renderItem = ({item, props}) => {
     selectDealer,
     returnScreen,
     returnState,
+    dealerFilter,
   } = props;
   if (item.virtual !== false && item.id !== 177) {
     // фикс для НЕ вывода виртуальных КО в списке
     return true;
   }
 
+  const isAvailable = filterDealer(item, dealerFilter);
+
   return (
     <Pressable
-      onPress={() =>
-        _onPressDealerItem({
-          dealerSelectedItem: item,
-          isLocal,
-          pushActionSubscribeState,
-          goBack,
-          navigation,
-          selectDealer,
-          returnScreen,
-          returnState,
-        })
-      }>
+      onPress={() => {
+        if (!isAvailable) {
+          return Alert.alert(
+            strings.SelectItemByCountry.error.title,
+            strings.DealerItemList.notAvailable,
+          );
+        } else {
+          return _onPressDealerItem({
+            dealerSelectedItem: item,
+            isLocal,
+            pushActionSubscribeState,
+            goBack,
+            navigation,
+            selectDealer,
+            returnScreen,
+            returnState,
+          });
+        }
+      }}>
       {({isPressed}) => {
         return (
           <Box
@@ -132,15 +170,20 @@ const _renderItem = ({item, props}) => {
             shadow="1"
             backgroundColor={styleConst.color.white}
             borderRadius="md"
-            style={{
-              transform: [
-                {
-                  scale: isPressed ? 0.98 : 1,
-                },
-              ],
-            }}>
+            style={
+              isAvailable
+                ? {
+                    transform: [
+                      {
+                        scale: isPressed ? 0.98 : 1,
+                      },
+                    ],
+                  }
+                : null
+            }>
             <DealerCard
               item={item}
+              isAvailable={isAvailable}
               showBrands={
                 get(DEALERS_SETTINGS, 'hideBrands', []).includes(item.id)
                   ? false
@@ -240,7 +283,6 @@ const makeLists = props => {
     itemLayout,
     isRefreshing,
     setRefreshing,
-    dealerFilter,
   } = props;
 
   let customListBYN = [];
@@ -251,17 +293,6 @@ const makeLists = props => {
   const countrySettings = get(settings, 'country', []);
 
   let listAll = props.listAll;
-
-  // console.log('dealerFilter', dealerFilter);
-
-  // if (dealerFilter) {
-  //   listAll = [];
-  //   listAll.push({
-  //     label: el.name,
-  //     value: el.id,
-  //     key: el.id,
-  //   });
-  // }
 
   if (listAll && listAll.length) {
     // выводим кастомные автоцентры

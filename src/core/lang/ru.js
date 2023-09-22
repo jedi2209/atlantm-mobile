@@ -67,6 +67,7 @@ export default {
   DealerItemList: {
     // выбор автоцентра
     chooseDealer: 'Выберите удобный для вас автоцентр',
+    notAvailable: 'В данном автоцентре выбранная вами услуга недоступна',
   },
   SelectItemByCountry: {
     error: {
