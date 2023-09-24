@@ -169,6 +169,7 @@ const InfoPostScreen = ({
       car: {
         dealer: customDealersList,
       },
+      dealerCustom: dealers,
       actionID: postID,
       region,
     });

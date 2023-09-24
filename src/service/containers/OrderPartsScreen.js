@@ -53,6 +53,7 @@ const mapStateToProps = ({dealer, profile, nav}) => {
     cars,
     nav,
     dealerSelected: dealer.selected,
+    allDealers: dealer.listDealers,
     dealerSelectedLocal: dealer.selectedLocal,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
@@ -102,7 +103,11 @@ const OrderPartsScreen = props => {
     dealerSelectedLocal,
     cars,
     navigation,
+    route,
+    allDealers,
   } = props;
+
+  const dealer = get(route, 'params.dealerCustom', dealerSelectedLocal);
 
   const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
   const [carSelected, setCar] = useState(null);
@@ -110,6 +115,30 @@ const OrderPartsScreen = props => {
   const [myCars, setMyCars] = useState([]);
 
   let isHaveCar = false;
+
+  let listDealers = [];
+  if (dealer) {
+    if (dealer.length) {
+      dealer.map(el => {
+        if (typeof el === 'string' || typeof el === 'number') {
+          el = allDealers[el];
+        }
+        listDealers.push({
+          label: el.name,
+          value: el.id,
+          key: el.id,
+        });
+      });
+    } else {
+      if (typeof dealer == 'object') {
+        listDealers.push({
+          label: dealer.name,
+          value: dealer.id,
+          key: dealer.id,
+        });
+      }
+    }
+  }
 
   useEffect(() => {
     let myCarsTmp = [];
@@ -166,28 +195,99 @@ const OrderPartsScreen = props => {
     setDealerSelectedLocal(dealerSelectedLocal);
   }, [dealerSelectedLocal]);
 
-  const formConfig = {
-    groups: [
-      {
+  let dealerGroup = {};
+  if (listDealers) {
+    if (listDealers.length < 1) {
+      dealerGroup = {
         name: strings.Form.group.dealer,
         fields: [
           {
             name: 'DEALER',
             type: 'dealerSelect',
-            label: strings.Form.field.label.dealer,
-            value: dealerSelectedLocalState,
+            label: strings.Form.group.dealer,
+            value: dealer,
             props: {
+              required: true,
               goBack: true,
               isLocal: true,
               showBrands: false,
-              required: true,
               dealerFilter: {
                 type: 'ZZ',
               },
             },
           },
         ],
-      },
+      };
+    }
+    if (listDealers.length === 1) {
+      dealerGroup = {
+        name: strings.Form.group.dealer,
+        fields: [
+          {
+            name: 'DEALER',
+            type: 'dealerSelect',
+            label: strings.Form.group.dealer,
+            value: dealerSelectedLocal || allDealers[dealer] || dealer,
+            props: {
+              required: true,
+              goBack: true,
+              isLocal: true,
+              showBrands: false,
+              dealerFilter: {
+                type: 'ZZ',
+              },
+            },
+          },
+        ],
+      };
+    }
+    if (listDealers.length > 1) {
+      dealerGroup = {
+        name: strings.Form.group.dealer,
+        fields: [
+          {
+            name: 'DEALER',
+            type: 'select',
+            label: strings.Form.field.label.dealer,
+            value: null,
+            props: {
+              items: listDealers,
+              required: true,
+              placeholder: {
+                label: strings.Form.field.placeholder.dealer,
+                value: null,
+                color: '#9EA0A4',
+              },
+            },
+          },
+        ],
+      };
+    }
+  }
+
+  const formConfig = {
+    groups: [
+      dealerGroup,
+      // {
+      //   name: strings.Form.group.dealer,
+      //   fields: [
+      //     {
+      //       name: 'DEALER',
+      //       type: 'dealerSelect',
+      //       label: strings.Form.field.label.dealer,
+      //       value: dealerSelectedLocalState,
+      //       props: {
+      //         goBack: true,
+      //         isLocal: true,
+      //         showBrands: false,
+      //         required: true,
+      //         dealerFilter: {
+      //           type: 'ZZ',
+      //         },
+      //       },
+      //     },
+      //   ],
+      // },
       {
         name: strings.Form.group.part,
         fields: [
