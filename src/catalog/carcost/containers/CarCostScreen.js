@@ -190,6 +190,9 @@ const CarCostScreen = ({
                   showBrands: false,
                   returnScreen: navigation.state?.routeName,
                   readonly: dealerFromNavigation ? true : false,
+                  dealerFilter: {
+                    type: 'TI',
+                  },
                 },
               },
               {
