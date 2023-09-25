@@ -141,7 +141,7 @@ const UsedCarItemScreen = props => {
     navigation.navigate('TestDriveScreen', {
       car: {
         brand: get(carDetails, 'brand.name', ''),
-        model: get(carDetails, 'model', ''),
+        model: get(carDetails, 'model.name', get(carDetails, 'model', ''), ''),
         complectation: get(carDetails, 'complectation.name'),
         year: get(carDetails, 'year'),
         dealer: [get(carDetails, 'dealer')],
@@ -168,7 +168,7 @@ const UsedCarItemScreen = props => {
               navigation.navigate('CallMeBackScreen', {
                 dealerCustom: listDealers[carDetails.dealer.id],
                 dealerHide: true,
-                goBack: true,
+                carId: carDetails.id.api,
               });
             },
           },
@@ -183,27 +183,18 @@ const UsedCarItemScreen = props => {
   const onPressCallMe = () => {
     navigation.navigate('CallMeBackScreen', {
       dealerCustom: listDealers[carDetails.dealer.id],
-      goBack: true,
-      car: {
-        brand: get(carDetails, 'brand.name', ''),
-        model: get(carDetails, 'model', ''),
-        complectation: get(carDetails, 'complectation.name'),
-        year: get(carDetails, 'year'),
-      },
-      region,
-      dealerId: get(carDetails, 'dealer.id'),
+      dealerHide: true,
       carId: carDetails.id.api,
-      isNewCar: false,
     });
   };
 
-  const renderAdditionalServices = element => {
+  const renderAdditionalServices = (element, i) => {
     if (!element && !element?.name) {
       return false;
     }
 
     return (
-      <HStack w="90%" alignItems="center">
+      <HStack w="90%" alignItems="center" key={'additionalService' + i}>
         <Icon
           as={MaterialCommunityIcons}
           name="check"
@@ -657,7 +648,7 @@ const UsedCarItemScreen = props => {
                       <Text style={styles.descr}>{carDetails.text}</Text>
                     </ReadMore>
                     {get(carDetails, 'additionalServices', []).map((el, i) =>
-                      renderAdditionalServices(el),
+                      renderAdditionalServices(el, i),
                     )}
                   </>
                 ) : null}
