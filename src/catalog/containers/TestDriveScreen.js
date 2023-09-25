@@ -112,19 +112,20 @@ const mapDispatchToProps = {
 class TestDriveScreen extends PureComponent {
   constructor(props) {
     super(props);
-    const orderedCar = get(props.route, 'params.car.ordered');
+    const screenParams = get(props.route, 'params');
+    const orderedCar = get(screenParams, 'car.ordered');
     let model = '';
     this.carName = [
-      get(props.route, 'params.car.brand'),
-      model,
-      get(props.route, 'params.car.complectation'),
-      !orderedCar ? get(props.route, 'params.car.year') : null,
+      get(screenParams, 'car.brand'),
+      get(screenParams, 'car.model', model),
+      get(screenParams, 'car.complectation'),
+      !orderedCar ? get(screenParams, 'car.year') : null,
       orderedCar ? 'или аналог' : null,
     ]
       .filter(Boolean)
       .join(' ');
 
-    const dealer = get(props.route, 'params.car.dealer');
+    const dealer = get(screenParams, 'car.dealer');
     this.listAll = [];
     if (dealer && dealer.length > 1) {
       dealer.map(el => {
@@ -144,7 +145,7 @@ class TestDriveScreen extends PureComponent {
 
     this.state = {
       date: null,
-      testDriveCar: get(props.route, 'params.carId'),
+      testDriveCar: get(screenParams, 'carId'),
       TDCarsList: null,
       comment: '',
       dealerID: null,
