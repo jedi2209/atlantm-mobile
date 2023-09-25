@@ -252,7 +252,7 @@ const CarInfoScreen = props => {
                         params: {
                           car: car,
                           settings: {
-                            disableDealer: true,
+                            disableDealer: false,
                             disableCarBlock: true,
                           },
                         },

@@ -211,28 +211,7 @@ class ServiceScreenStep1 extends Component {
       }
     });
 
-    // this.props.localDealerClear();
-
-    this.dealerBlock = {
-      name: strings.Form.group.dealer,
-      fields: [
-        {
-          name: 'DEALER',
-          type: 'dealerSelect',
-          label: strings.Form.field.label.dealer,
-          value: this.props.dealerSelectedLocal,
-          props: {
-            required: true,
-            goBack: true,
-            showBrands: false,
-            isLocal: true,
-            dealerFilter: {
-              type: 'ST',
-            },
-          },
-        },
-      ],
-    };
+    this.props.localDealerClear();
   }
 
   onServiceChoose(value) {
@@ -259,6 +238,9 @@ class ServiceScreenStep1 extends Component {
   }
 
   async _getServices() {
+    if (!get(this.props.dealerSelectedLocal, 'id', false)) {
+      return;
+    }
     const {navigation, route} = this.props;
     this.setState({
       servicesFetch: true,
@@ -333,6 +315,9 @@ class ServiceScreenStep1 extends Component {
   }
 
   async _getServicesInfo(id) {
+    if (!get(this.props.dealerSelectedLocal, 'id', false)) {
+      return;
+    }
     this.setState({
       serviceInfoFetch: true,
     });
@@ -391,13 +376,9 @@ class ServiceScreenStep1 extends Component {
   };
 
   componentDidMount() {
-    if (
-      this.state.carVIN &&
-      this.props.dealerSelectedLocal &&
-      this.props.dealerSelectedLocal.id
-    ) {
-      this._getServices();
-    }
+    // if (this.state.carVIN && get(this.props.dealerSelectedLocal, 'id', false)) {
+    //   this._getServices();
+    // }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -451,10 +432,33 @@ class ServiceScreenStep1 extends Component {
   };
 
   render() {
+    this.dealerBlock = {
+      name: strings.Form.group.dealer,
+      fields: [
+        {
+          name: 'DEALER',
+          type: 'dealerSelect',
+          label: strings.Form.field.label.dealer,
+          value: this.props.dealerSelectedLocal,
+          props: {
+            required: true,
+            goBack: true,
+            showBrands: false,
+            isLocal: true,
+            dealerFilter: {
+              type: 'ST',
+            },
+          },
+        },
+      ],
+    };
+
     this.FormConfig = {
       fields: {
         groups: [
-          !this.settingsFromNavigation?.disableDealer ? this.dealerBlock : {},
+          !get(this.settingsFromNavigation, 'disableDealer', false)
+            ? this.dealerBlock
+            : {},
           {
             name: strings.Form.group.car,
             fields: [
@@ -493,7 +497,7 @@ class ServiceScreenStep1 extends Component {
                         item.vin &&
                         this.state.carVIN
                       ) {
-                        if (item?.vin != this.state.carVIN) {
+                        if (item?.vin !== this.state.carVIN) {
                           return;
                         }
                       }
