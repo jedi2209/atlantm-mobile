@@ -9,7 +9,7 @@ import {get} from 'lodash';
 
 const mapStateToProps = ({dealer, profile}) => {
   return {
-    dealerSelected: dealer.selected,
+    region: dealer.region,
     loginID: get(profile, 'login.ID', false),
     cars: get(profile, 'cars', false),
   };
@@ -19,8 +19,8 @@ const ServiceContainer = props => {
   const navigation = useNavigation();
   const route = useRoute();
   const actionID = get(route, 'params.actionID', null);
-  const {dealerSelected, loginID, cars} = props;
-  if (!actionID && dealerSelected.region === 'by') {
+  const {region, loginID, cars} = props;
+  if (!actionID && region === 'by') {
     if (loginID && cars && cars.length > 0) {
       return <ServiceScreenStep1 navigation={navigation} route={route} />;
     } else {
