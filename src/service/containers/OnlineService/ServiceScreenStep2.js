@@ -204,7 +204,6 @@ class ServiceScreenStep2 extends Component {
     }
     this.setState({success: true, loading: false});
   };
-
   render() {
     this.FormConfig = {
       fields: {
