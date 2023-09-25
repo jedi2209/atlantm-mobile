@@ -268,26 +268,6 @@ const OrderPartsScreen = props => {
   const formConfig = {
     groups: [
       dealerGroup,
-      // {
-      //   name: strings.Form.group.dealer,
-      //   fields: [
-      //     {
-      //       name: 'DEALER',
-      //       type: 'dealerSelect',
-      //       label: strings.Form.field.label.dealer,
-      //       value: dealerSelectedLocalState,
-      //       props: {
-      //         goBack: true,
-      //         isLocal: true,
-      //         showBrands: false,
-      //         required: true,
-      //         dealerFilter: {
-      //           type: 'ZZ',
-      //         },
-      //       },
-      //     },
-      //   ],
-      // },
       {
         name: strings.Form.group.part,
         fields: [
