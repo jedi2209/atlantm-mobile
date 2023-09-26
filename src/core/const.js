@@ -13,6 +13,7 @@ let appRegion,
   sentryDSN,
   oneSignalKey,
   amplitudeKey,
+  appMetricaKey,
   appLang,
   countrySettings,
   countryList,
@@ -44,6 +45,7 @@ switch (bundle) {
     sentryDSN = 'https://2e35f2a2455b4a3d97a1687270845d33@sentry.io/219899';
     oneSignalKey = '2094a3e1-3c9a-479d-90ae-93adfcd15dab';
     amplitudeKey = '2716d7eebc63593e80e4fd172fc8b6f3';
+    appMetricaKey = '30b6e21f-4f57-4ec6-8349-125026a080c6';
     fbAppID = '423573815015675';
     jivoChat = {
       chatPage: 'https://api.atlantm.com/v1/jivo/widget/ZUIy6YbzLa/',
@@ -151,6 +153,8 @@ export const APP_EMAIL = appEmail;
 export const ONESIGNAL = oneSignalKey;
 
 export const AMPLITUDE_KEY = amplitudeKey;
+
+export const APP_METRICA_API_KEY = appMetricaKey;
 
 export const VK_APP_ID = '7255802';
 

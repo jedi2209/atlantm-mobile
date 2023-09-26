@@ -15,12 +15,11 @@ import {
   actionMenuOpenedCount,
   actionStoreUpdated,
   actionSettingsLoaded,
-  actionFetchMainScreenSettings,
 } from '../actions';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 import {APP_STORE_UPDATED} from '../actionTypes';
-import {APP_LANG, APP_REGION} from '../const';
+import {APP_LANG, APP_REGION, APP_METRICA_API_KEY} from '../const';
 
 import {strings} from '../lang/const';
 import {theme} from '../theme';
@@ -30,6 +29,7 @@ import API from '../../utils/api';
 import {get} from 'lodash';
 import {OneSignal} from 'react-native-onesignal';
 import moment from 'moment';
+// import AppMetrica from 'react-native-appmetrica';
 import PushNotifications from '../components/PushNotifications';
 import styleConst from '../style-const';
 
@@ -55,7 +55,6 @@ const mapDispatchToProps = {
   actionMenuOpenedCount,
   actionStoreUpdated,
   actionSettingsLoaded,
-  actionFetchMainScreenSettings,
 };
 
 const mainScreen = 'BottomTabNavigation';
@@ -136,6 +135,14 @@ const App = props => {
       });
 
     PushNotifications.init();
+
+    // if (APP_METRICA_API_KEY) {
+    //   AppMetrica.activate({
+    //     apiKey: APP_METRICA_API_KEY,
+    //     sessionTimeout: 120,
+    //     firstActivationAsUpdate: false,
+    //   });
+    // }
 
     if (Platform.OS === 'ios') {
       //Prompt for push on iOS
