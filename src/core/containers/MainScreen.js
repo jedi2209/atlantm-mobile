@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   Dimensions,
   Linking,
@@ -24,6 +24,7 @@ import {RefreshControl} from 'react-native-gesture-handler';
 import Carousel from 'react-native-snap-carousel';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Tooltip from 'react-native-walkthrough-tooltip';
 
 import {MainScreenButton} from '../components/MainScreenButtons';
 import RefreshSpinner from '../components/RefreshSpinner';
@@ -39,6 +40,7 @@ import {
   actionAppRated,
   actionAppLoaded,
   actionFetchMainScreenSettings,
+  actionWalktroughVisible,
 } from '../actions';
 
 import {STORE_LINK, APP_EMAIL, ERROR_NETWORK} from '../const';
@@ -67,6 +69,7 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
 
     isAppRated: core.isAppRated,
     isAppLoaded: core.isAppLoaded,
+    isWalkthroughShownAlready: core.isWalkthroughShown,
     menuOpenedCount: core.menuOpenedCount,
     mainScreenSettings: core.mainScreenSettings,
   };
@@ -80,6 +83,7 @@ const mapDispatchToProps = {
   actionAppLoaded,
   fetchDealers,
   fetchBrands,
+  actionWalktroughVisible,
 };
 
 const styles = StyleSheet.create({
@@ -154,11 +158,12 @@ const _linkProcess = (link, props) => {
 
 const RowConstruct = props => {
   const {json, rowNum, rowLength, navigation, firstRow, lastRow} = props;
+  const rowType = get(json[0], 'type', null);
   if (rowLength === 1) {
     return (
       <View
         mt={firstRow ? firstRowMarginTop : 0}
-        p={2}
+        p={rowType === 'actions' ? 0 : 2}
         key={'containerRow' + rowNum}>
         {_processRow({rowData: json, rowNum, navigation, ...props})}
       </View>
@@ -169,7 +174,7 @@ const RowConstruct = props => {
         mt={firstRow ? firstRowMarginTop : 0}
         p={2}
         key={'containerRow' + rowNum}>
-        <HStack justifyContent={'left'} space={3}>
+        <HStack justifyContent={'left'} space={2}>
           {_processRow({rowData: json, rowNum, navigation, ...props})}
         </HStack>
       </View>
@@ -199,15 +204,23 @@ const RowConstruct = props => {
 };
 
 const _processRow = props => {
-  const {rowData, rowNum, navigation, route} = props;
+  const {
+    rowData,
+    rowNum,
+    navigation,
+    route,
+    walkthroughData,
+    setTooltipVisible,
+    isFetchInfoList,
+    infoList,
+  } = props;
   let i = 0;
   let onPressBlockButton = () => {};
-
   return rowData.map(item => {
     i++;
     let widthNew = null;
     let heightNew = null;
-    let style = {};
+    let styleNew = {};
     let titleBackgroundStyle = {};
 
     const screenName = item.link.path;
@@ -222,6 +235,7 @@ const _processRow = props => {
         fontSize: 9,
         bottom: 0,
       };
+      item.type = 'dealersButton';
       titleBackgroundStyle = {
         borderBottomRightRadius: styleConst.borderRadius,
         borderBottomLeftRadius: styleConst.borderRadius,
@@ -242,54 +256,81 @@ const _processRow = props => {
     }
 
     if (i === rowData.length) {
-      style = {marginRight: 18};
+      styleNew = {marginRight: 18};
     }
 
-    if (isDealerButton) {
-      return (
-        <MainScreenButton
-          key={['button', 'dealers', 'select'].join('_')}
-          title={item.title.text}
-          background={require('../../../assets/mainScreen/dealers.png')}
-          size={'full'}
-          type={'bottom'}
-          onPress={() =>
-            navigation.navigate('ChooseDealerScreen', {
-              returnScreen: item?.link?.params?.returnScreen
-                ? item?.link?.params?.returnScreen
-                : route.name,
-              goBack: true,
-              updateDealers: true,
-            })
-          }
-        />
-      );
+    switch (item.type) {
+      case 'dealersButton':
+        return (
+          <Tooltip
+            isVisible={item.key === get(walkthroughData, 'visible')}
+            content={
+              <Text>{item.walkthroughText ? item.walkthroughText : ''}</Text>
+            }
+            allowChildInteraction={false}
+            key={['tooltip', item.key].join('_')}
+            showChildInTooltip={true}
+            placement="bottom"
+            onClose={() => setTooltipVisible()}>
+            <MainScreenButton
+              key={['button', 'dealers', 'select'].join('_')}
+              title={item.title.text}
+              background={require('../../../assets/mainScreen/dealers.png')}
+              size={'full'}
+              type={'bottom'}
+              onPress={() =>
+                navigation.navigate('ChooseDealerScreen', {
+                  returnScreen: item?.link?.params?.returnScreen
+                    ? item?.link?.params?.returnScreen
+                    : route.name,
+                  goBack: true,
+                  updateDealers: true,
+                })
+              }
+            />
+          </Tooltip>
+        );
+      case 'actions':
+        return _renderActions({isFetchInfoList, infoList, navigation});
+      default:
+        return (
+          <Tooltip
+            isVisible={item.key === get(walkthroughData, 'visible')}
+            content={
+              <Text>{item.walkthroughText ? item.walkthroughText : ''}</Text>
+            }
+            allowChildInteraction={false}
+            showChildInTooltip={true}
+            childrenWrapperStyle={{
+              marginLeft: item.type === 'small' ? 0 : 10,
+            }}
+            placement="top"
+            key={['tooltip', item.key].join('_')}
+            onClose={() => setTooltipVisible()}>
+            <MainScreenButton
+              key={['button', rowNum, i].join('_')}
+              title={item.title?.text.replace('||', '\n')}
+              titleStyle={item?.titleStyle}
+              subTitle={item.subTitle?.replace('||', '\n')}
+              subTitleStyle={item?.subTitleStyle}
+              type={item?.titleStyle ? null : item.title?.position}
+              size={item.type}
+              link={item.link}
+              width={widthNew ? widthNew : null}
+              height={heightNew ? heightNew : null}
+              onPress={onPressBlockButton}
+              background={{uri: item?.img}}
+              style={styleNew}
+              titleBackgroundStyle={titleBackgroundStyle}
+            />
+          </Tooltip>
+        );
     }
-
-    return (
-      <MainScreenButton
-        key={['button', rowNum, i].join('_')}
-        title={item.title?.text.replace('||', '\n')}
-        titleStyle={item?.titleStyle}
-        subTitle={item.subTitle?.replace('||', '\n')}
-        subTitleStyle={item?.subTitleStyle}
-        type={item?.titleStyle ? null : item.title?.position}
-        size={item.type}
-        link={item.link}
-        width={widthNew ? widthNew : null}
-        height={heightNew ? heightNew : null}
-        onPress={onPressBlockButton}
-        background={{uri: item?.img}}
-        style={style}
-        titleBackgroundStyle={titleBackgroundStyle}
-      />
-    );
   });
 };
 
 const fetchInfoData = async props => {
-  const {region, fetchInfoList} = props;
-  return fetchInfoList(region).then(action => {
+  return props.fetchInfoList(props.region).then(action => {
     if (action && action.type && action.type === INFO_LIST__FAIL) {
       let message = get(
         action,
@@ -319,14 +360,15 @@ const _renderActions = params => {
     );
   } else if (infoList?.length) {
     return (
-      <View px={2} pt={2} testID="ContactsScreen.currentActionsHeading">
-        <HStack justifyContent={'space-between'}>
-          <Text py={2} fontSize={16} fontFamily={styleConst.font.regular}>
+      <View
+        py={2}
+        testID="ContactsScreen.currentActionsHeading"
+        key={'actionsMainScreen'}>
+        <HStack py={2} px={2} justifyContent={'space-between'}>
+          <Text fontSize={16} fontFamily={styleConst.font.regular}>
             {strings.Menu.main.actions}
           </Text>
           <Text
-            py={2}
-            pl={4}
             onPress={() => navigation.navigate('InfoList')}
             color={styleConst.color.lightBlue}
             fontSize={16}>
@@ -363,8 +405,6 @@ const MainScreen = props => {
     navigation,
     region,
     mainScreenSettings,
-    isFetchInfoList,
-    infoList,
     fetchInfoList,
     fetchBrands,
     fetchDealers,
@@ -372,8 +412,12 @@ const MainScreen = props => {
     isAppLoaded,
   } = props;
   const [isLoading, setLoading] = useState(true);
+  const [walkthroughData, setWalkthroughData] = useState({});
+  const [walkthroughVisibleIndex, setWalkthroughVisibleIndex] = useState(1);
   const colorScheme = useColorScheme() || 'light';
   const prevRegion = usePrevious(region);
+
+  const scrollRef = useRef();
 
   const _onAppRateSuccess = () => {
     !props.isAppRated && props.actionAppRated();
@@ -397,8 +441,27 @@ const MainScreen = props => {
       setLoading(true);
       fetchInfoData({region, fetchInfoList});
       fetchBrands(); // обновляем бренды при первом открытии экрана
-      props.actionFetchMainScreenSettings(region).then(() => {
+      props.actionFetchMainScreenSettings(region).then(res => {
         props.actionAppLoaded(true);
+        if (res.payload.length && !props.isWalkthroughShownAlready) {
+          let walkthroughDataObj = {};
+          let iCount = 1;
+          res.payload.map(row => {
+            row.map(item => {
+              if (item.walkthroughText) {
+                walkthroughDataObj[iCount] = {
+                  key: item.key,
+                  text: item.walkthroughText,
+                };
+                ++iCount;
+              }
+            });
+          });
+          if (get(walkthroughDataObj, '1', false)) {
+            walkthroughDataObj.visible = walkthroughDataObj[1].key;
+            setWalkthroughData(walkthroughDataObj);
+          }
+        }
         setLoading(false);
       });
     }
@@ -418,6 +481,7 @@ const MainScreen = props => {
     <ScrollView
       style={styleConst.safearea.default}
       testID="MainScreen.Wrapper"
+      ref={scrollRef}
       refreshControl={
         isApple ? (
           <RefreshSpinner isRequest={isLoading} onRefresh={_onRefresh} />
@@ -445,6 +509,32 @@ const MainScreen = props => {
               json={el}
               firstRow={rowFirst}
               lastRow={rowLast}
+              walkthroughData={walkthroughData}
+              setTooltipVisible={() => {
+                const newIndex = walkthroughVisibleIndex + 1;
+                const walkthroughLength = Object.keys(walkthroughData).length;
+                setWalkthroughVisibleIndex(newIndex);
+                if (walkthroughLength - 1 === newIndex) {
+                  setWalkthroughData({...walkthroughData, visible: null});
+                  scrollRef.current?.scrollToEnd({
+                    animated: true,
+                  });
+                  setTimeout(() => {
+                    setWalkthroughData({
+                      ...walkthroughData,
+                      visible: get(walkthroughData[newIndex], 'key', null),
+                    });
+                  }, 700);
+                } else {
+                  setWalkthroughData({
+                    ...walkthroughData,
+                    visible: get(walkthroughData[newIndex], 'key', null),
+                  });
+                }
+                if (!get(walkthroughData[newIndex], 'key', false)) {
+                  props.actionWalktroughVisible(true);
+                }
+              }}
               {...props}
             />
           );
@@ -493,17 +583,6 @@ const MainScreen = props => {
             </Box>
           </Pressable>
         ) : null}
-        {_renderActions({isFetchInfoList, infoList, navigation})}
-        <View px={2} mt={4}>
-          <MainScreenButton
-            key={['button', 'settings'].join('_')}
-            title={strings.Menu.main.settings}
-            background={require('../../../assets/mainScreen/settings.png')}
-            size={'full'}
-            type={'bottom'}
-            onPress={() => navigation.navigate('SettingsScreen')}
-          />
-        </View>
         {false ? (
           <Pressable
             px={2}

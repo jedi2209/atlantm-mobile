@@ -80,7 +80,7 @@ const sizeType = {
     height: 96,
   },
   full: {
-    width: '100%',
+    width: widthDefault * 0.97,
     height: 128,
   },
 };

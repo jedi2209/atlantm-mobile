@@ -9,6 +9,7 @@ import {
   MAIN_SCREEN__REQUEST,
   MAIN_SCREEN__SUCCESS,
   MAIN_SCREEN__FAIL,
+  APP_WALKTROUGH_SHOWN,
 } from './actionTypes';
 
 import API from '../utils/api';
@@ -73,6 +74,15 @@ export const actionSetPushActionSubscribe = isSubscribe => {
     dispatch({
       type: APP_PUSH_ACTION_SUBSCRIBE__SET,
       payload: isSubscribe,
+    });
+  };
+};
+
+export const actionWalktroughVisible = isVisible => {
+  return dispatch => {
+    dispatch({
+      type: APP_WALKTROUGH_SHOWN,
+      payload: isVisible,
     });
   };
 };
