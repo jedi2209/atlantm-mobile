@@ -233,6 +233,7 @@ const OrderPartsScreen = props => {
               goBack: true,
               isLocal: true,
               showBrands: false,
+              readonly: true,
               dealerFilter: {
                 type: 'ZZ',
               },

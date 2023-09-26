@@ -186,7 +186,7 @@ const CallMeBackScreen = ({
               goBack: true,
               isLocal: true,
               showBrands: false,
-              readonly: isDealerHide,
+              readonly: true,
             },
           },
         ],
