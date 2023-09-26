@@ -102,8 +102,6 @@ const ServiceScreenStep2 = props => {
           parseInt(serviceInfo.summary[0].time.required, 10);
       }
     }
-    console.log('data', data);
-    console.log('dateFromForm', dateFromForm);
     if (isLead) {
       let textAdd = get(data, 'text', '');
       let text = '';

@@ -153,7 +153,6 @@ const ServiceScreen = props => {
           goBack: true,
           isLocal: true,
           showBrands: false,
-          readonly: isDealerHide,
           dealerFilter: {
             type: 'ST',
           },
