@@ -17,6 +17,7 @@ import {
   APP_PUSH_GRANTED__SET,
   APP_PUSH_ACTION_SUBSCRIBE__SET,
   APP_MENU_OPENED_COUNTER,
+  APP_WALKTROUGH_SHOWN,
   APP_ACTION_RATED,
   APP_STORE_UPDATED,
   APP_SETTINGS_LOADED,
@@ -87,6 +88,19 @@ const isAppLoaded = (state = false, action) => {
   }
 };
 
+const isWalkthroughShown = (state = false, action) => {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'core.isWalkthroughShown', false);
+    case APP_STORE_UPDATED:
+      return false;
+    case APP_WALKTROUGH_SHOWN:
+      return action.payload;
+    default:
+      return state;
+  }
+};
+
 const isStoreUpdated = (state = false, action) => {
   switch (action.type) {
     case REHYDRATE:
@@ -138,6 +152,7 @@ const coreReducer = combineReducers({
   menuOpenedCount,
   isAppRated,
   isAppLoaded,
+  isWalkthroughShown,
   isStoreUpdated,
   language,
   settings,
