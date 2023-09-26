@@ -171,7 +171,7 @@ const ServiceScreen = props => {
           goBack: true,
           isLocal: true,
           showBrands: false,
-          readonly: true,
+          readonly: get(route, 'params.settings.dealerHide', true),
           dealerFilter: {
             type: 'ST',
           },

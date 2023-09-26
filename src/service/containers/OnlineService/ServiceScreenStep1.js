@@ -456,7 +456,7 @@ class ServiceScreenStep1 extends Component {
     this.FormConfig = {
       fields: {
         groups: [
-          !get(this.settingsFromNavigation, 'disableDealer', false)
+          !get(this.settingsFromNavigation, 'dealerHide', false)
             ? this.dealerBlock
             : {},
           {

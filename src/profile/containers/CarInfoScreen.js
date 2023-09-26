@@ -252,7 +252,7 @@ const CarInfoScreen = props => {
                         params: {
                           car: car,
                           settings: {
-                            disableDealer: false,
+                            dealerHide: false,
                             disableCarBlock: true,
                           },
                         },
@@ -264,7 +264,7 @@ const CarInfoScreen = props => {
                         params: {
                           car: car,
                           settings: {
-                            disableDealer: true,
+                            dealerHide: true,
                             disableCarBlock: true,
                             submitButtonText: strings.ServiceScreen.title,
                             returnOnFailFetchServices: true,
