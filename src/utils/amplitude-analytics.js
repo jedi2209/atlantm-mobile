@@ -1,6 +1,7 @@
 import {store} from '../core/store';
 import {get} from 'lodash';
 import {Amplitude} from '@amplitude/react-native';
+// import AppMetrica from 'react-native-appmetrica';
 import * as Sentry from '@sentry/react-native';
 
 import {AMPLITUDE_KEY} from '../core/const';
@@ -26,5 +27,6 @@ export default class Analytics {
       });
     }
     ampInstance.logEvent(`${category}:${action}`, params);
+    // AppMetrica.reportEvent(`${category}:${action}`, params);
   }
 }

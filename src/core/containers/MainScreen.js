@@ -26,9 +26,7 @@ import Carousel from 'react-native-snap-carousel';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {MainScreenButton} from '../components/MainScreenButtons';
-import FlagButton from '../components/FlagButton';
 import RefreshSpinner from '../components/RefreshSpinner';
-import DealerItemList from '../components/DealerItemList';
 import Offer from '../components/Offer';
 import RateThisApp from '../components/RateThisApp';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
@@ -43,21 +41,13 @@ import {
   actionFetchMainScreenSettings,
 } from '../actions';
 
-import {
-  STORE_LINK,
-  APP_REGION,
-  APP_EMAIL,
-  DEALERS_SETTINGS,
-  ERROR_NETWORK,
-} from '../const';
+import {STORE_LINK, APP_EMAIL, ERROR_NETWORK} from '../const';
 import styleConst from '../style-const';
 import {strings} from '../lang/const';
 
 import {get} from 'lodash';
 import Analytics from '../../utils/amplitude-analytics';
 import {usePrevious} from '../../utils/hooks';
-import TransitionView from '../components/TransitionView';
-import style from '../components/Footer/style';
 import LogoLoader from '../components/LogoLoader';
 
 const {width, height} = Dimensions.get('screen');
@@ -320,7 +310,7 @@ const _renderActions = params => {
   const {isFetchInfoList, infoList, navigation} = params;
   if (isFetchInfoList) {
     return (
-      <View style={styles.spinnerContainer}>
+      <View style={styles.spinnerContainer} key={'actionsLoader'}>
         <ActivityIndicator
           color={styleConst.color.blue}
           style={styleConst.spinner}
