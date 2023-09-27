@@ -130,16 +130,16 @@ class TestDriveScreen extends PureComponent {
     if (dealer && dealer.length > 1) {
       dealer.map(el => {
         this.listAll.push({
-          label: el.name,
-          value: el.id,
-          key: el.id,
+          label: get(el, 'name', null),
+          value: get(el, 'id', null),
+          key: get(el, 'id', null),
         });
       });
     } else {
       this.listAll.push({
-        label: dealer[0].name,
-        value: dealer[0].id,
-        key: dealer[0].id,
+        label: get(dealer, '0.name', null),
+        value: get(dealer, '0.id', null),
+        key: get(dealer, '0.id', null),
       });
     }
 
@@ -377,16 +377,16 @@ class TestDriveScreen extends PureComponent {
             if (!carsAwait.payload.model) {
               Object.values(carsAwait.payload).map(el => {
                 return tdCarsArr.push({
-                  label: el.name,
-                  value: el.id,
-                  key: el.id,
+                  label: get(el, 'name', null),
+                  value: get(el, 'id', null),
+                  key: get(el, 'id', null),
                 });
               });
             } else {
               tdCarsArr.push({
-                label: carsAwait.payload.name,
-                value: carsAwait.payload.id,
-                key: carsAwait.payload.id,
+                label: get(carsAwait, 'payload.name', null),
+                value: get(carsAwait, 'payload.id', null),
+                key: get(carsAwait, 'payload.id', null),
               });
             }
             if (tdCarsArr.length > 0) {

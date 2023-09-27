@@ -120,17 +120,17 @@ class OrderScreen extends Component {
       if (dealer.length) {
         dealer.map(el => {
           listDealers.push({
-            label: el.name,
-            value: el.id,
-            key: el.id,
+            label: get(el, 'name', ''),
+            value: get(el, 'id', ''),
+            key: get(el, 'id', ''),
           });
         });
       } else {
         if (typeof dealer == 'object') {
           listDealers.push({
-            label: dealer.name,
-            value: dealer.id,
-            key: dealer.id,
+            label: get(dealer, 'name', ''),
+            value: get(dealer, 'id', ''),
+            key: get(dealer, 'id', ''),
           });
         }
       }

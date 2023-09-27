@@ -6,6 +6,7 @@ import {Image, View, ActivityIndicator, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
 import {SvgCssUri} from 'react-native-svg';
 import styleConst from '../style-const';
+import {get} from 'lodash';
 
 const styles = StyleSheet.create({
   loader: {
@@ -27,7 +28,10 @@ const styles = StyleSheet.create({
 const Imager = props => {
   const [isLoading, setLoading] = useState(false);
 
-  let path = props?.source?.uri?.toString();
+  let path = get(props, 'source.uri', null);
+  if (path) {
+    path = path.toString();
+  }
   let extension = null;
   if (path) {
     extension = path.split('.').pop();

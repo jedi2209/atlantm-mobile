@@ -752,8 +752,8 @@ export default {
     let formDataNew = [];
 
     formBody.map(val => {
-      formData.append(val.name, val.value);
-      formDataNew.push({name: val.name, data: val.value});
+      formData.append(val?.name, val?.value);
+      formDataNew.push({name: val?.name, data: val?.value});
     });
 
     let cnt = 0;

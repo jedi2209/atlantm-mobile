@@ -234,7 +234,7 @@ const _renderTechData = (title, data, carDetails) => {
       } else {
         name = get(carDetails, element.value, null);
       }
-      return _renderItem(element.name + ':', name, element.postfix);
+      return _renderItem(get(element, 'name') + ':', name, element.postfix);
     });
     let res = [];
     res = resRaw.filter(el => {
@@ -272,17 +272,17 @@ const _renderComplectationItem = (title, data) => {
     <View key={title} style={{marginBottom: 10}}>
       <Text style={styles.sectionTitle}>{title}</Text>
       {data.map(item => {
-        const key = md5(item.name + item.id);
+        const key = md5(get(item, 'name', null) + item.id);
         return (
           <View key={key}>
-            {item.name && item.value ? (
+            {get(item, 'name', null) && get(item, 'value', null) ? (
               <HStack style={styles.sectionRow}>
                 <View style={styles.sectionProp}>
                   <Text
                     style={styles.sectionPropText}
                     ellipsizeMode="tail"
                     numberOfLines={2}>
-                    {item.name}
+                    {get(item, 'name', null)}
                   </Text>
                 </View>
                 <View style={styles.sectionValue}>
@@ -290,13 +290,13 @@ const _renderComplectationItem = (title, data) => {
                     style={styles.sectionValueText}
                     ellipsizeMode="tail"
                     numberOfLines={1}>
-                    {item.value}
+                    {get(item, 'value', null)}
                   </Text>
                 </View>
               </HStack>
             ) : (
               <Text style={[styles.sectionPropText, styles.sectionRow]}>
-                {item.name}
+                {get(item, 'name', null)}
               </Text>
             )}
           </View>
@@ -830,8 +830,8 @@ const NewCarItemScreen = ({
             <View>
               {stockKeys.map(key => {
                 return _renderComplectationItem(
-                  stock[key].name,
-                  stock[key].data,
+                  get(stock[key], 'name', null),
+                  get(stock[key], 'data', null),
                 );
               })}
             </View>
@@ -841,8 +841,8 @@ const NewCarItemScreen = ({
             <View>
               {additionalKeys.map(key => {
                 return _renderComplectationItem(
-                  additional[key].name,
-                  additional[key].data,
+                  get(additional[key], 'name', null),
+                  get(additional[key], 'data', null),
                 );
               })}
             </View>
@@ -877,7 +877,7 @@ const NewCarItemScreen = ({
               testID="NewCarItemScreen.BadgesWrapper"
               style={styles.badgesView}>
               {badge.map((item, index) => {
-                switch (item.name.toLowerCase()) {
+                switch (get(item, 'name', '').toLowerCase()) {
                   case 'спец.цена':
                     item.name = strings.CarList.badges.specialPrice;
                     break;
@@ -892,7 +892,7 @@ const NewCarItemScreen = ({
                     key={'badgeItem' + carDetails.id.api + index}
                     index={index}
                     bgColor={item.background}
-                    name={item.name}
+                    name={get(item, 'name', '')}
                     textColor={item.textColor}
                   />
                 );

@@ -272,7 +272,7 @@ const TvaResultsScreen = props => {
                 <VStack space={'md'}>
                   <HStack justifyContent="space-between">
                     <Text>{strings.TvaResultsScreen.serviceMan}</Text>
-                    <Text>{item.name}</Text>
+                    <Text>{get(item, 'name')}</Text>
                   </HStack>
                   <HStack justifyContent="space-between">
                     <Text>{strings.TvaResultsScreen.time}</Text>
@@ -280,7 +280,7 @@ const TvaResultsScreen = props => {
                   </HStack>
                   <HStack justifyContent="space-between">
                     <Text>{strings.TvaResultsScreen.status}</Text>
-                    <Text>{item.status}</Text>
+                    <Text>{get(item, 'status')}</Text>
                   </HStack>
                 </VStack>
               </Box>

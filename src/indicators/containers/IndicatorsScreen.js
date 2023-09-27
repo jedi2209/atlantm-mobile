@@ -1,19 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {findNodeHandle, Image, Dimensions} from 'react-native';
 import {
-  findNodeHandle,
-  Text,
-  View,
   ScrollView,
-  Image,
-  Dimensions,
-} from 'react-native';
-import {
   Container,
   Stack,
   Box,
   Popover,
   Button,
+  View,
+  Text,
   IconButton,
   StatusBar,
 } from 'native-base';
@@ -28,6 +24,7 @@ import EmptyMessage from '../../core/components/EmptyMessage';
 // import IndicatorsRow from '../components/_old_IndicatorsRow';
 
 // helpers
+import {get} from 'lodash';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
 
@@ -147,7 +144,8 @@ class IndicatorsScreen extends Component {
                       />
                     );
                   }}>
-                  <Popover.Content accessibilityLabel={indicator.name}>
+                  <Popover.Content
+                    accessibilityLabel={get(indicator, 'name', 'Индикатор')}>
                     <Popover.Arrow />
                     <Popover.CloseButton />
                     <Popover.Header backgroundColor={styleConst.color.white}>

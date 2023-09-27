@@ -294,15 +294,15 @@ class ServiceScreenStep1 extends Component {
       let services = [];
       data.data.map(el => {
         if (
-          route.name === 'ServiceTOCalculatorScreen' &&
-          el.id.toString() === 'other'
+          get(route, 'name', null) === 'ServiceTOCalculatorScreen' &&
+          get(el, 'id', '').toString() === 'other'
         ) {
           return;
         }
         services.push({
-          label: el.name.toString(),
-          value: el.id.toString(),
-          key: el.id.toString(),
+          label: get(el, 'name', '').toString(),
+          value: get(el, 'id', '').toString(),
+          key: get(el, 'id', '').toString(),
         });
       });
       this.setState({

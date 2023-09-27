@@ -833,9 +833,8 @@ const MainFilterScreen = ({
               <VStack
                 space="2"
                 divider={<Divider bg="gray.100" thickness="1" />}>
-                {dataFilters &&
-                dataFilters.prices &&
-                !dataFilters.prices.hidden ? (
+                {get(dataFilters, 'prices') &&
+                !get(dataFilters, 'prices.hidden') ? (
                   <FilterRow
                     onPress={() => {
                       _showHideModal(true, modals.price);
@@ -850,7 +849,7 @@ const MainFilterScreen = ({
                           get(
                             stateFilters,
                             'price[from]',
-                            dataFilters.prices.min || 0,
+                            dataFilters?.prices?.min || 0,
                           ),
                         ),
                       to:
@@ -860,7 +859,7 @@ const MainFilterScreen = ({
                           get(
                             stateFilters,
                             'price[to]',
-                            dataFilters.prices.max || 0,
+                            dataFilters?.prices?.max || 0,
                           ),
                         ),
                     }}
@@ -1298,7 +1297,7 @@ const MainFilterScreen = ({
               </ModalViewFilter>
             ) : null}
             {/* Модалка Цена */}
-            {dataFilters.prices ? (
+            {get(dataFilters, 'prices', null) ? (
               <ModalViewFilter
                 isModalVisible={showModal === modals.price}
                 onHide={() => _showHideModal(false)}
@@ -1321,8 +1320,8 @@ const MainFilterScreen = ({
                       get(stateFilters, 'price[to]', dataFilters?.prices?.max),
                     ]}
                     step={dataFilters?.prices?.step}
-                    min={dataFilters.prices.min}
-                    max={dataFilters.prices.max}
+                    min={dataFilters?.prices?.min}
+                    max={dataFilters?.prices?.max}
                     sliderLength={sliderWidth}
                     onValuesChange={values =>
                       _onChangeFilter({
