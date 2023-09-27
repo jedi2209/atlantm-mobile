@@ -131,7 +131,7 @@ const ServiceScreen = props => {
       myCars.push(item);
     }
   });
-  if (myCars.length === 1) {
+  if (myCars.length === 1 && !carSelected) {
     selectCar({
       carBrand: myCars[0]?.brand,
       carModel: myCars[0]?.model,
