@@ -34,7 +34,7 @@ import {get, orderBy, valuesIn} from 'lodash';
 import {ERROR_NETWORK} from '../../../core/const';
 
 import {strings} from '../../../core/lang/const';
-import { RotationGestureHandler } from 'react-native-gesture-handler';
+import {RotationGestureHandler} from 'react-native-gesture-handler';
 
 const mapStateToProps = ({dealer, profile, catalog}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
@@ -334,24 +334,36 @@ const CarCostScreen = ({
 
       const dataToSend = {
         dealerId,
-        date: yearMonthDay(dataFromForm.DATE) || '',
-        firstName: dataFromForm.NAME || '',
-        secondName: dataFromForm.SECOND_NAME || '',
-        lastName: dataFromForm.LAST_NAME || '',
-        phone: dataFromForm.PHONE || '',
-        email: dataFromForm.EMAIL || '',
-        comment: dataFromForm.COMMENT || '',
-        vin: dataFromForm.CARVIN || carSelected.carVIN || '',
-        brand: dataFromForm.CARBRAND || carSelected.carBrand || '--',
-        model: dataFromForm.CARMODEL || carSelected.carModel || '--',
-        year: dataFromForm.CARYEAR || carSelected.carYear || '',
+        date: yearMonthDay(get(dataFromForm, 'DATE')) || '',
+        firstName: get(dataFromForm, 'NAME', ''),
+        secondName: get(dataFromForm, 'SECOND_NAME', ''),
+        lastName: get(dataFromForm, 'LAST_NAME', ''),
+        phone: get(dataFromForm, 'PHONE', ''),
+        email: get(dataFromForm, 'EMAIL', ''),
+        comment: get(dataFromForm, 'COMMENT', ''),
+        vin: get(dataFromForm, 'CARVIN', get(carSelected, 'carVIN', '')),
+        brand: get(
+          dataFromForm,
+          'CARBRAND',
+          get(carSelected, 'carBrand', '--'),
+        ),
+        model: get(
+          dataFromForm,
+          'CARMODEL',
+          get(carSelected, 'carModel', '--'),
+        ),
+        year: get(dataFromForm, 'CARYEAR', get(carSelected, 'carYear', '')),
         photos: photoForUpload,
-        mileage: dataFromForm.CARMILEAGE || carSelected.carMileage || '',
+        mileage: get(
+          dataFromForm,
+          'CARMILEAGE',
+          get(carSelected, 'carMileage', ''),
+        ),
         mileageUnit: 'км',
-        engineVolume: dataFromForm.CARENGINEVOLUME || '',
-        engineType: dataFromForm.CARENGINETYPE || '',
-        gearbox: dataFromForm.CARGEARBOXTYPE || '',
-        wheel: dataFromForm.CARWHEELTYPE || '',
+        engineVolume: get(dataFromForm, 'CARENGINEVOLUME', ''),
+        engineType: get(dataFromForm, 'CARENGINETYPE', ''),
+        gearbox: get(dataFromForm, 'CARGEARBOXTYPE', ''),
+        wheel: get(dataFromForm, 'CARWHEELTYPE', ''),
       };
 
       const actionData = await actionCarCostOrder(dataToSend);

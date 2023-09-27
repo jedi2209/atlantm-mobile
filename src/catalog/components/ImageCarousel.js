@@ -7,6 +7,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Imager from '../../core/components/Imager';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
+import {get} from 'lodash';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -52,7 +53,7 @@ const ImageCarousel = ({
         </Pressable>
       );
     } else {
-      switch (item.name) {
+      switch (get(item, 'name')) {
         case 'newCar':
           return (
             <View

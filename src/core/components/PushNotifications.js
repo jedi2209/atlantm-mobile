@@ -112,12 +112,12 @@ export default {
     OneSignal.logout();
   },
 
-  addTag(name, value) {
+  addTag(name, value = '') {
     OneSignal.User.addTag(name, value.toString());
   },
 
   getUserID() {
-    return OneSignal.User.PushSubscription.getPushSubscriptionId();
+    return OneSignal.User.pushSubscription.getPushSubscriptionId();
   },
 
   removeTag(name) {
@@ -128,7 +128,7 @@ export default {
     }
   },
 
-  async subscribeToTopic(topic, id) {
+  async subscribeToTopic(topic, id = '') {
     const isPermission = await this.checkPermission();
     if (isPermission) {
       this.unsubscribeFromTopic(topic);

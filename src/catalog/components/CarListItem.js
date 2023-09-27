@@ -441,7 +441,7 @@ const CarListItem = ({
     return (
       <>
         {badge.map((item, index) => {
-          switch (item.name.toLowerCase()) {
+          switch (get(item, 'name', '').toLowerCase()) {
             case 'спец.цена':
               item.name = strings.CarList.badges.specialPrice;
               break;
@@ -455,7 +455,7 @@ const CarListItem = ({
               key={'badgeItem' + car.id.api + index}
               index={index}
               bgColor={item.background}
-              name={item.name}
+              name={get(item, 'name')}
               textColor={item.textColor}
             />
           );

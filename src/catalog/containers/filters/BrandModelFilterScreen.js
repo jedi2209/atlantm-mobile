@@ -83,12 +83,12 @@ const reducerFilters = (state = initialStateFilters, field) => {
   }
   if (typeof field === 'object' && field.length) {
     field.map(val => {
-      state[val.name] = val.value;
+      state[get(val, 'name', '')] = val.value;
     });
     Object.assign(res, state);
   } else {
     Object.assign(res, state, {
-      [field.name]: field.value,
+      [get(field, 'name', '')]: field.value,
     });
   }
   return res;

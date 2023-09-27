@@ -19,6 +19,7 @@ import LogoLoader from '../../core/components/LogoLoader';
 import {strings} from '../../core/lang/const';
 import {ActivityIndicator} from 'react-native-paper';
 import styleConst from '../../core/style-const';
+import {get} from 'lodash';
 
 const _keyExtractor = item => {
   if (item && item.hash) {
@@ -73,7 +74,7 @@ const CarList = props => {
       <CarListItem
         resizeMode={resizeMode}
         key={item.hash ? item.hash : item.id.api}
-        currency={prices.curr.name}
+        currency={get(prices, 'curr.name', '')}
         testID="CarListItem.Wrapper"
         car={item}
         prices={prices}
