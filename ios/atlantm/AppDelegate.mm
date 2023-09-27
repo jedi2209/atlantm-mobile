@@ -2,8 +2,10 @@
 // #import <Firebase.h>
 #import <GoogleMaps/GoogleMaps.h>
 
-// modules
+#import <OneSignalFramework/OneSignalFramework.h>
 #import "Orientation.h"
+#import <AuthenticationServices/AuthenticationServices.h>
+#import <SafariServices/SafariServices.h>
 #import <FBSDKCoreKit/FBSDKCoreKit-swift.h>
 #import <RNGoogleSignin/RNGoogleSignin.h>
 #if __has_include(<VKSdkFramework/VKSdkFramework.h>)
