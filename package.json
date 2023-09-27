@@ -1,6 +1,6 @@
 {
   "name": "Atlant-M",
-  "version": "8.4.6",
+  "version": "8.5.0",
   "private": true,
   "scripts": {
     "build": "yarn android-version; yarn ios-build;",
