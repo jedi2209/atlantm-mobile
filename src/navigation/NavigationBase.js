@@ -179,11 +179,6 @@ export const Base = ({navigation, route}) => {
             {
               icon: 'close',
               iconSize: 12,
-              InnerStyle: {
-                ...stylesHeader.headerBackButtonContainer,
-                width: 50,
-                height: 50,
-              },
             },
           )}
         />

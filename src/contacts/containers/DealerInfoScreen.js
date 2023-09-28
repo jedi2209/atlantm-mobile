@@ -55,7 +55,7 @@ import Carousel from 'react-native-snap-carousel';
 import {strings} from '../../core/lang/const';
 
 const HEADER_MAX_HEIGHT = 416;
-const infoListHeight = 190;
+const infoListHeight = 300;
 
 const styles = StyleSheet.create({
   imgHero: {
