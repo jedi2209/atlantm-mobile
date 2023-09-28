@@ -31,12 +31,12 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = ({dealer, catalog}) => {
   return {
-    items: catalog.usedCar.items,
-    pages: catalog.usedCar.pages,
-    prices: catalog.usedCar.prices,
-    isFetchItems: catalog.usedCar.meta.isFetchItems,
+    items: get(catalog, 'usedCar.items', null),
+    pages: get(catalog, 'usedCar.pages', null),
+    prices: get(catalog, 'usedCar.prices', null),
+    isFetchItems: get(catalog, 'usedCar.meta.isFetchItems', false),
     region: dealer.region,
-    filters: catalog.usedCar.filters,
+    filters: get(catalog, 'usedCar.filters', null),
   };
 };
 

@@ -108,10 +108,10 @@ const usedCarPrices = (state = {}, action) => {
       if (action.payload.type === EVENT_LOAD_MORE) {
         return {
           ...state,
-          ...action.payload.prices,
+          ...action.payload?.prices,
         };
       }
-      return action.payload.prices;
+      return action.payload?.prices;
     default:
       return state;
   }
