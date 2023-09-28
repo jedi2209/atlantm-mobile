@@ -1091,7 +1091,7 @@ class Form extends Component {
       let countriesList = [];
       let countriesCodes = {};
       countriesListStatic.map(el => {
-        if (countrySettings.includes(el.iso2)) {
+        if (countrySettings.includes(get(el, 'iso2'))) {
           countriesList.push(el);
           countriesCodes[el.iso2] = el;
         }

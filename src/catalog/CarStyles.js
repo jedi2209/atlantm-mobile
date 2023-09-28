@@ -226,17 +226,13 @@ export default StyleSheet.create({
   bodyButtonLeft: {
     borderBottomLeftRadius: 0,
     borderTopLeftRadius: 0,
-    borderEndColor: styleConst.color.red,
-    borderTopColor: styleConst.color.red,
-    borderBottomColor: styleConst.color.red,
+    borderColor: styleConst.color.red,
     borderLeftWidth: 0,
   },
   bodyButtonRight: {
     borderBottomRightRadius: 0,
     borderTopRightRadius: 0,
-    borderStartColor: styleConst.color.blue,
-    borderTopColor: styleConst.color.blue,
-    borderBottomColor: styleConst.color.blue,
+    borderColor: styleConst.color.blue,
     borderRightWidth: 0,
   },
   bodyButtonIcon: {
