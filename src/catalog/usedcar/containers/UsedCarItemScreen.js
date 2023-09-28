@@ -83,7 +83,6 @@ const UsedCarItemScreen = props => {
     route,
   } = props;
 
-  const platesScrollView = useRef(null);
   const [sectionActive, setSectionActive] = useState([0]);
 
   const carId = get(route, 'params.carId');
@@ -328,19 +327,11 @@ const UsedCarItemScreen = props => {
       model_name: get(carDetails, 'model.name'),
     });
 
-    if (carDetails && !isFetchingCarDetails && platesScrollView?.current) {
+    if (carDetails && !isFetchingCarDetails) {
       const currency = get(route, 'params.currency');
       navigation.setParams({
         carDetails: carDetails,
       });
-      setTimeout(() => {
-        platesScrollView &&
-          platesScrollView?.current.scrollToEnd({duration: 500});
-        setTimeout(() => {
-          platesScrollView &&
-            platesScrollView?.current.scrollTo({x: 0, y: 0, animated: true});
-        }, 500);
-      }, 3000);
     }
   }, []);
 
@@ -519,8 +510,7 @@ const UsedCarItemScreen = props => {
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 bounces={true}
-                testID="NewCarItemScreen.PlatesWrapper"
-                ref={platesScrollView}>
+                testID="NewCarItemScreen.PlatesWrapper">
                 <HStack px="2%" mb="3">
                   {get(carDetails, 'mileage') ? (
                     <OptionPlate

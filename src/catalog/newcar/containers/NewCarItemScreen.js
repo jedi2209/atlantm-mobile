@@ -133,21 +133,14 @@ const OptionPlate = ({
 };
 
 const _renderOptionPlates = params => {
-  const {
-    platesScrollViewRef,
-    carDetails,
-    engineId,
-    engineVolumeShort,
-    wheelName,
-    colorName,
-  } = params;
+  const {carDetails, engineId, engineVolumeShort, wheelName, colorName} =
+    params;
   return (
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
       bounces={true}
-      testID="NewCarItemScreen.PlatesWrapper"
-      ref={platesScrollViewRef}>
+      testID="NewCarItemScreen.PlatesWrapper">
       <HStack px="2%" mb="4" mr="10">
         <OptionPlate
           title={strings.NewCarItemScreen.plates.complectation}
@@ -524,7 +517,6 @@ const NewCarItemScreen = ({
   actionFetchNewCarDetails,
 }) => {
   const [tabName, setTabName] = useState('base');
-  const platesScrollViewRef = useRef(null);
   const [isLoading, setLoading] = useState(true);
 
   const [sectionActive, setSectionActive] = useState([0]);
@@ -653,15 +645,6 @@ const NewCarItemScreen = ({
         setLoading(false);
       }
     });
-
-    if (carDetails && !isLoading && platesScrollViewRef) {
-      setTimeout(() => {
-        platesScrollViewRef?.current.scrollToEnd({duration: 500});
-        setTimeout(() => {
-          platesScrollViewRef?.current.scrollTo({x: 0, y: 0, animated: true});
-        }, 500);
-      }, 3000);
-    }
     return () => {};
   }, []);
 
@@ -947,7 +930,6 @@ const NewCarItemScreen = ({
             </View>
 
             {_renderOptionPlates({
-              platesScrollViewRef,
               carDetails,
               engineId,
               engineVolumeShort,
