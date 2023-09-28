@@ -1702,7 +1702,7 @@ const MainFilterScreen = ({
             shadow="7"
             isDisabled={!totalCars || totalCars === 0 ? true : false}
             onPress={() => {
-              _onSubmitButtonPress({showPrices: !dataFilters.prices.hidden});
+              _onSubmitButtonPress({showPrices: !dataFilters?.prices?.hidden});
             }}>
             {totalCars
               ? `${strings.CarsFilterScreen.resultsButton.show} ${totalCars} авто`
