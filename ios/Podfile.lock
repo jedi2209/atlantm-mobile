@@ -90,43 +90,43 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
-  - OneSignalXCFramework (5.0.1):
-    - OneSignalXCFramework/OneSignalComplete (= 5.0.1)
-  - OneSignalXCFramework/OneSignal (5.0.1):
+  - OneSignalXCFramework (5.0.2):
+    - OneSignalXCFramework/OneSignalComplete (= 5.0.2)
+  - OneSignalXCFramework/OneSignal (5.0.2):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalComplete (5.0.1):
+  - OneSignalXCFramework/OneSignalComplete (5.0.2):
     - OneSignalXCFramework/OneSignal
     - OneSignalXCFramework/OneSignalInAppMessages
     - OneSignalXCFramework/OneSignalLocation
-  - OneSignalXCFramework/OneSignalCore (5.0.1)
-  - OneSignalXCFramework/OneSignalExtension (5.0.1):
+  - OneSignalXCFramework/OneSignalCore (5.0.2)
+  - OneSignalXCFramework/OneSignalExtension (5.0.2):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalInAppMessages (5.0.1):
+  - OneSignalXCFramework/OneSignalInAppMessages (5.0.2):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLocation (5.0.1):
+  - OneSignalXCFramework/OneSignalLocation (5.0.2):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalNotifications (5.0.1):
+  - OneSignalXCFramework/OneSignalNotifications (5.0.2):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOSCore (5.0.1):
+  - OneSignalXCFramework/OneSignalOSCore (5.0.2):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalOutcomes (5.0.1):
+  - OneSignalXCFramework/OneSignalOutcomes (5.0.2):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalUser (5.0.1):
+  - OneSignalXCFramework/OneSignalUser (5.0.2):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
@@ -454,8 +454,8 @@ PODS:
     - React-Core
   - react-native-netinfo (9.4.1):
     - React-Core
-  - react-native-onesignal (5.0.0):
-    - OneSignalXCFramework (= 5.0.1)
+  - react-native-onesignal (5.0.1):
+    - OneSignalXCFramework (= 5.0.2)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-orientation-locker (1.5.0):
     - React-Core
@@ -975,7 +975,7 @@ SPEC CHECKSUMS:
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
-  OneSignalXCFramework: 8429bc2456554da1b09b17135621087152ad05a0
+  OneSignalXCFramework: d47a350b15e106a5dc310e3f97867e28dad6589e
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: df81ab637d35fac9e6eb94611cfd20f0feb05455
   RCTTypeSafety: 4636e4a36c7c2df332bda6d59b19b41c443d4287
@@ -995,7 +995,7 @@ SPEC CHECKSUMS:
   react-native-google-maps: dd12cdd86b8e3fedbbb671676aedaa2f656e2ccd
   react-native-maps: 667f9b975549c6fa9b1631bf859440f68ebd3b8f
   react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
-  react-native-onesignal: 31abbe6e1a47f85304a5bd6973eaab6ae018b50c
+  react-native-onesignal: 2f88c5f8d353ab553f699e760c7995a511aec5f4
   react-native-orientation-locker: 851f6510d8046ea2f14aa169b1e01fcd309a94ba
   react-native-otp-auto-fill: 722b3b99ddad3a2e92b6dacafdad6ab533e6ae2a
   react-native-pager-view: d211379f61895b6349bd7e571b44a26d005c2975

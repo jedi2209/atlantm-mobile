@@ -3514,9 +3514,9 @@ available-typed-arrays@^1.0.5:
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
 aws-sdk@^2.1313.0:
-  version "2.1466.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1466.0.tgz#ad7f4766b1d5feb54dacd3289e7a2e033803838e"
-  integrity sha512-wkpWe0TBNziEI5wNw2twRofCaNQAgQ+v91HoPylmcuD5qqgRm6hoV7M5NSOMKO8ALlglZdR66EmGusaZ2dMJwA==
+  version "2.1467.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1467.0.tgz#e3f2217ca8592b06021286bac304a58d2635fdb2"
+  integrity sha512-XJNbV2ORQB6XanyBLPJBjvm6axWlblFdyFHa+ZaUK4Kp3cZBggy53+0PMxS3bAGJKcP6h2pZQio9xZMCoebAKQ==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -8448,10 +8448,10 @@ react-native-nested-listview@0.14.2:
   dependencies:
     object-hash "3.0.0"
 
-react-native-onesignal@5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/react-native-onesignal/-/react-native-onesignal-5.0.0.tgz#c51b950dc8997b0dedfa6083efde9a1e4470b5b3"
-  integrity sha512-kIouwQoeMXmJeVg8mdvbtTisNejtlMlKW8sU7KdzAge9ZRezTr6ryVPHroiMdjnYBvmZ4UzCtZZrS+Aqarepbw==
+react-native-onesignal@5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/react-native-onesignal/-/react-native-onesignal-5.0.1.tgz#2297d3756074af8c8e664bc80dccd7d1c6143269"
+  integrity sha512-DB/r/r+nAa+HxLiGtYCx4PEpVhN391p517GEE+GG/hrAW+bV7BkwqPxjrYfircmrfhRTaYs59xgJ3Py0RJdkJQ==
   dependencies:
     invariant "^2.2.2"
 
