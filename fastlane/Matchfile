@@ -1,0 +1,15 @@
+git_url("git@bitbucket.org:zavarkateam/atlantm-mobile-certs.git")
+
+## Passphrase for Match storage - PfdfhrfNbv2008
+
+storage_mode("git")
+
+type("development") # The default type, can be: appstore, adhoc, enterprise or development
+
+app_identifier("com.atlantm.app") # The bundle identifier of your app
+username("atlantm.corp@gmail.com") # Your Apple Developer Portal username
+
+# For all available options run `fastlane match --help`
+# Remove the # in the beginning of the line to enable the other options
+
+# The docs are available on https://docs.fastlane.tools/actions/match
