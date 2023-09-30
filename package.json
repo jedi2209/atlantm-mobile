@@ -3,7 +3,7 @@
   "version": "9.0.1",
   "private": true,
   "scripts": {
-    "build": "yarn android-version; yarn ios-version;",
+    "build": "yarn ios-version; yarn android-version;",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "postinstall": "patch-package; cd ios; NO_FLIPPER=1 pod update; cd ../; NO_FLIPPER=1 npx pod-install;",
     "react": "watchman watch-del $(pwd); watchman watch-project $(pwd); npx react-native start --reset-cache",

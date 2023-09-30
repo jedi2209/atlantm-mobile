@@ -4,7 +4,7 @@ import groovy.json.JsonSlurper
 buildscript {
     ext {
         buildToolsVersion = "33.0.0"
-        minSdkVersion = 31
+        minSdkVersion = 21
         compileSdkVersion = 33
         targetSdkVersion = 33
         // playServicesVersion = "18.0.0"
