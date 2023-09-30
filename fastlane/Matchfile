@@ -1,4 +1,5 @@
 git_url("git@bitbucket.org:zavarkateam/atlantm-mobile-certs.git")
+git_branch("master")
 
 ## Passphrase for Match storage - PfdfhrfNbv2008
 
