@@ -71,6 +71,29 @@ platform :ios do
       team_id: "XXXX",
       readonly: is_ci
     )
+    match(
+      type: "development",
+      api_key: api_key,
+      username: "atlantm.corp@gmail.com",
+      team_id: "XXXX",
+      readonly: is_ci
+    )
+    match(
+      type: "appstore",
+      api_key: api_key,
+      username: "atlantm.corp@gmail.com",
+      team_id: "XXXX",
+      include_all_certificates: true,
+      readonly: is_ci
+    )
+    match(
+      type: "development",
+      api_key: api_key,
+      username: "atlantm.corp@gmail.com",
+      team_id: "XXXX",
+      include_all_certificates: true,
+      readonly: is_ci
+    )
     # get_certificates( # invokes cert
     #   output_path: ENV['KEYSTORES_PATH'], # The path in which the certificates should be stored
     #   api_key: api_key
