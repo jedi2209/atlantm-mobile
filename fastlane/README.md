@@ -39,6 +39,14 @@ Commit iOS
 
 Push a new beta build to TestFlight
 
+### ios version
+
+```sh
+[bundle exec] fastlane ios version
+```
+
+Commit a new iOS version for AppStore
+
 ----
 
 
