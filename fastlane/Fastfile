@@ -174,6 +174,40 @@ platform :ios do
       link_names: true
     )
   end
+
+  desc "Commit a new iOS version for AppStore"
+  lane :version do
+    ensure_git_status_clean
+    increment_build_number(
+        xcodeproj: ENV['XCODE_PROJ'],
+        skip_info_plist: true
+    )
+    # Generate the changelog based on commit messages since your last tag
+    changelog_from_git_commits(
+        pretty: "- %s",# Optional, lets you provide a custom format to apply to each commit when generating the changelog text
+        date_format: "short",# Optional, lets you provide an additional date format to dates within the pretty-formatted string
+        match_lightweight_tag: false,  # Optional, lets you ignore lightweight (non-annotated) tags when searching for the last tag
+        merge_commit_filtering: "exclude_merges", # Optional, lets you filter out merge commits
+        tag_match_pattern: "builds/ios*"
+    )
+    commit_version_bump(
+        message: "[fastlane][ios] Updated build number #{lane_context[SharedValues::VERSION_NUMBER]} (#{lane_context[SharedValues::BUILD_NUMBER]})",    # create a commit with a custom message
+        xcodeproj: ENV['XCODE_PROJ'],
+        force: true
+    )
+    add_git_tag(
+      build_number: "#{lane_context[SharedValues::VERSION_NUMBER]}.#{lane_context[SharedValues::BUILD_NUMBER]}",
+      grouping: "builds",
+      prefix: "v"
+    )
+    push_to_git_remote(
+      remote: "origin",         # optional, default: "origin"
+      # local_branch: "HEAD",  # optional, aliased by "branch", default: "master"
+      # remote_branch: "dev", # optional, default is set to local_branch
+      # force: true,    # optional, default: false
+      tags: true     # optional, default: true
+    )
+  end
 end
 
 platform :android do
