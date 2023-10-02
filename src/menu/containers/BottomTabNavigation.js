@@ -145,14 +145,15 @@ const ContactsStackView = ({navigation, route}) => (
       component={MainScreen}
       options={{
         headerTitle: () => (
-          <LogoTitle containerStyle={{marginTop: isApple ? 10 : 0}} />
+          <LogoTitle containerStyle={{marginTop: isApple ? 10 : 20}} />
         ),
         headerBackButtonMenuEnabled: false,
         headerBackVisible: false,
         headerBackTitleVisible: false,
         headerLeft: null,
+        headerTitleAlign: 'center',
         headerStyle: {
-          height: 90,
+          height: isApple ? 90 : 50,
           backgroundColor: '#F8F8F8',
           elevation: 0,
           shadowOpacity: 0,
