@@ -178,7 +178,7 @@ const InfoListScreen = ({
           data={data}
           bounceable={true}
           width={cardWidth}
-          height={200}
+          height={300}
           navigation={navigation.navigate}
         />
       </TransitionView>
