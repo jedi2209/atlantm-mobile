@@ -2,15 +2,15 @@
 import React from 'react';
 
 import {useSelector} from 'react-redux';
-import {TouchableWithoutFeedback, View, Text, StyleSheet} from 'react-native';
-import {Pressable} from 'native-base';
+import {StyleSheet} from 'react-native';
+import {Pressable, View, Text, VStack} from 'native-base';
 import * as NavigationService from '../../navigation/NavigationService';
 
 import Badge from '../../core/components/Badge';
 import Imager from '../components/Imager';
 
-import {strings} from '../../core/lang/const';
 import RNBounceable from '@freakycoder/react-native-bounceable';
+import styleConst from '../style-const';
 
 const styles = StyleSheet.create({
   slide: {
@@ -56,7 +56,7 @@ const MainWrapper = props => {
   } else {
     return <Pressable {...props} />;
   }
-}
+};
 
 const Offer = ({
   data,
@@ -101,39 +101,39 @@ const Offer = ({
           />
         </ImageWrapper>
       ) : null}
-      <Text
-        numberOfLines={3}
-        style={[
-          styles.title,
-          {
-            paddingHorizontal: theme === 'round' ? 10 : 0,
-          },
-        ]}>
-        {data.item.name}
-      </Text>
-      {data.item.type?.badge ? (
-        <View
-          style={[
-            styles.badge,
-            {
-              paddingHorizontal: theme === 'round' ? 9 : 0,
-            },
-          ]}>
-          <Badge
-            id={params.id}
-            key={'badgeItem' + params.id}
-            index={0}
-            bgColor={params.type.badge?.background}
-            name={params.type.name[currLang]}
-            textColor={params.type.badge?.color}
-          />
-        </View>
-      ) : null}
-      {theme === 'round' && (
-        <Text style={[styles.title, styles.titleRound]}>
-          {data.item.announce}
-        </Text>
-      )}
+      <View backgroundColor={theme === 'round' ? 'none' : styleConst.color.bg}>
+        <VStack
+          numberOfLines={3}
+          height={theme === 'round' ? 'auto' : 20}
+          paddingHorizontal={theme === 'round' ? 10 : 0}>
+          <Text
+            fontSize={20}
+            fontWeight={'bold'}
+            color={styleConst.color.black}
+            letterSpacing={0.25}
+            textAlign={'left'}
+            lineHeight={24}>
+            {data.item.name}
+          </Text>
+          {data.item.type?.badge ? (
+            <View pr={theme === 'round' ? 9 : 0} flexDirection={'row'} mt={1}>
+              <Badge
+                id={params.id}
+                key={'badgeItem' + params.id}
+                index={0}
+                bgColor={params.type.badge?.background}
+                name={params.type.name[currLang]}
+                textColor={params.type.badge?.color}
+              />
+            </View>
+          ) : null}
+        </VStack>
+        {theme === 'round' && (
+          <Text style={[styles.title, styles.titleRound]}>
+            {data.item.announce}
+          </Text>
+        )}
+      </View>
     </MainWrapper>
   );
 };
