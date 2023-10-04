@@ -67,7 +67,7 @@ const CarList = props => {
     );
 
   const _renderItem = ({item}) => {
-    if (item.type === 'empty') {
+    if (get(item, 'type') === 'empty') {
       return <EmptyMessage text={strings.CarList.emptyMessage} />;
     }
     return (
