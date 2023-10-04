@@ -261,6 +261,12 @@ const _processRow = props => {
 
     switch (item.type) {
       case 'dealersButton':
+        let backgroundImage;
+        if (get(item, 'img', false)) {
+          backgroundImage = {uri: item.img};
+        } else {
+          backgroundImage = require('../../../assets/mainScreen/dealers.png');
+        }
         return (
           <Tooltip
             isVisible={item.key === get(walkthroughData, 'visible')}
@@ -275,7 +281,7 @@ const _processRow = props => {
             <MainScreenButton
               key={['button', 'dealers', 'select'].join('_')}
               title={item.title.text}
-              background={require('../../../assets/mainScreen/dealers.png')}
+              background={backgroundImage}
               size={'full'}
               type={'bottom'}
               onPress={() =>
