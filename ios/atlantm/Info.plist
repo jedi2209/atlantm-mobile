@@ -70,6 +70,8 @@
 		<string>itms-apps</string>
 		<string>tel</string>
 		<string>telprompt</string>
+		<string>http</string>
+		<string>https</string>
 		<string>mailto</string>
 		<string>citymapper</string>
 		<string>uber</string>

@@ -209,65 +209,6 @@ const _renderInfoList = params => {
   return <></>;
 };
 
-const _renderEmergencyManager = ({emergencyManagerInfo, navigation}) => {
-  if (!emergencyManagerInfo) {
-    return null;
-  }
-  return (
-    <RNBounceable
-      onPress={() => {
-        navigation.navigate('WebviewScreen', {html: emergencyManagerInfo});
-      }}>
-      <HStack
-        w={'90%'}
-        h={'24'}
-        backgroundColor={styleConst.color.white}
-        shadow={6}
-        zIndex={1000}
-        rounded={'lg'}
-        marginX={'5%'}
-        marginTop={'5%'}>
-        <Image
-          key={'Imager-emergencyManager'}
-          source={require('../../../assets/emergency_manager.jpg')}
-          alt="emergency_manager"
-          resizeMode="cover"
-          width={'50%'}
-          height={'100%'}
-          rounded={'lg'}
-          roundedTopRight={0}
-          roundedBottomRight={0}
-        />
-        <View w={'50%'} paddingLeft={2} paddingTop={1}>
-          <Text
-            color={styleConst.color.blueNew}
-            fontFamily={styleConst.font.regular}
-            fontWeight={600}
-            lineHeight={18}>
-            {strings.ContactsScreen.emergencyManager.title}
-          </Text>
-          <Text
-            color={styleConst.color.blueNew}
-            fontFamily={styleConst.font.regular}
-            marginTop={1}
-            fontSize={9.5}>
-            {strings.ContactsScreen.emergencyManager.subTitle}
-          </Text>
-          <Image
-            source={require('../../menu/assets/logo-sm.svg')}
-            maxWidth={9}
-            height={5}
-            position={'absolute'}
-            bottom={1}
-            right={4}
-            alt="small-logo"
-          />
-        </View>
-      </HStack>
-    </RNBounceable>
-  );
-};
-
 const intervalSecondsMini = 60;
 const intervalMiliSeconds = intervalSecondsMini * 1000;
 
@@ -832,10 +773,6 @@ const DealerInfoScreen = ({
               onPressChat,
               onPressOrders: _showOrdersMenu,
             })}
-            {/* {_renderEmergencyManager({
-              emergencyManagerInfo: dealerSelected.emergencyManagerInfo,
-              navigation,
-            })} */}
             {_renderInfoList({
               isFetchInfoList,
               infoList,
