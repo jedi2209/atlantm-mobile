@@ -11,7 +11,6 @@ const flags = {
   belarus: require('../../../assets/flags/belarus.jpg'),
   ru: require('../../../assets/flags/russia.jpg'),
   russia: require('../../../assets/flags/russia.jpg'),
-  belarusFree: require('../../../assets/flags/belarus-free.jpg'),
 };
 
 const countryName = {
@@ -19,7 +18,6 @@ const countryName = {
   belarus: 'Беларусь',
   ru: 'Россия',
   russia: 'Россия',
-  belarusFree: 'Беларусь',
 };
 
 const styles = StyleSheet.create({
@@ -95,9 +93,6 @@ const FlagButton = props => {
               shadow={shadow}
               source={flags[country]}
             />
-            {showCaption && country === 'belarusFree' ? (
-              <Text style={styles.text}>Жыве Беларусь!</Text>
-            ) : null}
           </Animated.View>
         </Pressable>
       );
@@ -155,7 +150,7 @@ FlagButton.propTypes = {
   type: PropTypes.oneOf(['text', 'avatar', 'flag', 'button']),
   showCaption: PropTypes.bool,
   flagSize: PropTypes.number,
-  country: PropTypes.oneOf(['by', 'belarus', 'ru', 'russia', 'belarusFree']),
+  country: PropTypes.oneOf(['by', 'belarus', 'ru', 'russia']),
 };
 
 FlagButton.defaultProps = {
