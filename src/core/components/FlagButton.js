@@ -20,22 +20,6 @@ const countryName = {
   russia: 'Россия',
 };
 
-const styles = StyleSheet.create({
-  text: {
-    position: 'absolute',
-    bottom: '8%',
-    width: '80%',
-    alignSelf: 'center',
-    textAlign: 'center',
-    fontSize: 10,
-    color: styleConst.color.darkBg,
-    shadowOpacity: 0.8,
-    shadowOffset: {width: -0.2, height: 0.2},
-    shadowColor: styleConst.color.white,
-    opacity: 1,
-  },
-});
-
 const defaultOpacity = 0.7;
 
 const FlagButton = props => {

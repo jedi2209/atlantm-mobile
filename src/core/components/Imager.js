@@ -40,6 +40,17 @@ const Imager = props => {
     return null;
   }
 
+  if (isLoading) {
+    return (
+      <ActivityIndicator
+        animating={isLoading}
+        hidesWhenStopped={true}
+        color={styleConst.color.blue}
+        style={styles.loader}
+      />
+    );
+  }
+
   return (
     <View testID={props.testID}>
       {extension === 'svg' ? (
@@ -64,26 +75,22 @@ const Imager = props => {
               }}
               resizeMode={FastImage.resizeMode[props.resizeMode]}
               onLoadStart={() => {
-                setLoading(true);
+                console.log('start');
                 props.onLoadStart();
               }}
               onError={e => {
+                console.log('error');
                 props.onLoadError(e);
                 setLoading(false);
               }}
               onLoadEnd={() => {
+                console.log('end');
                 props.onLoadEnd();
                 setLoading(false);
               }}
               {...props}
             />
           </View>
-          <ActivityIndicator
-            animating={isLoading}
-            hidesWhenStopped={true}
-            color={styleConst.color.blue}
-            style={styles.loader}
-          />
         </View>
       )}
     </View>

@@ -224,7 +224,6 @@ const _processRow = props => {
     let titleBackgroundStyle = {};
 
     const screenName = item.link.path;
-    const screenImgAsset = screenName + '.png';
     const isDealerButton =
       screenName === 'ChooseDealerScreen' || screenName === 'DealerInfoScreen';
     if (isDealerButton) {
