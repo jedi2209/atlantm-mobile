@@ -13,6 +13,11 @@
 #else
 #import "VKSdk.h"
 #endif
+// #if DEBUG && TARGET_OS_SIMULATOR
+//   #ifdef FB_SONARKIT_ENABLED
+//     #import <RCTAppSetupUtils.h>
+//   #endif
+// #endif
 
 #import <React/RCTBundleURLProvider.h>
 

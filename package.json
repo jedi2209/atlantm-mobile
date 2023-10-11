@@ -5,7 +5,7 @@
   "scripts": {
     "build": "yarn ios-version; yarn android-version;",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "patch-package; cd ios; NO_FLIPPER=1 pod update; cd ../; NO_FLIPPER=1 npx pod-install;",
+    "postinstall": "patch-package; cd ios; pod update; cd ../; npx pod-install;",
     "react": "watchman watch-del $(pwd); watchman watch-project $(pwd); npx react-native start --reset-cache",
     "check-dependencies": "rnx-dep-check",
     "fix-dependencies": "rnx-dep-check --write",
@@ -149,7 +149,7 @@
     "metro-react-native-babel-preset": "0.76.8",
     "patch-package": "^8.0.0",
     "prettier": "^2.4.1",
-    "react-native-flipper": "0.212.0",
+    "react-native-flipper": "0.182.0",
     "react-test-renderer": "18.2.0",
     "ts-jest": "^29.1.1",
     "typescript": "4.8.4"
