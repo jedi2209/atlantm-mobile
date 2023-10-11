@@ -2,6 +2,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {Alert, StyleSheet} from 'react-native';
+import {useToast} from 'native-base';
 // redux
 import {connect} from 'react-redux';
 import {CALL_ME__SUCCESS, CALL_ME__FAIL} from '../../contacts/actionTypes';
@@ -44,8 +45,6 @@ const mapDispatchToProps = {
   callMe,
 };
 
-let isInternet = null;
-
 const CallMeBackScreen = ({
   dealerSelectedLocal,
   route,
@@ -57,6 +56,7 @@ const CallMeBackScreen = ({
 }) => {
   const dealer = get(route, 'params.dealerCustom', dealerSelectedLocal);
   const isDealerHide = get(route, 'params.dealerHide', isNil(dealer));
+  const toast = useToast();
 
   let listDealers = [];
   if (dealer) {
@@ -89,12 +89,16 @@ const CallMeBackScreen = ({
   }, [localDealerClear, route.params]);
 
   const _onPressCallMe = async dataFromForm => {
-    if (isInternet == null) {
-      isInternet = require('../../utils/internet').default;
-    }
+    const isInternet = require('../../utils/internet').default;
     const isInternetExist = await isInternet();
     if (!isInternetExist) {
-      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+      toast.show({
+        title: ERROR_NETWORK,
+        status: 'warning',
+        duration: 2000,
+        id: 'networkError',
+      });
+      return;
     }
 
     let actionID = null;

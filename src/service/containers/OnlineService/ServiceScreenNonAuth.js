@@ -18,6 +18,8 @@ import {strings} from '../../../core/lang/const';
 import Analytics from '../../../utils/amplitude-analytics';
 
 import API from '../../../utils/api';
+import {ERROR_NETWORK} from '../../../core/const';
+import {useToast} from 'native-base';
 
 const mapStateToProps = ({dealer, service, nav}) => {
   let carLocalBrand = '';
@@ -83,6 +85,8 @@ const ServiceScreenNonAuth = props => {
     name: firstName && lastName ? `${firstName} ${lastName}` : '',
   });
 
+  const toast = useToast();
+
   useEffect(() => {
     const carFromNavigation = get(props.route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
@@ -110,6 +114,17 @@ const ServiceScreenNonAuth = props => {
   }, [dealerSelectedLocal]);
 
   const _onPressOrder = async dataFromForm => {
+    const isInternet = require('../../../utils/internet').default;
+    const isInternetExist = await isInternet();
+    if (!isInternetExist) {
+      toast.show({
+        title: ERROR_NETWORK,
+        status: 'warning',
+        duration: 2000,
+        id: 'networkError',
+      });
+      return;
+    }
     const {navigation, route} = props;
 
     let dateFromForm = get(dataFromForm, 'DATETIME', null);

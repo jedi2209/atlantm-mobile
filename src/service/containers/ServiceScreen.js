@@ -10,7 +10,7 @@ import {
   ScrollView,
   Text,
 } from 'react-native';
-import {Icon, Button} from 'native-base';
+import {Icon, Button, useToast} from 'native-base';
 import Form from '../../core/components/Form/Form';
 import {CarCard} from '../../profile/components/CarCard';
 
@@ -24,7 +24,6 @@ import {localUserDataUpdate} from '../../profile/actions';
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
 import UserData from '../../utils/user';
-import isInternet from '../../utils/internet';
 import {addDays, dayMonthYear, yearMonthDay} from '../../utils/date';
 import {ERROR_NETWORK} from '../../core/const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
@@ -100,6 +99,8 @@ const ServiceScreen = props => {
   const isHaveCar = Boolean(cars.length > 0);
   const dealer = get(route, 'params.dealerCustom', dealerSelectedLocal);
   const isDealerHide = get(route, 'params.dealerHide', isNil(dealer));
+
+  const toast = useToast();
 
   let listDealers = [];
   if (dealer) {
@@ -212,6 +213,17 @@ const ServiceScreen = props => {
   }, [route]);
 
   const _onPressOrder = async dataFromForm => {
+    const isInternet = require('../../utils/internet').default;
+    const isInternetExist = await isInternet();
+    if (!isInternetExist) {
+      toast.show({
+        title: ERROR_NETWORK,
+        status: 'warning',
+        duration: 2000,
+        id: 'networkError',
+      });
+      return;
+    }
     const {localUserDataUpdate} = props;
 
     if (!dataFromForm.CARBRAND && carSelected?.carBrand) {
@@ -222,13 +234,6 @@ const ServiceScreen = props => {
     }
     if (!dataFromForm.CAR && carSelected?.carName) {
       dataFromForm.CAR = carSelected?.carName;
-    }
-
-    const isInternetExist = await isInternet();
-
-    if (!isInternetExist) {
-      setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-      return;
     }
 
     const name = [

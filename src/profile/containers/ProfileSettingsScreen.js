@@ -2,7 +2,7 @@
 import React, {useState, useEffect} from 'react';
 import {Alert, ActivityIndicator} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {Icon, Button, Text, View,} from 'native-base';
+import {Button, useToast} from 'native-base';
 
 import {substractYears} from '../../utils/date';
 
@@ -16,6 +16,7 @@ import styleConst from '../../core/style-const';
 
 import Analytics from '../../utils/amplitude-analytics';
 import {strings} from '../../core/lang/const';
+import {ERROR_NETWORK} from '../../core/const';
 
 const mapStateToProps = ({profile, dealer}) => {
   return {
@@ -78,6 +79,8 @@ const ProfileSettingsScreen = props => {
   const [loading, setLoading] = useState(false);
 
   const navigation = useNavigation();
+
+  const toast = useToast();
 
   const FormConfig = {
     fields: {
@@ -163,7 +166,18 @@ const ProfileSettingsScreen = props => {
     Analytics.logEvent('screen', 'profile/edit');
   }, []);
 
-  const _onPressSave = data => {
+  const _onPressSave = async data => {
+    const isInternet = require('../../utils/internet').default;
+    const isInternetExist = await isInternet();
+    if (!isInternetExist) {
+      toast.show({
+        title: ERROR_NETWORK,
+        status: 'warning',
+        duration: 2000,
+        id: 'networkError',
+      });
+      return;
+    }
     setLoading(true);
     let emailValue = [];
     let phoneValue = [];

@@ -39,7 +39,7 @@ import {strings} from '../../core/lang/const';
 
 import {verticalScale} from '../../utils/scale';
 import UserData from '../../utils/user';
-import {APP_PHONE_RESTRICTED} from '../../core/const';
+import {APP_PHONE_RESTRICTED, ERROR_NETWORK} from '../../core/const';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -111,7 +111,18 @@ const PhoneChangeScreen = props => {
     }
   };
 
-  const _verifyCode = data => {
+  const _verifyCode = async data => {
+    const isInternet = require('../../utils/internet').default;
+    const isInternetExist = await isInternet();
+    if (!isInternetExist) {
+      toast.show({
+        title: ERROR_NETWORK,
+        status: 'warning',
+        duration: 2000,
+        id: 'networkError',
+      });
+      return;
+    }
     let phone = data.PHONE;
     const phoneCountry = PhoneDetect.country(phone);
     if (phoneCountry && APP_PHONE_RESTRICTED.includes(phoneCountry.code)) {

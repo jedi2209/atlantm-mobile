@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component, useState} from 'react';
 import {Alert} from 'react-native';
-import {Toast} from 'native-base';
+import {Toast, useToast} from 'native-base';
 import {get} from 'lodash';
 
 import Form from '../../../core/components/Form/Form';
@@ -18,6 +18,7 @@ import {strings} from '../../../core/lang/const';
 import Analytics from '../../../utils/amplitude-analytics';
 
 import API from '../../../utils/api';
+import {ERROR_NETWORK} from '../../../core/const';
 
 const mapStateToProps = ({dealer}) => {
   return {
@@ -50,7 +51,20 @@ const ServiceScreenStep2 = props => {
   const recommended = get(route, 'params.recommended');
   const [dateSelected, setDate] = useState(null);
 
+  const toast = useToast();
+
   const _onPressOrder = async dataFromForm => {
+    const isInternet = require('../../../utils/internet').default;
+    const isInternetExist = await isInternet();
+    if (!isInternetExist) {
+      toast.show({
+        title: ERROR_NETWORK,
+        status: 'warning',
+        duration: 2000,
+        id: 'networkError',
+      });
+      return;
+    }
     let dateFromForm = get(dataFromForm, 'DATE', null);
     let isLead = orderLead;
 

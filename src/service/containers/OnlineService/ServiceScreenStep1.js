@@ -30,6 +30,7 @@ import {localDealerClear} from '../../../dealer/actions';
 import {strings} from '../../../core/lang/const';
 
 import API from '../../../utils/api';
+import {ERROR_NETWORK} from '../../../core/const';
 
 const mapStateToProps = ({dealer, profile, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
@@ -389,6 +390,18 @@ class ServiceScreenStep1 extends Component {
   }
 
   onPressOrder = async dataFromForm => {
+    const isInternet = require('../../../utils/internet').default;
+    const isInternetExist = await isInternet();
+    if (!isInternetExist) {
+      Toast.show({
+        title: ERROR_NETWORK,
+        status: 'warning',
+        duration: 2000,
+        id: 'networkError',
+      });
+      return;
+    }
+
     const {navigation} = this.props;
 
     let service = '';

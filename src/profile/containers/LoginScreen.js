@@ -47,6 +47,7 @@ import {
   APP_PHONE_RESTRICTED,
   APP_REGION,
   COORDS_DEFAULT,
+  ERROR_NETWORK,
   UKRAINE,
 } from '../../core/const';
 
@@ -246,7 +247,18 @@ const LoginScreen = props => {
     setPhone('');
   };
 
-  const _verifyCode = data => {
+  const _verifyCode = async data => {
+    const isInternet = require('../../utils/internet').default;
+    const isInternetExist = await isInternet();
+    if (!isInternetExist) {
+      toast.show({
+        title: ERROR_NETWORK,
+        status: 'warning',
+        duration: 2000,
+        id: 'networkError',
+      });
+      return;
+    }
     let phone = data.PHONELOGIN;
     const phoneCountry = PhoneDetect.country(phone);
     if (phoneCountry && APP_PHONE_RESTRICTED.includes(phoneCountry.code)) {

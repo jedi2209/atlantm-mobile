@@ -9,7 +9,7 @@ import {
   ScrollView,
 } from 'react-native';
 import CarCostPhotos from '../components/CarCostPhotos';
-import {Icon, Button} from 'native-base';
+import {Icon, Button, useToast} from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   addDays,
@@ -104,8 +104,6 @@ const styles = StyleSheet.create({
   },
 });
 
-let isInternet = null;
-
 const CarCostScreen = ({
   dealerSelectedLocal,
   firstName,
@@ -146,6 +144,8 @@ const CarCostScreen = ({
 
   const dealerFromNavigation = get(route, 'params.dealer', false);
   const userTextFromNavigation = get(route, 'params.Text', '');
+
+  const toast = useToast();
 
   useEffect(() => {
     console.info('== CarCost ==');
@@ -313,12 +313,16 @@ const CarCostScreen = ({
   };
 
   const _onPressOrder = async dataFromForm => {
-    if (isInternet == null) {
-      isInternet = require('../../../utils/internet').default;
-    }
+    const isInternet = require('../../../utils/internet').default;
     const isInternetExist = await isInternet();
     if (!isInternetExist) {
-      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
+      toast.show({
+        title: ERROR_NETWORK,
+        status: 'warning',
+        duration: 2000,
+        id: 'networkError',
+      });
+      return;
     }
 
     let dealerId = get(dealerFromNavigation, 'id', dealerSelectedLocal?.id);
@@ -326,84 +330,71 @@ const CarCostScreen = ({
     if (dealerSelectedLocalState) {
       dealerId = dealerSelectedLocalState.id;
     }
+    const photoForUpload = valuesIn(photos);
 
-    if (!isInternet) {
-      return setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
-    } else {
-      const photoForUpload = valuesIn(photos);
+    const dataToSend = {
+      dealerId,
+      date: yearMonthDay(get(dataFromForm, 'DATE')) || '',
+      firstName: get(dataFromForm, 'NAME', ''),
+      secondName: get(dataFromForm, 'SECOND_NAME', ''),
+      lastName: get(dataFromForm, 'LAST_NAME', ''),
+      phone: get(dataFromForm, 'PHONE', ''),
+      email: get(dataFromForm, 'EMAIL', ''),
+      comment: get(dataFromForm, 'COMMENT', ''),
+      vin: get(dataFromForm, 'CARVIN', get(carSelected, 'carVIN', '')),
+      brand: get(dataFromForm, 'CARBRAND', get(carSelected, 'carBrand', '--')),
+      model: get(dataFromForm, 'CARMODEL', get(carSelected, 'carModel', '--')),
+      year: get(dataFromForm, 'CARYEAR', get(carSelected, 'carYear', '')),
+      photos: photoForUpload,
+      mileage: get(
+        dataFromForm,
+        'CARMILEAGE',
+        get(carSelected, 'carMileage', ''),
+      ),
+      mileageUnit: 'км',
+      engineVolume: get(dataFromForm, 'CARENGINEVOLUME', ''),
+      engineType: get(dataFromForm, 'CARENGINETYPE', ''),
+      gearbox: get(dataFromForm, 'CARGEARBOXTYPE', ''),
+      wheel: get(dataFromForm, 'CARWHEELTYPE', ''),
+    };
 
-      const dataToSend = {
-        dealerId,
-        date: yearMonthDay(get(dataFromForm, 'DATE')) || '',
-        firstName: get(dataFromForm, 'NAME', ''),
-        secondName: get(dataFromForm, 'SECOND_NAME', ''),
-        lastName: get(dataFromForm, 'LAST_NAME', ''),
-        phone: get(dataFromForm, 'PHONE', ''),
-        email: get(dataFromForm, 'EMAIL', ''),
-        comment: get(dataFromForm, 'COMMENT', ''),
-        vin: get(dataFromForm, 'CARVIN', get(carSelected, 'carVIN', '')),
-        brand: get(
-          dataFromForm,
-          'CARBRAND',
-          get(carSelected, 'carBrand', '--'),
-        ),
-        model: get(
-          dataFromForm,
-          'CARMODEL',
-          get(carSelected, 'carModel', '--'),
-        ),
-        year: get(dataFromForm, 'CARYEAR', get(carSelected, 'carYear', '')),
-        photos: photoForUpload,
-        mileage: get(
-          dataFromForm,
-          'CARMILEAGE',
-          get(carSelected, 'carMileage', ''),
-        ),
-        mileageUnit: 'км',
-        engineVolume: get(dataFromForm, 'CARENGINEVOLUME', ''),
-        engineType: get(dataFromForm, 'CARENGINETYPE', ''),
-        gearbox: get(dataFromForm, 'CARGEARBOXTYPE', ''),
-        wheel: get(dataFromForm, 'CARWHEELTYPE', ''),
-      };
+    const actionData = await actionCarCostOrder(dataToSend);
+    if (actionData) {
+      switch (actionData.type) {
+        case CAR_COST__SUCCESS:
+          Analytics.logEvent('order', 'catalog/carcost');
 
-      const actionData = await actionCarCostOrder(dataToSend);
-      if (actionData) {
-        switch (actionData.type) {
-          case CAR_COST__SUCCESS:
-            Analytics.logEvent('order', 'catalog/carcost');
-
-            setTimeout(() => {
-              Alert.alert(
-                strings.Notifications.success.title,
-                strings.Notifications.success.textOrder,
-                [
-                  {
-                    text: 'ОК',
-                    onPress: () => {
-                      navigation.goBack();
-                    },
+          setTimeout(() => {
+            Alert.alert(
+              strings.Notifications.success.title,
+              strings.Notifications.success.textOrder,
+              [
+                {
+                  text: 'ОК',
+                  onPress: () => {
+                    navigation.goBack();
                   },
-                ],
-              );
-            }, 100);
-            break;
-          case CAR_COST__FAIL:
-            let message = get(
-              actionData,
-              'payload.message',
-              strings.Notifications.error.text,
+                },
+              ],
             );
+          }, 100);
+          break;
+        case CAR_COST__FAIL:
+          let message = get(
+            actionData,
+            'payload.message',
+            strings.Notifications.error.text,
+          );
 
-            if (message === 'Network request failed') {
-              message = ERROR_NETWORK;
-            }
+          if (message === 'Network request failed') {
+            message = ERROR_NETWORK;
+          }
 
-            setTimeout(
-              () => Alert.alert(strings.Notifications.error.title, message),
-              100,
-            );
-            break;
-        }
+          setTimeout(
+            () => Alert.alert(strings.Notifications.error.title, message),
+            100,
+          );
+          break;
       }
     }
   };
