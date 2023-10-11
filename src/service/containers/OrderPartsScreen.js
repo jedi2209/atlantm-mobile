@@ -10,7 +10,7 @@ import {
   Alert,
   Text,
 } from 'react-native';
-import {Icon, Button, Toast} from 'native-base';
+import {Icon, Button, useToast} from 'native-base';
 import Form from '../../core/components/Form/Form';
 import {CarCard} from '../../profile/components/CarCard';
 
@@ -28,7 +28,6 @@ import UserData from '../../utils/user';
 import {ERROR_NETWORK} from '../../core/const';
 import {PARTS_ORDER__SUCCESS, PARTS_ORDER__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
-import moment from 'moment';
 import LogoLoader from '../../core/components/LogoLoader';
 
 const mapStateToProps = ({dealer, profile, nav}) => {
@@ -94,8 +93,6 @@ const styles = StyleSheet.create({
   },
 });
 
-let isInternet = null;
-
 const OrderPartsScreen = props => {
   const {
     localDealerClear,
@@ -108,6 +105,7 @@ const OrderPartsScreen = props => {
   } = props;
 
   const dealer = get(route, 'params.dealerCustom', dealerSelectedLocal);
+  const toast = useToast();
 
   const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
   const [carSelected, setCar] = useState(null);
@@ -468,6 +466,17 @@ const OrderPartsScreen = props => {
   };
 
   const _onPressOrder = async dataFromForm => {
+    const isInternet = require('../../utils/internet').default;
+    const isInternetExist = await isInternet();
+    if (!isInternetExist) {
+      toast.show({
+        title: ERROR_NETWORK,
+        status: 'warning',
+        duration: 2000,
+        id: 'networkError',
+      });
+      return;
+    }
     const {navigation, localUserDataUpdate} = props;
 
     if (!dataFromForm.CARBRAND && carSelected?.carBrand) {
@@ -481,17 +490,6 @@ const OrderPartsScreen = props => {
     }
     if (!dataFromForm.CARVIN && carSelected?.carVIN) {
       dataFromForm.CARVIN = carSelected?.carVIN;
-    }
-
-    if (isInternet == null) {
-      isInternet = require('../../utils/internet').default;
-    }
-
-    const isInternetExist = await isInternet();
-    if (!isInternetExist) {
-      Toast.show({
-        title: ERROR_NETWORK,
-      });
     }
 
     const name = [
@@ -558,7 +556,7 @@ const OrderPartsScreen = props => {
             );
             break;
           case PARTS_ORDER__FAIL:
-            Toast.show({
+            toast.show({
               title: strings.Notifications.error.title,
             });
             break;

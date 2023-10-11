@@ -11,7 +11,7 @@ import {
 } from '../../actions';
 
 // components
-import {Checkbox, View} from 'native-base';
+import {Checkbox, View, useToast} from 'native-base';
 
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
@@ -28,6 +28,7 @@ import {
 } from '../../constants';
 import {strings} from '../../../core/lang/const';
 import styleConst from '../../../core/style-const';
+import {ERROR_NETWORK} from '../../../core/const';
 
 const mapStateToProps = ({dealer, eko, nav, profile}) => {
   return {
@@ -58,6 +59,8 @@ const mapDispatchToProps = {
 const ReviewAddRatingStepScreen = props => {
   const [publicAgree, setPublicAgree] = useState(true);
 
+  const toast = useToast();
+
   const reviewData = props.route?.params;
 
   useEffect(() => {
@@ -65,6 +68,18 @@ const ReviewAddRatingStepScreen = props => {
   }, []);
 
   const _onPressButton = async dataFromForm => {
+    const isInternet = require('../../../utils/internet').default;
+    const isInternetExist = await isInternet();
+    if (!isInternetExist) {
+      toast.show({
+        title: ERROR_NETWORK,
+        status: 'warning',
+        duration: 2000,
+        id: 'networkError',
+      });
+      return;
+    }
+
     const {navigation} = props;
 
     const name = [

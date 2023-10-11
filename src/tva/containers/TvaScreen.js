@@ -21,7 +21,7 @@ import {get} from 'lodash';
 import {TVA__SUCCESS, TVA__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
 import styleConst from '../../core/style-const';
-import {BELARUSSIA} from '../../core/const';
+import {BELARUSSIA, ERROR_NETWORK} from '../../core/const';
 
 const mapStateToProps = ({dealer, profile, tva, core}) => {
   return {
@@ -98,6 +98,17 @@ const TvaScreen = props => {
   }, []);
 
   const _onPressButton = async pushProps => {
+    const isInternet = require('../../utils/internet').default;
+    const isInternetExist = await isInternet();
+    if (!isInternetExist) {
+      toast.show({
+        title: ERROR_NETWORK,
+        status: 'warning',
+        duration: 2000,
+        id: 'networkError',
+      });
+      return;
+    }
     // const dealerId = pushProps.DEALER.id;
     const carNumber = pushProps.CARNUMBER;
 
