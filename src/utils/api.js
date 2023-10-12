@@ -262,23 +262,21 @@ export default {
     ratingTo,
     nextPageUrl,
   }) {
-    let url = `/eko/review/get/${dealerId}/?date_from=${dateFrom}`;
+    const url =
+      `/eko/review/get/${dealerId}/?` +
+      new URLSearchParams(
+        _.omitBy(
+          {
+            date_from: dateFrom,
+            date_to: dateTo,
+            grade_from: ratingFrom,
+            grade_to: ratingTo,
+          },
+          _.isNil,
+        ),
+      );
 
-    if (dateTo) {
-      url += `&date_to=${dateTo}`;
-    }
-
-    if (ratingFrom) {
-      url += `&grade_from=${ratingFrom}`;
-    }
-
-    if (ratingTo) {
-      url += `&grade_to=${ratingTo}`;
-    }
-
-    url = nextPageUrl || url;
-
-    return this.request(url, baseRequestParams);
+    return this.request(nextPageUrl ? nextPageUrl : url, baseRequestParams);
   },
 
   fetchDealerRating({dealerId}) {

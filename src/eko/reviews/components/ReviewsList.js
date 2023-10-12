@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useEffect, useState} from 'react';
 import {FlatList, View, StyleSheet} from 'react-native';
 
 // components
@@ -24,42 +24,27 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class ReviewsList extends Component {
-  static propTypes = {
-    pages: PropTypes.object,
-    items: PropTypes.array,
-    dataHandler: PropTypes.func,
-    isFetchItems: PropTypes.bool,
-    onPressItemHandler: PropTypes.func,
-  };
+const ReviewsList = props => {
+  const {
+    items,
+    extraData,
+    isFetchItems,
+    onPressItemHandler,
+    dataHandler,
+    pages,
+  } = props;
 
-  static defaultProps = {
-    pages: {},
-    items: null,
-    isFetchItems: false,
-    onPressItemHandler: null,
-  };
+  const [bounces, setBounces] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [loadingNextPage, setLoadingNextPage] = useState(false);
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      bounces: true,
-      isRefreshing: false,
-      loadingNextPage: false,
-    };
-  }
-
-  componentDidMount() {
-    const {items, isFetchItems, dataHandler} = this.props;
-
+  useEffect(() => {
     if ((!items || items.length === 0) && !isFetchItems) {
       dataHandler(EVENT_DEFAULT);
     }
-  }
+  }, []);
 
-  renderEmptyComponent = () => {
-    const {isFetchItems} = this.props;
-
+  const _renderEmptyComponent = () => {
     return isFetchItems ? (
       <LogoLoader mode={'relative'} />
     ) : (
@@ -67,83 +52,79 @@ export default class ReviewsList extends Component {
     );
   };
 
-  renderItem = ({item}) => {
+  const _renderItem = ({item}) => {
     if (item.type === 'empty') {
       return <EmptyMessage text={strings.EkoScreen.empty.text} />;
     }
-
-    const {onPressItemHandler} = this.props;
     return (
       <Review inList={true} review={item} onPressHandler={onPressItemHandler} />
     );
   };
 
-  renderFooter = () => {
-    if (!this.state.loadingNextPage) {
+  const _renderFooter = () => {
+    if (!loadingNextPage) {
       return null;
     }
 
     return <FlatListFooter />;
   };
 
-  onRefresh = () => {
-    const {dataHandler} = this.props;
-
-    this.setState({
-      bounces: false,
-      isRefreshing: true,
-    });
+  const _onRefresh = () => {
+    setBounces(false);
+    setIsRefreshing(true);
 
     dataHandler(EVENT_REFRESH).then(() => {
-      this.setState({
-        bounces: true,
-        isRefreshing: false,
-      });
+      setBounces(true);
+      setIsRefreshing(false);
     });
   };
 
-  handleLoadMore = () => {
-    const {items, pages, dataHandler} = this.props;
-
-    if (!pages.next || items.length === 0 || this.state.loadingNextPage) {
+  const _handleLoadMore = () => {
+    if (!pages.next || items.length === 0 || loadingNextPage) {
       return false;
     }
-
-    this.setState({
-      loadingNextPage: true,
-      bounces: false,
-    });
+    setBounces(false);
+    setLoadingNextPage(true);
 
     return dataHandler(EVENT_LOAD_MORE).then(() => {
-      this.setState({
-        loadingNextPage: false,
-        bounces: true,
-      });
+      setBounces(true);
+      setLoadingNextPage(false);
     });
   };
 
-  render() {
-    const {items, extraData} = this.props;
+  return (
+    <FlatList
+      windowSize={3}
+      removeClippedSubviews={true}
+      onEndReachedThreshold={10}
+      initialNumToRender={10}
+      maxToRenderPerBatch={10}
+      data={items}
+      extraData={extraData}
+      onRefresh={_onRefresh}
+      refreshing={isRefreshing}
+      ListEmptyComponent={_renderEmptyComponent}
+      ListFooterComponent={_renderFooter}
+      renderItem={_renderItem}
+      keyExtractor={item => `${item.hash.toString()}`}
+      onEndReached={_handleLoadMore}
+    />
+  );
+};
 
-    return (
-      <View style={styles.container}>
-        <FlatList
-          windowSize={3}
-          removeClippedSubviews={true}
-          onEndReachedThreshold={10}
-          initialNumToRender={10}
-          maxToRenderPerBatch={10}
-          data={items}
-          extraData={extraData}
-          onRefresh={this.onRefresh}
-          refreshing={this.state.isRefreshing}
-          ListEmptyComponent={this.renderEmptyComponent}
-          ListFooterComponent={this.renderFooter}
-          renderItem={this.renderItem}
-          keyExtractor={item => `${item.hash.toString()}`}
-          onEndReached={this.handleLoadMore}
-        />
-      </View>
-    );
-  }
-}
+ReviewsList.propTypes = {
+  pages: PropTypes.object,
+  items: PropTypes.array,
+  dataHandler: PropTypes.func,
+  isFetchItems: PropTypes.bool,
+  onPressItemHandler: PropTypes.func,
+};
+
+ReviewsList.defaultProps = {
+  pages: {},
+  items: null,
+  isFetchItems: false,
+  onPressItemHandler: null,
+};
+
+export default ReviewsList;

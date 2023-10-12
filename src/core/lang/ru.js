@@ -494,8 +494,8 @@ export default {
       rating2: '"Рейтинг до" не может быть меньше "рейтинга от"',
     },
     rating: {
-      from: 'рейтинг от',
-      to: 'рейтинг до',
+      from: 'от',
+      to: 'до',
     },
   },
   IndicatorsScreen: {

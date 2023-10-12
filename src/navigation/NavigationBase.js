@@ -19,6 +19,7 @@ import {
   VStack,
   HStack,
   useDisclose,
+  IconButton,
 } from 'native-base';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -29,8 +30,7 @@ import {EVENT_REFRESH} from '../core/actionTypes';
 // EKO
 import ReviewsScreen from '../eko/reviews/containers/ReviewsScreen';
 import ReviewScreen from '../eko/reviews/containers/ReviewScreen';
-import ReviewsFilterDateScreen from '../eko/reviews/containers/ReviewsFilterDateScreen';
-import ReviewsFilterRatingScreen from '../eko/reviews/containers/ReviewsFilterRatingScreen';
+import ReviewsFilter from '../eko/reviews/containers/ReviewsFilter';
 import ReviewAddMessageStepScreen from '../eko/reviews/containers/ReviewAddMessageStepScreen';
 import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRatingStepScreen';
 
@@ -659,21 +659,23 @@ const EKO = ({navigation, route}) => {
             ...TransitionPresets.ScaleFromCenterAndroid,
             headerTitle: strings.ReviewsScreen.title,
             headerRight: () => (
-              <Pressable
-                onPress={() =>
-                  navigation.navigate('ReviewAddMessageStepScreen')
-                }>
-                <Icon
-                  size={7}
-                  style={styles.sortHeaderButton}
-                  as={MaterialCommunityIcons}
-                  name="pencil-plus"
-                  color={styleConst.color.blue}
-                  _dark={{
-                    color: styleConst.color.white,
-                  }}
-                />
-              </Pressable>
+              <IconButton
+                size={'sm'}
+                variant={'ghost'}
+                onPress={() => navigation.navigate('ReviewsFilter')}
+                style={{marginRight: 4}}
+                icon={
+                  <Icon
+                    size={7}
+                    as={MaterialCommunityIcons}
+                    name="filter"
+                    color={styleConst.color.blue}
+                    _dark={{
+                      color: styleConst.color.white,
+                    }}
+                  />
+                }
+              />
             ),
             headerTitleStyle: [
               stylesHeader.transparentHeaderTitle,
@@ -704,29 +706,17 @@ const EKO = ({navigation, route}) => {
         )}
       />
       <StackEKO.Screen
-        name="ReviewsFilterDateScreen"
-        component={ReviewsFilterDateScreen}
+        name="ReviewsFilter"
+        component={ReviewsFilter}
         options={BigCloseButton(navigation, route, {
-          ...TransitionPresets.ScaleFromCenterAndroid,
+          ...TransitionPresets.ModalTransition,
           headerTitle: strings.ReviewsFilterDateScreen.title,
           headerRight: () => <></>,
           headerTitleStyle: [
             stylesHeader.transparentHeaderTitle,
             {color: '#222B45'},
           ],
-        })}
-      />
-      <StackEKO.Screen
-        name="ReviewsFilterRatingScreen"
-        component={ReviewsFilterRatingScreen}
-        options={BigCloseButton(navigation, route, {
-          ...TransitionPresets.ScaleFromCenterAndroid,
-          headerTitle: strings.ReviewsFilterRatingScreen.title,
-          headerRight: () => <></>,
-          headerTitleStyle: [
-            stylesHeader.transparentHeaderTitle,
-            {color: '#222B45'},
-          ],
+          presentation: 'modal',
         })}
       />
       <StackEKOAddReview.Screen

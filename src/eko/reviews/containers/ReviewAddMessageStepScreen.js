@@ -30,12 +30,12 @@ const ReviewAddMessageStepScreen = ({
   Text,
   localDealerClear,
 }) => {
-  useEffect(() => {
-    console.info('== ReviewAddMessageStepScreen ==');
-    return () => {
-      localDealerClear();
-    };
-  }, [localDealerClear]);
+  // useEffect(() => {
+  //   console.info('== ReviewAddMessageStepScreen ==');
+  //   return () => {
+  //     // localDealerClear();
+  //   };
+  // }, [localDealerClear]);
 
   const FormConfig = {
     groups: [

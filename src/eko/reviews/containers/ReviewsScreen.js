@@ -1,5 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
+import {Button, Fab, HStack, Icon} from 'native-base';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // redux
 import {connect} from 'react-redux';
@@ -7,7 +9,6 @@ import {
   actionReviewVisit,
   actionFetchReviews,
   actionDateFromFill,
-  actionDateToFill,
   actionSelectFilterDatePeriod,
   actionSelectFilterRatingFrom,
   actionSelectFilterRatingTo,
@@ -16,7 +17,6 @@ import {localDealerClear} from '../../../dealer/actions';
 
 // components
 import ReviewsList from '../components/ReviewsList';
-import ReviewsFilter from '../components/ReviewsFilter';
 import DealerItemList from '../../../core/components/DealerItemList';
 
 // helpers
@@ -54,7 +54,6 @@ const mapStateToProps = ({dealer, nav, eko}) => {
 const mapDispatchToProps = {
   actionReviewVisit,
   actionFetchReviews,
-  actionDateToFill,
   actionDateFromFill,
   actionSelectFilterDatePeriod,
   actionSelectFilterRatingFrom,
@@ -70,6 +69,7 @@ const ReviewsScreen = props => {
     route,
     dealerSelectedLocal,
     isFetchReviews,
+    dateFrom,
     actionReviewVisit,
     localDealerClear,
   } = props;
@@ -84,20 +84,24 @@ const ReviewsScreen = props => {
           setLoading(false);
         }, 500);
       });
-      // console.log('params.prevScreen', get(route, 'params.prevScreen', null));
-      // return () => {
-      //   if (get(route, 'params.prevScreen', null) !== 'ChooseDealerScreen') {
-      //     localDealerClear();
-      //   }
-      // };
-    } else {
+    }
+  }, [dealerSelectedLocal, dateFrom]);
+
+  useEffect(() => {
+    if (!dealerSelectedLocal) {
       navigation.navigate('ChooseDealerScreen', {
         returnScreen: route.name,
         goBack: true,
         isLocal: true,
       });
     }
-  }, [dealerSelectedLocal]);
+
+    return () => {
+      if (get(route, 'params.prevScreen', null) !== 'ChooseDealerScreen') {
+        localDealerClear();
+      }
+    };
+  }, []);
 
   const _onPressItem = review => {
     navigation.navigate('ReviewScreen', {
@@ -106,11 +110,6 @@ const ReviewsScreen = props => {
     });
     actionReviewVisit(review?.id);
   };
-
-  // const _onPressRating = () => navigation.navigate('ReviewsFilterRatingScreen');
-  // const _onPressDate = () => navigation.navigate('ReviewsFilterDateScreen');
-  // const _onPressAddReview = () =>
-  //   navigation.navigate('ReviewAddMessageStepScreen');
 
   const _fetchReviews = type => {
     let {
@@ -127,10 +126,9 @@ const ReviewsScreen = props => {
       actionSelectFilterRatingTo,
     } = props;
 
-    if (!dateFrom) {
+    if (dateFrom === strings.ReviewsFilterDateScreen.periods.all) {
       dateFrom = substractYears(10);
       actionDateFromFill(dateFrom);
-      actionSelectFilterDatePeriod(strings.ReviewsFilterDateScreen.periods.all);
     }
 
     if (!filterRatingFrom) {
@@ -160,7 +158,7 @@ const ReviewsScreen = props => {
         goBack={true}
         isLocal={true}
         returnScreen={route.name}
-        style={{marginHorizontal: 8}}
+        style={{marginHorizontal: 8, marginBottom: 8}}
         showBrands={false}
         placeholder={strings.ChooseDealerScreen.title}
       />
@@ -169,18 +167,30 @@ const ReviewsScreen = props => {
         <ReviewsList
           items={reviews}
           pages={pages}
-          extraData={dealerSelectedLocal.id}
           dataHandler={_fetchReviews}
           onPressItemHandler={_onPressItem}
           isFetchItems={isFetchReviews}
         />
       ) : null}
-
-      {/* <ReviewsFilter
-        onPressRating={_onPressRating}
-        onPressDate={_onPressDate}
-        onPressAddReview={_onPressAddReview}
-      /> */}
+      <Fab
+        renderInPortal={false}
+        style={{backgroundColor: styleConst.color.blue, marginBottom: 20}}
+        shadow={7}
+        size="sm"
+        icon={
+          <Icon
+            size={8}
+            as={MaterialCommunityIcons}
+            name="plus"
+            color={styleConst.color.white}
+            _dark={{
+              color: styleConst.color.white,
+            }}
+          />
+        }
+        placement="bottom-right"
+        onPress={() => navigation.navigate('ReviewAddMessageStepScreen')}
+      />
     </SafeAreaView>
   );
 };
