@@ -56,7 +56,7 @@ const ReviewsFilter = props => {
 
   return (
     <View style={[styleFooter.footerFilters, styleFooter.footer]}>
-      <View style={[styleConst.shadow.default, styles.container]}>
+      <View style={[styles.container]}>
         {onPressRating ? _renderIcon('rating', onPressRating) : null}
         {onPressDate ? _renderIcon('date', onPressDate) : null}
         {onPressAddReview ? _renderIcon('add', onPressAddReview) : null}
