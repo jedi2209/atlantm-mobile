@@ -7,27 +7,8 @@ import {
   Text,
   ScrollView,
   StatusBar,
-  ActivityIndicator,
 } from 'react-native';
-import {
-  StyleProvider,
-  ListItem,
-  Body,
-  Right,
-  Row,
-  Col,
-  Item,
-  Label,
-} from 'native-base';
-import {
-  List,
-  DefaultTheme,
-  Provider as PaperProvider,
-  Divider,
-  Card,
-  Title,
-  Paragraph,
-} from 'react-native-paper';
+import {List} from 'react-native-paper';
 import Analytics from '../../../utils/amplitude-analytics';
 
 // redux
@@ -41,9 +22,6 @@ import {
 
 import LogoLoader from '../../../core/components/LogoLoader';
 
-// styles
-import stylesList from '../../../core/components/Lists/style';
-
 // helpers
 import {get, isEmpty} from 'lodash';
 import {dayMonthYear, dayMonth} from '../../../utils/date';
@@ -52,14 +30,6 @@ import showPrice from '../../../utils/price';
 import numberWithGap from '../../../utils/number-with-gap';
 import {ERROR_NETWORK} from '../../../core/const';
 import {strings} from '../../../core/lang/const';
-
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: styleConst.color.blue,
-  },
-};
 
 const styles = StyleSheet.create({
   safearea: {
@@ -298,15 +268,13 @@ const CarHistoryScreen = ({
   }
 
   return (
-    <PaperProvider theme={theme}>
-      <ScrollView style={{backgroundColor: styleConst.color.white}}>
-        <View style={{flex: 1}}>
-          {Object.keys(get(carHistory, 'items'), []).length
-            ? renderData(carHistory.items)
-            : null}
-        </View>
-      </ScrollView>
-    </PaperProvider>
+    <ScrollView style={{backgroundColor: styleConst.color.white}}>
+      <View style={{flex: 1}}>
+        {Object.keys(get(carHistory, 'items'), []).length
+          ? renderData(carHistory.items)
+          : null}
+      </View>
+    </ScrollView>
   );
 };
 

@@ -1,12 +1,7 @@
 import React, {useEffect, useState, useReducer} from 'react';
 import {connect} from 'react-redux';
 
-import {
-  List,
-  Divider,
-  DefaultTheme,
-  Provider as PaperProvider,
-} from 'react-native-paper';
+import {List, Divider} from 'react-native-paper';
 import {Box, View, Button, Text, ScrollView} from 'native-base';
 
 import API from '../../../utils/api';
@@ -18,14 +13,6 @@ import {get} from 'lodash';
 
 import styleConst from '../../../core/style-const';
 import LogoLoader from '../../../core/components/LogoLoader';
-
-const theme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: styleConst.color.blue,
-  },
-};
 
 const initialState = {};
 
@@ -306,41 +293,39 @@ const AdditionalPurchaseScreen = ({
   }
 
   return (
-    <PaperProvider theme={theme}>
-      <View bg={styleConst.color.white} flex={1}>
-        {allDataFilter.length > 1 ? (
-          <Box px="3" py="2" position={'absolute'} w="100%" zIndex={1000}>
-            <Button.Group
-              isAttached
-              colorScheme={'blue'}
-              mx={{
-                base: 'auto',
-                md: 0,
-              }}
-              shadow="5"
-              size="md">
-              {allDataFilter.map((val, index) => {
-                return (
-                  <Button
-                    onPress={() => setActiveTab(val)}
-                    isPressed={activeTab === val ? true : false}
-                    variant={activeTab === val ? 'solid' : 'outline'}
-                    // isLoading={activeTab === val && isLoading ? true : false}
-                    // isLoadingText={strings.AdditionalPurchaseScreen.tabs[val]}
-                    _spinner={{color: styleConst.color.white}}
-                    _text={{textTransform: 'uppercase'}}>
-                    {strings.AdditionalPurchaseScreen.tabs[val]}
-                  </Button>
-                );
-              })}
-            </Button.Group>
-          </Box>
-        ) : null}
-        <ScrollView pb={7} mt={allDataFilter.length > 1 ? 16 : 2}>
-          {isLoading ? <LogoLoader mode={'relative'} /> : renderTab(activeTab)}
-        </ScrollView>
-      </View>
-    </PaperProvider>
+    <View bg={styleConst.color.white} flex={1}>
+      {allDataFilter.length > 1 ? (
+        <Box px="3" py="2" position={'absolute'} w="100%" zIndex={1000}>
+          <Button.Group
+            isAttached
+            colorScheme={'blue'}
+            mx={{
+              base: 'auto',
+              md: 0,
+            }}
+            shadow="5"
+            size="md">
+            {allDataFilter.map((val, index) => {
+              return (
+                <Button
+                  onPress={() => setActiveTab(val)}
+                  isPressed={activeTab === val ? true : false}
+                  variant={activeTab === val ? 'solid' : 'outline'}
+                  // isLoading={activeTab === val && isLoading ? true : false}
+                  // isLoadingText={strings.AdditionalPurchaseScreen.tabs[val]}
+                  _spinner={{color: styleConst.color.white}}
+                  _text={{textTransform: 'uppercase'}}>
+                  {strings.AdditionalPurchaseScreen.tabs[val]}
+                </Button>
+              );
+            })}
+          </Button.Group>
+        </Box>
+      ) : null}
+      <ScrollView pb={7} mt={allDataFilter.length > 1 ? 16 : 2}>
+        {isLoading ? <LogoLoader mode={'relative'} /> : renderTab(activeTab)}
+      </ScrollView>
+    </View>
   );
 };
 

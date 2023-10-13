@@ -1,11 +1,5 @@
 import React, {useEffect} from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  Appearance,
-  ActivityIndicator,
-} from 'react-native';
+import {StyleSheet, View, Text, Appearance} from 'react-native';
 import * as Sentry from '@sentry/react-native';
 
 // redux
@@ -42,7 +36,7 @@ if (__DEV__) {
   LogBox.ignoreLogs([
     'NativeBase: The contrast ratio of',
     "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
-    "If you do not provide children, you must specify an aria-label for accessibility",
+    'If you do not provide children, you must specify an aria-label for accessibility',
   ]);
   sentryParams = {
     dsn: SENTRY_DSN,

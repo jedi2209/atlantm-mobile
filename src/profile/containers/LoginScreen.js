@@ -10,6 +10,7 @@ import {
   Platform,
   StyleSheet,
   Dimensions,
+  Animated,
 } from 'react-native';
 import {Button, HStack, Icon, useToast, VStack, View} from 'native-base';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
@@ -175,6 +176,36 @@ const LoginScreen = props => {
   const [loadingVerify, setLoadingVerify] = useState(false);
   const [keyboardShow, setKeyboardShow] = useState(false);
   const [background, setBackground] = useState(backgrounds.day[0]);
+  const [bonusButtonOpaticy, setBonusButtonOpaticy] = useState(1);
+
+  const _animated = {
+    SubmitButton: new Animated.Value(bonusButtonOpaticy),
+    duration: 200,
+  };
+
+  const _showHideSubmitButton = show => {
+    if (show) {
+      Animated.timing(_animated.SubmitButton, {
+        toValue: 1,
+        duration: _animated.duration,
+        useNativeDriver: true,
+      }).start(() => {
+        setBonusButtonOpaticy(1);
+      });
+    } else {
+      Animated.timing(_animated.SubmitButton, {
+        toValue: 0,
+        duration: _animated.duration,
+        useNativeDriver: true,
+      }).start(() => {
+        setBonusButtonOpaticy(0);
+      });
+    }
+  };
+
+  useEffect(() => {
+    _showHideSubmitButton(!keyboardShow);
+  }, [keyboardShow]);
 
   const FormConfig = {
     fields: [
@@ -662,23 +693,28 @@ const LoginScreen = props => {
                 </Button>
               ) : null}
             </>
-          ) : null}
+          ) : (
+            <Animated.View
+              style={{
+                opacity: _animated.SubmitButton,
+              }}>
+              <Button
+                onPress={() => {
+                  navigation.navigate('BonusScreenInfo', {
+                    refererScreen: 'LoginScreen',
+                    returnScreen: 'LoginScreen',
+                  });
+                }}
+                _text={styles.BonusInfoButtonText}
+                leftIcon={<Icon name="info" as={SimpleLineIcons} size={5} />}
+                rounded={'lg'}
+                w={'60%'}
+                style={styles.BonusInfoButton}>
+                {strings.Menu.main.bonus}
+              </Button>
+            </Animated.View>
+          )}
         </VStack>
-        {!code && !keyboardShow ? (
-          <Button
-            onPress={() => {
-              navigation.navigate('BonusScreenInfo', {
-                refererScreen: 'LoginScreen',
-                returnScreen: 'LoginScreen',
-              });
-            }}
-            _text={styles.BonusInfoButtonText}
-            leftIcon={<Icon name="info" as={SimpleLineIcons} size={5} />}
-            rounded={'lg'}
-            style={styles.BonusInfoButton}>
-            {strings.Menu.main.bonus}
-          </Button>
-        ) : null}
       </View>
     </View>
   );
@@ -737,17 +773,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   BonusInfoButton: {
-    paddingTop: 10,
-    paddingBottom: 10,
     backgroundColor: styleConst.color.darkBg,
     borderColor: styleConst.color.white,
     borderWidth: 0.6,
     opacity: 0.95,
-    width: '80%',
-    marginVertical: 10,
-    marginHorizontal: '10%',
-    position: 'absolute',
-    bottom: 80,
+    paddingLeft: 0,
   },
   BonusInfoButtonText: {
     fontFamily: styleConst.font.medium,
