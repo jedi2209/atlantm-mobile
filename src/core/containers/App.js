@@ -1,8 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Platform, View} from 'react-native';
+import {StyleSheet, Platform, View, Alert} from 'react-native';
 import {NativeBaseProvider} from 'native-base';
+import {DefaultTheme, PaperProvider} from 'react-native-paper';
+
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
 
@@ -57,6 +59,14 @@ const mapDispatchToProps = {
   actionSettingsLoaded,
 };
 
+const paperTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: styleConst.color.blue,
+  },
+};
+
 const mainScreen = 'BottomTabNavigation';
 const storeVersion = '2023-08-02';
 
@@ -76,6 +86,9 @@ const _awaitStoreToUpdate = async props => {
   const {settings} = await API.fetchVersion(currentVersion || null);
   if (settings) {
     actionSettingsLoaded(settings);
+  } else {
+    console.error('_awaitStoreToUpdate => settings not loaded', settings);
+    return false;
   }
 
   if (currentRegion && isStoreUpdatedCurrent === storeVersion) {
@@ -86,8 +99,10 @@ const _awaitStoreToUpdate = async props => {
     // если мы ещё не очищали стор
     actionMenuOpenedCount(0);
     await actionStoreUpdated(storeVersion);
+    return true;
   } catch (error) {
     console.error('_awaitStoreToUpdate error', error);
+    return false;
   }
 };
 
@@ -127,10 +142,15 @@ const App = props => {
           moment().format('YYYY-MM-DD HH:mm:ss'),
           res,
         );
-        setLoading(false);
+        if (!res) {
+          Alert.alert('Кажется, что-то пошло не так');
+        } else {
+          setLoading(false);
+        }
       })
       .catch(err => {
         console.error('_awaitStoreToUpdate error', err);
+        Alert.alert('Кажется, что-то пошло не так');
         setLoading(false);
       });
 
@@ -194,9 +214,11 @@ const App = props => {
                 .default,
             },
           }}>
-          <NavigationContainer ref={NavigationService.navigationRef}>
-            <Nav.Base />
-          </NavigationContainer>
+          <PaperProvider theme={paperTheme}>
+            <NavigationContainer ref={NavigationService.navigationRef}>
+              <Nav.Base />
+            </NavigationContainer>
+          </PaperProvider>
         </NativeBaseProvider>
       </GestureHandlerRootView>
     );

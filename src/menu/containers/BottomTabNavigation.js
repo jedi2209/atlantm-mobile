@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {Platform, Keyboard} from 'react-native';
-import {useDisclose, Icon, View} from 'native-base';
+import {Platform, Keyboard, Animated} from 'react-native';
+import {useDisclose, Icon, Text, View} from 'native-base';
 import orderFunctions from '../../utils/orders';
 import Analytics from '../../utils/amplitude-analytics';
 import {connect} from 'react-redux';
@@ -167,10 +167,38 @@ const CleanStackView = () => {
   return <></>;
 };
 
+const menuOpacity = 1;
+
 const BottomTabNavigation = ({navigation, route, region}) => {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [actionSheetData, setActionSheetData] = useState({});
   const [keyboardShow, setKeyboardShow] = useState(false);
+  const [bonusButtonPosition, setBonusButtonPosition] = useState(menuOpacity);
+
+  const _animated = {
+    bottomMenu: new Animated.Value(bonusButtonPosition),
+    duration: 200,
+  };
+
+  const _showHideBottomMenu = show => {
+    if (show) {
+      Animated.timing(_animated.bottomMenu, {
+        toValue: menuOpacity,
+        duration: _animated.duration,
+        useNativeDriver: true,
+      }).start(() => {
+        setBonusButtonPosition(menuOpacity);
+      });
+    } else {
+      Animated.timing(_animated.bottomMenu, {
+        toValue: 0,
+        duration: _animated.duration,
+        useNativeDriver: true,
+      }).start(() => {
+        setBonusButtonPosition(0);
+      });
+    }
+  };
 
   const _showOrdersMenu = () => {
     orderFunctions.getOrders().then(data => {
@@ -218,6 +246,10 @@ const BottomTabNavigation = ({navigation, route, region}) => {
     };
   }, []);
 
+  useEffect(() => {
+    _showHideBottomMenu(!keyboardShow);
+  }, [keyboardShow]);
+
   return (
     <>
       <Tab.Navigator
@@ -228,8 +260,8 @@ const BottomTabNavigation = ({navigation, route, region}) => {
           tabBarHideOnKeyboard: true,
           tabBarStyle: {
             position: 'absolute',
-            bottom: keyboardShow ? 0 : 25,
-            opacity: 1,
+            bottom: keyboardShow ? -100 : 25,
+            opacity: _animated.bottomMenu,
             left: 7,
             right: 7,
             borderRadius: 15,
