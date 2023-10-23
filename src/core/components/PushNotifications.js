@@ -154,31 +154,30 @@ export default {
       // Check push notification and OneSignal subscription statuses
       OneSignal.Notifications.requestPermission();
       if (this.deviceState() === false) {
-        switch (Platform.OS) {
-          case 'ios':
-            setTimeout(() => {
-              return Alert.alert(
-                strings.Notifications.PushAlert.title,
-                strings.Notifications.PushAlert.text,
-                [
-                  {
-                    text: strings.Notifications.PushAlert.later,
-                    style: 'destructive',
+        if (Platform.OS === 'ios') {
+          setTimeout(() => {
+            return Alert.alert(
+              strings.Notifications.PushAlert.title,
+              strings.Notifications.PushAlert.text,
+              [
+                {
+                  text: strings.Notifications.PushAlert.later,
+                  style: 'destructive',
+                },
+                {
+                  text: strings.Notifications.PushAlert.approve,
+                  onPress: () => {
+                    Linking.openURL('app-settings://notification/' + bundle);
                   },
-                  {
-                    text: strings.Notifications.PushAlert.approve,
-                    onPress: () => {
-                      Linking.openURL('app-settings://notification/' + bundle);
-                    },
-                    style: 'cancel',
-                  },
-                ],
-              );
-            }, 100);
-            break;
+                  style: 'cancel',
+                },
+              ],
+            );
+          }, 100);
         }
         return resolve(false);
       }
+      return resolve(true);
     });
   },
 };

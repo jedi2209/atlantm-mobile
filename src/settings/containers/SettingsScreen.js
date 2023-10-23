@@ -19,6 +19,7 @@ import {
   View,
   HStack,
   VStack,
+  useToast,
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import DeviceInfo from 'react-native-device-info';
@@ -39,6 +40,7 @@ import Analytics from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
 import {APP_EMAIL, APP_REGION, STORE_LINK} from '../../core/const';
 import {strings} from '../../core/lang/const';
+import ToastAlert from '../../core/components/ToastAlert';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -104,6 +106,8 @@ const cardWidth = deviceWidth - 20;
 const SettingsScreen = props => {
   const {region} = props;
 
+  const toast = useToast();
+
   useEffect(() => {
     Analytics.logEvent('screen', 'settings');
   }, []);
@@ -112,32 +116,39 @@ const SettingsScreen = props => {
     !props.isAppRated && props.actionAppRated();
   };
 
-  const _onSwitchActionSubscribe = value => {
-    let text,
-      title = '';
+  const _onSwitchActionSubscribe = async value => {
+    let title = strings.Notifications.success.titleSad,
+      text = strings.Notifications.success.textPushSad,
+      status = 'info';
+
     if (value === true) {
       PushNotifications.unsubscribeFromTopic('actions');
-      PushNotifications.subscribeToTopic(
+      const subscriptionStatus = await PushNotifications.subscribeToTopic(
         'actionsRegion',
         region,
-        isPermission => {
-          console.info('isPermission', isPermission);
-          props.actionSetPushActionSubscribe(isPermission);
-          if (isPermission) {
-            title = strings.Notifications.success.title;
-            text = strings.Notifications.success.textPush;
-            Alert.alert(title, text);
-          }
-        },
       );
+      props.actionSetPushActionSubscribe(subscriptionStatus);
+      title = strings.Notifications.success.title;
+      text = strings.Notifications.success.textPush;
+      status = 'success';
     } else {
       PushNotifications.unsubscribeFromTopic('actionsRegion');
       PushNotifications.unsubscribeFromTopic('actions');
       props.actionSetPushActionSubscribe(value);
-      title = strings.Notifications.success.titleSad;
-      text = strings.Notifications.success.textPushSad;
-      Alert.alert(title, text);
     }
+    toast.show({
+      render: ({id}) => {
+        return (
+          <ToastAlert
+            id={id}
+            description={text}
+            status={status}
+            title={title}
+            duration={5000}
+          />
+        );
+      },
+    });
   };
 
   return (
