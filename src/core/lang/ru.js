@@ -1,4 +1,7 @@
 export default {
+  App: {
+    APIError: 'Ошибка при загрузке данных.\r\nПопробуйте позже.',
+  },
   Menu: {
     main: {
       // основное меню
@@ -826,6 +829,7 @@ export default {
     reset: 'Сброс',
     choose: 'Выбрать',
     ok: 'OK',
+    repeat: 'Повторить',
   },
   CarParams: {
     engine: {

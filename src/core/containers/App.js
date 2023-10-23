@@ -1,12 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, Platform, View, Alert} from 'react-native';
+import {Animated, StyleSheet, Platform, View, Text} from 'react-native';
 import {NativeBaseProvider} from 'native-base';
-import {DefaultTheme, PaperProvider} from 'react-native-paper';
+import {DefaultTheme, PaperProvider, Button} from 'react-native-paper';
 
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
+
+import RNRestart from 'react-native-restart';
 
 // redux
 import {connect} from 'react-redux';
@@ -20,8 +22,7 @@ import {
 } from '../actions';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
-import {APP_STORE_UPDATED} from '../actionTypes';
-import {APP_LANG, APP_REGION, APP_METRICA_API_KEY} from '../const';
+import {APP_LANG} from '../const';
 
 import {strings} from '../lang/const';
 import {theme} from '../theme';
@@ -108,6 +109,9 @@ const _awaitStoreToUpdate = async props => {
 
 const App = props => {
   const [isLoading, setLoading] = useState(true);
+  const [isError, setError] = useState(false);
+
+  const opacityValue = new Animated.Value(0);
 
   const {
     auth,
@@ -143,26 +147,19 @@ const App = props => {
           res,
         );
         if (!res) {
-          Alert.alert('Кажется, что-то пошло не так');
+          setError(true);
         } else {
+          setError(false);
           setLoading(false);
         }
       })
       .catch(err => {
         console.error('_awaitStoreToUpdate error', err);
-        Alert.alert('Кажется, что-то пошло не так');
-        setLoading(false);
+        setError(true);
+        // setLoading(false);
       });
 
     PushNotifications.init();
-
-    // if (APP_METRICA_API_KEY) {
-    //   AppMetrica.activate({
-    //     apiKey: APP_METRICA_API_KEY,
-    //     sessionTimeout: 120,
-    //     firstActivationAsUpdate: false,
-    //   });
-    // }
 
     if (Platform.OS === 'ios') {
       //Prompt for push on iOS
@@ -194,35 +191,62 @@ const App = props => {
     }
   }, []);
 
+  useEffect(() => {
+    if (isError) {
+      Animated.timing(opacityValue, {
+        toValue: 1,
+        duration: 1000, // Adjust the duration as per your requirement
+        useNativeDriver: true, // Enable this for better performance
+      }).start();
+    }
+  }, [isError]);
+
   if (isLoading || !NavigationContainer) {
     return (
-      <View
-        flex={1}
-        style={styles.center}
-        backgroundColor={styleConst.color.blue}>
-        <LogoTitle theme={'white'} />
-      </View>
-    );
-  } else {
-    return (
-      <GestureHandlerRootView style={{flex: 1}}>
-        <NativeBaseProvider
-          theme={theme}
-          config={{
-            dependencies: {
-              'linear-gradient': require('react-native-linear-gradient')
-                .default,
-            },
-          }}>
-          <PaperProvider theme={paperTheme}>
-            <NavigationContainer ref={NavigationService.navigationRef}>
-              <Nav.Base />
-            </NavigationContainer>
-          </PaperProvider>
-        </NativeBaseProvider>
-      </GestureHandlerRootView>
+      <PaperProvider theme={paperTheme}>
+        <View
+          flex={1}
+          style={styles.center}
+          backgroundColor={styleConst.color.blue}>
+          <LogoTitle
+            theme={'white'}
+            containerStyle={{opacity: isError ? 0 : 1}}
+          />
+          {isError ? (
+            <>
+              <Animated.View style={{opacity: opacityValue}}>
+                <Text style={styles.apiErrorText}>{strings.App.APIError}</Text>
+                <Button
+                  onPress={() => RNRestart.restart()}
+                  buttonColor={styleConst.color.white}
+                  textColor={styleConst.color.blue}>
+                  {strings.Base.repeat}
+                </Button>
+              </Animated.View>
+            </>
+          ) : null}
+        </View>
+      </PaperProvider>
     );
   }
+
+  return (
+    <GestureHandlerRootView style={{flex: 1}}>
+      <NativeBaseProvider
+        theme={theme}
+        config={{
+          dependencies: {
+            'linear-gradient': require('react-native-linear-gradient').default,
+          },
+        }}>
+        <PaperProvider theme={paperTheme}>
+          <NavigationContainer ref={NavigationService.navigationRef}>
+            <Nav.Base />
+          </NavigationContainer>
+        </PaperProvider>
+      </NativeBaseProvider>
+    </GestureHandlerRootView>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -232,6 +256,14 @@ const styles = StyleSheet.create({
   center: {
     justifyContent: 'center',
     alignContent: 'center',
+    alignItems: 'center',
+  },
+  apiErrorText: {
+    color: styleConst.color.white,
+    textAlign: 'center',
+    marginTop: 40,
+    marginBottom: 20,
+    fontSize: 18,
   },
 });
 
