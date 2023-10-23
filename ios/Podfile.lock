@@ -466,6 +466,8 @@ PODS:
   - react-native-pure-jwt (3.0.2):
     - JWT (= 3.0.0-beta.12)
     - React
+  - react-native-restart (0.0.27):
+    - React-Core
   - react-native-safe-area-context (4.7.2):
     - React-Core
   - react-native-slider (4.4.3):
@@ -716,6 +718,7 @@ DEPENDENCIES:
   - react-native-otp-auto-fill (from `../node_modules/react-native-otp-auto-fill`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-pure-jwt (from `../node_modules/react-native-pure-jwt`)
+  - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
@@ -857,6 +860,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-pager-view"
   react-native-pure-jwt:
     :path: "../node_modules/react-native-pure-jwt"
+  react-native-restart:
+    :path: "../node_modules/react-native-restart"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
@@ -1000,6 +1005,7 @@ SPEC CHECKSUMS:
   react-native-otp-auto-fill: 722b3b99ddad3a2e92b6dacafdad6ab533e6ae2a
   react-native-pager-view: d211379f61895b6349bd7e571b44a26d005c2975
   react-native-pure-jwt: c7aabf3e38f688922741774c5b37d1288fc64311
+  react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
   react-native-safe-area-context: 7aa8e6d9d0f3100a820efb1a98af68aa747f9284
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
