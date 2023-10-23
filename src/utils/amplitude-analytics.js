@@ -3,6 +3,7 @@ import {get} from 'lodash';
 import {Amplitude} from '@amplitude/react-native';
 // import AppMetrica from 'react-native-appmetrica';
 import * as Sentry from '@sentry/react-native';
+import appsFlyer from 'react-native-appsflyer';
 
 import {AMPLITUDE_KEY} from '../core/const';
 
@@ -27,6 +28,17 @@ export default class Analytics {
       });
     }
     ampInstance.logEvent(`${category}:${action}`, params);
+
+    appsFlyer.logEvent(
+      `${category}:${action}`,
+      params,
+      res => {
+        console.log('appsFlyer.logEvent', res);
+      },
+      err => {
+        console.error('appsFlyer.logEvent error => ', err);
+      },
+    );
     // AppMetrica.reportEvent(`${category}:${action}`, params);
   }
 }

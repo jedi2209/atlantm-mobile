@@ -13,13 +13,10 @@
 #else
 #import "VKSdk.h"
 #endif
-// #if DEBUG && TARGET_OS_SIMULATOR
-//   #ifdef FB_SONARKIT_ENABLED
-//     #import <RCTAppSetupUtils.h>
-//   #endif
-// #endif
 
 #import <React/RCTBundleURLProvider.h>
+
+@import AppsFlyerLib;
 
 @implementation AppDelegate
 
@@ -40,6 +37,11 @@
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
   return [Orientation getOrientation];
+}
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+// notify AppsFlyerLib
+ [[AppsFlyerLib shared] registerUninstall:deviceToken];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge

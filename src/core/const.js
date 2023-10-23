@@ -10,6 +10,7 @@ let appRegion,
   appName,
   dealersSettings,
   appEmail,
+  appsFlyerSettings,
   sentryDSN,
   oneSignalKey,
   amplitudeKey,
@@ -42,6 +43,13 @@ switch (bundle) {
     dealersSettings = {
       hideBrands: [220, 137],
     };
+    appsFlyerSettings = {
+      devKey: 'N4FV8QhfUtmr59F5gDEV45',
+      appId: appleID,
+      onInstallConversionDataListener: false, //Optional
+      onDeepLinkListener: true, //Optional
+      timeToWaitForATTUserAuthorization: 10, //for iOS 14.5
+    };
     sentryDSN = 'https://2e35f2a2455b4a3d97a1687270845d33@sentry.io/219899';
     oneSignalKey = '2094a3e1-3c9a-479d-90ae-93adfcd15dab';
     amplitudeKey = '2716d7eebc63593e80e4fd172fc8b6f3';
@@ -68,6 +76,13 @@ switch (bundle) {
     appName = 'Автодім Атлант';
     dealersSettings = {
       hideBrands: [220, 137],
+    };
+    appsFlyerSettings = {
+      devKey: 'N4FV8QhfUtmr59F5gDEV45',
+      appId: appleID,
+      onInstallConversionDataListener: false, //Optional
+      onDeepLinkListener: true, //Optional
+      timeToWaitForATTUserAuthorization: 10, //for iOS 14.5
     };
     sentryDSN =
       'https://3bf79e8300e2427ca03f48301da3a7d9@o76005.ingest.sentry.io/6367469';
@@ -143,6 +158,8 @@ export const STORE_LINK = {
 export const API_MAIN_URL = 'https://api.atlantm.com/v1';
 
 export const SENTRY_DSN = sentryDSN;
+
+export const APPSFLYER_SETTINGS = appsFlyerSettings;
 
 export const APP_NAME = appName;
 
