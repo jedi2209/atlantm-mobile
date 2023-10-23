@@ -124,14 +124,6 @@ const App = props => {
 
   moment.locale(APP_LANG);
 
-  const hasPermission = async () => {
-    const res = await OneSignal.Notifications.hasPermission();
-    if (res) {
-      return res;
-    }
-    return false;
-  };
-
   useEffect(() => {
     NavigationService.setTopLevelNavigator(NavigationService.navigationRef);
     console.info(
@@ -164,7 +156,7 @@ const App = props => {
     if (Platform.OS === 'ios') {
       //Prompt for push on iOS
       OneSignal.Notifications.requestPermission();
-      if (hasPermission()) {
+      if (OneSignal.Notifications.hasPermission()) {
         actionSetPushGranted(true);
 
         if (
