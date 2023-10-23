@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, View, Text, Appearance} from 'react-native';
 import * as Sentry from '@sentry/react-native';
+import appsFlyer from 'react-native-appsflyer';
 
 // redux
 import {Provider} from 'react-redux';
@@ -15,7 +16,7 @@ import SplashScreen from 'react-native-splash-screen';
 import App from './App';
 import {LogBox} from 'react-native';
 
-import {SENTRY_DSN} from '../const';
+import {SENTRY_DSN, APPSFLYER_SETTINGS} from '../const';
 import styleConst from '../style-const';
 
 enableLatestRenderer();
@@ -31,6 +32,8 @@ let sentryParams = {
     }),
   ],
 };
+
+let appsFlyerSettings = Object.assign(APPSFLYER_SETTINGS, {isDebug: false});
 
 if (__DEV__) {
   LogBox.ignoreLogs([
@@ -48,6 +51,7 @@ if (__DEV__) {
       }),
     ],
   };
+  appsFlyerSettings.isDebug = true;
 }
 
 const _defaultHandler = ErrorUtils.getGlobalHandler();
@@ -74,6 +78,15 @@ const Wrapper = () => {
     Text.defaultProps.maxFontSizeMultiplier = 0;
     Text.defaultProps.selectable = false;
     Sentry.init(sentryParams);
+    appsFlyer.initSdk(
+      appsFlyerSettings,
+      result => {
+        console.info('appsFlyer.initSdk result => ', result);
+      },
+      error => {
+        console.error('appsFlyer.initSdk error => ', error);
+      },
+    );
   }, []);
 
   return (
