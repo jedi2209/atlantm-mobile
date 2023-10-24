@@ -77,6 +77,7 @@ const mapStateToProps = ({dealer, profile, nav}) => {
       : carLocalNumber,
     carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
     dealerSelectedLocal: dealer.selectedLocal,
+    allDealers: dealer.listDealers,
     region: dealer.region,
   };
 };
@@ -175,7 +176,7 @@ const styles = StyleSheet.create({
 class ServiceScreenStep1 extends Component {
   constructor(props) {
     super(props);
-    const {carBrand, carModel, carVIN, carNumber} = props;
+    const {route, carBrand, carModel, carVIN, carNumber, allDealers} = props;
 
     this.state = {
       service: undefined,
@@ -192,8 +193,8 @@ class ServiceScreenStep1 extends Component {
       recommended: false,
     };
 
-    this.carFromNavigation = get(this.props.route, 'params.car');
-    this.settingsFromNavigation = get(this.props.route, 'params.settings');
+    this.carFromNavigation = get(route, 'params.car');
+    this.settingsFromNavigation = get(route, 'params.settings');
     if (this.carFromNavigation && get(this.carFromNavigation, 'vin')) {
       this.state.carVIN = this.carFromNavigation.vin;
       this.state.carBrand = get(this.carFromNavigation, 'brand');
@@ -205,12 +206,38 @@ class ServiceScreenStep1 extends Component {
       ].join(' ');
     }
 
+    this.dealerSelectedLocal = get(route, 'params.dealerCustom');
+
     this.myCars = [];
     this.props.cars.map(item => {
       if (!item.hidden) {
         this.myCars.push(item);
       }
     });
+
+    this.listDealers = [];
+    if (this.dealerSelectedLocal) {
+      if (this.dealerSelectedLocal.length) {
+        this.dealerSelectedLocal.map(el => {
+          if (typeof el === 'string' || typeof el === 'number') {
+            el = allDealers[el];
+          }
+          this.listDealers.push({
+            label: el.name,
+            value: el.id,
+            key: el.id,
+          });
+        });
+      } else {
+        if (typeof this.dealerSelectedLocal === 'object') {
+          this.listDealers.push({
+            label: this.dealerSelectedLocal.name,
+            value: this.dealerSelectedLocal.id,
+            key: this.dealerSelectedLocal.id,
+          });
+        }
+      }
+    }
 
     this.props.localDealerClear();
   }
@@ -239,7 +266,7 @@ class ServiceScreenStep1 extends Component {
   }
 
   async _getServices() {
-    if (!get(this.props.dealerSelectedLocal, 'id', false)) {
+    if (!get(this.dealerSelectedLocal, 'id', false)) {
       return;
     }
     const {navigation, route} = this.props;
@@ -247,7 +274,7 @@ class ServiceScreenStep1 extends Component {
       servicesFetch: true,
     });
     const data = await API.getServiceAvailable({
-      dealer: this.props.dealerSelectedLocal.id,
+      dealer: this.dealerSelectedLocal.id,
       vin: this.state.carVIN,
     });
 
@@ -316,7 +343,7 @@ class ServiceScreenStep1 extends Component {
   }
 
   async _getServicesInfo(id) {
-    if (!get(this.props.dealerSelectedLocal, 'id', false)) {
+    if (!get(this.dealerSelectedLocal, 'id', false)) {
       return;
     }
     this.setState({
@@ -324,7 +351,7 @@ class ServiceScreenStep1 extends Component {
     });
     const data = await API.getServiceInfo({
       id,
-      dealer: this.props.dealerSelectedLocal.id,
+      dealer: this.dealerSelectedLocal.id,
       vin: this.state.carVIN,
     });
 
@@ -377,7 +404,7 @@ class ServiceScreenStep1 extends Component {
   };
 
   componentDidMount() {
-    // if (this.state.carVIN && get(this.props.dealerSelectedLocal, 'id', false)) {
+    // if (this.state.carVIN && get(this.dealerSelectedLocal, 'id', false)) {
     //   this._getServices();
     // }
   }
@@ -465,6 +492,75 @@ class ServiceScreenStep1 extends Component {
         },
       ],
     };
+    if (this.listDealers) {
+      if (this.listDealers.length < 1) {
+        this.dealerBlock = {
+          name: strings.Form.group.dealer,
+          fields: [
+            {
+              name: 'DEALER',
+              type: 'dealerSelect',
+              label: strings.Form.group.dealer,
+              value: this.props.dealerSelectedLocal || this.dealerSelectedLocal,
+              props: {
+                required: true,
+                goBack: true,
+                isLocal: true,
+                showBrands: false,
+                readonly: get(this.settingsFromNavigation, 'dealerHide', false),
+              },
+            },
+          ],
+        };
+      } else if (this.listDealers.length === 1) {
+        this.dealerBlock = {
+          name: strings.Form.group.dealer,
+          fields: [
+            {
+              name: 'DEALER',
+              type: 'dealerSelect',
+              label: strings.Form.group.dealer,
+              value: this.props.dealerSelectedLocal || this.dealerSelectedLocal,
+              props: {
+                required: true,
+                goBack: true,
+                isLocal: true,
+                showBrands: false,
+                readonly: true,
+              },
+            },
+          ],
+        };
+      } else if (this.listDealers.length > 1) {
+        this.dealerBlock = {
+          name: strings.Form.group.dealer,
+          fields: [
+            {
+              name: 'DEALER',
+              type: 'select',
+              label: strings.Form.field.label.dealer,
+              value: null,
+              props: {
+                items: this.listDealers,
+                required: true,
+                goBack: true,
+                showBrands: false,
+                isLocal: true,
+                dealerFilter: {
+                  type: 'ST',
+                },
+                placeholder: {
+                  label: strings.Form.field.placeholder.dealer,
+                  value: null,
+                  color: '#9EA0A4',
+                },
+              },
+            },
+          ],
+        };
+      }
+    }
+    console.info('this.listDealers', this.dealerBlock, this.listDealers);
 
     this.FormConfig = {
       fields: {

@@ -22,11 +22,14 @@ const ServiceContainer = props => {
   const {region, loginID, cars} = props;
   if (!actionID && region === 'by') {
     if (loginID && cars && cars.length > 0) {
+      console.info('\t\tService Screen => ServiceScreenStep1');
       return <ServiceScreenStep1 navigation={navigation} route={route} />;
     } else {
+      console.info('\t\tService Screen => ServiceNewNonAuth');
       return <ServiceNewNonAuth navigation={navigation} route={route} />;
     }
   }
+  console.info('\t\tService Screen => Service');
   return <Service navigation={navigation} route={route} />;
 };
 

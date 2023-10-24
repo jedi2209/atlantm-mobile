@@ -42,7 +42,7 @@ import FullScreenGallery from '../core/components/FullScreenGallery';
 import MainFilterScreen from '../catalog/containers/filters/MainFilterScreen';
 import BrandModelFilterScreen from '../catalog/containers/filters/BrandModelFilterScreen';
 
-import DealerInfoScreen from '../contacts/containers/DealerInfoScreen';
+import DealerInfoScreen from '../dealer/containers/DealerInfoScreen';
 
 // Used Cars Catalog
 import UsedCarListScreen from '../catalog/usedcar/containers/UsedCarListScreen';
@@ -179,6 +179,16 @@ export const Base = ({navigation, route}) => {
             {
               icon: 'close',
               iconSize: 12,
+              ContainerStyle: {
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                position: 'absolute',
+                borderRadius: 15,
+                marginTop: 10,
+                marginLeft: 10,
+                width: 50,
+                height: 50,
+                zIndex: 10000,
+              },
             },
           )}
         />

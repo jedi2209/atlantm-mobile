@@ -142,7 +142,11 @@ const CarCostScreen = ({
 
   const [FormConfig, setFormConfig] = useState({});
 
-  const dealerFromNavigation = get(route, 'params.dealer', false);
+  const dealerFromNavigation = get(
+    route,
+    'params.dealer',
+    get(route, 'params.dealerCustom', false),
+  );
   const userTextFromNavigation = get(route, 'params.Text', '');
 
   const toast = useToast();

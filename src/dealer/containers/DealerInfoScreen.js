@@ -35,7 +35,7 @@ import ActionSheetMenu from '../../core/components/ActionSheetMenu';
 
 // redux
 import {connect} from 'react-redux';
-import {callMe} from '../actions';
+import {callMe} from '../../contacts/actions';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList} from '../../info/actions';
