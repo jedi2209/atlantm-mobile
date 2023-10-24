@@ -16,8 +16,6 @@
 
 #import <React/RCTBundleURLProvider.h>
 
-@import AppsFlyerLib;
-
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -37,11 +35,6 @@
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
   return [Orientation getOrientation];
-}
-
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-// notify AppsFlyerLib
- [[AppsFlyerLib shared] registerUninstall:deviceToken];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
