@@ -8,6 +8,8 @@ import Orientation, {
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {get} from 'lodash';
+import {substractYears} from '../utils/date';
 
 import {
   Icon,
@@ -657,6 +659,16 @@ export const Base = ({navigation, route}) => {
 };
 
 const EKO = ({navigation, route}) => {
+  const filtersEKO = useSelector(state => state.eko.reviews);
+  const filtersActive = Boolean(
+    (get(filtersEKO, 'dateFrom', false) &&
+      get(filtersEKO, 'dateFrom', false) !== substractYears(10)) ||
+      (get(filtersEKO, 'filterDatePeriod', false) &&
+        get(filtersEKO, 'filterDatePeriod') !== 'все') ||
+      get(filtersEKO, 'filterRatingFrom') !== 1 ||
+      get(filtersEKO, 'filterRatingTo') !== 5,
+  );
+
   return (
     <StackEKO.Navigator initialRouteName="ReviewsScreenMain">
       <StackEKO.Screen
@@ -678,7 +690,7 @@ const EKO = ({navigation, route}) => {
                   <Icon
                     size={7}
                     as={MaterialCommunityIcons}
-                    name="filter"
+                    name={filtersActive ? 'filter' : 'filter-outline'}
                     color={styleConst.color.blue}
                     _dark={{
                       color: styleConst.color.white,

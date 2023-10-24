@@ -102,6 +102,8 @@ const ReviewsFilter = props => {
     setNewDateFrom(newDateFromLocal);
   };
 
+  useEffect(() => {}, [dateFrom, filterRatingFrom, filterRatingTo]);
+
   return (
     <View padding={4} flex={1}>
       <VStack space={5} alignContent={'center'} mt={8}>
@@ -111,7 +113,11 @@ const ReviewsFilter = props => {
           </Heading>
           <View alignContent={'center'} mt={2}>
             <Select
-              selectedValue={filterDatePeriod}
+              selectedValue={
+                filterDatePeriod
+                  ? filterDatePeriod
+                  : strings.ReviewsFilterDateScreen.periods.all
+              }
               _selectedItem={{
                 endIcon: (
                   <Icon size="5" as={MaterialCommunityIcons} name="check" />
