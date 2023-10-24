@@ -21,6 +21,7 @@ import {
   REVIEW_ADD__SUCCESS,
   REVIEW_ADD__FAIL,
   REVIEW_ADD_PUBLIC_AGREE__SELECT,
+  REVIEWS_ALL_FILTERS_CLEAR,
 } from './actionTypes';
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
@@ -250,5 +251,14 @@ export const actionReviewAdd = props => {
           },
         });
       });
+  };
+};
+
+export const clearFiltersEKO = message => {
+  return dispatch => {
+    dispatch({
+      type: REVIEWS_ALL_FILTERS_CLEAR,
+      payload: message,
+    });
   };
 };

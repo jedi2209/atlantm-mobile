@@ -12,6 +12,7 @@ import {
   actionSelectFilterDatePeriod,
   actionSelectFilterRatingFrom,
   actionSelectFilterRatingTo,
+  clearFiltersEKO,
 } from '../../actions';
 import {localDealerClear} from '../../../dealer/actions';
 
@@ -58,6 +59,7 @@ const mapDispatchToProps = {
   actionSelectFilterDatePeriod,
   actionSelectFilterRatingFrom,
   actionSelectFilterRatingTo,
+  clearFiltersEKO,
   localDealerClear,
 };
 
@@ -70,8 +72,10 @@ const ReviewsScreen = props => {
     dealerSelectedLocal,
     isFetchReviews,
     dateFrom,
+    dateTo,
+    filterRatingFrom,
+    filterRatingTo,
     actionReviewVisit,
-    localDealerClear,
   } = props;
 
   const [isLoading, setLoading] = useState(false);
@@ -85,7 +89,7 @@ const ReviewsScreen = props => {
         }, 500);
       });
     }
-  }, [dealerSelectedLocal, dateFrom]);
+  }, [dealerSelectedLocal, dateFrom, filterRatingTo, filterRatingFrom]);
 
   useEffect(() => {
     if (!dealerSelectedLocal) {
@@ -98,7 +102,8 @@ const ReviewsScreen = props => {
 
     return () => {
       if (get(route, 'params.prevScreen', null) !== 'ChooseDealerScreen') {
-        localDealerClear();
+        props.localDealerClear();
+        props.clearFiltersEKO();
       }
     };
   }, []);
@@ -114,8 +119,6 @@ const ReviewsScreen = props => {
   const _fetchReviews = type => {
     let {
       pages,
-      dateTo,
-      dateFrom,
       filterRatingFrom,
       filterRatingTo,
       dealerSelectedLocal,
@@ -127,8 +130,7 @@ const ReviewsScreen = props => {
     } = props;
 
     if (dateFrom === strings.ReviewsFilterDateScreen.periods.all) {
-      dateFrom = substractYears(10);
-      actionDateFromFill(dateFrom);
+      actionDateFromFill(substractYears(10));
     }
 
     if (!filterRatingFrom) {
@@ -194,20 +196,5 @@ const ReviewsScreen = props => {
     </SafeAreaView>
   );
 };
-
-// class ReviewsScreen extends Component {
-//   componentDidUpdate(prevProps) {
-//     const {needFetchReviews, isFetchReviews} = this.props;
-//     const isFilterWillUpdate =
-//       prevProps.dateTo !== this.props.dateTo ||
-//       prevProps.dateFrom !== this.props.dateFrom ||
-//       prevProps.filterRatingFrom !== this.props.filterRatingFrom ||
-//       prevProps.filterRatingTo !== this.props.filterRatingTo;
-
-//     if (isFilterWillUpdate && needFetchReviews && !isFetchReviews) {
-//       this.fetchReviews();
-//     }
-//   }
-// }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReviewsScreen);

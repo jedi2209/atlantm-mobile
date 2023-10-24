@@ -22,6 +22,7 @@ import {
   REVIEW_ADD__SUCCESS,
   REVIEW_ADD__FAIL,
   REVIEW_ADD_PUBLIC_AGREE__SELECT,
+  REVIEWS_ALL_FILTERS_CLEAR,
 } from './actionTypes';
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
@@ -123,6 +124,7 @@ function reviewDateFrom(state = null, action) {
   switch (action.type) {
     case REVIEWS__RESET:
     case DEALER__SUCCESS:
+    case REVIEWS_ALL_FILTERS_CLEAR:
       return null;
     case REVIEWS_DATE_FROM__FILL:
       return action.payload;
@@ -135,6 +137,7 @@ function reviewDateTo(state = null, action) {
   switch (action.type) {
     case REVIEWS__RESET:
     case DEALER__SUCCESS:
+    case REVIEWS_ALL_FILTERS_CLEAR:
       return null;
     case REVIEWS_DATE_TO__FILL:
       return action.payload;
@@ -147,6 +150,7 @@ function filterDatePeriod(state = null, action) {
   switch (action.type) {
     case REVIEWS__RESET:
     case DEALER__SUCCESS:
+    case REVIEWS_ALL_FILTERS_CLEAR:
       return null;
     case REVIEWS_DATE_PERIOD__SELECT:
       return action.payload;
@@ -159,6 +163,7 @@ function filterRatingFrom(state = null, action) {
   switch (action.type) {
     case REVIEWS__RESET:
     case DEALER__SUCCESS:
+    case REVIEWS_ALL_FILTERS_CLEAR:
       return null;
     case REVIEWS_RATING_FROM__SELECT:
       return action.payload;
@@ -171,6 +176,7 @@ function filterRatingTo(state = null, action) {
   switch (action.type) {
     case REVIEWS__RESET:
     case DEALER__SUCCESS:
+    case REVIEWS_ALL_FILTERS_CLEAR:
       return null;
     case REVIEWS_RATING_TO__SELECT:
       return action.payload;
