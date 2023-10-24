@@ -66,12 +66,15 @@ const Offer = ({
   bounceable,
   imageStyle,
   imagePressable,
+  dealerCustom,
 }) => {
   const currLang = useSelector(state => state.core.language.selected);
+
   const params = {
     id: data.item.id,
     date: data.item.date,
     type: data.item?.type,
+    dealerCustom,
   };
   return (
     <MainWrapper
@@ -141,6 +144,7 @@ const Offer = ({
 Offer.defaultProps = {
   imagePressable: false,
   bounceable: false,
+  dealerCustom: null,
 };
 
 export default Offer;
