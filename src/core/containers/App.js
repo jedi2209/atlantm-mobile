@@ -8,6 +8,11 @@ import {DefaultTheme, PaperProvider, Button} from 'react-native-paper';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
 
+import SpInAppUpdates, {
+  NeedsUpdateResponse,
+  IAUUpdateKind,
+  StartUpdateOptions,
+} from 'sp-react-native-in-app-updates';
 import RNRestart from 'react-native-restart';
 
 // redux
@@ -107,6 +112,33 @@ const _awaitStoreToUpdate = async props => {
   }
 };
 
+const checkAppForUpdate = async region => {
+  try {
+    const inAppUpdates = new SpInAppUpdates(
+      true, // isDebug
+    );
+    inAppUpdates.checkNeedsUpdate({curVersion: '8.4.5'}).then(result => {
+      if (result.shouldUpdate) {
+        let updateOptions = Platform.select({
+          ios: {
+            title: strings.Notifications.UpdatePopup.title,
+            message: strings.Notifications.UpdatePopup.text,
+            buttonUpgradeText: strings.Notifications.UpdatePopup.update,
+            buttonCancelText: strings.Notifications.UpdatePopup.later,
+            bundleId: DeviceInfo.getBundleId(),
+          },
+          android: {
+            updateType: IAUUpdateKind.FLEXIBLE,
+          },
+        });
+        inAppUpdates.startUpdate(updateOptions); // https://github.com/SudoPlz/sp-react-native-in-app-updates/blob/master/src/types.ts#L78
+      }
+    });
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 const App = props => {
   const [isLoading, setLoading] = useState(true);
   const [isError, setError] = useState(false);
@@ -120,6 +152,7 @@ const App = props => {
     dealerSelected,
     menuOpenedCount,
     isStoreUpdated,
+    region,
   } = props;
 
   moment.locale(APP_LANG);
@@ -144,6 +177,7 @@ const App = props => {
           setError(false);
           setLoading(false);
         }
+        checkAppForUpdate(region);
       })
       .catch(err => {
         console.error('_awaitStoreToUpdate error', err);
