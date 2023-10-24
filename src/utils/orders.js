@@ -192,6 +192,7 @@ async function getOrders(type = 'default', dealerData = null) {
           color: '#2c8ef4',
         },
         navigate: 'OrderPartsScreen',
+        navigateOptions,
       });
       res.ios.BUTTONS.push({
         priority: 4,
@@ -202,6 +203,7 @@ async function getOrders(type = 'default', dealerData = null) {
           color: '#2c8ef4',
         },
         navigate: 'OrderPartsScreen',
+        navigateOptions,
       });
       tmpArr.push(4);
       res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;
@@ -218,6 +220,7 @@ async function getOrders(type = 'default', dealerData = null) {
           color: '#2c8ef4',
         },
         navigate: 'CarCostScreen',
+        navigateOptions,
       });
       res.ios.BUTTONS.push({
         priority: 5,
@@ -228,6 +231,7 @@ async function getOrders(type = 'default', dealerData = null) {
           color: '#2c8ef4',
         },
         navigate: 'CarCostScreen',
+        navigateOptions,
       });
       tmpArr.push(5);
       res.android.CANCEL_INDEX = res.android.CANCEL_INDEX + 1;
