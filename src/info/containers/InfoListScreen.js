@@ -179,6 +179,7 @@ const InfoListScreen = ({
           bounceable={true}
           width={cardWidth}
           height={300}
+          dealerCustom={dealerAPIRequest}
           navigation={navigation.navigate}
         />
       </TransitionView>

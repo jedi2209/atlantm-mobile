@@ -195,6 +195,7 @@ const _renderInfoList = params => {
                 width={cardWidth}
                 height={infoListHeight}
                 imagePressable={false}
+                dealerCustom={dealerID}
               />
             );
           }}

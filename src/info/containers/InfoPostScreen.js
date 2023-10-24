@@ -75,7 +75,8 @@ const InfoPostScreen = ({
   route,
   fetchInfoPost,
 }) => {
-  const postID = route.params.id;
+  const postID = get(route, 'params.id');
+  const dealerCustom = get(route, 'params.dealerCustom');
 
   const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setLoading] = useState(true);
@@ -126,8 +127,8 @@ const InfoPostScreen = ({
     };
   }, []);
 
-  const _onPressCallMe = () => {
-    const dealers = get(postData, 'dealers');
+  const _onPressCallMe = ({dealers}) => {
+    // const dealers = get(postData, 'dealers');
     navigation.navigate('CallMeBackScreen', {
       actionID: postID,
       goBack: true,
@@ -175,8 +176,8 @@ const InfoPostScreen = ({
     });
   };
 
-  const _onPressService = () => {
-    const dealers = get(postData, 'dealers');
+  const _onPressService = ({dealers}) => {
+    // const dealers = get(postData, 'dealers');
     let customDealersList = [];
     dealersList[region].forEach(element => {
       if (dealers.includes(element.id)) {
@@ -280,7 +281,10 @@ const InfoPostScreen = ({
   const imageUrl = get(img, '10000x440');
   const date = get(postData, 'date');
   const type = get(postData, 'type');
-  const dealers = get(postData, 'dealers');
+  let dealers = get(postData, 'dealers');
+  if (dealerCustom) {
+    dealers = [dealerCustom];
+  }
   let resizeMode = null;
   if (postData) {
     resizeMode =
@@ -366,7 +370,7 @@ const InfoPostScreen = ({
               styleConst.button.footer.buttonRight,
               {backgroundColor: styleConst.color.lightBlue},
             ]}
-            onPress={() => _onPressCallMe()}>
+            onPress={() => _onPressCallMe({dealers})}>
             <Text style={styles.buttonText} selectable={false}>
               {strings.InfoPostScreen.button.callMe}
             </Text>
