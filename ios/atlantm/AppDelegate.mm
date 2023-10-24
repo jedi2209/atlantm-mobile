@@ -22,7 +22,7 @@
 {
   // [FIRApp configure];
   [GMSServices provideAPIKey:@"XXXX"];
-  [FBSDKApplicationDelegate.sharedInstance initializeSDK];
+  // [FBSDKApplicationDelegate.sharedInstance initializeSDK];
   [[FBSDKApplicationDelegate sharedInstance] application:application
                       didFinishLaunchingWithOptions:launchOptions];
   self.moduleName = @"atlantm";
@@ -44,6 +44,15 @@
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
+}
+
+- (BOOL)application:(UIApplication *)app
+            openURL:(NSURL *)url
+            options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
+{
+  return [[FBSDKApplicationDelegate sharedInstance]application:app
+                                                      openURL:url
+                                                      options:options];
 }
 
 @end
