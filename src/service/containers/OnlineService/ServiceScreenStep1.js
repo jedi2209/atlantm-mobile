@@ -508,6 +508,9 @@ class ServiceScreenStep1 extends Component {
                 isLocal: true,
                 showBrands: false,
                 readonly: get(this.settingsFromNavigation, 'dealerHide', false),
+                dealerFilter: {
+                  type: 'ST',
+                },
               },
             },
           ],
@@ -527,6 +530,9 @@ class ServiceScreenStep1 extends Component {
                 isLocal: true,
                 showBrands: false,
                 readonly: true,
+                dealerFilter: {
+                  type: 'ST',
+                },
               },
             },
           ],
