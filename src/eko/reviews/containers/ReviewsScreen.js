@@ -123,27 +123,19 @@ const ReviewsScreen = props => {
       filterRatingTo,
       dealerSelectedLocal,
       actionFetchReviews,
-      actionDateFromFill,
-      actionSelectFilterDatePeriod,
-      actionSelectFilterRatingFrom,
-      actionSelectFilterRatingTo,
     } = props;
-
-    if (dateFrom === strings.ReviewsFilterDateScreen.periods.all) {
-      actionDateFromFill(substractYears(10));
-    }
-
-    if (!filterRatingFrom) {
-      actionSelectFilterRatingFrom(1);
-      actionSelectFilterRatingTo(5);
-    }
 
     return actionFetchReviews({
       type,
       dateTo,
-      dateFrom,
-      ratingFrom: filterRatingFrom,
-      ratingTo: filterRatingTo,
+      dateFrom:
+        dateFrom === strings.ReviewsFilterDateScreen.periods.all
+          ? substractYears(10)
+          : dateFrom
+          ? dateFrom
+          : substractYears(10),
+      ratingFrom: filterRatingFrom ? filterRatingFrom : 1,
+      ratingTo: filterRatingTo ? filterRatingTo : 5,
       nextPage: pages.next,
       dealerId: dealerSelectedLocal.id,
     });
