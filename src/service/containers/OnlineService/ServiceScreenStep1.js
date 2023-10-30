@@ -566,7 +566,6 @@ class ServiceScreenStep1 extends Component {
         };
       }
     }
-    console.info('this.listDealers', this.dealerBlock, this.listDealers);
 
     this.FormConfig = {
       fields: {

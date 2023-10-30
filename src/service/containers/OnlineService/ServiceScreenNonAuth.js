@@ -29,6 +29,7 @@ const mapStateToProps = ({dealer, service, nav}) => {
 
   return {
     nav,
+    allDealers: dealer.listDealers,
     date: service.date,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
@@ -57,6 +58,7 @@ const mapDispatchToProps = {
 
 const ServiceScreenNonAuth = props => {
   const {
+    route,
     lastName,
     firstName,
     phone,
@@ -68,6 +70,7 @@ const ServiceScreenNonAuth = props => {
     localDealerClear,
     dealerSelectedLocal,
     region,
+    allDealers,
   } = props;
 
   const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
@@ -85,7 +88,33 @@ const ServiceScreenNonAuth = props => {
     name: firstName && lastName ? `${firstName} ${lastName}` : '',
   });
 
+  const dealer = get(props.route, 'params.dealerCustom', dealerSelectedLocal);
+
   const toast = useToast();
+
+  let listDealers = [];
+  if (dealer) {
+    if (dealer.length) {
+      dealer.map(el => {
+        if (typeof el === 'string' || typeof el === 'number') {
+          el = allDealers[el];
+        }
+        listDealers.push({
+          label: el.name,
+          value: el.id,
+          key: el.id,
+        });
+      });
+    } else {
+      if (typeof dealer == 'object') {
+        listDealers.push({
+          label: dealer.name,
+          value: dealer.id,
+          key: dealer.id,
+        });
+      }
+    }
+  }
 
   useEffect(() => {
     const carFromNavigation = get(props.route, 'params.car');
@@ -243,27 +272,68 @@ const ServiceScreenNonAuth = props => {
     setSuccess(true);
   };
 
+  let dealerField = {};
+  if (listDealers) {
+    if (listDealers.length < 1) {
+      dealerField = {
+        name: 'DEALER',
+        type: 'dealerSelect',
+        label: strings.Form.group.dealer,
+        value: dealer,
+        props: {
+          required: true,
+          goBack: true,
+          isLocal: true,
+          showBrands: false,
+          dealerFilter: {
+            type: 'ST',
+          },
+        },
+      };
+    }
+    if (listDealers.length === 1) {
+      dealerField = {
+        name: 'DEALER',
+        type: 'dealerSelect',
+        label: strings.Form.group.dealer,
+        value: dealerSelectedLocal || allDealers[dealer] || dealer,
+        props: {
+          required: true,
+          goBack: true,
+          isLocal: true,
+          showBrands: false,
+          readonly: get(route, 'params.settings.dealerHide', true),
+          dealerFilter: {
+            type: 'ST',
+          },
+        },
+      };
+    }
+    if (listDealers.length > 1) {
+      dealerField = {
+        name: 'DEALER',
+        type: 'select',
+        label: strings.Form.field.label.dealer,
+        value: null,
+        props: {
+          items: listDealers,
+          required: true,
+          placeholder: {
+            label: strings.Form.field.placeholder.dealer,
+            value: null,
+            color: '#9EA0A4',
+          },
+        },
+      };
+    }
+  }
+
   const FormConfig = {
     groups: [
       {
         name: strings.Form.group.dealer,
         fields: [
-          {
-            name: 'DEALER',
-            type: 'dealerSelect',
-            label: strings.Form.field.label.dealer,
-            value: dealerSelectedLocalState,
-            props: {
-              goBack: true,
-              isLocal: true,
-              showBrands: false,
-              readonly: false,
-              required: true,
-              dealerFilter: {
-                type: 'ST',
-              },
-            },
-          },
+          dealerField,
           {
             name: 'DATETIME',
             type: orderLead ? 'date' : 'dateTime',
