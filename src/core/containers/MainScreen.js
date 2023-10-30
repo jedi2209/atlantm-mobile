@@ -545,168 +545,48 @@ const MainScreen = props => {
             />
           );
         })}
-        {false ? (
-          <Pressable px={2} pt={2} onPress={() => {}}>
-            <HStack justifyContent={'space-between'}>
-              <Text py={2} fontSize={16} fontFamily={styleConst.font.regular}>
-                {strings.Menu.main.autocenters}
-              </Text>
-            </HStack>
-            <Box
-              borderWidth="1"
-              borderColor="coolGray.300"
-              bg={styleConst.color.green}
-              borderRadius={styleConst.borderRadius}
-              shadow={styleConst.shadow.default}
-              style={[styles.block]}>
-              <MapView
-                key={'map' + colorScheme}
-                provider={PROVIDER_GOOGLE}
-                mapType={isApple ? 'mutedStandard' : 'none'}
-                scrollEnabled={false}
-                rotateEnabled={false}
-                zoomControlEnabled={false}
-                zoomTapEnabled={false}
-                scrollDuringRotateOrZoomEnabled={false}
-                pitchEnabled={false}
-                toolbarEnabled={false}
-                loadingEnabled={true}
-                showsCompass={false}
-                liteMode={true}
-                showsIndoors={false}
-                userInterfaceStyle={colorScheme}
-                initialRegion={{
-                  latitude: 53.893009,
-                  longitude: 27.567444,
-                  latitudeDelta: 0.0922,
-                  longitudeDelta: 0.0421,
-                }}
-                style={{
-                  height: 300,
-                  borderRadius: styleConst.borderRadius,
-                }}
-              />
-            </Box>
-          </Pressable>
-        ) : null}
-        {false ? (
-          <Pressable
-            px={2}
-            pt={2}
-            onPress={() => {
-              Analytics.logEvent('screen', 'ratePopup', {
-                source: 'settings',
-              });
-              return RateThisApp({onSuccess: _onAppRateSuccess});
-              //return Linking.openURL(STORE_LINK[Platform.OS]);
-            }}>
-            <Box
-              borderWidth="1"
-              borderColor="coolGray.300"
-              bg={styleConst.color.orange}
-              p={2}
-              shadow={styleConst.shadow.default}
-              borderRadius={styleConst.borderRadius}
-              style={styles.block}>
-              <HStack
-                space={3}
-                justifyContent="space-between"
-                alignItems="center">
-                <Text
-                  selectable={false}
-                  fontSize={18}
-                  lineHeight={24}
-                  color={styleConst.color.white}
-                  fontFamily={styleConst.font.regular}>
-                  {strings.SettingsScreen.rateAppTitle}
-                </Text>
-                <Icon
-                  size={55}
-                  as={Ionicons}
-                  name={
-                    isApple ? 'logo-apple-appstore' : 'logo-google-playstore'
-                  }
-                  color={styleConst.color.white}
-                  _dark={{
-                    color: styleConst.color.white,
-                  }}
-                  selectable={false}
-                />
-              </HStack>
-            </Box>
-          </Pressable>
-        ) : null}
-        {false ? (
-          <Pressable
-            px={2}
-            pt={2}
-            onPress={() => {
-              return Linking.openURL('mailto:' + APP_EMAIL);
-            }}>
-            <Box
-              borderWidth="1"
-              borderColor="coolGray.300"
-              bg={styleConst.color.green}
-              borderRadius={styleConst.borderRadius}
-              shadow={styleConst.shadow.default}
-              p={2}
-              style={[styles.block]}>
-              <HStack
-                space={3}
-                justifyContent="space-between"
-                alignItems="center">
-                <Text
-                  selectable={false}
-                  fontSize={18}
-                  lineHeight={24}
-                  color={styleConst.color.white}
-                  fontFamily={styleConst.font.regular}>
-                  {strings.SettingsScreen.mailtoUs}
-                </Text>
-                <Icon
-                  size={12}
-                  as={Ionicons}
-                  name={'mail-outline'}
-                  color={styleConst.color.white}
-                  _dark={{
-                    color: styleConst.color.white,
-                  }}
-                  selectable={false}
-                />
-              </HStack>
-            </Box>
-          </Pressable>
-        ) : null}
-        {false ? (
-          <Button
-            px={2}
-            variant="link"
-            size="md"
-            onPress={() => navigation.navigate('UserAgreementScreen')}>
-            <Text style={styles.userAgreementText}>
-              {strings.Form.agreement.title}
+        {/* <Pressable px={2} pt={2} onPress={() => {}}>
+          <HStack justifyContent={'space-between'}>
+            <Text py={2} fontSize={16} fontFamily={styleConst.font.regular}>
+              {strings.Menu.main.autocenters}
             </Text>
-          </Button>
-        ) : null}
-        {false ? (
-          <Button
-            px={2}
-            variant="link"
-            size="md"
-            onPress={() => Linking.openURL(STORE_LINK[Platform.OS])}>
-            <Text
-              selectable={false}
-              fontFamily={styleConst.font.regular}
-              fontSize={12}
-              color={styleConst.color.lightBlue}
-              opacity={0.5}>
-              {'v. ' +
-                DeviceInfo.getVersion() +
-                '.' +
-                DeviceInfo.getBuildNumber()}
-            </Text>
-          </Button>
-        ) : null}
+          </HStack>
+          <Box
+            borderWidth="1"
+            borderColor="coolGray.300"
+            bg={styleConst.color.green}
+            borderRadius={styleConst.borderRadius}
+            shadow={styleConst.shadow.default}
+            style={[styles.block]}>
+            <MapView
+              key={'map' + colorScheme}
+              provider={PROVIDER_GOOGLE}
+              mapType={isApple ? 'mutedStandard' : 'none'}
+              scrollEnabled={false}
+              rotateEnabled={false}
+              zoomControlEnabled={false}
+              zoomTapEnabled={false}
+              scrollDuringRotateOrZoomEnabled={false}
+              pitchEnabled={false}
+              toolbarEnabled={false}
+              loadingEnabled={true}
+              showsCompass={false}
+              liteMode={true}
+              showsIndoors={false}
+              userInterfaceStyle={colorScheme}
+              initialRegion={{
+                latitude: 53.893009,
+                longitude: 27.567444,
+                latitudeDelta: 0.0922,
+                longitudeDelta: 0.0421,
+              }}
+              style={{
+                height: 300,
+                borderRadius: styleConst.borderRadius,
+              }}
+            />
+          </Box>
+        </Pressable> */}
       </VStack>
     </ScrollView>
   );

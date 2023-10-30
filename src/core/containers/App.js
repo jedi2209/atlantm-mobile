@@ -115,9 +115,9 @@ const _awaitStoreToUpdate = async props => {
 const checkAppForUpdate = async region => {
   try {
     const inAppUpdates = new SpInAppUpdates(
-      true, // isDebug
+      false, // isDebug
     );
-    inAppUpdates.checkNeedsUpdate({curVersion: '8.4.5'}).then(result => {
+    inAppUpdates.checkNeedsUpdate().then(async result => {
       if (result.shouldUpdate) {
         let updateOptions = Platform.select({
           ios: {
@@ -131,7 +131,10 @@ const checkAppForUpdate = async region => {
             updateType: IAUUpdateKind.FLEXIBLE,
           },
         });
-        inAppUpdates.startUpdate(updateOptions); // https://github.com/SudoPlz/sp-react-native-in-app-updates/blob/master/src/types.ts#L78
+        await inAppUpdates.startUpdate(updateOptions);
+        if (Platform.OS === 'android') {
+          inAppUpdates.installUpdate();
+        }
       }
     });
   } catch (error) {
