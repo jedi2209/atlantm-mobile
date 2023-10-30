@@ -149,35 +149,33 @@ export default {
     return OneSignal.Notifications.hasPermission();
   },
 
-  checkPermission() {
-    return new Promise((resolve, reject) => {
-      // Check push notification and OneSignal subscription statuses
-      OneSignal.Notifications.requestPermission();
-      if (this.deviceState() === false) {
-        if (Platform.OS === 'ios') {
-          setTimeout(() => {
-            return Alert.alert(
-              strings.Notifications.PushAlert.title,
-              strings.Notifications.PushAlert.text,
-              [
-                {
-                  text: strings.Notifications.PushAlert.later,
-                  style: 'destructive',
-                },
-                {
-                  text: strings.Notifications.PushAlert.approve,
-                  onPress: () => {
-                    Linking.openURL('app-settings://notification/' + bundle);
-                  },
-                  style: 'cancel',
-                },
-              ],
-            );
-          }, 100);
-        }
-        return resolve(false);
-      }
-      return resolve(true);
-    });
+  async checkPermission() {
+    // Check push notification and OneSignal subscription statuses
+    const isPermission = this.deviceState();
+    if (isPermission) {
+      return true;
+    }
+    if (Platform.OS === 'ios') {
+      const permission = await OneSignal.Notifications.requestPermission();
+      setTimeout(() => {
+        return Alert.alert(
+          strings.Notifications.PushAlert.title,
+          strings.Notifications.PushAlert.text,
+          [
+            {
+              text: strings.Notifications.PushAlert.later,
+              style: 'destructive',
+            },
+            {
+              text: strings.Notifications.PushAlert.approve,
+              onPress: () => {
+                Linking.openURL('app-settings://notification/' + bundle);
+              },
+              style: 'cancel',
+            },
+          ],
+        );
+      }, 100);
+    }
   },
 };
