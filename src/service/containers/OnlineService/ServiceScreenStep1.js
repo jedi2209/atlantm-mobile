@@ -446,7 +446,7 @@ class ServiceScreenStep1 extends Component {
     }
 
     let data = {
-      dealer: this.props.dealerSelectedLocal,
+      dealer: this.props.dealerSelectedLocal || this.dealerSelectedLocal,
       service: service || null,
       serviceInfo: this.state.serviceInfo || null,
       orderLead: this.state.orderLead,
