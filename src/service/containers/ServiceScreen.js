@@ -293,9 +293,7 @@ const ServiceScreen = props => {
               [
                 {
                   text: 'ОК',
-                  onPress: () => {
-                    navigation.goBack();
-                  },
+                  onPress: () => navigation.goBack(),
                 },
               ],
             );

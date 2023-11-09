@@ -149,15 +149,6 @@ const OrderPartsScreen = props => {
       setMyCars(myCarsTmp);
     }
 
-    const dealerFromNavigation = get(props.route, 'params.dealer');
-    if (dealerFromNavigation) {
-      setDealerSelectedLocal(dealerFromNavigation);
-    } else {
-      setDealerSelectedLocal(
-        dealerSelectedLocal ? dealerSelectedLocal : dealerSelected,
-      );
-    }
-
     const carFromNavigation = get(props.route, 'params.car');
 
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
@@ -500,11 +491,12 @@ const OrderPartsScreen = props => {
       .filter(Boolean)
       .join(' ');
 
-    let dealerID = dataFromForm.DEALER.id;
+    const dealerID = get(
+      dataFromForm,
+      'DEALER.id',
+      get(dataFromForm, 'DEALER'),
+    );
 
-    if (dealerSelectedLocalState) {
-      dealerID = dealerSelectedLocalState.id;
-    }
     const actionID = get(props.route, 'params.actionID');
 
     const dataToSend = {
