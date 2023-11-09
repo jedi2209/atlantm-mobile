@@ -1098,7 +1098,7 @@ export default {
       }
     }
     if (__DEV__) {
-      console.info('apiGetData', requestParams?.method, url);
+      console.info('apiGetData', requestParams?.method, url, body);
     }
     if (method === 'delete' || method === 'patch') {
       const res = await fetch(url, {

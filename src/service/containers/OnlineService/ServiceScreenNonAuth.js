@@ -164,8 +164,14 @@ const ServiceScreenNonAuth = props => {
       setLead(true);
     }
 
+    const dealerID = get(
+      dataFromForm,
+      'DEALER.id',
+      get(dataFromForm, 'DEALER'),
+    );
+
     let data = {
-      dealer: props.dealerSelectedLocal.id,
+      dealer: dealerID,
       time: {
         from:
           dateFromForm && dateFromForm.time
@@ -203,7 +209,7 @@ const ServiceScreenNonAuth = props => {
         email: get(data, 'email', ''),
         phone: get(data, 'phone', ''),
         text: get(data, 'text', ''),
-        dealerID: data.dealer,
+        dealerID: get(data, 'dealer', dealerID),
         actionID,
       };
       const action = await props.orderService(dataToSend);
@@ -261,9 +267,7 @@ const ServiceScreenNonAuth = props => {
           [
             {
               text: 'ОК',
-              onPress: () => {
-                navigation.goBack();
-              },
+              onPress: () => navigation.goBack(),
             },
           ],
         );
