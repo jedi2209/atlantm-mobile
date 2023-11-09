@@ -326,7 +326,6 @@ const CarListItem = ({
           navigation.navigate('CallMeBackScreen', {
             dealerCustom: dealerList[car.dealer.id],
             dealerHide: true,
-            goBack: true,
             car: {
               brand: get(car, 'brand.name', ''),
               model: get(car, 'model', ''),

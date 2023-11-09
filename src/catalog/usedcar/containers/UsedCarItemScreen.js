@@ -167,7 +167,6 @@ const UsedCarItemScreen = props => {
               navigation.navigate('CallMeBackScreen', {
                 dealerCustom: listDealers[carDetails.dealer.id],
                 dealerHide: true,
-                goBack: true,
                 carId: carDetails.id.api,
               });
             },
@@ -184,7 +183,6 @@ const UsedCarItemScreen = props => {
     navigation.navigate('CallMeBackScreen', {
       dealerCustom: listDealers[carDetails.dealer.id],
       dealerHide: true,
-      goBack: true,
       carId: carDetails.id.api,
     });
   };

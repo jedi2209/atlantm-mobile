@@ -131,7 +131,6 @@ const InfoPostScreen = ({
     // const dealers = get(postData, 'dealers');
     navigation.navigate('CallMeBackScreen', {
       actionID: postID,
-      goBack: true,
       dealerCustom: dealers,
     });
   };

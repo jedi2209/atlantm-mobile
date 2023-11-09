@@ -439,7 +439,6 @@ const DealerInfoScreen = ({
                         onPress: () => {
                           navigation.navigate('CallMeBackScreen', {
                             dealerCustom: dealerSelected,
-                            goBack: true,
                           });
                         },
                       },
@@ -679,7 +678,6 @@ const DealerInfoScreen = ({
     navigation.navigate('CallMeBackScreen', {
       dealerCustom: dealerSelected,
       dealerHide: true,
-      goBack: true,
     });
   };
 

@@ -130,13 +130,7 @@ const CallMeBackScreen = ({
         [
           {
             text: 'ОК',
-            onPress: () => {
-              if (route?.params && route.params?.goBack) {
-                NavigationService.goBack();
-              } else {
-                NavigationService.reset();
-              }
-            },
+            onPress: () => NavigationService.goBack(),
           },
         ],
       );
