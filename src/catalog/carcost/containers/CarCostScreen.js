@@ -138,15 +138,10 @@ const CarCostScreen = ({
   });
 
   const [photos, setPhotos] = useState([]);
-  const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
 
   const [FormConfig, setFormConfig] = useState({});
 
-  const dealerFromNavigation = get(
-    route,
-    'params.dealer',
-    get(route, 'params.dealerCustom', false),
-  );
+  const dealer = get(route, 'params.dealerCustom', dealerSelectedLocal);
   const userTextFromNavigation = get(route, 'params.Text', '');
 
   const toast = useToast();
@@ -154,7 +149,6 @@ const CarCostScreen = ({
   useEffect(() => {
     console.info('== CarCost ==');
     Analytics.logEvent('screen', 'catalog/carcost');
-    // setDealerSelectedLocal(dealerSelectedLocal);
     if (cars.length === 1) {
       _selectCar(cars[0]);
     }
@@ -162,10 +156,6 @@ const CarCostScreen = ({
       localDealerClear();
     };
   }, [localDealerClear]);
-
-  // useEffect(() => {
-  //   setDealerSelectedLocal(dealerSelectedLocal);
-  // }, [dealerSelectedLocal]);
 
   useEffect(() => {
     const carFromNavigation = get(route, 'params.car');
@@ -185,15 +175,13 @@ const CarCostScreen = ({
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: strings.Form.field.label.dealer,
-                value: dealerFromNavigation
-                  ? dealerFromNavigation
-                  : dealerSelectedLocal,
+                value: dealer ? dealer : dealerSelectedLocal,
                 props: {
                   goBack: true,
                   isLocal: true,
                   showBrands: false,
                   returnScreen: navigation.state?.routeName,
-                  readonly: dealerFromNavigation ? true : false,
+                  readonly: get(route, 'params.dealerCustom') ? true : false,
                   dealerFilter: {
                     type: 'TI',
                   },
@@ -302,7 +290,7 @@ const CarCostScreen = ({
         ],
       },
     });
-  }, [carSelected, photos, dealerSelectedLocal, dealerFromNavigation]);
+  }, [carSelected, photos, dealerSelectedLocal, dealer]);
 
   const _selectCar = item => {
     setCarData({
@@ -329,11 +317,8 @@ const CarCostScreen = ({
       return;
     }
 
-    let dealerId = get(dealerFromNavigation, 'id', dealerSelectedLocal?.id);
+    let dealerId = get(dealer, 'id', dealerSelectedLocal?.id);
 
-    if (dealerSelectedLocalState) {
-      dealerId = dealerSelectedLocalState.id;
-    }
     const photoForUpload = valuesIn(photos);
 
     const dataToSend = {

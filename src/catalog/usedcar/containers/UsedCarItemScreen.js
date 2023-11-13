@@ -220,7 +220,7 @@ const UsedCarItemScreen = props => {
                 get(carDetails, 'model.generation.name'),
                 '#' + get(carDetails, 'id.sap', null),
               ].join(' '),
-            dealer: carDetails.dealer,
+            dealerCustom: carDetails.dealer,
           });
         }}
         mx="2%"
