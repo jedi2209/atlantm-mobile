@@ -19,6 +19,7 @@ import {
   ToastRef,
   Checkbox,
   HStack,
+  Icon,
 } from 'native-base';
 import ToastAlert from '../ToastAlert';
 import {get} from 'lodash';
@@ -31,6 +32,7 @@ import {DatePickerCustom} from '../DatePickerCustom';
 import ChooseDateTimeComponent from '../../../service/components/ChooseDateTimeComponent';
 import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 import RNPickerSelect from 'react-native-picker-select';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import PhoneInput from 'react-native-phone-input';
 import DealerItemList from '../DealerItemList';
 
@@ -1327,9 +1329,18 @@ class Form extends Component {
             style={{
               ...pickerSelectStyles,
               iconContainer: {
-                top: 10,
-                right: 5,
+                top: 12,
               },
+            }}
+            Icon={() => {
+              return (
+                <Icon
+                  name="keyboard-arrow-down"
+                  as={MaterialIcons}
+                  size={6}
+                  color={styleConst.color.darkBg}
+                />
+              );
             }}
             {...data.props}
           />
