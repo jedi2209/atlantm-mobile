@@ -82,6 +82,7 @@
     "react-native-appsflyer": "^6.12.2",
     "react-native-awesome-gallery": "^0.3.0",
     "react-native-big-list": "^1.6.1",
+    "react-native-circular-progress-indicator": "^4.4.2",
     "react-native-codegen": "0.71.5",
     "react-native-collapsible": "^1.6.0",
     "react-native-communications": "^2.2.1",
