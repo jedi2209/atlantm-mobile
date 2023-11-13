@@ -8,11 +8,8 @@ import {DefaultTheme, PaperProvider, Button} from 'react-native-paper';
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
 
-import SpInAppUpdates, {
-  NeedsUpdateResponse,
-  IAUUpdateKind,
-  StartUpdateOptions,
-} from 'sp-react-native-in-app-updates';
+import SpInAppUpdates, {IAUUpdateKind} from 'sp-react-native-in-app-updates';
+import CircularProgress from 'react-native-circular-progress-indicator';
 import RNRestart from 'react-native-restart';
 
 // redux
@@ -112,42 +109,7 @@ const _awaitStoreToUpdate = async props => {
   }
 };
 
-const checkAppForUpdate = async region => {
-  try {
-    const inAppUpdates = new SpInAppUpdates(
-      false, // isDebug
-    );
-    inAppUpdates.checkNeedsUpdate().then(async result => {
-      if (result.shouldUpdate) {
-        let updateOptions = Platform.select({
-          ios: {
-            title: strings.Notifications.UpdatePopup.title,
-            message: strings.Notifications.UpdatePopup.text,
-            buttonUpgradeText: strings.Notifications.UpdatePopup.update,
-            buttonCancelText: strings.Notifications.UpdatePopup.later,
-            bundleId: DeviceInfo.getBundleId(),
-          },
-          android: {
-            updateType: IAUUpdateKind.FLEXIBLE,
-          },
-        });
-        await inAppUpdates.startUpdate(updateOptions);
-        if (Platform.OS === 'android') {
-          inAppUpdates.installUpdate();
-        }
-      }
-    });
-  } catch (error) {
-    console.error(error);
-  }
-};
-
 const App = props => {
-  const [isLoading, setLoading] = useState(true);
-  const [isError, setError] = useState(false);
-
-  const opacityValue = new Animated.Value(0);
-
   const {
     auth,
     actionSetPushGranted,
@@ -158,7 +120,77 @@ const App = props => {
     region,
   } = props;
 
+  const [isLoading, setLoading] = useState(true);
+  const [isError, setError] = useState(false);
+  const [isUpdateDownloading, setUpdateDownload] = useState(false);
+  const [downloadPercent, setDownloadPercent] = useState(0);
+
+  const opacityValue = new Animated.Value(0);
+
+  const inAppUpdates = new SpInAppUpdates(
+    false, // isDebug
+  );
+
   moment.locale(APP_LANG);
+
+  const onStatusUpdate = statusInfo => {
+    const {bytesDownloaded, totalBytesToDownload, status} = statusInfo;
+
+    const percent = Math.ceil((bytesDownloaded / totalBytesToDownload) * 100);
+    // do something
+    switch (status) {
+      case 1: // PENDING
+      case 2: // DOWNLOADING
+      case 3: // INSTALLING
+        if (!isUpdateDownloading) {
+          setUpdateDownload(true);
+          setDownloadPercent(percent || 0);
+        }
+        break;
+      case 0: // UNKNOWN
+      case 5: // FAILED
+      case 6: // CANCELED
+        if (!isUpdateDownloading) {
+          setUpdateDownload(false);
+          setDownloadPercent(0);
+        }
+        break;
+      case 11: // DOWNLOADED
+        if (bytesDownloaded === totalBytesToDownload) {
+          inAppUpdates.installUpdate();
+        }
+        break;
+      default:
+        break;
+    }
+  };
+
+  const checkAppForUpdate = async region => {
+    try {
+      inAppUpdates.checkNeedsUpdate().then(async result => {
+        if (result.shouldUpdate) {
+          let updateOptions = Platform.select({
+            ios: {
+              title: strings.Notifications.UpdatePopup.title,
+              message: strings.Notifications.UpdatePopup.text,
+              buttonUpgradeText: strings.Notifications.UpdatePopup.update,
+              buttonCancelText: strings.Notifications.UpdatePopup.later,
+              bundleId: DeviceInfo.getBundleId(),
+            },
+            android: {
+              updateType: IAUUpdateKind.FLEXIBLE,
+            },
+          });
+          if (Platform.OS === 'android') {
+            inAppUpdates.addStatusUpdateListener(onStatusUpdate);
+            inAppUpdates.startUpdate(updateOptions);
+          }
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     NavigationService.setTopLevelNavigator(NavigationService.navigationRef);
@@ -230,7 +262,7 @@ const App = props => {
     }
   }, [isError]);
 
-  if (isLoading || !NavigationContainer) {
+  if (isUpdateDownloading || isLoading || !NavigationContainer) {
     return (
       <PaperProvider theme={paperTheme}>
         <View
@@ -241,6 +273,17 @@ const App = props => {
             theme={'white'}
             containerStyle={{opacity: isError ? 0 : 1}}
           />
+          {isUpdateDownloading ? (
+            <View style={{marginTop: 20}}>
+              <CircularProgress
+                value={downloadPercent}
+                inActiveStrokeColor={'#2ecc71'}
+                inActiveStrokeOpacity={0.2}
+                progressValueColor={styleConst.color.white}
+                valueSuffix={'%'}
+              />
+            </View>
+          ) : null}
           {isError ? (
             <>
               <Animated.View style={{opacity: opacityValue}}>
