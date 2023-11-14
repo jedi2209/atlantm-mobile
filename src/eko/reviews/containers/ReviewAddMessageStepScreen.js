@@ -48,6 +48,7 @@ const ReviewAddMessageStepScreen = ({
             label: strings.Form.field.label.dealer,
             value: dealerSelectedLocal,
             props: {
+              required: true,
               goBack: true,
               isLocal: true,
               showBrands: false,
