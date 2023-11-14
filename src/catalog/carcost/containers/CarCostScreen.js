@@ -35,6 +35,7 @@ import {ERROR_NETWORK} from '../../../core/const';
 
 import {strings} from '../../../core/lang/const';
 import {RotationGestureHandler} from 'react-native-gesture-handler';
+import ToastAlert from '../../../core/components/ToastAlert';
 
 const mapStateToProps = ({dealer, profile, catalog}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
@@ -179,6 +180,7 @@ const CarCostScreen = ({
                 props: {
                   goBack: true,
                   isLocal: true,
+                  required: true,
                   showBrands: false,
                   returnScreen: navigation.state?.routeName,
                   readonly: get(route, 'params.dealerCustom') ? true : false,
@@ -318,6 +320,26 @@ const CarCostScreen = ({
     }
 
     let dealerId = get(dealer, 'id', dealerSelectedLocal?.id);
+    if (!dealerId) {
+      toast.show({
+        render: ({id}) => {
+          return (
+            <ToastAlert
+              id={id}
+              status="warning"
+              duration={3000}
+              description={
+                strings.Form.status.fieldRequired1 +
+                '\r\n- Автоцентр \r\n' +
+                strings.Form.status.fieldRequired2
+              }
+              title={strings.Form.status.fieldRequiredMiss}
+            />
+          );
+        },
+      });
+      return;
+    }
 
     const photoForUpload = valuesIn(photos);
 
