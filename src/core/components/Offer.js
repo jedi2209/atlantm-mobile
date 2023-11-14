@@ -107,7 +107,6 @@ const Offer = ({
       <View backgroundColor={theme === 'round' ? 'none' : styleConst.color.bg}>
         <VStack
           numberOfLines={3}
-          height={theme === 'round' ? 'auto' : 20}
           paddingHorizontal={theme === 'round' ? 10 : 0}>
           <Text
             fontSize={20}

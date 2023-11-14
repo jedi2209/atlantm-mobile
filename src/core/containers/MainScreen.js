@@ -56,7 +56,7 @@ const {width, height} = Dimensions.get('screen');
 const isApple = Platform.OS === 'ios';
 const firstRowMarginTop = 3;
 const infoListHeight = 250;
-const cardWidth = width - 30;
+const cardWidth = width - 40;
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
@@ -396,8 +396,10 @@ const _renderActions = params => {
           }}
           sliderWidth={width}
           itemWidth={cardWidth}
-          // inactiveSlideScale={0.98}
-          layout={'stack'}
+          lockScrollWhileSnapping={true}
+          swipeThreshold={10}
+          decelerationRate="fast"
+          inactiveSlideScale={0.98}
           layoutCardOffset={18}
         />
       </View>
