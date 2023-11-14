@@ -248,6 +248,8 @@ const pickerSelectStyles = StyleSheet.create({
   },
 });
 
+const isAndroid = Platform.OS === 'android';
+
 const MaskedPhone = {
   ru: '+7 (9[00]) [000]-[00]-[00]',
   by: '+375 ([00]) [000]-[00]-[00]',
@@ -1332,17 +1334,19 @@ class Form extends Component {
                 top: 12,
               },
             }}
-            Icon={() => {
-              return (
-                <Icon
-                  name="keyboard-arrow-down"
-                  as={MaterialIcons}
-                  size={6}
-                  color={styleConst.color.darkBg}
-                />
-              );
-            }}
             {...data.props}
+            Icon={() => {
+              if (!isAndroid) {
+                return (
+                  <Icon
+                    name="keyboard-arrow-down"
+                    as={MaterialIcons}
+                    size={6}
+                    color={styleConst.color.darkBg}
+                  />
+                );
+              }
+            }}
           />
         </View>
       );
