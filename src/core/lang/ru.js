@@ -661,6 +661,12 @@ export default {
         chooseDate: 'Необходимо выбрать дату для продолжения',
       },
     },
+    works: {
+      service: 'Техническое обслуживание',
+      tyreChange: 'Шиномонтаж',
+      carWash: 'Мойка',
+      other: 'Прочий сервис',
+    },
     button: 'Записаться!',
   },
   ServiceScreenStep1: {
@@ -813,6 +819,7 @@ export default {
       send: 'Отправить',
       sending: 'Отправляем...',
       receiveCode: 'Получить код',
+      nextToDate: 'Далее к выбору даты',
     },
     agreement: {
       title: 'Пользовательское соглашение',

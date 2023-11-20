@@ -3,22 +3,25 @@ import React, {useState, useEffect} from 'react';
 import {Alert} from 'react-native';
 import {get} from 'lodash';
 
-import Form from '../../../core/components/Form/Form';
-import {addDays, dayMonthYear, format} from '../../../utils/date';
-import UserData from '../../../utils/user';
+import Form from '../../../../core/components/Form/Form';
+import {addDays, dayMonthYear, format} from '../../../../utils/date';
+import UserData from '../../../../utils/user';
 
 // redux
 import {connect} from 'react-redux';
-import {orderService} from '../../actions';
-import {localUserDataUpdate} from '../../../profile/actions';
-import {localDealerClear} from '../../../dealer/actions';
-import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../../actionTypes';
-import {strings} from '../../../core/lang/const';
+import {orderService} from '../../../actions';
+import {localUserDataUpdate} from '../../../../profile/actions';
+import {localDealerClear} from '../../../../dealer/actions';
+import {
+  SERVICE_ORDER__SUCCESS,
+  SERVICE_ORDER__FAIL,
+} from '../../../actionTypes';
+import {strings} from '../../../../core/lang/const';
 
-import Analytics from '../../../utils/amplitude-analytics';
+import Analytics from '../../../../utils/amplitude-analytics';
 
-import API from '../../../utils/api';
-import {ERROR_NETWORK} from '../../../core/const';
+import API from '../../../../utils/api';
+import {ERROR_NETWORK} from '../../../../core/const';
 import {useToast} from 'native-base';
 
 const mapStateToProps = ({dealer, service, nav}) => {
@@ -56,7 +59,7 @@ const mapDispatchToProps = {
   localDealerClear,
 };
 
-const ServiceScreenNonAuth = props => {
+const ServiceNonAuthStep2 = props => {
   const {
     route,
     lastName,
@@ -143,7 +146,7 @@ const ServiceScreenNonAuth = props => {
   }, [dealerSelectedLocal]);
 
   const _onPressOrder = async dataFromForm => {
-    const isInternet = require('../../../utils/internet').default;
+    const isInternet = require('../../../../utils/internet').default;
     const isInternetExist = await isInternet();
     if (!isInternetExist) {
       toast.show({
@@ -339,6 +342,42 @@ const ServiceScreenNonAuth = props => {
         fields: [
           dealerField,
           {
+            name: 'SERVICE',
+            type: 'select',
+            label: strings.Form.field.label.service,
+            value: null,
+            props: {
+              items: [
+                {
+                  label: 'Техническое обслуживание',
+                  value: 'service',
+                  key: 'service',
+                },
+                {
+                  label: 'Шиномонтаж',
+                  value: 'tyreChange',
+                  key: 'tyreChange',
+                },
+                {
+                  label: 'Мойка',
+                  value: 'carWash',
+                  key: 'carWash',
+                },
+                {
+                  label: 'Прочий сервис',
+                  value: 'other',
+                  key: 'other',
+                },
+              ],
+              required: true,
+              placeholder: {
+                label: strings.Form.field.placeholder.service,
+                value: null,
+                color: '#9EA0A4',
+              },
+            },
+          },
+          {
             name: 'DATETIME',
             type: orderLead ? 'date' : 'dateTime',
             label: strings.Form.field.label.date,
@@ -487,4 +526,4 @@ const ServiceScreenNonAuth = props => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(ServiceScreenNonAuth);
+)(ServiceNonAuthStep2);
