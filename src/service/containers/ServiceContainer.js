@@ -3,7 +3,7 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 
 import Service from './ServiceScreen';
 import ServiceScreenStep1 from './OnlineService/ServiceScreenStep1';
-import ServiceNewNonAuth from './OnlineService/ServiceScreenNonAuth';
+import ServiceNonAuthStep1 from './OnlineService/NonAuth/ServiceNonAuthStep1';
 import {connect} from 'react-redux';
 import {get} from 'lodash';
 
@@ -26,7 +26,7 @@ const ServiceContainer = props => {
       return <ServiceScreenStep1 navigation={navigation} route={route} />;
     } else {
       console.info('\t\tService Screen => ServiceNewNonAuth');
-      return <ServiceNewNonAuth navigation={navigation} route={route} />;
+      return <ServiceNonAuthStep1 navigation={navigation} route={route} />;
     }
   }
   console.info('\t\tService Screen => Service');

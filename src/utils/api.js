@@ -1032,6 +1032,16 @@ export default {
     }
   },
 
+  fetchServiceCalculation({dealerID, workType}) {
+    if (!workType || !dealerID) {
+      return false;
+    }
+    return this.request(
+      `/service/online/${dealerID}/calculator/?type=${workType}`,
+      baseRequestParams,
+    );
+  },
+
   getServiceAvailable({dealer, vin}) {
     return this.request(
       `/service/maintenance/intervals/?dealer=${dealer}&vin=${vin}`,
