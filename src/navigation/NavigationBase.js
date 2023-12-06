@@ -70,6 +70,7 @@ import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 import ServiceContainer from '../service/containers/ServiceContainer';
 import ServiceInfoModal from '../service/containers/OnlineService/ServiceInfoModal';
 import ServiceScreenStep2 from '../service/containers/OnlineService/ServiceScreenStep2';
+import ServiceNonAuthStep2 from '../service/containers/OnlineService/NonAuth/ServiceNonAuthStep2';
 import OrderScreen from '../catalog/containers/OrderScreen';
 import TestDriveScreen from '../catalog/containers/TestDriveScreen';
 import OrderMyPriceScreen from '../catalog/containers/OrderMyPriceScreen';
@@ -451,6 +452,15 @@ export const Base = ({navigation, route}) => {
         <StackOrders.Screen
           name="ServiceScreenStep2"
           component={ServiceScreenStep2}
+          options={ClassicHeaderWhite(
+            strings.ServiceScreen.title,
+            navigation,
+            route,
+          )}
+        />
+        <StackOrders.Screen
+          name="ServiceNonAuthStep2"
+          component={ServiceNonAuthStep2}
           options={ClassicHeaderWhite(
             strings.ServiceScreen.title,
             navigation,

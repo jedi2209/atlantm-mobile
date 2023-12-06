@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from 'moment-timezone';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
 import {APP_LANG} from '../core/const';
@@ -7,37 +7,45 @@ moment.locale(APP_LANG);
 
 // moment.js playground https://codepen.io/widmoser/pen/NNOQEx
 
-export const time = date => (date ? moment(date).format('HH:mm') : null);
+export const time = date =>
+  date ? moment(date).tz('Europe/Minsk').format('HH:mm') : null;
 
 export const year = moment().year();
 
-export const dayMonth = ts => (ts ? moment(ts).format('D MMMM') : null);
+export const dayMonth = ts =>
+  ts ? moment(ts).tz('Europe/Minsk').format('D MMMM') : null;
 
 export const format = (date, format) =>
-  date ? moment(date).format(format ? format : 'YYYY-MM-DD') : null;
+  date
+    ? moment(date)
+        .tz('Europe/Minsk')
+        .format(format ? format : 'YYYY-MM-DD')
+    : null;
 
 export const yearMonthDay = date =>
-  date ? moment(date).format('YYYY-MM-DD') : null;
+  date ? moment(date).tz('Europe/Minsk').format('YYYY-MM-DD') : null;
 
 export const dayMonthYear = date =>
-  date ? moment(date).format('D MMMM YYYY') : null;
+  date ? moment(date).tz('Europe/Minsk').format('D MMMM YYYY') : null;
 
 export const dayMonthYearTime = date =>
-  date ? moment(date).format('D.MM.YYYY, HH:mm') : null;
+  date ? moment(date).tz('Europe/Minsk').format('D.MM.YYYY, HH:mm') : null;
 
 export const humanDate = date =>
-  date ? moment(date).format('DD MMMM в HH:mm') : null;
+  date ? moment(date).tz('Europe/Minsk').format('DD MMMM в HH:mm') : null;
 
 export const substructMonth = () =>
-  moment().subtract(1, 'months').format('YYYY-MM-DD');
+  moment().tz('Europe/Minsk').subtract(1, 'months').format('YYYY-MM-DD');
 
 export const substractWeek = () =>
-  moment().subtract(1, 'week').format('YYYY-MM-DD');
+  moment().tz('Europe/Minsk').subtract(1, 'week').format('YYYY-MM-DD');
 
 export const substractYears = yearsCol =>
-  moment().subtract(yearsCol, 'years').format('YYYY-MM-DD');
+  moment().tz('Europe/Minsk').subtract(yearsCol, 'years').format('YYYY-MM-DD');
 
 export const addDays = daysCol =>
-  moment().add(daysCol, 'days').format('YYYY-MM-DD');
+  moment().tz('Europe/Minsk').add(daysCol, 'days').format('YYYY-MM-DD');
 
 export const getTimestampInSeconds = () => parseInt(moment().unix(), 10);
+
+export const getDateFromTimestamp = ts => moment.unix(ts);

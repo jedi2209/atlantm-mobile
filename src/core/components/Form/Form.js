@@ -25,6 +25,7 @@ import ToastAlert from '../ToastAlert';
 import {get} from 'lodash';
 import {connect} from 'react-redux';
 import * as NavigationService from '../../../navigation/NavigationService';
+import {ActivityIndicator} from 'react-native-paper';
 
 // Form field types
 import {TextInput} from '../TextInput';
@@ -69,7 +70,7 @@ const platformStyle = {
       paddingLeft: 15,
     },
     textarea: {
-      height: 140,
+      height: 80,
     },
   },
   android: {
@@ -173,7 +174,7 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingBottom: 0,
     paddingHorizontal: 0,
-    maxHeight: 150,
+    maxHeight: 100,
   },
   switchWrapper: {
     marginVertical: 10,
@@ -788,7 +789,7 @@ class Form extends Component {
             testID={'Form.TextArea.' + name}
             style={styles.textarea}
             multiline={true}
-            numberOfLines={4}
+            numberOfLines={2}
             label={label + (data.props && data.props.required ? '*' : '')}
             name={name}
             ref={this.inputRefs[groupNum + 'Input' + num]}
@@ -1272,6 +1273,18 @@ class Form extends Component {
           dealer={value}
           style={fieldStyle}
           {...data.props}
+        />
+      );
+    },
+    loading: (data, num, totalFields, groupNum) => {
+      return (
+        <ActivityIndicator
+          color={
+            styleConst.color.blueNew
+              ? styleConst.color.blueNew
+              : styleConst.color.blue
+          }
+          style={{marginTop: 15, marginBottom: 15}}
         />
       );
     },

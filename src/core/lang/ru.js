@@ -775,6 +775,22 @@ export default {
         birthday: 'Когда у вас день рождения?',
         social: 'Привяжи соц.сети',
         part: 'Что будем заказывать?',
+        serviceTypes: {
+          tyreChange: {
+            title: 'Шиномонтаж',
+            subtitle: 'Выберите услуги',
+            second: 'Выберите размер ваших шин',
+            additional: 'Дополнительно',
+            myTyresInStorage: 'Мои шины у вас',
+            leaveTyresInStorage: 'Оставить шины на хранение',
+          },
+          carWash: {
+            title: 'Мойка',
+            subtitle: 'Выберите услуги',
+            second: 'Выберите тип мойки',
+            additional: 'Дополнительно',
+          },
+        },
       },
       placeholder: {
         dealer: 'Выберите удобный для вас автоцентр',
