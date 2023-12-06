@@ -72,6 +72,7 @@
     "html-entities": "^2.0.3",
     "lodash": "^4.17.20",
     "moment": "^2.27.0",
+    "moment-timezone": "^0.5.43",
     "native-base": "^3.4.25",
     "promise": "^8.1.0",
     "prop-types": "^15.7.2",

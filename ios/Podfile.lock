@@ -74,7 +74,7 @@ PODS:
   - GTMAppAuth (2.0.0):
     - AppAuth/Core (~> 1.6)
     - GTMSessionFetcher/Core (< 4.0, >= 1.5)
-  - GTMSessionFetcher/Core (3.1.1)
+  - GTMSessionFetcher/Core (3.2.0)
   - hermes-engine (0.72.7):
     - hermes-engine/Pre-built (= 0.72.7)
   - hermes-engine/Pre-built (0.72.7)
@@ -483,7 +483,7 @@ PODS:
   - react-native-vkontakte-login (1.0.1):
     - React
     - VK-ios-sdk
-  - react-native-webview (13.6.2):
+  - react-native-webview (13.6.3):
     - React-Core
   - React-NativeModulesApple (0.72.7):
     - hermes-engine
@@ -601,15 +601,15 @@ PODS:
     - React-Core
   - RNAppleAuthentication (2.3.0):
     - React-Core
-  - RNCAsyncStorage (1.19.5):
+  - RNCAsyncStorage (1.19.8):
     - React-Core
   - RNCClipboard (1.12.1):
     - React-Core
   - RNCMaskedView (0.3.0):
     - React-Core
-  - RNCPicker (2.5.1):
+  - RNCPicker (2.6.1):
     - React-Core
-  - RNDateTimePicker (7.6.1):
+  - RNDateTimePicker (7.6.2):
     - React-Core
   - RNDeviceInfo (10.11.0):
     - React-Core
@@ -617,7 +617,7 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNGestureHandler (2.13.4):
+  - RNGestureHandler (2.14.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNGoogleSignin (10.1.1):
@@ -632,40 +632,17 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController
-  - RNReanimated (3.5.4):
-    - DoubleConversion
-    - FBLazyVector
-    - glog
-    - hermes-engine
-    - RCT-Folly
-    - RCTRequired
-    - RCTTypeSafety
-    - React-callinvoker
+  - RNReanimated (3.6.0):
+    - RCT-Folly (= 2021.07.22.00)
     - React-Core
-    - React-Core/DevSupport
-    - React-Core/RCTWebSocket
-    - React-CoreModules
-    - React-cxxreact
-    - React-hermes
-    - React-jsi
-    - React-jsiexecutor
-    - React-jsinspector
-    - React-RCTActionSheet
-    - React-RCTAnimation
-    - React-RCTAppDelegate
-    - React-RCTBlob
-    - React-RCTImage
-    - React-RCTLinking
-    - React-RCTNetwork
-    - React-RCTSettings
-    - React-RCTText
     - ReactCommon/turbomodule/core
-    - Yoga
   - RNScreens (3.27.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - RNSentry (5.13.0):
+  - RNSentry (5.14.1):
+    - hermes-engine
     - React-Core
+    - React-hermes
     - Sentry/HybridSDK (= 8.15.2)
   - RNSha256 (1.4.9):
     - React-Core
@@ -988,7 +965,7 @@ SPEC CHECKSUMS:
   GoogleMaps: 032f676450ba0779bd8ce16840690915f84e57ac
   GoogleSignIn: b232380cf495a429b8095d3178a8d5855b42e842
   GTMAppAuth: 99fb010047ba3973b7026e45393f51f27ab965ae
-  GTMSessionFetcher: e8647203b65cee28c5f73d0f473d096653945e72
+  GTMSessionFetcher: 41b9ef0b4c08a6db4b7eb51a21ae5183ec99a2c8
   hermes-engine: 9180d43df05c1ed658a87cc733dc3044cf90c00a
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
@@ -1024,7 +1001,7 @@ SPEC CHECKSUMS:
   react-native-slider: 1cdd6ba29675df21f30544253bf7351d3c2d68c4
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
-  react-native-webview: 8fc09f66a1a5b16bbe37c3878fda27d5982bb776
+  react-native-webview: 88293a0f23eca8465c0433c023ec632930e644d0
   React-NativeModulesApple: b6868ee904013a7923128892ee4a032498a1024a
   React-perflogger: 31ea61077185eb1428baf60c0db6e2886f141a5a
   React-RCTActionSheet: 392090a3abc8992eb269ef0eaa561750588fc39d
@@ -1045,19 +1022,19 @@ SPEC CHECKSUMS:
   ReactNativeLocalization: fb171138cdc80d5d0d4f20243d2fc82c2b3cc48f
   rn-fetch-blob: d469adb2e1d17f9d02ceb2b7bdd35ae5bd5db66b
   RNAppleAuthentication: e99eaf3c4c01ad8ecb6125dd6f0cfd98871685b5
-  RNCAsyncStorage: f2974eca860c16a3e56eea5771fda8d12e2d2057
+  RNCAsyncStorage: 687bb9e85dd3d45b966662440dcfc0cd962347e6
   RNCClipboard: d77213bfa269013bf4b857b7a9ca37ee062d8ef1
   RNCMaskedView: f7c74478c83c4fdfc5cf4df51f80c0dd5cf125c6
-  RNCPicker: 529d564911e93598cc399b56cc0769ce3675f8c8
-  RNDateTimePicker: 8fb39263b721223e095248acaf6f406d5b7f6713
+  RNCPicker: b18aaf30df596e9b1738e7c1f9ee55402a229dca
+  RNDateTimePicker: fc2e4f2795877d45e84d85659bebe627eba5c931
   RNDeviceInfo: bf8a32acbcb875f568217285d1793b0e8588c974
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
-  RNGestureHandler: 6e46dde1f87e5f018a54fe5d40cd0e0b942b49ee
+  RNGestureHandler: 32a01c29ecc9bb0b5bf7bc0a33547f61b4dc2741
   RNGoogleSignin: aac5c1ec73422109dec1da770247a1e410dcc620
   RNImageCropPicker: d9616a0cb9b72e8551ff94a7a5021fbd29050aa5
-  RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
+  RNReanimated: 1dcf7602777a195cf34f1dcd658037a80a2c8af1
   RNScreens: 3c2d122f5e08c192e254c510b212306da97d2581
-  RNSentry: 82667e9889782365bf801645ef4d2a731dcf60df
+  RNSentry: ee1a9a80996414205d84ce9180c31bd855fd4641
   RNSha256: a6bc3640a34eb41907e363828b9ec742c274298d
   RNSVG: 255767813dac22db1ec2062c8b7e7b856d4e5ae6
   RNVectorIcons: 23b6e11af4aaf104d169b1b0afa7e5cf96c676ce
@@ -1072,4 +1049,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 1b6444dd794bdc18e11c2d68d654cb095ec2d634
 
-COCOAPODS: 1.12.1
+COCOAPODS: 1.14.3

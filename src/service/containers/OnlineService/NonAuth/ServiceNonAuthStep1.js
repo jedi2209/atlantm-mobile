@@ -77,9 +77,15 @@ const ServiceNonAuthStep1 = props => {
   } = props;
 
   const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
-  const [isSuccess, setSuccess] = useState(false);
-  const [servicesSecond, setServices] = useState([]);
-  const [orderLead, setLead] = useState(true);
+  const [secondData, setSecondData] = useState({});
+  const [servicesSecond, setServices] = useState({
+    type: null,
+    loading: false,
+    lead: true,
+    items: [],
+  });
+  const [servicesSecondField, setServicesSecondField] = useState({});
+  const [additionalFields, setAdditionalFields] = useState({});
   const [car, setCar] = useState({
     carBrand: carBrand,
     carModel: carModel,
@@ -93,8 +99,6 @@ const ServiceNonAuthStep1 = props => {
   });
 
   const dealer = get(props.route, 'params.dealerCustom', dealerSelectedLocal);
-
-  const toast = useToast();
 
   let listDealers = [];
   if (dealer) {
@@ -110,7 +114,7 @@ const ServiceNonAuthStep1 = props => {
         });
       });
     } else {
-      if (typeof dealer == 'object') {
+      if (typeof dealer === 'object') {
         listDealers.push({
           label: dealer.name,
           value: dealer.id,
@@ -144,7 +148,87 @@ const ServiceNonAuthStep1 = props => {
 
   useEffect(() => {
     setDealerSelectedLocal(dealerSelectedLocal);
+    setServices({
+      type: null,
+      loading: false,
+      lead: true,
+      items: [],
+      selectItems: [],
+    });
+    setAdditionalFields({});
   }, [dealerSelectedLocal]);
+
+  useEffect(() => {
+    if (servicesSecond.loading) {
+      setAdditionalFields({});
+      return setServicesSecondField({
+        name: 'loading',
+        type: 'loading',
+        value: null,
+        props: {},
+      });
+    } else {
+      if (servicesSecond.items.length) {
+        switch (servicesSecond.type) {
+          case 'service':
+            break;
+          case 'tyreChange':
+            setAdditionalFields({
+              name: strings.Form.field.label.serviceTypes[servicesSecond.type]
+                .additional,
+              fields: [
+                {
+                  name: 'additionalField',
+                  type: 'checkbox',
+                  label:
+                    strings.Form.field.label.serviceTypes[servicesSecond.type]
+                      .myTyresInStorage,
+                  value: false,
+                },
+                {
+                  name: 'leaveTyresInStorage',
+                  type: 'checkbox',
+                  label:
+                    strings.Form.field.label.serviceTypes[servicesSecond.type]
+                      .leaveTyresInStorage,
+                  value: false,
+                },
+              ],
+            });
+            break;
+          case 'carWash':
+            break;
+          case 'other':
+            break;
+        }
+        const servicesSecondFieldTmp = {
+          name: 'SERVICESecond',
+          type: 'select',
+          label:
+            strings.Form.field.label.serviceTypes[servicesSecond.type].second,
+          value: null,
+          props: {
+            items: servicesSecond.selectItems,
+            required: true,
+            placeholder: {
+              label:
+                strings.Form.field.label.serviceTypes[servicesSecond.type]
+                  .second,
+              value: null,
+              color: '#9EA0A4',
+            },
+            onChange: async serviceSecondID => {
+              setSecondData({
+                data: get(servicesSecond, 'items[' + serviceSecondID + ']'),
+                lead: servicesSecond.lead,
+              });
+            },
+          },
+        };
+        return setServicesSecondField(servicesSecondFieldTmp);
+      }
+    }
+  }, [servicesSecond]);
 
   let dealerField = {};
   if (listDealers) {
@@ -176,7 +260,7 @@ const ServiceNonAuthStep1 = props => {
           goBack: true,
           isLocal: true,
           showBrands: false,
-          readonly: get(route, 'params.settings.dealerHide', true),
+          readonly: get(route, 'params.settings.dealerHide', false),
           dealerFilter: {
             type: 'ST',
           },
@@ -238,20 +322,35 @@ const ServiceNonAuthStep1 = props => {
               ],
               required: true,
               onChange: async workType => {
+                setServices({
+                  type: workType,
+                  loading: true,
+                  lead: true,
+                  items: [],
+                  selectItems: [],
+                });
                 const services = await API.fetchServiceCalculation({
                   dealerID: get(dealer, 'id'),
                   workType,
                 });
                 let servicesTmp = [];
-                get(services, 'data.work', []).map(el => {
+                let servicesFull = [];
+                get(services, 'data', []).map(el => {
                   servicesTmp.push({
                     label: el.name,
-                    value: el.count,
+                    value: el.id,
                     key: el.id,
                   });
+                  servicesFull[el.id] = el;
                 });
                 if (servicesTmp.length) {
-                  setServices(servicesTmp);
+                  setServices({
+                    type: workType,
+                    loading: false,
+                    lead: false,
+                    items: servicesFull,
+                    selectItems: servicesTmp,
+                  });
                 }
               },
               placeholder: {
@@ -261,25 +360,10 @@ const ServiceNonAuthStep1 = props => {
               },
             },
           },
-          servicesSecond.length
-            ? {
-                name: 'SERVICESecond',
-                type: 'select',
-                label: strings.Form.field.label.service,
-                value: null,
-                props: {
-                  items: servicesSecond,
-                  required: true,
-                  placeholder: {
-                    label: strings.Form.field.placeholder.service,
-                    value: null,
-                    color: '#9EA0A4',
-                  },
-                },
-              }
-            : {},
+          servicesSecondField,
         ],
       },
+      additionalFields,
       {
         name: strings.Form.group.car,
         fields: [
@@ -309,7 +393,6 @@ const ServiceNonAuthStep1 = props => {
             label: strings.Form.field.label.carNumber,
             value: props.carNumber,
             props: {
-              required: true,
               placeholder: null,
             },
           },
@@ -328,6 +411,12 @@ const ServiceNonAuthStep1 = props => {
     ],
   };
 
+  const _onSubmit = async pushProps => {
+    pushProps.lead = secondData.lead;
+    pushProps.secondData = secondData.data;
+    props.navigation.navigate('ServiceNonAuthStep2', {...pushProps});
+  };
+
   return (
     <Form
       contentContainerStyle={{
@@ -338,7 +427,7 @@ const ServiceNonAuthStep1 = props => {
       fields={FormConfig}
       barStyle={'light-content'}
       defaultCountryCode={region}
-      onSubmit={() => {}}
+      onSubmit={_onSubmit}
       SubmitButton={{
         text: strings.DatePickerCustom.chooseDateButton,
         noAgreement: true,

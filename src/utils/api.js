@@ -1066,18 +1066,19 @@ export default {
   getPeriodForServiceInfo({dealer, date, service, seconds}) {
     // Дата в формате [YYYY-MM-DD] или [YYYYMMDD] или [DD.MM.YYYY]
     return this.request(
-      `/service/order/?dealer=${dealer}&date=${date}&serviceID=${service}&seconds=${seconds}`,
+      `/service/online/${dealer}/?seconds=${seconds}&date=${date}&type=${service}`,
       baseRequestParams,
     );
   },
 
   saveOrderToService(body) {
+    const {dealer} = body;
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'PUT',
       body: body,
     });
 
-    return this.request('/service/order/', requestParams);
+    return this.request(`/service/online/${dealer}/`, requestParams);
   },
 
   async request(path, requestParams = baseRequestParams) {
