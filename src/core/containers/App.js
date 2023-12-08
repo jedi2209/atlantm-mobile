@@ -11,6 +11,7 @@ import * as NavigationService from '../../navigation/NavigationService';
 import SpInAppUpdates, {IAUUpdateKind} from 'sp-react-native-in-app-updates';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import RNRestart from 'react-native-restart';
+import Analytics from '../../utils/amplitude-analytics';
 
 // redux
 import {connect} from 'react-redux';
@@ -254,6 +255,7 @@ const App = props => {
 
   useEffect(() => {
     if (isError) {
+      Analytics.logEvent('screen', 'app/startError');
       Animated.timing(opacityValue, {
         toValue: 1,
         duration: 1000, // Adjust the duration as per your requirement
