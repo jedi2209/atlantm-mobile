@@ -168,7 +168,7 @@ const ServiceNonAuthStep1 = props => {
         props: {},
       });
     } else {
-      if (servicesSecond.items.length) {
+      if (get(servicesSecond, 'items.length')) {
         switch (servicesSecond.type) {
           case 'service':
             break;
@@ -201,32 +201,34 @@ const ServiceNonAuthStep1 = props => {
           case 'other':
             break;
         }
-        const servicesSecondFieldTmp = {
-          name: 'SERVICESecond',
-          type: 'select',
-          label:
-            strings.Form.field.label.serviceTypes[servicesSecond.type].second,
-          value: null,
-          props: {
-            items: servicesSecond.selectItems,
-            required: true,
-            placeholder: {
-              label:
-                strings.Form.field.label.serviceTypes[servicesSecond.type]
-                  .second,
-              value: null,
-              color: '#9EA0A4',
+        if (get(servicesSecond, 'selectItems')) {
+          return setServicesSecondField({
+            name: 'SERVICESecond',
+            type: 'select',
+            label:
+              strings.Form.field.label.serviceTypes[servicesSecond.type].second,
+            value: null,
+            props: {
+              items: servicesSecond.selectItems,
+              required: true,
+              placeholder: {
+                label:
+                  strings.Form.field.label.serviceTypes[servicesSecond.type]
+                    .second,
+                value: null,
+                color: '#9EA0A4',
+              },
+              onChange: async serviceSecondID => {
+                setSecondData({
+                  data: get(servicesSecond, 'items[' + serviceSecondID + ']'),
+                  lead: servicesSecond.lead,
+                });
+              },
             },
-            onChange: async serviceSecondID => {
-              setSecondData({
-                data: get(servicesSecond, 'items[' + serviceSecondID + ']'),
-                lead: servicesSecond.lead,
-              });
-            },
-          },
-        };
-        return setServicesSecondField(servicesSecondFieldTmp);
+          });
+        }
       }
+      return setServicesSecondField({});
     }
   }, [servicesSecond]);
 
@@ -333,6 +335,17 @@ const ServiceNonAuthStep1 = props => {
                   dealerID: get(dealer, 'id'),
                   workType,
                 });
+                console.log('services', get(services, 'status'));
+                if (get(services, 'status') !== 'success') {
+                  setServices({
+                    type: workType,
+                    loading: false,
+                    lead: true,
+                    items: [],
+                    selectItems: [],
+                  });
+                  return;
+                }
                 let servicesTmp = [];
                 let servicesFull = [];
                 get(services, 'data', []).map(el => {
@@ -412,7 +425,7 @@ const ServiceNonAuthStep1 = props => {
   };
 
   const _onSubmit = async pushProps => {
-    pushProps.lead = secondData.lead;
+    pushProps.lead = servicesSecond.lead;
     pushProps.secondData = secondData.data;
     props.navigation.navigate('ServiceNonAuthStep2', {...pushProps});
   };
@@ -429,7 +442,7 @@ const ServiceNonAuthStep1 = props => {
       defaultCountryCode={region}
       onSubmit={_onSubmit}
       SubmitButton={{
-        text: strings.DatePickerCustom.chooseDateButton,
+        text: strings.Form.button.next,
         noAgreement: true,
       }}
     />

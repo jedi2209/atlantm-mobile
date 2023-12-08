@@ -282,9 +282,8 @@ export default class ChooseDateTimeComponent extends Component {
     return (
       <>
         <DatePickerCustom
-          style={{width: '100%'}}
           locale={'ru-RU'}
-          styleContainer={{paddingLeft: 15}}
+          styleContainer={{paddingLeft: 3}}
           confirmBtnText={strings.Picker.choose}
           value={this.state.date || null}
           isActive={this.state.modal || false}
@@ -322,7 +321,7 @@ export default class ChooseDateTimeComponent extends Component {
               }
             });
           }}
-          onChange={(_, date) => {
+          onDateChange={date => {
             if (Platform.OS === 'android') {
               this.setState({date: date, modal: false});
               switch (this.props.type) {

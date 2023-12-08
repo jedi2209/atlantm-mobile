@@ -836,6 +836,7 @@ export default {
       sending: 'Отправляем...',
       receiveCode: 'Получить код',
       nextToDate: 'Далее к выбору даты',
+      next: 'Далее',
     },
     agreement: {
       title: 'Пользовательское соглашение',

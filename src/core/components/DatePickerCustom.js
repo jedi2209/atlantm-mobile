@@ -1,73 +1,61 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {View, Text, StyleSheet, Platform} from 'react-native';
+import {View, Text, Pressable, StyleSheet, Platform} from 'react-native';
 import {Button} from 'native-base';
 import {format} from '../../utils/date';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from 'react-native-date-picker';
 import ModalView from './ModalView';
 import {strings} from '../lang/const';
 
-export const DatePickerCustom = React.forwardRef((props, ref) => {
+const DatePickerWrapper = props => {
+  const {
+    isActive,
+    onDateChange,
+    onHideModal,
+    confirmBtnText,
+    label,
+    mode,
+    value,
+  } = props;
   const defaultDate = new Date();
-  const dateHuman = props.value ? format(props.value, 'DD MMMM YYYY') : null;
+  switch (Platform.OS) {
+    case 'ios':
+      return (
+        <DatePicker
+          modal
+          open={isActive}
+          title={label}
+          mode={mode}
+          date={value ? new Date(value) : defaultDate}
+          locale="ru-RU"
+          confirmText={confirmBtnText}
+          cancelText={strings.Base.cancel}
+          onConfirm={date => {
+            onDateChange(date);
+            onHideModal();
+          }}
+          onCancel={onHideModal}
+          {...props}
+        />
+      );
+    case 'android':
+      if (!isActive) {
+        return null;
+      }
+      return (
+        <DateTimePicker
+          mode={props.mode}
+          locale="ru-RU"
+          {...props}
+          value={props.value ? new Date(props.value) : defaultDate}
+        />
+      );
+  }
+};
 
-  const DatePicker = show => {
-    switch (Platform.OS) {
-      case 'ios':
-        const majorVersionIOS = parseInt(Platform.Version, 10);
-        if (majorVersionIOS < 14) {
-          return (
-            <ModalView
-              isModalVisible={show}
-              animationIn="zoomIn"
-              animationOut="zoomOut"
-              onHide={props.onHideModal}
-              swipeDirection={['up', 'down', 'left', 'right']}
-              confirmBtnText={props.confirmBtnText}
-              selfClosed={false}>
-              <DateTimePicker
-                mode={props.mode}
-                display="spinner"
-                locale="ru-RU"
-                {...props}
-                value={props.value ? new Date(props.value) : defaultDate}
-              />
-            </ModalView>
-          );
-        } else {
-          return (
-            <ModalView
-              isModalVisible={show}
-              animationIn="zoomIn"
-              animationOut="zoomOut"
-              onHide={props.onHideModal}
-              swipeDirection={['up', 'down', 'left', 'right']}
-              confirmBtnText={props.confirmBtnText}
-              selfClosed={false}>
-              <DateTimePicker
-                mode={props.mode}
-                display="inline"
-                locale="ru-RU"
-                {...props}
-                value={props.value ? new Date(props.value) : defaultDate}
-              />
-            </ModalView>
-          );
-        }
-      case 'android':
-        if (!show) {
-          return null;
-        }
-        return (
-          <DateTimePicker
-            mode={props.mode}
-            locale="ru-RU"
-            {...props}
-            value={props.value ? new Date(props.value) : defaultDate}
-          />
-        );
-    }
-  };
+export const DatePickerCustom = React.forwardRef((props, ref) => {
+  const dateHuman = props.value ? format(props.value, 'DD MMMM YYYY') : null;
 
   return (
     <View
@@ -77,7 +65,6 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
       ]}>
       {props.label ? (
         <Text
-          onPress={props.onPressButton}
           style={[
             styles.label,
             props.styleLabel ? props.styleLabel : {},
@@ -104,7 +91,7 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
           ? props.placeholder
           : strings.DatePickerCustom.chooseDate}
       </Button>
-      {DatePicker(props.isActive)}
+      {DatePickerWrapper(props)}
     </View>
   );
 });
