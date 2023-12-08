@@ -899,7 +899,7 @@ class Form extends Component {
                 return {active: copyField};
               });
             }}
-            onChange={(_, selectedDate) => {
+            onDateChange={selectedDate => {
               const currentDate =
                 (selectedDate && selectedDate.toUTCString()) ||
                 this.state[name];

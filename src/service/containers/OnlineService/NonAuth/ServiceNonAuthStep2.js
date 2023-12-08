@@ -80,7 +80,7 @@ const ServiceNonAuthStep2 = props => {
   } = props;
 
   const [orderParams, setOrderParams] = useState(true);
-  const [orderLead, setLead] = useState(false);
+  const [orderLead, setLead] = useState(true);
   const [user, setUser] = useState({
     email: email,
     phone: phone,
@@ -93,6 +93,9 @@ const ServiceNonAuthStep2 = props => {
   useEffect(() => {
     const params = get(props.route, 'params', null);
     setOrderParams(params);
+    if (!get(params, 'lead') !== orderLead) {
+      setLead(get(params, 'lead'));
+    }
 
     return () => {
       setOrderParams();
@@ -255,7 +258,10 @@ const ServiceNonAuthStep2 = props => {
               },
               reqiredTime: get(orderParams, 'secondData.total.time', null),
               onChange: data => {
-                setReview({...orderParams, datetime: data});
+                setReview(null);
+                if (get(data, 'time')) {
+                  setReview({...orderParams, datetime: data});
+                }
               },
             },
           },
@@ -275,22 +281,26 @@ const ServiceNonAuthStep2 = props => {
                       {strings.ServiceScreen.works[showReview.SERVICE]} в
                       автоцентр {listDealers[showReview.DEALER].name}
                     </Text>
-                    <Text>
-                      {humanDate(
-                        getDateFromTimestamp(showReview.datetime.time),
-                      )}
-                    </Text>
+                    {get(showReview, 'datetime.time') ? (
+                      <Text>
+                        {humanDate(
+                          getDateFromTimestamp(showReview.datetime.time),
+                        )}
+                      </Text>
+                    ) : null}
                     <Text>
                       для автомобиля {showReview.CARBRAND} {showReview.CARMODEL}
                       {showReview.CARNUMBER
                         ? '\r\nгос. номер ' + showReview.CARNUMBER
                         : null}
                     </Text>
-                    <Text>
-                      Стоимость работ составит{' '}
-                      {showReview.secondData.total.summ.value}{' '}
-                      {showReview.secondData.total.summ.currency}
-                    </Text>
+                    {get(showReview, 'secondData.total') ? (
+                      <Text>
+                        Стоимость работ составит{' '}
+                        {showReview.secondData.total.summ.value}{' '}
+                        {showReview.secondData.total.summ.currency}
+                      </Text>
+                    ) : null}
                   </View>
                 ),
               },
