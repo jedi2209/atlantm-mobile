@@ -80,13 +80,13 @@ export default StyleSheet.create({
     shadowColor: 'transparent',
   },
   whiteHeaderTitle: {
-    fontSize: 16,
-    fontWeight: '300',
+    // fontSize: 16,
+    // fontWeight: '300',
     alignSelf: 'center',
     alignItems: 'center',
     fontFamily: styleConst.font.regular,
     letterSpacing: styleConst.ui.letterSpacing,
-    color: styleConst.color.lightBlue,
+    // color: styleConst.color.lightBlue,
   },
   headerBackButtonContainer: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)',

@@ -29,7 +29,7 @@ const ClassicHeaderWhite = (title, navigation, route, options) => {
     headerShown: true,
     headerTransparent: false,
     headerLeft: () => {
-      return ArrowBack(navigation, route);
+      return ArrowBack(navigation, route, {theme: 'black'});
     },
     headerRight: () => <></>,
     ...options,

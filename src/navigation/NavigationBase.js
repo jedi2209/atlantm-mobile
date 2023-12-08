@@ -432,10 +432,7 @@ export const Base = ({navigation, route}) => {
           options={BigCloseButton(navigation, route, {
             ...TransitionPresets.ScaleFromCenterAndroid,
             headerTitle: strings.ServiceScreen.title,
-            headerTitleStyle: [
-              stylesHeader.transparentHeaderTitle,
-              {color: '#222B45'},
-            ],
+            headerTitleStyle: [stylesHeader.transparentHeaderTitle],
           })}
         />
         <StackOrders.Screen
