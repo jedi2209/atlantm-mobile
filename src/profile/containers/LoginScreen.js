@@ -402,8 +402,8 @@ const LoginScreen = props => {
 
   const _renderLoginButtons = region => {
     let VKenabled = true;
-    let ButtonWidth = '25%';
-    let ButtonHeight = 50;
+    let ButtonWidth = '45%';
+    let ButtonHeight = 60;
     switch (region.toLowerCase()) {
       case UKRAINE:
         VKenabled = false;
@@ -434,7 +434,7 @@ const LoginScreen = props => {
               height: ButtonHeight,
             }}
           />
-          <SocialAuthButton
+          {/* <SocialAuthButton
             type="Facebook"
             onPress={_checkPhone}
             isDisabled={isSigninInProgress}
@@ -444,7 +444,7 @@ const LoginScreen = props => {
               marginVertical: 8,
               paddingHorizontal: 8,
             }}
-          />
+          /> */}
           {VKenabled ? (
             <SocialAuthButton
               type="VK"
