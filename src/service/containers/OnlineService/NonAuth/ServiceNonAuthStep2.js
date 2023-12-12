@@ -27,7 +27,11 @@ import Analytics from '../../../../utils/amplitude-analytics';
 
 import API from '../../../../utils/api';
 import {ERROR_NETWORK} from '../../../../core/const';
-import {View, Text, useToast} from 'native-base';
+import {View, Text, useToast, Image, Icon, HStack, VStack} from 'native-base';
+
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import styleConst from '../../../../core/style-const';
 
 const mapStateToProps = ({dealer, service, nav}) => {
   let carLocalBrand = '';
@@ -63,6 +67,23 @@ const mapDispatchToProps = {
   orderService,
 };
 
+const CarIcon = props => {
+  const {type} = props;
+
+  switch (type) {
+    case 'tyreChange':
+      return (
+        <Icon name="snowflake-melt" as={MaterialCommunityIcons} {...props} />
+      );
+    case 'carWash':
+      return <Icon name="car-wash" as={MaterialCommunityIcons} {...props} />;
+    case 'service':
+    case 'other':
+    default:
+      return <Icon name="car-wrench" as={MaterialCommunityIcons} {...props} />;
+  }
+};
+
 const ServiceNonAuthStep2 = props => {
   const {
     route,
@@ -77,15 +98,11 @@ const ServiceNonAuthStep2 = props => {
     dealerSelectedLocal,
     region,
     listDealers,
+    navigation,
   } = props;
 
   const [orderParams, setOrderParams] = useState(true);
   const [orderLead, setLead] = useState(true);
-  const [user, setUser] = useState({
-    email: email,
-    phone: phone,
-    name: firstName && lastName ? `${firstName} ${lastName}` : '',
-  });
   const [showReview, setReview] = useState(null);
 
   const toast = useToast();
@@ -114,40 +131,30 @@ const ServiceNonAuthStep2 = props => {
       });
       return;
     }
-    const {navigation} = props;
-
-    // console.info('dataFromForm', dataFromForm);
-    // console.info('orderParams', orderParams);
-    // return;
 
     let dateFromForm = get(dataFromForm, 'DATETIME', null);
-
-    // if (get(dateFromForm, 'noTimeAlways', false)) {
-    //   // хак для Лексуса
-    //   setLead(true);
-    // }
 
     let data = {
       dealer: orderParams.DEALER,
       time: {
-        from: parseInt(dateFromForm.time),
+        from: parseInt(get(dateFromForm, 'time', 0)),
         to:
-          parseInt(dateFromForm.time) +
+          parseInt(get(dateFromForm, 'time', 0)) +
           parseInt(get(orderParams, 'secondData.total.time', 0)),
       },
-      f_FirstName: dataFromForm.NAME || null,
-      f_SecondName: dataFromForm.SECOND_NAME || null,
-      f_LastName: dataFromForm.LAST_NAME || null,
-      phone: dataFromForm.PHONE,
-      email: dataFromForm.EMAIL || null,
-      tech_place: dateFromForm.tech_place || null,
-      service: orderParams.SERVICE,
-      serviceName: dataFromForm.SERVICE || null,
-      vin: orderParams.CARVIN,
+      f_FirstName: get(dataFromForm, 'NAME', ''),
+      f_SecondName: get(dataFromForm, 'SECOND_NAME', ''),
+      f_LastName: get(dataFromForm, 'LAST_NAME', ''),
+      phone: get(dataFromForm, 'PHONE', ''),
+      email: get(dataFromForm, 'EMAIL', ''),
+      tech_place: get(dateFromForm, 'tech_place', ''),
+      service: get(orderParams, 'SERVICE', ''),
+      serviceName: strings.ServiceScreen.works[get(orderParams, 'SERVICE', '')],
+      vin: get(orderParams, 'CARVIN', ''),
       car: {
-        brand: orderParams.CARBRAND || null,
-        model: orderParams.CARMODEL || null,
-        plate: orderParams.CARNUMBER || null,
+        brand: get(orderParams, 'CARBRAND', ''),
+        model: get(orderParams, 'CARMODEL', ''),
+        plate: get(orderParams, 'CARNUMBER', ''),
       },
       text: dataFromForm.COMMENT || null,
     };
@@ -276,33 +283,86 @@ const ServiceNonAuthStep2 = props => {
                 type: 'component',
                 value: (
                   <View>
-                    <Text>
-                      Вы будете записаны на{' '}
-                      {strings.ServiceScreen.works[showReview.SERVICE]} в
-                      автоцентр {listDealers[showReview.DEALER].name}
-                    </Text>
-                    {get(showReview, 'datetime.time') ? (
-                      <Text>
-                        {humanDate(
-                          getDateFromTimestamp(showReview.datetime.time),
-                        )}
-                      </Text>
-                    ) : null}
-                    <Text>
-                      для автомобиля {showReview.CARBRAND} {showReview.CARMODEL}
-                      {showReview.CARNUMBER
-                        ? '\r\nгос. номер ' + showReview.CARNUMBER
-                        : null}
-                    </Text>
-                    {get(showReview, 'secondData.total') ? (
-                      <Text>
-                        Стоимость работ составит{' '}
-                        {showReview.secondData.total.summ.value}{' '}
-                        {showReview.secondData.total.summ.currency}
-                      </Text>
-                    ) : null}
+                    <Image
+                      source={{
+                        uri: get(listDealers[showReview.DEALER], 'img.0'),
+                      }}
+                      alt="dealer main image"
+                      resizeMode="cover"
+                      w={'100%'}
+                      h={200}
+                    />
+                    <View
+                      position={'absolute'}
+                      background={styleConst.color.white}
+                      w={'100%'}
+                      h={200}
+                      opacity={0.9}
+                    />
+                    <View position={'absolute'} h={200} w={'100%'} p={2}>
+                      <VStack mx={1} mb={3} space={4}>
+                        {get(showReview, 'datetime.time') ? (
+                          <HStack alignItems="center">
+                            <Icon
+                              name="calendar-check-outline"
+                              as={MaterialCommunityIcons}
+                              size={8}
+                              mr={2}
+                              color={styleConst.color.blue}
+                            />
+                            <Text
+                              fontSize={20}
+                              lineHeight={32}
+                              fontWeight={'600'}>
+                              {humanDate(
+                                getDateFromTimestamp(showReview.datetime.time),
+                              )}
+                            </Text>
+                          </HStack>
+                        ) : null}
+                        <HStack alignItems="center">
+                          <CarIcon
+                            type={get(showReview, 'SERVICE')}
+                            size={8}
+                            mr={2}
+                            color={styleConst.color.blue}
+                          />
+                          <Text>
+                            {[
+                              strings.ServiceScreen.works[showReview.SERVICE],
+                              'в',
+                              listDealers[showReview.DEALER].name,
+                            ].join(' ')}
+                          </Text>
+                        </HStack>
+                        <HStack alignItems="center">
+                          <Icon
+                            name="car-outline"
+                            as={MaterialCommunityIcons}
+                            size={8}
+                            mr={2}
+                            color={styleConst.color.blue}
+                          />
+                          <Text>
+                            {showReview.CARBRAND} {showReview.CARMODEL}
+                            {showReview.CARNUMBER
+                              ? '\r\nгос. номер ' + showReview.CARNUMBER
+                              : null}
+                          </Text>
+                        </HStack>
+                        {get(showReview, 'secondData.total') ? (
+                          <Text fontWeight={600} fontSize={17}>
+                            ~ {showReview.secondData.total.summ.value}{' '}
+                            {showReview.secondData.total.summ.currency}
+                          </Text>
+                        ) : null}
+                      </VStack>
+                    </View>
                   </View>
                 ),
+                props: {
+                  unstyle: true,
+                },
               },
             ],
           }
