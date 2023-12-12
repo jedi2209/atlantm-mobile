@@ -1241,7 +1241,11 @@ class Form extends Component {
       return (
         <View
           testID={'Form.ComponentWrapper.' + name}
-          style={[styles.field, styles.component]}
+          style={
+            get(data, 'props.unstyle', false)
+              ? null
+              : [styles.field, styles.component]
+          }
           key={'field' + num + name}>
           {value}
         </View>

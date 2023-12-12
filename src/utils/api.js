@@ -14,6 +14,7 @@ import {strings} from '../core/lang/const';
 import {getTimestampInSeconds} from './date';
 
 const isAndroid = Platform.OS === 'android';
+const SourceID = 3;
 const secretKey = [
   API_MAIN_KEY[APP_REGION][Platform.OS],
   DeviceInfo.getBundleId(),
@@ -368,7 +369,7 @@ export default {
       f_Action: actionID,
       f_Phone: phone,
       f_Car: carID,
-      f_Source: 3,
+      f_Source: SourceID,
     };
 
     const requestParams = _.merge({}, baseRequestParams, {
@@ -413,7 +414,7 @@ export default {
       f_Phone: phone,
       f_Email: email,
       f_Text: text,
-      f_Source: 3,
+      f_Source: SourceID,
     };
 
     const requestParams = _.merge({}, baseRequestParams, {
@@ -442,7 +443,18 @@ export default {
       dealerID,
       actionID,
       text,
+      service,
     } = props;
+
+    const textModified = [];
+    if (service) {
+      textModified.push('Требуемые работы: ' + service);
+    }
+    if (text) {
+      textModified.push('Комментарий клиента: ' + text);
+    }
+
+    textModified.join('\r\n');
 
     const body = {
       f_Dealer: dealerID,
@@ -456,8 +468,8 @@ export default {
       f_Phone: phone,
       f_Email: email,
       f_Date: date,
-      f_Text: text,
-      f_Source: 3,
+      f_Text: textModified,
+      f_Source: SourceID,
     };
     const requestParams = _.merge({}, baseRequestParams, {
       method: 'POST',
@@ -495,7 +507,7 @@ export default {
       f_Text: comment,
       f_TradeIn: tradeIn ? tradeIn : false,
       f_Credit: credit ? credit : false,
-      f_Source: 3,
+      f_Source: SourceID,
     };
 
     const requestParams = _.merge({}, baseRequestParams, {
@@ -531,7 +543,7 @@ export default {
       f_Email: email,
       f_Summ: summ,
       f_Text: comment,
-      f_Source: 3,
+      f_Source: SourceID,
     };
 
     const requestParams = _.merge({}, baseRequestParams, {
@@ -567,7 +579,7 @@ export default {
       f_Date: date,
       f_Email: email,
       f_Text: comment,
-      f_Source: 3,
+      f_Source: SourceID,
     };
 
     const requestParams = _.merge({}, baseRequestParams, {
@@ -603,7 +615,7 @@ export default {
       f_Email: email,
       f_Summ: summ,
       f_Text: comment,
-      f_Source: 3,
+      f_Source: SourceID,
     };
 
     const requestParams = _.merge({}, baseRequestParams, {
@@ -640,7 +652,7 @@ export default {
       lastName: lastName || '',
       phone: phone || '',
       text: comment,
-      f_Source: 3,
+      f_Source: SourceID,
     };
 
     const requestParams = _.merge({}, baseRequestParams, {
@@ -685,7 +697,7 @@ export default {
   }) {
     const body = {
       posting: 1,
-      f_Source: 3,
+      f_Source: SourceID,
       f_Dealer: dealerId,
       f_Name: name,
       f_FirstName: firstName,
@@ -714,7 +726,7 @@ export default {
     let formData = new FormData();
 
     const formBody = _.compact([
-      {name: 'f_Source', value: '3'},
+      {name: 'f_Source', value: SourceID},
       props.dealerId && {name: 'f_Dealer', value: String(props.dealerId)},
       props.date && {name: 'f_Date', value: String(props.date)},
       props.firstName && {name: 'f_FirstName', value: String(props.firstName)},
@@ -821,7 +833,7 @@ export default {
       f_Name: name,
       f_Phone: phone,
       f_Email: email,
-      f_Source: 3,
+      f_Source: SourceID,
       f_VIN: carVIN,
       f_Number: carNumber,
     };
