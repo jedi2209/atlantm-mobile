@@ -42,7 +42,7 @@ const headers = {
 };
 const baseRequestParams = {
   method: 'GET',
-  timeout: 30 * 1000,
+  timeout: 45 * 1000,
   headers,
 };
 
