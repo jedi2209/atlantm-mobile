@@ -262,40 +262,42 @@ class SocialAuth extends PureComponent {
               },
               im.google ? styles.SocialLoginBtActive : null,
             ]}></Button>
-          <Button
-            onPress={this._connectFB}
-            disabled={this.state.isSigninInProgress || Boolean(im.facebook)}
-            leftIcon={
-              <Icon
-                name="facebook"
-                size={10}
-                as={FontAwesome5}
-                style={{
-                  marginLeft: 0,
-                  color: styleConst.color.white,
-                }}
-              />
-            }
-            rightIcon={
-              im.facebook ? (
+          {false ? (
+            <Button
+              onPress={this._connectFB}
+              disabled={this.state.isSigninInProgress || Boolean(im.facebook)}
+              leftIcon={
                 <Icon
-                  name="check-circle"
-                  size={4}
+                  name="facebook"
+                  size={10}
                   as={FontAwesome5}
-                  style={[styles.CheckCircleIcon, {right: -12, bottom: -5}]}
+                  style={{
+                    marginLeft: 0,
+                    color: styleConst.color.white,
+                  }}
                 />
-              ) : null
-            }
-            style={[
-              styleConst.shadow.default,
-              styles.SocialLoginBt,
-              {
-                backgroundColor: '#4167B2',
-                width: VKenabled ? '29%' : ButtonWidth,
-                height: 60,
-              },
-              im.facebook ? styles.SocialLoginBtActive : null,
-            ]}></Button>
+              }
+              rightIcon={
+                im.facebook ? (
+                  <Icon
+                    name="check-circle"
+                    size={4}
+                    as={FontAwesome5}
+                    style={[styles.CheckCircleIcon, {right: -12, bottom: -5}]}
+                  />
+                ) : null
+              }
+              style={[
+                styleConst.shadow.default,
+                styles.SocialLoginBt,
+                {
+                  backgroundColor: '#4167B2',
+                  width: VKenabled ? '29%' : ButtonWidth,
+                  height: 60,
+                },
+                im.facebook ? styles.SocialLoginBtActive : null,
+              ]}></Button>
+          ) : null}
           {VKenabled ? (
             <Button
               onPress={this._connectVK}
