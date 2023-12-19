@@ -18,6 +18,8 @@ import Analytics from '../../utils/amplitude-analytics';
 import {strings} from '../../core/lang/const';
 import {ERROR_NETWORK} from '../../core/const';
 
+import {get} from 'lodash';
+
 const mapStateToProps = ({profile, dealer}) => {
   return {
     profile: profile.login,
@@ -32,37 +34,48 @@ const mapDispatchToProps = {
 
 const ProfileSettingsScreen = props => {
   const {NAME, LAST_NAME, SECOND_NAME, EMAIL, PHONE, BIRTHDATE} = props.profile;
+  const [loading, setLoading] = useState(false);
+  const navigation = useNavigation();
+  const toast = useToast();
 
   let emailData = [];
   let phoneData = [];
   let birthdate = null;
 
+  useEffect(() => {
+    Analytics.logEvent('screen', 'profile/edit');
+  }, []);
+
   if (typeof EMAIL === 'object' && EMAIL && EMAIL.length) {
     EMAIL.map((field, num) => {
-      emailData[field.ID] = {
+      const fieldID = get(field, 'ID');
+      // emailData[fieldID] = {
+      emailData.push({
         id: field.ID,
         name: 'EMAIL',
         type: 'email',
         label: strings.Form.field.label.email,
-        value: field.VALUE,
-      };
+        value: get(field, 'VALUE'),
+      });
     });
   } else {
     emailData = EMAIL;
   }
   if (typeof PHONE === 'object' && PHONE && PHONE.length) {
     PHONE.map((field, num) => {
-      phoneData[field.ID] = {
-        id: field.ID,
+      const fieldID = get(field, 'ID');
+      // phoneData[fieldID] = {
+      phoneData.push({
+        id: fieldID,
         name: 'PHONE',
         type: 'phone',
         label: strings.Form.field.label.phone,
-        value: field.VALUE,
-        country: field.COUNTRY,
+        value: get(field, 'VALUE'),
+        country: get(field, 'COUNTRY'),
         textStyle: {
           color: styleConst.color.greyText4,
         },
-      };
+      });
     });
   } else {
     phoneData = PHONE;
@@ -73,14 +86,6 @@ const ProfileSettingsScreen = props => {
   } else if (typeof BIRTHDATE === 'object') {
     birthdate = BIRTHDATE;
   }
-
-  const [email, setEmail] = useState(emailData || []);
-  const [phone, setPhone] = useState(phoneData || []);
-  const [loading, setLoading] = useState(false);
-
-  const navigation = useNavigation();
-
-  const toast = useToast();
 
   const FormConfig = {
     fields: {
@@ -120,7 +125,7 @@ const ProfileSettingsScreen = props => {
         },
         {
           name: strings.Form.group.contacts,
-          fields: [].concat(email, phone),
+          fields: [].concat(emailData, phoneData),
         },
         {
           name: strings.Form.group.social,
@@ -161,10 +166,6 @@ const ProfileSettingsScreen = props => {
       ],
     },
   };
-
-  useEffect(() => {
-    Analytics.logEvent('screen', 'profile/edit');
-  }, []);
 
   const _onPressSave = async data => {
     const isInternet = require('../../utils/internet').default;

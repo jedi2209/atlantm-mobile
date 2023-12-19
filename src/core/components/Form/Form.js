@@ -1098,7 +1098,7 @@ class Form extends Component {
       countriesListStatic.map(el => {
         if (countrySettings.includes(get(el, 'iso2'))) {
           countriesList.push(el);
-          countriesCodes[el.iso2] = el;
+          countriesCodes[get(el, 'iso2')] = el;
         }
       });
 
@@ -1114,6 +1114,9 @@ class Form extends Component {
             }
           },
         );
+      }
+      if (!countriesCodes[countryCode]) {
+        return;
       }
       return (
         <View
