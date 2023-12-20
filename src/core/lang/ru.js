@@ -667,6 +667,25 @@ export default {
       carWash: 'Мойка',
       other: 'Прочий сервис',
     },
+    works2: {
+      tyreChange: [
+        {
+          label: 'Замена колёс',
+          value: 'wheelChange',
+          key: 'wheelChange',
+        },
+        {
+          label: 'Замена шин',
+          value: 'tyreChange',
+          key: 'tyreChange',
+        },
+        {
+          label: 'Ремонт шин',
+          value: 'tyreRepair',
+          key: 'tyreRepair',
+        },
+      ],
+    },
     button: 'Записаться!',
   },
   ServiceScreenStep1: {
@@ -730,6 +749,7 @@ export default {
     group: {
       main: 'Основное',
       dealer: 'Автоцентр',
+      services: 'Услуги',
       dealerCar: 'Автоцентр и автомобиль',
       car: 'Автомобиль',
       contacts: 'Контактные данные',
