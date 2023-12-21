@@ -1,9 +1,10 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {isValidElement, useState, useRef} from 'react';
 import {Animated, Dimensions, StyleSheet} from 'react-native';
-import {Box, Pressable, Text, View, Image} from 'native-base';
+import {Pressable, Text, View} from 'native-base';
 
 import Imager from './Imager';
 import styleConst from '../style-const';
+import {get} from 'lodash';
 
 import PropTypes from 'prop-types';
 
@@ -22,7 +23,11 @@ const BackGroundComponent = props => {
   let backgroundPath = null;
 
   if (typeof background === 'object') {
-    backgroundPath = background?.uri;
+    if (get(background, 'uri')) {
+      backgroundPath = background?.uri;
+    } else if (isValidElement(background)) {
+      type = 'component';
+    }
   } else {
     backgroundPath = background;
   }
@@ -40,7 +45,7 @@ const BackGroundComponent = props => {
     }
   }
 
-  if (typeof background === 'number') {
+  if (typeof backgroundPath === 'number') {
     type = 'pathLocalObject';
   }
 
@@ -63,6 +68,8 @@ const BackGroundComponent = props => {
       return (
         <View backgroundColor={background} position={'absolute'} {...props} />
       );
+    case 'component':
+      return background;
   }
 };
 
@@ -207,7 +214,7 @@ export const MainScreenButton = ({
                 height: height ? height : heightDefault,
                 position: 'absolute',
                 borderRadius: styleConst.borderRadius,
-                zIndex: 0,
+                zIndex: 10,
               },
             ]}
             {...backgroundProps}
@@ -293,6 +300,7 @@ MainScreenButton.defaultProps = {
   size: 'small',
   width: null,
   height: null,
+  onPress: () => {},
 };
 
 MainScreenButtons.propTypes = {
