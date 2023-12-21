@@ -1044,12 +1044,12 @@ export default {
     }
   },
 
-  async fetchServiceCalculation({dealerID, workType}) {
+  async fetchServiceCalculation({dealerID, workType, additional}) {
     if (!workType || !dealerID) {
       return false;
     }
     return await this.request(
-      `/service/online/${dealerID}/calculator/?type=${workType}`,
+      `/service/online/${dealerID}/calculator/?type=${workType}&additional=${additional}`,
       baseRequestParams,
     );
   },

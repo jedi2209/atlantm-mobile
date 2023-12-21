@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect, useReducer} from 'react';
-import {ActivityIndicator} from 'react-native-paper';
+import {HStack, Text, View} from 'native-base';
 import {get} from 'lodash';
 
 import Form from '../../../../core/components/Form/Form';
@@ -13,8 +13,6 @@ import {localDealerClear} from '../../../../dealer/actions';
 import {strings} from '../../../../core/lang/const';
 
 import API from '../../../../utils/api';
-import {View} from 'native-base';
-import styleConst from '../../../../core/style-const';
 import Analytics from '../../../../utils/amplitude-analytics';
 import LogoLoader from '../../../../core/components/LogoLoader';
 
@@ -53,6 +51,18 @@ const mapDispatchToProps = {
   localDealerClear,
 };
 
+const getTime = seconds => {
+  const hrs = Math.ceil(seconds / 60 / 60);
+  const mns = Math.ceil(seconds % 60);
+  if (hrs && mns) {
+    return `${hrs} ч. ${mns} мин.`;
+  } else if (hrs) {
+    return `${hrs} ч.`;
+  } else if (mns) {
+    return `${mns} мин.`;
+  }
+};
+
 const reducerService = (state = {}, action) => {
   if (action.type && action.type === 'clear') {
     return {};
@@ -68,14 +78,15 @@ const ServiceNonAuthStep2 = props => {
   const [serviceData, setServiceData] = useReducer(reducerService, {
     typeFirst: get(orderData, 'SERVICE'),
     typeSecond: get(orderData, 'SERVICETYPE'),
+    additionalField: false,
     loading: false,
     lead: get(orderData, 'lead'),
-    items: [],
-    itemsFull: [],
+    items: get(orderData, 'items'),
+    itemsFull: get(orderData, 'itemsFull'),
+    itemFullSelected: {},
   });
 
-  const [servicesValueField, setServicesValueField] = useState({});
-  const [extraFields, setAdditionalFields] = useState({});
+  console.info('serviceData', serviceData);
 
   useEffect(() => {
     Analytics.logEvent('screen', 'service/step2');
@@ -89,93 +100,57 @@ const ServiceNonAuthStep2 = props => {
     ) {
       return;
     }
-    setServiceData({loading: true});
-    API.fetchServiceCalculation({
-      dealerID: get(orderData, 'DEALER'),
-      workType: get(orderData, 'SERVICETYPE'),
-    }).then(servicesCalculation => {
-      let servicesTmp = [];
-      let servicesFull = [];
-      get(servicesCalculation, 'data', []).map(el => {
-        const id = get(el, 'id');
-        servicesTmp.push({
-          label: el.name,
-          value: id,
-          key: id,
-        });
-        servicesFull.push(el);
-      });
-      if (!get(servicesTmp, 'length')) {
-        setServiceData({lead: true, loading: false});
-        return navigation.navigate('ServiceNonAuthStep3', {
-          ...orderData,
-          ...serviceData,
-        });
-      }
-      setServiceData({
-        loading: false,
-        lead: false,
-        items: servicesTmp,
-        itemsFull: servicesFull,
-      });
-    });
-  }, [orderData]);
-
-  useEffect(() => {
     if (!get(serviceData, 'items.length')) {
-      return;
+      setServiceData({
+        loading: true,
+        items: [],
+        itemsFull: [],
+        itemFullSelected: {},
+      });
+      API.fetchServiceCalculation({
+        dealerID: get(orderData, 'DEALER'),
+        workType: get(orderData, 'SERVICETYPE'),
+        additional: get(serviceData, 'additionalField', false),
+      }).then(servicesCalculation => {
+        let servicesTmp = [];
+        let servicesFull = [];
+        get(servicesCalculation, 'data', []).map(el => {
+          const id = get(el, 'id');
+          servicesTmp.push({
+            label: el.name,
+            value: id,
+            key: id,
+          });
+          servicesFull.push(el);
+        });
+        if (!get(servicesTmp, 'length')) {
+          setServiceData({lead: true, loading: false});
+          return navigation.navigate('ServiceNonAuthStep3', {
+            ...orderData,
+            ...serviceData,
+          });
+        }
+        setServiceData({
+          loading: false,
+          lead: false,
+          items: servicesTmp,
+          itemsFull: servicesFull,
+        });
+      });
+    } else {
+      // setServiceData({
+      //   loading: false,
+      //   lead: false,
+      //   items: get(serviceData, 'items'),
+      //   itemsFull: get(orderData, 'servicesFull'),
+      // });
     }
-    setAdditionalFields({
-      name: strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')]
-        .additional,
-      fields: [
-        {
-          name: 'additionalField',
-          type: 'checkbox',
-          label:
-            strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')]
-              .myTyresInStorage,
-          value: false,
-        },
-        {
-          name: 'leaveTyresInStorage',
-          type: 'checkbox',
-          label:
-            strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')]
-              .leaveTyresInStorage,
-          value: false,
-        },
-      ],
-    });
-    setServicesValueField({
-      name: 'SERVICESecond',
-      type: 'select',
-      label:
-        strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')].second,
-      value: null,
-      props: {
-        items: serviceData.items,
-        required: true,
-        // value: secondData.items,
-        placeholder: {
-          label:
-            strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')]
-              .second,
-          value: null,
-          color: '#9EA0A4',
-        },
-        onChange: async serviceSecondID => {
-          const itemsFull = get(serviceData, 'itemsFull');
-          const indexEl = Object.keys(itemsFull).find(
-            item => itemsFull[item].id == serviceSecondID,
-          );
-          if (indexEl) {
-            setServiceData({itemFullSelected: serviceData.itemsFull[indexEl]});
-          }
-        },
-      },
-    });
-  }, [serviceData?.items]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    orderData,
+    serviceData?.leaveTyresInStorage,
+    serviceData?.additionalField,
+  ]);
 
   if (serviceData.loading) {
     return <LogoLoader />;
@@ -193,10 +168,113 @@ const ServiceNonAuthStep2 = props => {
                 value: null,
                 props: {},
               }
-            : servicesValueField,
+            : get(serviceData, 'items.length')
+            ? {
+                name: 'SERVICESecond',
+                type: 'select',
+                label:
+                  strings.Form.field.label.serviceTypes[
+                    get(orderData, 'SERVICE')
+                  ].second,
+                value: null,
+                props: {
+                  items: serviceData.items,
+                  required: true,
+                  // value: secondData.items,
+                  placeholder: {
+                    label:
+                      strings.Form.field.label.serviceTypes[
+                        get(orderData, 'SERVICE')
+                      ].second,
+                    value: null,
+                    color: '#9EA0A4',
+                  },
+                  onChange: async serviceSecondID => {
+                    const itemsFull = get(serviceData, 'itemsFull');
+                    const indexEl = Object.keys(itemsFull).find(
+                      item => itemsFull[item].id == serviceSecondID,
+                    );
+                    if (indexEl) {
+                      setServiceData({
+                        itemFullSelected: serviceData.itemsFull[indexEl],
+                      });
+                    }
+                  },
+                },
+              }
+            : null,
         ],
       },
-      extraFields,
+      {
+        name: strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')]
+          .additional,
+        fields: [
+          {
+            name: 'additionalField',
+            type: 'checkbox',
+            label:
+              strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')]
+                .myTyresInStorage,
+            value: get(serviceData, 'additionalField', false),
+            props: {
+              onSelect: val => setServiceData({additionalField: val}),
+            },
+          },
+          {
+            name: 'leaveTyresInStorage',
+            type: 'checkbox',
+            label:
+              strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')]
+                .leaveTyresInStorage,
+            value: false,
+            // props: {
+            //   onSelect: val => setServiceData({leaveTyresInStorage: val}),
+            // },
+          },
+        ],
+      },
+      get(serviceData, 'itemFullSelected.total')
+        ? {
+            name: strings.Form.group.additional,
+            fields: [
+              {
+                name: 'summaryData',
+                type: 'component',
+                label: strings.Form.group.additional,
+                value: (
+                  <View>
+                    {get(serviceData, 'itemFullSelected.total.time') ? (
+                      <HStack>
+                        <Text>Нам потребуется примерно </Text>
+                        <Text fontWeight={600}>
+                          {getTime(
+                            get(serviceData, 'itemFullSelected.total.time'),
+                          )}
+                        </Text>
+                        <Text> на все работы</Text>
+                      </HStack>
+                    ) : null}
+                    {get(serviceData, 'itemFullSelected.total') ? (
+                      <HStack>
+                        <Text>Итоговая стоимость составит ~ </Text>
+                        <Text fontWeight={600}>
+                          {get(
+                            serviceData,
+                            'itemFullSelected.total.summ.value',
+                          )}{' '}
+                          {get(
+                            serviceData,
+                            'itemFullSelected.total.summ.currency',
+                          )}
+                        </Text>
+                      </HStack>
+                    ) : null}
+                  </View>
+                ),
+              },
+            ],
+          }
+        : {},
     ],
   };
 
