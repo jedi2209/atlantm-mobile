@@ -154,7 +154,7 @@ const ContactsStackView = ({navigation, route}) => (
         headerTitleAlign: 'center',
         headerStyle: {
           height: isApple ? 90 : 50,
-          backgroundColor: '#F8F8F8',
+          backgroundColor: '#f2f2f2',
           elevation: 0,
           shadowOpacity: 0,
         },

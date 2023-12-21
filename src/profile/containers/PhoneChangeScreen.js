@@ -459,7 +459,7 @@ const PhoneChangeScreen = props => {
 const styles = StyleSheet.create({
   mainView: {
     flex: 1,
-    backgroundColor: '#eee',
+    backgroundColor: '#f2f2f2',
   },
   BonusInfoButtonIcon: {
     fontSize: 20,
