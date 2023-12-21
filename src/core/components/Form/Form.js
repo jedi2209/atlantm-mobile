@@ -1400,6 +1400,9 @@ class Form extends Component {
           style={[styles.field, styles.textinput, styles.checkboxWrapper]}
           onPress={() => {
             this.onChangeField(data)(!this.state[name]);
+            if (data?.props?.onSelect) {
+              data.props.onSelect(!this.state[name]);
+            }
           }}
           key={'field' + num + name}>
           <HStack justifyContent={'space-between'}>
@@ -1408,8 +1411,11 @@ class Form extends Component {
             </Text>
             <Checkbox
               aria-label={label}
-              onChange={() => {
+              onChange={val => {
                 this.onChangeField(data)(!this.state[name]);
+                if (data?.props?.onSelect) {
+                  data.props.onSelect(val);
+                }
               }}
               isChecked={this.state[name] ? true : false}
               defaultIsChecked={this.state[name] ? true : false}

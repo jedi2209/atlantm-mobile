@@ -248,7 +248,7 @@ const ServiceNonAuthStep4 = props => {
                 />
                 <View position={'absolute'} h={200} w={'100%'} p={2}>
                   <VStack mx={1} mb={3} space={4}>
-                    {get(orderData, 'datetime.time') ? (
+                    {get(orderData, 'DATETIME.time') ? (
                       <HStack alignItems="center">
                         <Icon
                           name="calendar-check-outline"
