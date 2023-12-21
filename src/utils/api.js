@@ -1121,7 +1121,12 @@ export default {
       }
     }
     if (__DEV__) {
-      console.info('apiGetData', requestParams?.method, url, body);
+      console.info(
+        new Date().toString() + '\tapiGetData\t',
+        requestParams?.method,
+        url,
+        body ? body : '',
+      );
     }
     if (method === 'delete' || method === 'patch') {
       const res = await fetch(url, {
@@ -1134,7 +1139,14 @@ export default {
         const resJson = JSON.parse(resText);
         return resJson;
       } catch (err) {
-        console.error('apiGetDataError ' + method + ' URL: ' + url, err);
+        console.error(
+          new Date().toString() +
+            '\tapiGetDataError ' +
+            method +
+            '\tURL: ' +
+            url,
+          err,
+        );
         return resText;
       }
     } else {
@@ -1150,26 +1162,44 @@ export default {
             case 'json':
               answer = res.json();
               if (__DEV__) {
-                console.info('apiGetData JSON result', answer);
+                console.info(
+                  new Date().toString() + '\tapiGetData\tJSON result',
+                  url,
+                  '\r\n',
+                  answer,
+                );
               }
               break;
             case 'text':
               answer = res?.data;
               if (__DEV__) {
-                console.info('apiGetData JSON text', answer);
+                console.info(
+                  new Date().toString() + '\tapiGetData\tJSON text',
+                  url,
+                  '\r\n',
+                  answer,
+                );
               }
               break;
             default:
               if (res?.data) {
                 answer = res?.data;
               }
-              console.error('apiGetDataError res.info().respType: ' + url, res);
+              console.error(
+                new Date().toString() +
+                  '\tapiGetDataError res.info().respType: ' +
+                  url,
+                res,
+              );
               break;
           }
           return answer;
         })
         .catch(err => {
-          console.error('apiGetDataError URL: ' + url, err);
+          console.error(
+            new Date().toString() + '\tapiGetDataError URL: ' + url,
+            err,
+          );
           return false;
         });
     }
