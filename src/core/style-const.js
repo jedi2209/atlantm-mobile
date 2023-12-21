@@ -11,7 +11,7 @@ export default {
     green: '#34BD78',
     green2: '#4cd864',
     orange: '#FFA51D',
-    bg: '#F8F8F8',
+    bg: '#f2f2f2',
     white: '#ffffff',
     accordeonGrey1: '#ededed',
     accordeonGrey2: '#dedfe0',
@@ -61,7 +61,7 @@ export default {
   form: {
     scrollView: {
       flex: 1,
-      backgroundColor: '#eee',
+      backgroundColor: '#f2f2f2',
     },
   },
   font: {
@@ -188,7 +188,7 @@ export default {
     default: {
       flex: 1,
       position: 'relative',
-      backgroundColor: '#F8F8F8',
+      backgroundColor: '#f2f2f2',
     },
   },
   borderRadius: 8,

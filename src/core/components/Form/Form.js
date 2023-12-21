@@ -1607,7 +1607,7 @@ Form.defaultProps = {
   contentContainerStyle: {},
   formScrollViewStyle: {
     flex: 1,
-    backgroundColor: '#eee',
+    backgroundColor: '#f2f2f2',
     paddingBottom: 0,
   },
   keyboardAvoidingViewProps: {},
