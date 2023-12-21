@@ -288,18 +288,18 @@ export default class ChooseDateTimeComponent extends Component {
           value={this.state.date || null}
           isActive={this.state.modal || false}
           onPressButton={() => {
-            if (Platform.OS === 'android') {
-              if (
-                !this.state.modal &&
-                typeof this.state.modal !== 'undefined'
-              ) {
-                this.setState({modal: true});
-              } else {
-                this.setState({modal: false});
-              }
-            } else {
-              this.setState({modal: true});
-            }
+            // if (Platform.OS === 'android') {
+            //   if (
+            //     !this.state.modal &&
+            //     typeof this.state.modal !== 'undefined'
+            //   ) {
+            //     this.setState({modal: true});
+            //   } else {
+            //     this.setState({modal: false});
+            //   }
+            // } else {
+            this.setState({modal: true});
+            // }
           }}
           onHideModal={() => {
             //только для iOS
@@ -322,19 +322,19 @@ export default class ChooseDateTimeComponent extends Component {
             });
           }}
           onDateChange={date => {
-            if (Platform.OS === 'android') {
-              this.setState({date: date, modal: false});
-              switch (this.props.type) {
-                case 'service':
-                  this._getTimeService(date);
-                  break;
-                case 'testDrive':
-                  this._getTimeTestDrive(date);
-                  break;
-              }
-            } else {
-              this.setState({date: date});
-            }
+            // if (Platform.OS === 'android') {
+            //   this.setState({date: date, modal: false});
+            //   switch (this.props.type) {
+            //     case 'service':
+            //       this._getTimeService(date);
+            //       break;
+            //     case 'testDrive':
+            //       this._getTimeTestDrive(date);
+            //       break;
+            //   }
+            // } else {
+            this.setState({date: date});
+            // }
             this.props.onFinishedSelection({
               date: date,
               noTimeAlways: this.state.noTimeAlways

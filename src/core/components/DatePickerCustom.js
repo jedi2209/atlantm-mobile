@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {View, Text, Pressable, StyleSheet, Platform} from 'react-native';
 import {Button} from 'native-base';
 import {format} from '../../utils/date';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import DatePicker from 'react-native-date-picker';
 import ModalView from './ModalView';
 import {strings} from '../lang/const';
@@ -19,39 +18,26 @@ const DatePickerWrapper = props => {
     value,
   } = props;
   const defaultDate = new Date();
-  switch (Platform.OS) {
-    case 'ios':
-      return (
-        <DatePicker
-          modal
-          open={isActive}
-          title={label}
-          mode={mode}
-          date={value ? new Date(value) : defaultDate}
-          locale="ru-RU"
-          confirmText={confirmBtnText}
-          cancelText={strings.Base.cancel}
-          onConfirm={date => {
-            onDateChange(date);
-            onHideModal();
-          }}
-          onCancel={onHideModal}
-          {...props}
-        />
-      );
-    case 'android':
-      if (!isActive) {
-        return null;
-      }
-      return (
-        <DateTimePicker
-          mode={props.mode}
-          locale="ru-RU"
-          {...props}
-          value={props.value ? new Date(props.value) : defaultDate}
-        />
-      );
-  }
+  return (
+    <DatePicker
+      modal
+      open={isActive}
+      title={label}
+      mode={mode}
+      androidVariant={'nativeAndroid'}
+      timeZoneOffsetInMinutes={180}
+      date={value ? new Date(value) : defaultDate}
+      locale="ru-RU"
+      confirmText={confirmBtnText}
+      cancelText={strings.Base.cancel}
+      onConfirm={date => {
+        onDateChange(date);
+        onHideModal();
+      }}
+      onCancel={onHideModal}
+      {...props}
+    />
+  );
 };
 
 export const DatePickerCustom = React.forwardRef((props, ref) => {
