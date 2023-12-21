@@ -667,6 +667,14 @@ export default {
       carWash: 'Мойка',
       other: 'Прочий сервис',
     },
+    worksService: {
+      service: 'Сервис',
+      tyreChange: 'Замена шин',
+      wheelChange: 'Замена колёс',
+      tyreRepair: 'Ремонт шин',
+      carWash: 'Мойка',
+      other: 'Прочий сервис',
+    },
     works2: {
       tyreChange: [
         {

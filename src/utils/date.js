@@ -49,3 +49,15 @@ export const addDays = daysCol =>
 export const getTimestampInSeconds = () => parseInt(moment().unix(), 10);
 
 export const getDateFromTimestamp = ts => moment.unix(ts);
+
+export const getHumanTime = seconds => {
+  const hrs = Math.ceil(seconds / 60 / 60);
+  const mns = Math.ceil(seconds % 60);
+  if (hrs && mns) {
+    return `${hrs} ч. ${mns} мин.`;
+  } else if (hrs) {
+    return `${hrs} ч.`;
+  } else if (mns) {
+    return `${mns} мин.`;
+  }
+};

@@ -1,17 +1,21 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import {Alert} from 'react-native';
-import {get} from 'lodash';
+import {ScrollView, View, Text, useToast, Icon, HStack} from 'native-base';
+
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import {MainScreenButton} from '../../../../core/components/MainScreenButtons';
 
 import Form from '../../../../core/components/Form/Form';
 import {
-  addDays,
   dayMonthYear,
-  format,
   humanDate,
+  getHumanTime,
   getDateFromTimestamp,
 } from '../../../../utils/date';
 import UserData from '../../../../utils/user';
+import Analytics from '../../../../utils/amplitude-analytics';
 
 // redux
 import {connect} from 'react-redux';
@@ -23,15 +27,12 @@ import {
 } from '../../../actionTypes';
 import {strings} from '../../../../core/lang/const';
 
-import Analytics from '../../../../utils/amplitude-analytics';
-
 import API from '../../../../utils/api';
 import {ERROR_NETWORK} from '../../../../core/const';
-import {View, Text, useToast, Image, Icon, HStack, VStack} from 'native-base';
 
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import styleConst from '../../../../core/style-const';
+
+import {get} from 'lodash';
 
 const mapStateToProps = ({dealer, service, nav}) => {
   let carLocalBrand = '';
@@ -81,6 +82,19 @@ const CarIcon = props => {
     case 'other':
     default:
       return <Icon name="car-wrench" as={MaterialCommunityIcons} {...props} />;
+  }
+};
+
+const getServiceImage = type => {
+  switch (type) {
+    case 'tyreChange':
+      return require('../../../../../assets/services/tyreChange.webp');
+    case 'carWash':
+      return require('../../../../../assets/services/carWash.webp');
+    case 'service':
+    case 'other':
+    default:
+      return require('../../../../../assets/services/service.webp');
   }
 };
 
@@ -222,96 +236,20 @@ const ServiceNonAuthStep4 = props => {
 
   const FormConfig = {
     groups: [
-      {
-        name: strings.ServiceScreenStep1.total,
-        fields: [
-          {
-            name: 'Review',
-            type: 'component',
-            value: (
-              <View>
-                <Image
-                  source={{
-                    uri: get(listDealers[orderData.DEALER], 'img.0'),
-                  }}
-                  alt="dealer main image"
-                  resizeMode="cover"
-                  w={'100%'}
-                  h={200}
-                />
-                <View
-                  position={'absolute'}
-                  background={styleConst.color.white}
-                  w={'100%'}
-                  h={200}
-                  opacity={0.9}
-                />
-                <View position={'absolute'} h={200} w={'100%'} p={2}>
-                  <VStack mx={1} mb={3} space={4}>
-                    {get(orderData, 'DATETIME.time') ? (
-                      <HStack alignItems="center">
-                        <Icon
-                          name="calendar-check-outline"
-                          as={MaterialCommunityIcons}
-                          size={8}
-                          mr={2}
-                          color={styleConst.color.blue}
-                        />
-                        <Text fontSize={20} lineHeight={32} fontWeight={'600'}>
-                          {humanDate(
-                            getDateFromTimestamp(
-                              get(orderData, 'DATETIME.time'),
-                            ),
-                          )}
-                        </Text>
-                      </HStack>
-                    ) : null}
-                    <HStack alignItems="center">
-                      <CarIcon
-                        type={get(orderData, 'SERVICE')}
-                        size={8}
-                        mr={2}
-                        color={styleConst.color.blue}
-                      />
-                      <Text>
-                        {[
-                          strings.ServiceScreen.works[orderData.SERVICE],
-                          'в',
-                          listDealers[orderData.DEALER].name,
-                        ].join(' ')}
-                      </Text>
-                    </HStack>
-                    <HStack alignItems="center">
-                      <Icon
-                        name="car-outline"
-                        as={MaterialCommunityIcons}
-                        size={8}
-                        mr={2}
-                        color={styleConst.color.blue}
-                      />
-                      <Text>
-                        {orderData.CARBRAND} {orderData.CARMODEL}
-                        {orderData.CARNUMBER
-                          ? '\r\nгос. номер ' + orderData.CARNUMBER
-                          : null}
-                      </Text>
-                    </HStack>
-                    {get(orderData, 'SERVICESecondFull.total') ? (
-                      <Text fontWeight={600} fontSize={17}>
-                        ~ {orderData.SERVICESecondFull.total.summ.value}{' '}
-                        {orderData.SERVICESecondFull.total.summ.currency}
-                      </Text>
-                    ) : null}
-                  </VStack>
-                </View>
-              </View>
-            ),
-            props: {
-              unstyle: true,
-            },
-          },
-        ],
-      },
+      // {
+      //   name: strings.ServiceScreenStep1.total,
+      //   fields: [
+      //     {
+      //       name: 'Review',
+      //       type: 'component',
+      //       value: (
+      //       ),
+      //       props: {
+      //         unstyle: true,
+      //       },
+      //     },
+      //   ],
+      // },
       {
         name: strings.Form.group.contacts,
         fields: [
@@ -381,18 +319,216 @@ const ServiceNonAuthStep4 = props => {
   };
 
   return (
-    <Form
-      contentContainerStyle={{
-        paddingHorizontal: 14,
-        marginTop: 20,
-      }}
-      key="ServiceNonAuthForm"
-      fields={FormConfig}
-      barStyle={'light-content'}
-      defaultCountryCode={region}
-      onSubmit={_onPressOrder}
-      SubmitButton={{text: strings.Form.button.send}}
-    />
+    <ScrollView>
+      <View ml={4} my={1}>
+        {/* <Image
+                  source={{
+                    uri: get(listDealers[orderData.DEALER], 'img.0'),
+                  }}
+                  alt="dealer main image"
+                  resizeMode="cover"
+                  w={'100%'}
+                  h={250}
+                /> */}
+        {/* <View
+                  position={'absolute'}
+                  background={styleConst.color.white}
+                  w={'100%'}
+                  h={250}
+                  opacity={0.9}
+                /> */}
+        {/* <View position={'absolute'} h={200} w={'100%'} p={2}> */}
+        {/* <VStack mx={1} mb={3} space={4}> */}
+        {/* <ScrollView
+                    mx={1}
+                    pb={5}
+                    showsHorizontalScrollIndicator={false}
+                    bounces={false}
+                    horizontal={true}> */}
+        <HStack space={2}>
+          <MainScreenButton
+            key={['block', 'summary', 'dealer'].join('_')}
+            title={listDealers[orderData.DEALER].name}
+            background={{
+              uri: get(listDealers[orderData.DEALER], 'img.0'),
+            }}
+            size={'2/3'}
+            type={'bottom'}
+          />
+          <MainScreenButton
+            key={['block', 'summary', 'date'].join('_')}
+            title={
+              get(orderData, 'DATETIME.time')
+                ? humanDate(
+                    getDateFromTimestamp(get(orderData, 'DATETIME.time')),
+                  )
+                : dayMonthYear(get(orderData, 'DATETIME.date'))
+            }
+            background={
+              <Icon
+                name="calendar-check-outline"
+                as={MaterialCommunityIcons}
+                size={12}
+                color={styleConst.color.blue}
+                style={{
+                  opacity: 0.8,
+                  alignSelf: 'center',
+                }}
+              />
+            }
+            size={'small'}
+            type={'bottom'}
+          />
+        </HStack>
+        <HStack space={2} mt={4} mb={2}>
+          <MainScreenButton
+            key={['block', 'summary', 'car'].join('_')}
+            title={[
+              orderData.CARBRAND,
+              orderData.CARMODEL,
+              orderData.CARNUMBER
+                ? '\r\nгос. номер ' + orderData.CARNUMBER
+                : null,
+            ].join(' ')}
+            background={
+              <Icon
+                name="car-outline"
+                as={MaterialCommunityIcons}
+                size={12}
+                color={styleConst.color.blue}
+                style={{
+                  opacity: 0.8,
+                  alignSelf: 'center',
+                }}
+              />
+            }
+            size={'small'}
+            type={'bottom'}
+          />
+          <MainScreenButton
+            key={['block', 'summary', 'works'].join('_')}
+            title={[
+              strings.ServiceScreen.works[orderData.SERVICE],
+              // strings.ServiceScreen.worksService[orderData.SERVICE],
+            ].join('\r\n')}
+            titleStyle={{
+              lineHeight: 16.5,
+            }}
+            background={getServiceImage(get(orderData, 'SERVICE'))}
+            // <CarIcon
+            //   type={get(orderData, 'SERVICE')}
+            //   size={12}
+            //   color={styleConst.color.blue}
+            //   style={{
+            //     opacity: 0.8,
+            //     alignSelf: 'center',
+            //   }}
+            // />
+            size={'small'}
+            type={'bottom'}
+          />
+          {get(orderData, 'SERVICESecondFull.total') ? (
+            <MainScreenButton
+              key={['block', 'summary', 'price'].join('_')}
+              title={[
+                orderData.SERVICESecondFull.total.summ.value,
+                orderData.SERVICESecondFull.total.summ.currency,
+              ].join(' ')}
+              titleStyle={{
+                lineHeight: 20,
+                fontSize: 18,
+                paddingTop: 8,
+              }}
+              background={
+                <Text
+                  adjustsFontSizeToFit={true}
+                  fontWeight={600}
+                  fontSize={18}
+                  style={{
+                    marginTop: 20,
+                    alignContent: 'center',
+                    alignSelf: 'center',
+                  }}>
+                  {getHumanTime(get(orderData, 'SERVICESecondFull.total.time'))}
+                </Text>
+              }
+              size={'small'}
+              type={'bottom'}
+            />
+          ) : null}
+        </HStack>
+        {get(orderData, 'DATETIME.time') && false ? (
+          <HStack alignItems="center">
+            <Icon
+              name="calendar-check-outline"
+              as={MaterialCommunityIcons}
+              size={8}
+              mr={2}
+              color={styleConst.color.blue}
+            />
+            <Text fontSize={20} lineHeight={32} fontWeight={'600'}>
+              {humanDate(getDateFromTimestamp(get(orderData, 'DATETIME.time')))}
+            </Text>
+          </HStack>
+        ) : null}
+        {console.info('orderData', orderData)}
+        {false ? (
+          <>
+            <HStack alignItems="center">
+              <CarIcon
+                type={get(orderData, 'SERVICE')}
+                size={8}
+                mr={2}
+                color={styleConst.color.blue}
+              />
+              <Text>
+                {[
+                  strings.ServiceScreen.works[orderData.SERVICE],
+                  'в',
+                  listDealers[orderData.DEALER].name,
+                ].join(' ')}
+              </Text>
+            </HStack>
+            <HStack alignItems="center">
+              <Icon
+                name="car-outline"
+                as={MaterialCommunityIcons}
+                size={8}
+                mr={2}
+                color={styleConst.color.blue}
+              />
+              <Text>
+                {orderData.CARBRAND} {orderData.CARMODEL}
+                {orderData.CARNUMBER
+                  ? '\r\nгос. номер ' + orderData.CARNUMBER
+                  : null}
+              </Text>
+            </HStack>
+          </>
+        ) : null}
+        {get(orderData, 'SERVICESecondFull.total') && false ? (
+          <Text fontWeight={600} fontSize={17}>
+            ~ {orderData.SERVICESecondFull.total.summ.value}{' '}
+            {orderData.SERVICESecondFull.total.summ.currency}
+          </Text>
+        ) : null}
+        {/* </ScrollView> */}
+        {/* </VStack> */}
+        {/* </View> */}
+      </View>
+      <Form
+        contentContainerStyle={{
+          paddingHorizontal: 14,
+          marginTop: 20,
+        }}
+        key="ServiceNonAuthForm"
+        fields={FormConfig}
+        barStyle={'light-content'}
+        defaultCountryCode={region}
+        onSubmit={_onPressOrder}
+        SubmitButton={{text: strings.Form.button.send}}
+      />
+    </ScrollView>
   );
 };
 

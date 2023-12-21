@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect, useReducer} from 'react';
+import React, {useEffect, useReducer} from 'react';
 import {HStack, Text, View} from 'native-base';
 import {get} from 'lodash';
 
@@ -13,8 +13,8 @@ import {localDealerClear} from '../../../../dealer/actions';
 import {strings} from '../../../../core/lang/const';
 
 import API from '../../../../utils/api';
+import {getHumanTime} from '../../../../utils/date';
 import Analytics from '../../../../utils/amplitude-analytics';
-import LogoLoader from '../../../../core/components/LogoLoader';
 
 const mapStateToProps = ({dealer, service, nav}) => {
   let carLocalBrand = '';
@@ -49,18 +49,6 @@ const mapStateToProps = ({dealer, service, nav}) => {
 const mapDispatchToProps = {
   orderService,
   localDealerClear,
-};
-
-const getTime = seconds => {
-  const hrs = Math.ceil(seconds / 60 / 60);
-  const mns = Math.ceil(seconds % 60);
-  if (hrs && mns) {
-    return `${hrs} ч. ${mns} мин.`;
-  } else if (hrs) {
-    return `${hrs} ч.`;
-  } else if (mns) {
-    return `${mns} мин.`;
-  }
 };
 
 const reducerService = (state = {}, action) => {
@@ -247,7 +235,7 @@ const ServiceNonAuthStep2 = props => {
                       <HStack>
                         <Text>Нам потребуется примерно </Text>
                         <Text fontWeight={600}>
-                          {getTime(
+                          {getHumanTime(
                             get(serviceData, 'itemFullSelected.total.time'),
                           )}
                         </Text>
