@@ -132,7 +132,7 @@ const ServiceNonAuthStep4 = props => {
         model: get(orderData, 'CARMODEL', ''),
         plate: get(orderData, 'CARNUMBER', ''),
       },
-      text: dataFromForm.COMMENT || null,
+      text: get(dataFromForm, 'COMMENT', ''),
     };
 
     if (get(orderData, 'lead', true)) {

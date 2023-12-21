@@ -161,7 +161,7 @@ const ServiceNonAuthStep1 = props => {
         setServicesCategoryField({
           name: 'SERVICETYPE',
           type: 'select',
-          label: strings.Form.field.label.service,
+          label: strings.Form.field.label.serviceSecond,
           value: get(serviceData, 'typeSecond'),
           props: {
             items: strings.ServiceScreen.works2['tyreChange'],
@@ -394,6 +394,9 @@ const ServiceNonAuthStep1 = props => {
       SubmitButton={{
         text: strings.Form.button.next,
         noAgreement: true,
+        props: {
+          isLoadingText: null,
+        },
       }}
     />
   );

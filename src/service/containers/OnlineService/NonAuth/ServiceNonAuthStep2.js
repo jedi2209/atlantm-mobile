@@ -87,6 +87,7 @@ const ServiceNonAuthStep2 = props => {
   });
 
   console.info('serviceData', serviceData);
+  console.info('orderData', orderData);
 
   useEffect(() => {
     Analytics.logEvent('screen', 'service/step2');
@@ -100,12 +101,13 @@ const ServiceNonAuthStep2 = props => {
     ) {
       return;
     }
-    if (!get(serviceData, 'items.length')) {
+    if (!get(serviceData, 'items.length') || get(serviceData, 'needUpdate')) {
       setServiceData({
         loading: true,
         items: [],
         itemsFull: [],
         itemFullSelected: {},
+        needUpdate: false,
       });
       API.fetchServiceCalculation({
         dealerID: get(orderData, 'DEALER'),
@@ -124,7 +126,7 @@ const ServiceNonAuthStep2 = props => {
           servicesFull.push(el);
         });
         if (!get(servicesTmp, 'length')) {
-          setServiceData({lead: true, loading: false});
+          setServiceData({lead: true, loading: false, needUpdate: false});
           return navigation.navigate('ServiceNonAuthStep3', {
             ...orderData,
             ...serviceData,
@@ -135,26 +137,19 @@ const ServiceNonAuthStep2 = props => {
           lead: false,
           items: servicesTmp,
           itemsFull: servicesFull,
+          needUpdate: false,
         });
       });
-    } else {
-      // setServiceData({
-      //   loading: false,
-      //   lead: false,
-      //   items: get(serviceData, 'items'),
-      //   itemsFull: get(orderData, 'servicesFull'),
-      // });
+      // } else {
+      //   setServiceData({
+      //     loading: false,
+      //     lead: false,
+      //     items: get(serviceData, 'items'),
+      //     itemsFull: get(orderData, 'servicesFull'),
+      //   });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    orderData,
-    serviceData?.leaveTyresInStorage,
-    serviceData?.additionalField,
-  ]);
-
-  if (serviceData.loading) {
-    return <LogoLoader />;
-  }
+  }, [orderData, serviceData?.additionalField]);
 
   const FormConfig = {
     groups: [
@@ -217,7 +212,12 @@ const ServiceNonAuthStep2 = props => {
                 .myTyresInStorage,
             value: get(serviceData, 'additionalField', false),
             props: {
-              onSelect: val => setServiceData({additionalField: val}),
+              onSelect: val =>
+                setTimeout(
+                  () =>
+                    setServiceData({additionalField: val, needUpdate: true}),
+                  300,
+                ),
             },
           },
           {
@@ -304,6 +304,8 @@ const ServiceNonAuthStep2 = props => {
         noAgreement: true,
         props: {
           isDisabled: serviceData.loading,
+          isLoading: serviceData.loading,
+          isLoadingText: null,
         },
       }}
     />
