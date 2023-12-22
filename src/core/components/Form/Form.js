@@ -257,6 +257,27 @@ const MaskedPhone = {
   ua: '+380 ([00]) [000]-[00]-[00]',
 };
 
+const _Wrapper = props => {
+  if (props.scrollViewWrapperAvailable) {
+    return (
+      <ScrollView
+        style={props.formScrollViewStyle}
+        testID={props.testID}
+        key={props.key ? props.key : 'Form' + Math.round(new Date().getDate())}>
+        {props.children}
+      </ScrollView>
+    );
+  }
+  return (
+    <View
+      style={props.formScrollViewStyle}
+      testID={props.testID}
+      key={props.key ? props.key : 'Form' + Math.round(new Date().getDate())}>
+      {props.children}
+    </View>
+  );
+};
+
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -1431,14 +1452,7 @@ class Form extends Component {
 
   render() {
     const res = (
-      <ScrollView
-        style={this.props.formScrollViewStyle}
-        testID={this.props.testID}
-        key={
-          this.props.key
-            ? this.props.key
-            : 'Form' + Math.round(new Date().getDate())
-        }>
+      <_Wrapper {...this.props}>
         <KeyboardAvoidingView {...this.props.keyboardAvoidingViewProps}>
           <StatusBar
             barStyle={this.props.barStyle ? this.props.barStyle : 'default'}
@@ -1588,7 +1602,7 @@ class Form extends Component {
           </View>
         </KeyboardAvoidingView>
         {this.props.children}
-      </ScrollView>
+      </_Wrapper>
     );
     return res;
   }
@@ -1601,6 +1615,7 @@ Form.defaultProps = {
     region: APP_REGION,
     noAgreement: false,
   },
+  scrollViewWrapperAvailable: true,
   region: APP_REGION,
   testID: 'Form',
   barStyle: 'light-content',
