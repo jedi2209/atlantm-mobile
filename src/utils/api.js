@@ -1044,12 +1044,12 @@ export default {
     }
   },
 
-  async fetchServiceCalculation({dealerID, workType, additional}) {
+  async fetchServiceCalculation({dealerID, workType, leaveTyresInStorage}) {
     if (!workType || !dealerID) {
       return false;
     }
     return await this.request(
-      `/service/online/${dealerID}/calculator/?type=${workType}&additional=${additional}`,
+      `/service/online/${dealerID}/calculator/?type=${workType}&additional=${leaveTyresInStorage}`,
       baseRequestParams,
     );
   },

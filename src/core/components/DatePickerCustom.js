@@ -44,7 +44,8 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
   const dateHuman = props.value ? format(props.value, 'DD MMMM YYYY') : null;
 
   return (
-    <View
+    <Pressable
+      onPress={props.onPressButton}
       style={[
         styles.container,
         props.styleContainer ? props.styleContainer : {},
@@ -78,7 +79,7 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
           : strings.DatePickerCustom.chooseDate}
       </Button>
       {DatePickerWrapper(props)}
-    </View>
+    </Pressable>
   );
 });
 

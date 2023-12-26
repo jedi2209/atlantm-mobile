@@ -87,6 +87,11 @@ const ServiceNonAuthStep1 = props => {
     defaultFieldsSdata,
   );
 
+  const [seed, setSeed] = useState(1);
+  const resetForm = () => {
+    setSeed(Math.random());
+  };
+
   const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
   const [servicesCategoryField, setServicesCategoryField] = useState({});
   const [car, setCar] = useState({
@@ -137,8 +142,7 @@ const ServiceNonAuthStep1 = props => {
         ].join(' '),
       });
     }
-
-    setDealerSelectedLocal(dealerSelectedLocal);
+    // setDealerSelectedLocal(dealerSelectedLocal);
 
     return () => {
       localDealerClear();
@@ -146,6 +150,8 @@ const ServiceNonAuthStep1 = props => {
   }, []);
 
   useEffect(() => {
+    resetForm();
+    setServicesCategoryField({});
     setDealerSelectedLocal(dealerSelectedLocal);
     setServiceData({type: 'clear'});
   }, [dealerSelectedLocal]);
@@ -375,8 +381,12 @@ const ServiceNonAuthStep1 = props => {
         }
       }
     }
+    // pushProps.SERVICE = get(
+    //   pushProps,
+    //   'SERVICE' + get(dealerSelectedLocalState, 'id'),
+    // );
     const dataForNextScreen = {...serviceData, ...pushProps, ...extData};
-    console.info('dataForNextScreen', dataForNextScreen);
+    // console.info('dataForNextScreen', dataForNextScreen);
     navigation.navigate(nextScreen, dataForNextScreen);
   };
 
@@ -386,7 +396,7 @@ const ServiceNonAuthStep1 = props => {
         paddingHorizontal: 14,
         marginTop: 20,
       }}
-      key="ServiceNonAuthForm"
+      key={'ServiceNonAuthForm' + seed}
       fields={FormConfig}
       barStyle={'light-content'}
       defaultCountryCode={region}
