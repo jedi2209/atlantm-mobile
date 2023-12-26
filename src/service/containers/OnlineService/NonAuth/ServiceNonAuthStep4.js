@@ -1,7 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect} from 'react';
 import {Alert} from 'react-native';
-import {ScrollView, View, Text, useToast, Icon, HStack} from 'native-base';
+import {
+  ScrollView,
+  View,
+  Text,
+  Icon,
+  VStack,
+  HStack,
+  Image,
+  useToast,
+} from 'native-base';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -11,6 +20,7 @@ import Form from '../../../../core/components/Form/Form';
 import {
   dayMonthYear,
   humanDate,
+  format,
   getHumanTime,
   getDateFromTimestamp,
 } from '../../../../utils/date';
@@ -106,6 +116,8 @@ const ServiceNonAuthStep4 = props => {
   useEffect(() => {
     Analytics.logEvent('screen', 'service/step4');
   }, []);
+
+  // console.info('orderData', orderData);
 
   const toast = useToast();
 
@@ -236,20 +248,111 @@ const ServiceNonAuthStep4 = props => {
 
   const FormConfig = {
     groups: [
-      // {
-      //   name: strings.ServiceScreenStep1.total,
-      //   fields: [
-      //     {
-      //       name: 'Review',
-      //       type: 'component',
-      //       value: (
-      //       ),
-      //       props: {
-      //         unstyle: true,
-      //       },
-      //     },
-      //   ],
-      // },
+      {
+        name: strings.ServiceScreenStep1.total,
+        fields: [
+          {
+            name: 'Review',
+            type: 'component',
+            value: (
+              <>
+                <Image
+                  source={{
+                    uri: get(listDealers[orderData.DEALER], 'img.0'),
+                  }}
+                  alt="dealer main image"
+                  resizeMode="cover"
+                  w={'100%'}
+                  h={250}
+                />
+                <View
+                  position={'absolute'}
+                  background={styleConst.color.white}
+                  w={'100%'}
+                  h={250}
+                  opacity={0.9}
+                />
+                <View position={'absolute'} h={200} w={'100%'} p={2}>
+                  <VStack mx={1} mb={3} space={4}>
+                    {get(orderData, 'DATETIME.time') ? (
+                      <HStack alignItems="center">
+                        <Icon
+                          name="calendar-check-outline"
+                          as={MaterialCommunityIcons}
+                          size={8}
+                          mr={2}
+                          color={styleConst.color.blue}
+                        />
+                        <Text fontSize={20} lineHeight={32} fontWeight={'600'}>
+                          {humanDate(
+                            getDateFromTimestamp(
+                              get(orderData, 'DATETIME.time'),
+                            ),
+                          )}
+                        </Text>
+                      </HStack>
+                    ) : null}
+                    <HStack alignItems="center">
+                      <CarIcon
+                        type={get(orderData, 'SERVICE')}
+                        size={8}
+                        mr={2}
+                        color={styleConst.color.blue}
+                      />
+                      <VStack>
+                        <Text>
+                          {[
+                            strings.ServiceScreen.works[orderData.SERVICE],
+                            '(' +
+                              strings.ServiceScreen.worksService[
+                                orderData.SERVICETYPE
+                              ].toLowerCase() +
+                              ')',
+                            'в',
+                            listDealers[orderData.DEALER].name,
+                          ].join(' ')}
+                        </Text>
+                        {get(orderData, 'leaveTyresInStorage', false) ? (
+                          <Text>
+                            {'+ '}
+                            {strings.Form.field.label.serviceTypes[
+                              get(orderData, 'SERVICE')
+                            ].leaveTyresInStorage.toLowerCase()}
+                          </Text>
+                        ) : null}
+                      </VStack>
+                    </HStack>
+                    <HStack alignItems="center">
+                      <Icon
+                        name="car-outline"
+                        as={MaterialCommunityIcons}
+                        size={8}
+                        mr={2}
+                        color={styleConst.color.blue}
+                      />
+                      <Text>
+                        {orderData.CARBRAND} {orderData.CARMODEL}
+                        {orderData.CARNUMBER
+                          ? '\r\nгос. номер ' + orderData.CARNUMBER
+                          : null}
+                      </Text>
+                    </HStack>
+                    {get(orderData, 'SERVICESecondFull.total') ? (
+                      <Text fontWeight={600} fontSize={17}>
+                        ~ {orderData.SERVICESecondFull.total.summ.value}{' '}
+                        {orderData.SERVICESecondFull.total.summ.currency}
+                      </Text>
+                    ) : null}
+                  </VStack>
+                </View>
+              </>
+            ),
+            props: {
+              unstyle: true,
+            },
+          },
+        ],
+      },
       {
         name: strings.Form.group.contacts,
         fields: [
@@ -320,30 +423,12 @@ const ServiceNonAuthStep4 = props => {
 
   return (
     <ScrollView>
-      {/* <Image
-                  source={{
-                    uri: get(listDealers[orderData.DEALER], 'img.0'),
-                  }}
-                  alt="dealer main image"
-                  resizeMode="cover"
-                  w={'100%'}
-                  h={250}
-                /> */}
-      {/* <View
-                  position={'absolute'}
-                  background={styleConst.color.white}
-                  w={'100%'}
-                  h={250}
-                  opacity={0.9}
-                /> */}
-      {/* <View position={'absolute'} h={200} w={'100%'} p={2}> */}
-      {/* <VStack mx={1} mb={3} space={4}> */}
       {/* <ScrollView
-                    mx={1}
-                    pb={5}
-                    showsHorizontalScrollIndicator={false}
-                    bounces={false}
-                    horizontal={true}> */}
+        mx={1}
+        pb={5}
+        showsHorizontalScrollIndicator={false}
+        bounces={false}
+        horizontal={true}>
       <HStack space={2} ml={4} my={1}>
         <MainScreenButton
           key={['block', 'summary', 'dealer'].join('_')}
@@ -458,63 +543,7 @@ const ServiceNonAuthStep4 = props => {
           />
         ) : null}
       </HStack>
-      {false && get(orderData, 'DATETIME.time') ? (
-        <HStack alignItems="center">
-          <Icon
-            name="calendar-check-outline"
-            as={MaterialCommunityIcons}
-            size={8}
-            mr={2}
-            color={styleConst.color.blue}
-          />
-          <Text fontSize={20} lineHeight={32} fontWeight={'600'}>
-            {humanDate(getDateFromTimestamp(get(orderData, 'DATETIME.time')))}
-          </Text>
-        </HStack>
-      ) : null}
-      {false ? (
-        <>
-          <HStack alignItems="center">
-            <CarIcon
-              type={get(orderData, 'SERVICE')}
-              size={8}
-              mr={2}
-              color={styleConst.color.blue}
-            />
-            <Text>
-              {[
-                strings.ServiceScreen.works[orderData.SERVICE],
-                'в',
-                listDealers[orderData.DEALER].name,
-              ].join(' ')}
-            </Text>
-          </HStack>
-          <HStack alignItems="center">
-            <Icon
-              name="car-outline"
-              as={MaterialCommunityIcons}
-              size={8}
-              mr={2}
-              color={styleConst.color.blue}
-            />
-            <Text>
-              {orderData.CARBRAND} {orderData.CARMODEL}
-              {orderData.CARNUMBER
-                ? '\r\nгос. номер ' + orderData.CARNUMBER
-                : null}
-            </Text>
-          </HStack>
-        </>
-      ) : null}
-      {false && get(orderData, 'SERVICESecondFull.total') ? (
-        <Text fontWeight={600} fontSize={17}>
-          ~ {orderData.SERVICESecondFull.total.summ.value}{' '}
-          {orderData.SERVICESecondFull.total.summ.currency}
-        </Text>
-      ) : null}
-      {/* </ScrollView> */}
-      {/* </VStack> */}
-      {/* </View> */}
+      </ScrollView> */}
       <Form
         contentContainerStyle={{
           paddingHorizontal: 14,

@@ -67,6 +67,7 @@ const ServiceNonAuthStep2 = props => {
     typeFirst: get(orderData, 'SERVICE'),
     typeSecond: get(orderData, 'SERVICETYPE'),
     additionalField: false,
+    leaveTyresInStorage: false,
     loading: false,
     lead: get(orderData, 'lead'),
     items: get(orderData, 'items'),
@@ -74,8 +75,8 @@ const ServiceNonAuthStep2 = props => {
     itemFullSelected: {},
   });
 
-  console.info('serviceData', serviceData);
-  console.info('orderData', orderData);
+  // console.info('serviceData', serviceData);
+  // console.info('orderData', orderData);
 
   useEffect(() => {
     Analytics.logEvent('screen', 'service/step2');
@@ -100,7 +101,7 @@ const ServiceNonAuthStep2 = props => {
       API.fetchServiceCalculation({
         dealerID: get(orderData, 'DEALER'),
         workType: get(orderData, 'SERVICETYPE'),
-        additional: get(serviceData, 'additionalField', false),
+        leaveTyresInStorage: get(serviceData, 'leaveTyresInStorage', false),
       }).then(servicesCalculation => {
         let servicesTmp = [];
         let servicesFull = [];
@@ -128,16 +129,9 @@ const ServiceNonAuthStep2 = props => {
           needUpdate: false,
         });
       });
-      // } else {
-      //   setServiceData({
-      //     loading: false,
-      //     lead: false,
-      //     items: get(serviceData, 'items'),
-      //     itemsFull: get(orderData, 'servicesFull'),
-      //   });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [orderData, serviceData?.additionalField]);
+  }, [orderData, serviceData?.leaveTyresInStorage]);
 
   const FormConfig = {
     groups: [
@@ -152,14 +146,6 @@ const ServiceNonAuthStep2 = props => {
               strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')]
                 .myTyresInStorage,
             value: get(serviceData, 'additionalField', false),
-            props: {
-              onSelect: val =>
-                setTimeout(
-                  () =>
-                    setServiceData({additionalField: val, needUpdate: true}),
-                  300,
-                ),
-            },
           },
           {
             name: 'leaveTyresInStorage',
@@ -168,9 +154,17 @@ const ServiceNonAuthStep2 = props => {
               strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')]
                 .leaveTyresInStorage,
             value: false,
-            // props: {
-            //   onSelect: val => setServiceData({leaveTyresInStorage: val}),
-            // },
+            props: {
+              onSelect: val =>
+                setTimeout(
+                  () =>
+                    setServiceData({
+                      leaveTyresInStorage: val,
+                      needUpdate: true,
+                    }),
+                  300,
+                ),
+            },
           },
         ],
       },
