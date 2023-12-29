@@ -178,7 +178,7 @@ const ServiceNonAuthStep2 = props => {
                 value: null,
                 props: {},
               }
-            : get(serviceData, 'items.length')
+            : get(serviceData, 'items.length') && !get(serviceData, 'lead')
             ? {
                 name: 'SERVICESecond',
                 type: 'select',

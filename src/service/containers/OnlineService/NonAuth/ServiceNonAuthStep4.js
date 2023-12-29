@@ -13,6 +13,7 @@ import {
 } from 'native-base';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
 import {MainScreenButton} from '../../../../core/components/MainScreenButtons';
 
@@ -22,6 +23,7 @@ import {
   humanDate,
   format,
   getHumanTime,
+  humanDateTime,
   getDateFromTimestamp,
 } from '../../../../utils/date';
 import UserData from '../../../../utils/user';
@@ -135,6 +137,14 @@ const ServiceNonAuthStep4 = props => {
     }
 
     let dateFromForm = get(orderData, 'DATETIME', null);
+    let servicePrice = null;
+
+    if (get(orderData, 'SERVICESecondFull.total')) {
+      servicePrice = [
+        orderData.SERVICESecondFull.total.summ.value,
+        orderData.SERVICESecondFull.total.summ.currency,
+      ].join(' ');
+    }
 
     let data = {
       dealer: orderData.DEALER,
@@ -152,6 +162,7 @@ const ServiceNonAuthStep4 = props => {
       tech_place: get(dateFromForm, 'tech_place', ''),
       service: get(orderData, 'SERVICE', ''),
       serviceName: strings.ServiceScreen.works[get(orderData, 'SERVICE', '')],
+      servicePrice,
       vin: get(orderData, 'CARVIN', ''),
       car: {
         brand: get(orderData, 'CARBRAND', ''),
@@ -172,6 +183,7 @@ const ServiceNonAuthStep4 = props => {
         service: get(data, 'serviceName', ''),
         firstName: get(data, 'f_FirstName', ''),
         secondName: get(data, 'f_SecondName', ''),
+        servicePrice,
         lastName: get(data, 'f_LastName', ''),
         email: get(data, 'email', ''),
         phone: get(data, 'phone', ''),
@@ -263,35 +275,47 @@ const ServiceNonAuthStep4 = props => {
                   alt="dealer main image"
                   resizeMode="cover"
                   w={'100%'}
-                  h={250}
+                  h={get(orderData, 'SERVICESecondFull.total') ? 290 : 250}
                 />
                 <View
                   position={'absolute'}
                   background={styleConst.color.white}
                   w={'100%'}
-                  h={250}
+                  h={get(orderData, 'SERVICESecondFull.total') ? 290 : 250}
                   opacity={0.9}
                 />
-                <View position={'absolute'} h={200} w={'100%'} p={2}>
+                <View position={'absolute'} h={200} w={'90%'} p={2}>
                   <VStack mx={1} mb={3} space={4}>
-                    {get(orderData, 'DATETIME.time') ? (
-                      <HStack alignItems="center">
-                        <Icon
-                          name="calendar-check-outline"
-                          as={MaterialCommunityIcons}
-                          size={8}
-                          mr={2}
-                          color={styleConst.color.blue}
-                        />
-                        <Text fontSize={20} lineHeight={32} fontWeight={'600'}>
-                          {humanDate(
-                            getDateFromTimestamp(
-                              get(orderData, 'DATETIME.time'),
-                            ),
-                          )}
-                        </Text>
-                      </HStack>
-                    ) : null}
+                    <HStack alignItems="center">
+                      <Icon
+                        name="map-marker-outline"
+                        as={MaterialCommunityIcons}
+                        size={8}
+                        mr={2}
+                        color={styleConst.color.blue}
+                      />
+                      <VStack>
+                        <Text>{listDealers[orderData.DEALER].name}</Text>
+                      </VStack>
+                    </HStack>
+                    <HStack alignItems="center">
+                      <Icon
+                        name="calendar-check-outline"
+                        as={MaterialCommunityIcons}
+                        size={8}
+                        mr={2}
+                        color={styleConst.color.blue}
+                      />
+                      <Text>
+                        {get(orderData, 'DATETIME.time')
+                          ? humanDateTime(
+                              getDateFromTimestamp(
+                                get(orderData, 'DATETIME.time'),
+                              ),
+                            )
+                          : dayMonthYear(get(orderData, 'DATETIME'))}
+                      </Text>
+                    </HStack>
                     <HStack alignItems="center">
                       <CarIcon
                         type={get(orderData, 'SERVICE')}
@@ -301,16 +325,7 @@ const ServiceNonAuthStep4 = props => {
                       />
                       <VStack>
                         <Text>
-                          {[
-                            strings.ServiceScreen.works[orderData.SERVICE],
-                            '(' +
-                              strings.ServiceScreen.worksService[
-                                orderData.SERVICETYPE
-                              ].toLowerCase() +
-                              ')',
-                            'в',
-                            listDealers[orderData.DEALER].name,
-                          ].join(' ')}
+                          {strings.ServiceScreen.works[orderData.SERVICE]}
                         </Text>
                         {get(orderData, 'leaveTyresInStorage', false) ? (
                           <Text>
@@ -320,6 +335,24 @@ const ServiceNonAuthStep4 = props => {
                             ].leaveTyresInStorage.toLowerCase()}
                           </Text>
                         ) : null}
+                      </VStack>
+                    </HStack>
+                    <HStack alignItems="center">
+                      <Icon
+                        name="gear"
+                        as={EvilIcons}
+                        size={8}
+                        mr={2}
+                        color={styleConst.color.blue}
+                      />
+                      <VStack>
+                        <Text>
+                          {
+                            strings.ServiceScreen.worksService[
+                              orderData.SERVICETYPE
+                            ]
+                          }
+                        </Text>
                       </VStack>
                     </HStack>
                     <HStack alignItems="center">
@@ -338,10 +371,19 @@ const ServiceNonAuthStep4 = props => {
                       </Text>
                     </HStack>
                     {get(orderData, 'SERVICESecondFull.total') ? (
-                      <Text fontWeight={600} fontSize={17}>
-                        ~ {orderData.SERVICESecondFull.total.summ.value}{' '}
-                        {orderData.SERVICESecondFull.total.summ.currency}
-                      </Text>
+                      <HStack alignItems="center">
+                        <Icon
+                          name="wallet-outline"
+                          as={MaterialCommunityIcons}
+                          size={8}
+                          mr={2}
+                          color={styleConst.color.blue}
+                        />
+                        <Text fontWeight={600} fontSize={17}>
+                          ~ {orderData.SERVICESecondFull.total.summ.value}{' '}
+                          {orderData.SERVICESecondFull.total.summ.currency}
+                        </Text>
+                      </HStack>
                     ) : null}
                   </VStack>
                 </View>
