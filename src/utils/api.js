@@ -454,8 +454,6 @@ export default {
       textModified.push('Комментарий клиента: ' + text);
     }
 
-    textModified.join('\r\n');
-
     const body = {
       f_Dealer: dealerID,
       f_Action: actionID,
@@ -468,7 +466,7 @@ export default {
       f_Phone: phone,
       f_Email: email,
       f_Date: date,
-      f_Text: textModified,
+      f_Text: textModified.join('\r\n'),
       f_Source: SourceID,
     };
     const requestParams = _.merge({}, baseRequestParams, {
@@ -1048,10 +1046,19 @@ export default {
     if (!workType || !dealerID) {
       return false;
     }
-    return await this.request(
-      `/service/online/${dealerID}/calculator/?type=${workType}&additional=${leaveTyresInStorage}`,
-      baseRequestParams,
-    );
+    const url =
+      `/service/online/${dealerID}/calculator/?` +
+      new URLSearchParams(
+        _.omitBy(
+          {
+            type: workType,
+            additional: leaveTyresInStorage,
+          },
+          _.isNil,
+        ),
+      );
+
+    return await this.request(url, baseRequestParams);
   },
 
   getServiceAvailable({dealer, vin}) {

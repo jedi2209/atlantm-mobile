@@ -119,8 +119,6 @@ const ServiceNonAuthStep4 = props => {
     Analytics.logEvent('screen', 'service/step4');
   }, []);
 
-  // console.info('orderData', orderData);
-
   const toast = useToast();
 
   const _onPressOrder = async dataFromForm => {
@@ -453,7 +451,6 @@ const ServiceNonAuthStep4 = props => {
             name: 'COMMENT',
             type: 'textarea',
             label: strings.Form.field.label.comment,
-            value: props.Text,
             props: {
               placeholder: strings.Form.field.placeholder.comment,
             },

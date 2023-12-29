@@ -63,6 +63,8 @@ const ServiceNonAuthStep2 = props => {
 
   const orderData = get(route, 'params', {});
 
+  const isAdditionalAvailable = get(orderData, 'typeSecond') !== 'tyreRepair';
+
   const [serviceData, setServiceData] = useReducer(reducerService, {
     typeFirst: get(orderData, 'SERVICE'),
     typeSecond: get(orderData, 'SERVICETYPE'),
@@ -75,18 +77,16 @@ const ServiceNonAuthStep2 = props => {
     itemFullSelected: {},
   });
 
-  // console.info('serviceData', serviceData);
-  // console.info('orderData', orderData);
-
   useEffect(() => {
     Analytics.logEvent('screen', 'service/step2');
   }, []);
 
   useEffect(() => {
     if (
-      !get(orderData, 'DEALER') ||
-      !get(orderData, 'SERVICE') ||
-      !get(orderData, 'SERVICETYPE')
+      !isAdditionalAvailable &&
+      (!get(orderData, 'DEALER') ||
+        !get(orderData, 'SERVICE') ||
+        !get(orderData, 'SERVICETYPE'))
     ) {
       return;
     }
@@ -135,39 +135,44 @@ const ServiceNonAuthStep2 = props => {
 
   const FormConfig = {
     groups: [
-      {
-        name: strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')]
-          .additional,
-        fields: [
-          {
-            name: 'additionalField',
-            type: 'checkbox',
-            label:
-              strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')]
-                .myTyresInStorage,
-            value: get(serviceData, 'additionalField', false),
-          },
-          {
-            name: 'leaveTyresInStorage',
-            type: 'checkbox',
-            label:
-              strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')]
-                .leaveTyresInStorage,
-            value: false,
-            props: {
-              onSelect: val =>
-                setTimeout(
-                  () =>
-                    setServiceData({
-                      leaveTyresInStorage: val,
-                      needUpdate: true,
-                    }),
-                  300,
-                ),
-            },
-          },
-        ],
-      },
+      isAdditionalAvailable
+        ? {
+            name: strings.Form.field.label.serviceTypes[
+              get(orderData, 'SERVICE')
+            ].additional,
+            fields: [
+              {
+                name: 'additionalField',
+                type: 'checkbox',
+                label:
+                  strings.Form.field.label.serviceTypes[
+                    get(orderData, 'SERVICE')
+                  ].myTyresInStorage,
+                value: get(serviceData, 'additionalField', false),
+              },
+              {
+                name: 'leaveTyresInStorage',
+                type: 'checkbox',
+                label:
+                  strings.Form.field.label.serviceTypes[
+                    get(orderData, 'SERVICE')
+                  ].leaveTyresInStorage,
+                value: false,
+                props: {
+                  onSelect: val =>
+                    setTimeout(
+                      () =>
+                        setServiceData({
+                          leaveTyresInStorage: val,
+                          needUpdate: true,
+                        }),
+                      300,
+                    ),
+                },
+              },
+            ],
+          }
+        : null,
       {
         name: strings.Form.group.services,
         fields: [
