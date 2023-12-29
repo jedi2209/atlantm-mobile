@@ -25,12 +25,15 @@ const colorScheme = Appearance.getColorScheme();
 
 let sentryParams = {
   dsn: SENTRY_DSN,
-  tracesSampleRate: 0.2,
+  tracesSampleRate: 1.0,
   integrations: [
     new Sentry.ReactNativeTracing({
       tracingOrigins: ['localhost', 'api.atlantm.com', 'cdn.atlantm.com'],
     }),
   ],
+  _experiments: {
+    profilesSampleRate: 1.0,
+  },
 };
 
 let appsFlyerSettings = Object.assign(APPSFLYER_SETTINGS, {isDebug: false});
@@ -50,6 +53,9 @@ if (__DEV__) {
         tracingOrigins: ['localhost', 'api.atlantm.com', 'cdn.atlantm.com'],
       }),
     ],
+    _experiments: {
+      profilesSampleRate: 1.0,
+    },
   };
   appsFlyerSettings.isDebug = true;
 }

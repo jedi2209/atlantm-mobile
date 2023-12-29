@@ -314,7 +314,7 @@ class Form extends Component {
     };
     if (props.fields.groups) {
       props.fields.groups.map(group => {
-        if (group.fields) {
+        if (group && group?.fields) {
           group.fields = group.fields.filter(field => {
             return (
               typeof field === 'object' &&
@@ -667,6 +667,9 @@ class Form extends Component {
   };
 
   _groupRender = (group, num) => {
+    if (!group) {
+      return;
+    }
     if (
       (group.fields && typeof group.fields === 'undefined') ||
       typeof group.fields !== 'object'
@@ -1317,9 +1320,12 @@ class Form extends Component {
       );
     },
     select: (data, num, totalFields, groupNum) => {
-      const {name, label, id} = data;
+      const {name, label, id, value} = data;
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
+      if (typeof value !== 'undefined' && value !== null) {
+        data.props.value = value;
+      }
       return (
         <View
           style={[
@@ -1351,14 +1357,17 @@ class Form extends Component {
             }}
             doneText={strings.Base.choose}
             onDonePress={() => {
+              console.info('onDonePress');
+              if (data.props.onChange && Platform.OS === 'ios') {
+                console.info('onDonePress iOS', this.state[name]);
+                data.props.onChange(this.state[name]);
+              }
               if (data.props.focusNextInput) {
                 this._nextInput(groupNum, num);
               }
-              if (data.props.onChange && Platform.OS === 'ios') {
-                data.props.onChange(this.state[name]);
-              }
             }}
             onValueChange={value => {
+              console.info('onValueChange', value);
               this.onChangeField(data)(value);
               if (data.props.onChange && Platform.OS !== 'ios') {
                 data.props.onChange(value);
@@ -1366,6 +1375,7 @@ class Form extends Component {
             }}
             onClose={() => {
               if (data.props.onChange && Platform.OS === 'ios') {
+                console.info('onClose iOS', this.state[name]);
                 data.props.onChange(this.state[name]);
               }
             }}

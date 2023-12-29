@@ -166,7 +166,7 @@ const _renderOptionPlates = params => {
               ? get(carDetails, 'gearbox.count') + '-ст.'
               : ''
           } ${
-            get(carDetails, 'gearbox.name')
+            get(carDetails, 'gearbox.name', '')
               .replace(/^(Механическая)/i, 'МКПП')
               .replace(/^(Автоматическая)/i, 'АКПП')
               .split('/')[0]

@@ -374,6 +374,7 @@ const UsedCarItemScreen = props => {
       carDetails,
       'location.phoneMobile[0]',
       get(carDetails, 'location.phone[0]'),
+      '',
     ),
   ).replace(/[^+\d]+/g, '');
 
@@ -540,7 +541,7 @@ const UsedCarItemScreen = props => {
                             '-ст.'
                           : ''
                       } ${
-                        get(carDetails, 'gearbox.name')
+                        get(carDetails, 'gearbox.name', '')
                           .replace(/^(Механическая)/i, 'МКПП')
                           .replace(/^(Автоматическая)/i, 'АКПП')
                           .split('/')[0]

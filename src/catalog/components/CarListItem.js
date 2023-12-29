@@ -67,13 +67,13 @@ const CarListItem = ({
   const gearboxId = get(car, 'gearbox.id');
   let gearboxName = get(car, 'gearbox.name');
   if (gearboxId) {
-    gearboxName = strings.CarParams.gearbox[gearboxId];
+    gearboxName = get(strings.CarParams.gearbox, gearboxId, '');
   }
 
   const engineId = get(car, 'engine.id');
   let engineName = get(car, 'engine.type');
   if (engineId) {
-    engineName = strings.CarParams.engine[engineId];
+    engineName = get(strings.CarParams.engine, engineId, '');
   }
 
   const year = get(car, 'year');
@@ -290,7 +290,7 @@ const CarListItem = ({
                   },
                 },
                 {
-                  text: strings.Base.cancel.toLowerCase(),
+                  text: get(strings, 'Base.cancel', '').toLowerCase(),
                   style: 'destructive',
                 },
               ],
