@@ -225,25 +225,24 @@ const App = props => {
 
     if (Platform.OS === 'ios') {
       //Prompt for push on iOS
-      OneSignal.Notifications.requestPermission();
-      if (OneSignal.Notifications.hasPermission()) {
-        actionSetPushGranted(true);
-
-        if (
-          Number(menuOpenedCount) <= 1 ||
-          menuOpenedCount === 0 ||
-          isStoreUpdated === false
-        ) {
-          actionSetPushActionSubscribe(true);
+      OneSignal.Notifications.requestPermission().then(res => {
+        if (OneSignal.Notifications.hasPermission()) {
+          actionSetPushGranted(true);
+          if (
+            Number(menuOpenedCount) <= 1 ||
+            menuOpenedCount === 0 ||
+            isStoreUpdated === false
+          ) {
+            actionSetPushActionSubscribe(true);
+          }
+          OneSignal.User.pushSubscription.optIn();
+        } else {
+          actionSetPushGranted(false);
+          actionSetPushActionSubscribe(false);
+          PushNotifications.unsubscribeFromTopic(['actionsRegion', 'actions']);
+          OneSignal.User.pushSubscription.optOut();
         }
-
-        OneSignal.User.pushSubscription.optIn();
-      } else {
-        actionSetPushGranted(false);
-        actionSetPushActionSubscribe(false);
-        PushNotifications.unsubscribeFromTopic(['actionsRegion', 'actions']);
-        OneSignal.User.pushSubscription.optOut();
-      }
+      });
     }
 
     strings.setLanguage(APP_LANG);
