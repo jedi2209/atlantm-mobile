@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect, useReducer} from 'react';
+import React, {useState, useEffect, useMemo, useReducer} from 'react';
 import {get} from 'lodash';
 
 import Form from '../../../../core/components/Form/Form';
@@ -49,7 +49,7 @@ const mapDispatchToProps = {
   localDealerClear,
 };
 
-const defaultFieldsSdata = {
+const defaultFieldsData = {
   typeFirst: null,
   typeSecond: null,
   loading: false,
@@ -63,7 +63,7 @@ const reducerService = (state = {}, action) => {
     return {};
   }
   if (Object.keys(action)[0] === 'typeFirst') {
-    return {...defaultFieldsSdata, ...action};
+    return {...defaultFieldsData, ...action};
   }
   return {...state, ...action};
 };
@@ -84,13 +84,13 @@ const ServiceNonAuthStep1 = props => {
 
   const [serviceData, setServiceData] = useReducer(
     reducerService,
-    defaultFieldsSdata,
+    defaultFieldsData,
   );
 
-  const [seed, setSeed] = useState(1);
-  const resetForm = () => {
-    setSeed(Math.random());
-  };
+  // const [seed, setSeed] = useState(1);
+  // const resetForm = () => {
+  //   setSeed(Math.random());
+  // };
 
   const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
   const [servicesCategoryField, setServicesCategoryField] = useState({});
@@ -126,72 +126,6 @@ const ServiceNonAuthStep1 = props => {
       }
     }
   }
-
-  useEffect(() => {
-    Analytics.logEvent('screen', 'service/step1');
-    const carFromNavigation = get(route, 'params.car');
-    if (carFromNavigation && get(carFromNavigation, 'vin')) {
-      setCar({
-        carVIN: carFromNavigation.vin,
-        carBrand: get(carFromNavigation, 'brand'),
-        carModel: get(carFromNavigation, 'model'),
-        carNumber: get(carFromNavigation, 'number'),
-        carName: [
-          get(carFromNavigation, 'brand'),
-          get(carFromNavigation, 'model'),
-        ].join(' '),
-      });
-    }
-    // setDealerSelectedLocal(dealerSelectedLocal);
-
-    return () => {
-      localDealerClear();
-    };
-  }, []);
-
-  useEffect(() => {
-    resetForm();
-    setServicesCategoryField({});
-    setDealerSelectedLocal(dealerSelectedLocal);
-    setServiceData({type: 'clear'});
-  }, [dealerSelectedLocal]);
-
-  useEffect(() => {
-    switch (serviceData.typeFirst) {
-      case 'service':
-        setServicesCategoryField({});
-        break;
-      case 'tyreChange':
-      case 'tyreRepair':
-      case 'wheelChange':
-        setServicesCategoryField({
-          name: 'SERVICETYPE',
-          type: 'select',
-          label: strings.Form.field.label.serviceSecond,
-          value: get(serviceData, 'typeSecond'),
-          props: {
-            items: strings.ServiceScreen.works2['tyreChange'],
-            required: true,
-            onChange: async typeSecond => setServiceData({typeSecond}),
-            placeholder: {
-              label: strings.Form.field.placeholder.service,
-              value: null,
-              color: '#9EA0A4',
-            },
-          },
-        });
-        break;
-      case 'carWash':
-        setServicesCategoryField({});
-        break;
-      case 'other':
-        setServicesCategoryField({});
-        break;
-      default:
-        setServicesCategoryField({});
-        break;
-    }
-  }, [serviceData?.typeFirst]);
 
   let dealerField = {};
   if (listDealers) {
@@ -249,6 +183,73 @@ const ServiceNonAuthStep1 = props => {
     }
   }
 
+  useEffect(() => {
+    console.info('useEffect first init');
+    Analytics.logEvent('screen', 'service/step1');
+    const carFromNavigation = get(route, 'params.car');
+    if (carFromNavigation && get(carFromNavigation, 'vin')) {
+      setCar({
+        carVIN: carFromNavigation.vin,
+        carBrand: get(carFromNavigation, 'brand'),
+        carModel: get(carFromNavigation, 'model'),
+        carNumber: get(carFromNavigation, 'number'),
+        carName: [
+          get(carFromNavigation, 'brand'),
+          get(carFromNavigation, 'model'),
+        ].join(' '),
+      });
+    }
+    // setDealerSelectedLocal(dealerSelectedLocal);
+
+    return () => {
+      localDealerClear();
+    };
+  }, []);
+
+  useEffect(() => {
+    // resetForm();
+    // setServicesCategoryField({});
+    setDealerSelectedLocal(dealerSelectedLocal);
+    // setServiceData({type: 'clear'});
+  }, [dealerSelectedLocal]);
+
+  useMemo(() => {
+    if (!get(serviceData, 'typeFirst')) {
+      return;
+    }
+    // console.info('useMemo serviceData?.typeFirst', serviceData?.typeFirst);
+    switch (serviceData.typeFirst) {
+      case 'tyreChange':
+      case 'tyreRepair':
+      case 'wheelChange':
+        setServicesCategoryField({
+          name: 'SERVICETYPE',
+          type: 'select',
+          label: strings.Form.field.label.serviceSecond,
+          value: get(serviceData, 'typeSecond'),
+          props: {
+            items: strings.ServiceScreen.works2['tyreChange'],
+            required: true,
+            onChange: typeSecond => setServiceData({typeSecond}),
+            placeholder: {
+              label: strings.Form.field.placeholder.service,
+              value: null,
+              color: '#9EA0A4',
+            },
+          },
+        });
+        break;
+      case 'service':
+      case 'carWash':
+      case 'other':
+      default:
+        setServicesCategoryField({});
+        break;
+    }
+  }, [serviceData]);
+
+  console.info('serviceData', serviceData);
+
   const FormConfig = {
     groups: [
       {
@@ -263,32 +264,27 @@ const ServiceNonAuthStep1 = props => {
                 name: 'SERVICE',
                 type: 'select',
                 label: strings.Form.field.label.service,
-                value: null,
                 props: {
                   items: [
                     {
                       label: strings.ServiceScreen.works.service,
                       value: 'service',
-                      key: 'service',
                     },
                     {
                       label: strings.ServiceScreen.works.tyreChange,
                       value: 'tyreChange',
-                      key: 'tyreChange',
                     },
                     {
                       label: strings.ServiceScreen.works.carWash,
                       value: 'carWash',
-                      key: 'carWash',
                     },
                     {
                       label: strings.ServiceScreen.works.other,
                       value: 'other',
-                      key: 'other',
                     },
                   ],
                   required: true,
-                  onChange: async typeFirst => setServiceData({typeFirst}),
+                  onChange: typeFirst => setServiceData({typeFirst}),
                   placeholder: {
                     label: strings.Form.field.placeholder.service,
                     value: null,
@@ -299,7 +295,7 @@ const ServiceNonAuthStep1 = props => {
               servicesCategoryField,
             ],
           }
-        : {},
+        : null,
       {
         name: strings.Form.group.car,
         fields: [
@@ -381,10 +377,6 @@ const ServiceNonAuthStep1 = props => {
         }
       }
     }
-    // pushProps.SERVICE = get(
-    //   pushProps,
-    //   'SERVICE' + get(dealerSelectedLocalState, 'id'),
-    // );
     const dataForNextScreen = {...serviceData, ...pushProps, ...extData};
     // console.info('dataForNextScreen', dataForNextScreen);
     navigation.navigate(nextScreen, dataForNextScreen);
@@ -396,7 +388,6 @@ const ServiceNonAuthStep1 = props => {
         paddingHorizontal: 14,
         marginTop: 20,
       }}
-      key={'ServiceNonAuthForm' + seed}
       fields={FormConfig}
       barStyle={'light-content'}
       defaultCountryCode={region}
