@@ -1357,9 +1357,7 @@ class Form extends Component {
             }}
             doneText={strings.Base.choose}
             onDonePress={() => {
-              console.info('onDonePress');
               if (data.props.onChange && Platform.OS === 'ios') {
-                console.info('onDonePress iOS', this.state[name]);
                 data.props.onChange(this.state[name]);
               }
               if (data.props.focusNextInput) {
@@ -1367,7 +1365,6 @@ class Form extends Component {
               }
             }}
             onValueChange={value => {
-              console.info('onValueChange', value);
               this.onChangeField(data)(value);
               if (data.props.onChange && Platform.OS !== 'ios') {
                 data.props.onChange(value);
@@ -1375,7 +1372,6 @@ class Form extends Component {
             }}
             onClose={() => {
               if (data.props.onChange && Platform.OS === 'ios') {
-                console.info('onClose iOS', this.state[name]);
                 data.props.onChange(this.state[name]);
               }
             }}

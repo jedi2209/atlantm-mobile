@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({dealer, info, nav, core}) => {
+const mapStateToProps = ({dealer, nav, core}) => {
   return {
     nav,
     region: dealer.region,
@@ -104,7 +104,14 @@ const deviceWidth = Dimensions.get('window').width;
 const cardWidth = deviceWidth - 20;
 
 const SettingsScreen = props => {
-  const {region} = props;
+  const {
+    region,
+    pushActionSubscribeState,
+    isAppRated,
+    actionAppRated,
+    actionSetPushActionSubscribe,
+    navigation,
+  } = props;
 
   const toast = useToast();
 
@@ -113,7 +120,7 @@ const SettingsScreen = props => {
   }, []);
 
   const _onAppRateSuccess = () => {
-    !props.isAppRated && props.actionAppRated();
+    !isAppRated && actionAppRated();
   };
 
   const _onSwitchActionSubscribe = async value => {
@@ -121,20 +128,20 @@ const SettingsScreen = props => {
       text = strings.Notifications.success.textPushSad,
       status = 'info';
 
-    if (value === true) {
+    if (value) {
       PushNotifications.unsubscribeFromTopic('actions');
       const subscriptionStatus = await PushNotifications.subscribeToTopic(
         'actionsRegion',
         region,
       );
-      props.actionSetPushActionSubscribe(subscriptionStatus);
+      actionSetPushActionSubscribe(subscriptionStatus);
       title = strings.Notifications.success.title;
       text = strings.Notifications.success.textPush;
       status = 'success';
     } else {
       PushNotifications.unsubscribeFromTopic('actionsRegion');
       PushNotifications.unsubscribeFromTopic('actions');
-      props.actionSetPushActionSubscribe(value);
+      actionSetPushActionSubscribe(value);
     }
     toast.show({
       render: ({id}) => {
@@ -185,7 +192,7 @@ const SettingsScreen = props => {
                 alignItems={'center'}>
                 <Switch
                   style={styles.pushButton}
-                  value={props.pushActionSubscribeState}
+                  value={pushActionSubscribeState}
                   trackColor={{
                     false: '#767577',
                     true: styleConst.color.darkBg,
@@ -312,7 +319,7 @@ const SettingsScreen = props => {
         animation={styleConst.animation.zoomIn}
         duration={250}
         index={6}>
-        <Pressable onPress={() => props.navigation.navigate('IntroScreenNew')}>
+        <Pressable onPress={() => navigation.navigate('IntroScreenNew')}>
           <FlagButton
             style={[styles.block, {width: cardWidth}]}
             styleText={{
@@ -321,8 +328,8 @@ const SettingsScreen = props => {
               color: styleConst.color.lightBlue,
             }}
             shadow={null}
-            onPress={() => props.navigation.navigate('IntroScreenNew')}
-            country={props.region}
+            onPress={() => navigation.navigate('IntroScreenNew')}
+            country={region}
             type={'button'}
             variant={'outline'}
           />

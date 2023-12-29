@@ -184,7 +184,6 @@ const ServiceNonAuthStep1 = props => {
   }
 
   useEffect(() => {
-    console.info('useEffect first init');
     Analytics.logEvent('screen', 'service/step1');
     const carFromNavigation = get(route, 'params.car');
     if (carFromNavigation && get(carFromNavigation, 'vin')) {
@@ -217,7 +216,6 @@ const ServiceNonAuthStep1 = props => {
     if (!get(serviceData, 'typeFirst')) {
       return;
     }
-    // console.info('useMemo serviceData?.typeFirst', serviceData?.typeFirst);
     switch (serviceData.typeFirst) {
       case 'tyreChange':
       case 'tyreRepair':
@@ -247,8 +245,6 @@ const ServiceNonAuthStep1 = props => {
         break;
     }
   }, [serviceData]);
-
-  console.info('serviceData', serviceData);
 
   const FormConfig = {
     groups: [
@@ -378,7 +374,6 @@ const ServiceNonAuthStep1 = props => {
       }
     }
     const dataForNextScreen = {...serviceData, ...pushProps, ...extData};
-    // console.info('dataForNextScreen', dataForNextScreen);
     navigation.navigate(nextScreen, dataForNextScreen);
   };
 
