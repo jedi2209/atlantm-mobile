@@ -224,7 +224,6 @@ const ServiceNonAuthStep1 = props => {
           name: 'SERVICETYPE',
           type: 'select',
           label: strings.Form.field.label.serviceSecond,
-          value: get(serviceData, 'typeSecond'),
           props: {
             items: strings.ServiceScreen.works2['tyreChange'],
             required: true,
@@ -347,7 +346,7 @@ const ServiceNonAuthStep1 = props => {
       const isDataAvailable = await API.fetchServiceCalculation({
         dealerID: get(pushProps, 'DEALER'),
         workType: get(pushProps, 'SERVICETYPE'),
-        additional: false,
+        leaveTyresInStorage: false,
       });
       if (isDataAvailable) {
         let servicesTmp = [];

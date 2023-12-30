@@ -1042,7 +1042,11 @@ export default {
     }
   },
 
-  async fetchServiceCalculation({dealerID, workType, leaveTyresInStorage}) {
+  async fetchServiceCalculation({
+    dealerID,
+    workType,
+    leaveTyresInStorage = false,
+  }) {
     if (!workType || !dealerID) {
       return false;
     }
