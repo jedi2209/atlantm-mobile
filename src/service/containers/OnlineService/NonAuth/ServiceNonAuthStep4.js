@@ -159,7 +159,10 @@ const ServiceNonAuthStep4 = props => {
       email: get(dataFromForm, 'EMAIL', ''),
       tech_place: get(dateFromForm, 'tech_place', ''),
       service: get(orderData, 'SERVICE', ''),
-      serviceName: strings.ServiceScreen.works[get(orderData, 'SERVICE', '')],
+      serviceName: [
+        strings.ServiceScreen.works[get(orderData, 'SERVICE', '')],
+        strings.ServiceScreen.worksService[get(orderData, 'SERVICETYPE', '')],
+      ].join(' / '),
       servicePrice,
       vin: get(orderData, 'CARVIN', ''),
       car: {
@@ -256,6 +259,15 @@ const ServiceNonAuthStep4 = props => {
     }
   };
 
+  let heightBlock = 200;
+
+  if (get(orderData, 'SERVICETYPE')) {
+    heightBlock = heightBlock + 45;
+  }
+  if (get(orderData, 'SERVICESecondFull.total')) {
+    heightBlock = heightBlock + 45;
+  }
+
   const FormConfig = {
     groups: [
       {
@@ -273,16 +285,20 @@ const ServiceNonAuthStep4 = props => {
                   alt="dealer main image"
                   resizeMode="cover"
                   w={'100%'}
-                  h={get(orderData, 'SERVICESecondFull.total') ? 290 : 250}
+                  h={heightBlock}
                 />
                 <View
                   position={'absolute'}
                   background={styleConst.color.white}
                   w={'100%'}
-                  h={get(orderData, 'SERVICESecondFull.total') ? 290 : 250}
+                  h={heightBlock}
                   opacity={0.9}
                 />
-                <View position={'absolute'} h={200} w={'90%'} p={2}>
+                <View
+                  position={'absolute'}
+                  h={heightBlock - 50}
+                  w={'90%'}
+                  p={2}>
                   <VStack mx={1} mb={3} space={4}>
                     <HStack alignItems="center">
                       <Icon
@@ -335,24 +351,26 @@ const ServiceNonAuthStep4 = props => {
                         ) : null}
                       </VStack>
                     </HStack>
-                    <HStack alignItems="center">
-                      <Icon
-                        name="gear"
-                        as={EvilIcons}
-                        size={8}
-                        mr={2}
-                        color={styleConst.color.blue}
-                      />
-                      <VStack>
-                        <Text>
-                          {
-                            strings.ServiceScreen.worksService[
-                              orderData.SERVICETYPE
-                            ]
-                          }
-                        </Text>
-                      </VStack>
-                    </HStack>
+                    {get(orderData, 'SERVICETYPE') ? (
+                      <HStack alignItems="center">
+                        <Icon
+                          name="gear"
+                          as={EvilIcons}
+                          size={8}
+                          mr={2}
+                          color={styleConst.color.blue}
+                        />
+                        <VStack>
+                          <Text>
+                            {
+                              strings.ServiceScreen.worksService[
+                                orderData.SERVICETYPE
+                              ]
+                            }
+                          </Text>
+                        </VStack>
+                      </HStack>
+                    ) : null}
                     <HStack alignItems="center">
                       <Icon
                         name="car-outline"
