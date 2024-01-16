@@ -1324,7 +1324,12 @@ class Form extends Component {
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
       if (typeof value !== 'undefined' && value !== null) {
-        data.props.value = value;
+        if (!isNaN(parseFloat(value)) && isFinite(value)) {
+          data.props.value = parseFloat(value);
+          data.value = parseFloat(value);
+        } else {
+          data.props.value = value;
+        }
       }
       return (
         <View
