@@ -134,14 +134,19 @@ const SettingsScreen = props => {
         'actionsRegion',
         region,
       );
-      title = strings.Notifications.success.title;
-      text = strings.Notifications.success.textPush;
-      status = 'success';
+      if (subscriptionStatus) {
+        actionSetPushActionSubscribe(value);
+        title = strings.Notifications.success.title;
+        text = strings.Notifications.success.textPush;
+        status = 'success';
+      } else {
+        return false;
+      }
     } else {
       PushNotifications.unsubscribeFromTopic('actionsRegion');
       PushNotifications.unsubscribeFromTopic('actions');
+      actionSetPushActionSubscribe(value);
     }
-    actionSetPushActionSubscribe(value);
     toast.show({
       render: ({id}) => {
         return (

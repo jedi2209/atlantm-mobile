@@ -3,6 +3,7 @@ import {Platform, Alert, Linking, AppState} from 'react-native';
 import {OneSignal} from 'react-native-onesignal';
 import DeviceInfo from 'react-native-device-info';
 import {ONESIGNAL} from '../const';
+import {actionSetPushActionSubscribe} from '../../core/actions';
 import Analytics from '../../utils/amplitude-analytics';
 import * as NavigationService from '../../navigation/NavigationService';
 import {strings} from '../lang/const';
@@ -12,7 +13,7 @@ import {get} from 'lodash';
 const bundle = DeviceInfo.getBundleId();
 
 export default {
-  init() {
+  async init() {
     OneSignal.initialize(ONESIGNAL);
     // OneSignal.addEventListener('received', this.onReceived);
     // OneSignal.addEventListener('opened', this.onOpened);
@@ -21,9 +22,18 @@ export default {
     //Method for handling notifications received while app in foreground
     this.setNotificationWillShowInForegroundHandler();
 
-    OneSignal.Notifications.addEventListener('permissionChange', observer => {
-      console.info('OneSignal: permission changed:', observer);
-    });
+    OneSignal.Notifications.addEventListener(
+      'permissionChange',
+      this.permissionChange,
+    );
+  },
+
+  permissionChange(observer) {
+    if (!observer) {
+      actionSetPushActionSubscribe(false);
+    } else {
+      actionSetPushActionSubscribe(true);
+    }
   },
 
   onReceived(data) {
@@ -149,19 +159,12 @@ export default {
     return OneSignal.Notifications.hasPermission();
   },
 
-  async checkPermission() {
-    // Check push notification and OneSignal subscription statuses
-    const isPermission = this.deviceState();
-    const canRequestPermission =
-      await OneSignal.Notifications.canRequestPermission();
-    if (isPermission) {
-      return true;
-    } else if (canRequestPermission) {
-      // OneSignal.InAppMessages.addTrigger('showPrompt', true);
-      OneSignal.Notifications.requestPermission(true);
+  async checkPermissionIOS() {
+    let permission = await OneSignal.Notifications.requestPermission();
+    if (typeof permission === 'object') {
+      permission = permission[0];
     }
-    if (Platform.OS === 'ios') {
-      const permission = await OneSignal.Notifications.requestPermission();
+    if (!permission) {
       setTimeout(() => {
         return Alert.alert(
           strings.Notifications.PushAlert.title,
@@ -181,6 +184,36 @@ export default {
           ],
         );
       }, 100);
+      return false;
     }
+  },
+
+  async checkPermissionAndroid() {
+    let permission = await OneSignal.Notifications.requestPermission(true);
+    console.info('permission', permission);
+    return permission;
+  },
+
+  async checkPermission() {
+    const currPermission = this.deviceState();
+    if (currPermission) return true;
+    switch (Platform.OS) {
+      case 'ios':
+        return await this.checkPermissionIOS();
+      case 'android':
+        return await this.checkPermissionAndroid();
+      default:
+        return false;
+    }
+    // // Check push notification and OneSignal subscription statuses
+    // const isPermission = this.deviceState();
+    // const canRequestPermission =
+    //   await OneSignal.Notifications.canRequestPermission();
+    // if (isPermission) {
+    //   return true;
+    // } else if (canRequestPermission) {
+    //   // OneSignal.InAppMessages.addTrigger('showPrompt', true);
+    //   OneSignal.Notifications.requestPermission(true);
+    // }
   },
 };
