@@ -27,7 +27,6 @@ const mapStateToProps = ({dealer, profile, tva, core}) => {
   return {
     region: dealer.region,
     isTvaRequest: tva.meta.isRequest,
-    pushGranted: core.pushGranted,
     pushTracking: tva.pushTracking,
     carNumber: profile.cars.length
       ? profile.cars[0].number

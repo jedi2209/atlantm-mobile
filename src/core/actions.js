@@ -1,5 +1,4 @@
 import {
-  APP_PUSH_GRANTED__SET,
   APP_PUSH_ACTION_SUBSCRIBE__SET,
   APP_MENU_OPENED_COUNTER,
   APP_ACTION_RATED,
@@ -15,15 +14,6 @@ import {
 import API from '../utils/api';
 
 import {APP_REGION} from './const';
-
-export const actionSetPushGranted = isGranted => {
-  return dispatch => {
-    dispatch({
-      type: APP_PUSH_GRANTED__SET,
-      payload: isGranted,
-    });
-  };
-};
 
 export const actionMenuOpenedCount = reset => {
   return dispatch => {
@@ -69,7 +59,7 @@ export const actionSettingsLoaded = settings => {
   };
 };
 
-export const actionSetPushActionSubscribe = isSubscribe => {
+export const actionSetPushActionSubscribe = (isSubscribe = false) => {
   return dispatch => {
     dispatch({
       type: APP_PUSH_ACTION_SUBSCRIBE__SET,

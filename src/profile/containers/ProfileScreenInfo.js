@@ -17,7 +17,6 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import PushNotifications from '../../core/components/PushNotifications';
-import DealerItemList from '../../core/components/DealerItemList';
 // import RefreshSpinner from '../../core/components/RefreshSpinner';
 
 // redux
@@ -28,10 +27,7 @@ import {
   connectSocialMedia,
   actionToggleCar,
 } from '../actions';
-import {
-  actionSetPushActionSubscribe,
-  actionSetPushGranted,
-} from '../../core/actions';
+import {actionSetPushActionSubscribe} from '../../core/actions';
 
 import Analytics from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
@@ -158,7 +154,6 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
 
 const mapDispatchToProps = {
   actionLogout,
-  actionSetPushGranted,
   actionSetPushActionSubscribe,
   getProfileSapData,
   connectSocialMedia,

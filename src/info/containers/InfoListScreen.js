@@ -21,10 +21,7 @@ const cardWidth = deviceWidth - 20;
 // redux
 import {connect} from 'react-redux';
 import {fetchInfoList, actionListReset} from '../actions';
-import {
-  actionSetPushGranted,
-  actionSetPushActionSubscribe,
-} from '../../core/actions';
+import {actionSetPushActionSubscribe} from '../../core/actions';
 import {INFO_LIST__FAIL} from '../actionTypes';
 
 // helpers
@@ -78,7 +75,6 @@ const mapStateToProps = ({dealer, info, nav, core}) => {
 const mapDispatchToProps = {
   fetchInfoList,
   actionListReset,
-  actionSetPushGranted,
   actionSetPushActionSubscribe,
 };
 

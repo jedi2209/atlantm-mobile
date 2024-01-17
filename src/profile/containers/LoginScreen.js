@@ -30,10 +30,7 @@ import OtpAutoFillViewManager from 'react-native-otp-auto-fill';
 import {connect} from 'react-redux';
 import {actionSavePofile, actionGetPhoneCode} from '../actions';
 
-import {
-  actionSetPushActionSubscribe,
-  actionSetPushGranted,
-} from '../../core/actions';
+import {actionSetPushActionSubscribe} from '../../core/actions';
 
 import PushNotifications from '../../core/components/PushNotifications';
 import Analytics from '../../utils/amplitude-analytics';
@@ -84,9 +81,7 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
 };
 
 const mapDispatchToProps = {
-  actionSetPushGranted,
   actionSetPushActionSubscribe,
-
   actionSavePofile,
   actionGetPhoneCode,
 };

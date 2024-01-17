@@ -24,10 +24,7 @@ import Form from '../../core/components/Form/Form';
 import {connect} from 'react-redux';
 import {actionSavePofile, actionGetPhoneCode} from '../actions';
 
-import {
-  actionSetPushActionSubscribe,
-  actionSetPushGranted,
-} from '../../core/actions';
+import {actionSetPushActionSubscribe} from '../../core/actions';
 
 import PushNotifications from '../../core/components/PushNotifications';
 
@@ -69,9 +66,7 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
 };
 
 const mapDispatchToProps = {
-  actionSetPushGranted,
   actionSetPushActionSubscribe,
-
   actionSavePofile,
   actionGetPhoneCode,
 };
