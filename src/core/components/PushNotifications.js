@@ -152,8 +152,13 @@ export default {
   async checkPermission() {
     // Check push notification and OneSignal subscription statuses
     const isPermission = this.deviceState();
+    const canRequestPermission =
+      await OneSignal.Notifications.canRequestPermission();
     if (isPermission) {
       return true;
+    } else if (canRequestPermission) {
+      // OneSignal.InAppMessages.addTrigger('showPrompt', true);
+      OneSignal.Notifications.requestPermission(true);
     }
     if (Platform.OS === 'ios') {
       const permission = await OneSignal.Notifications.requestPermission();
