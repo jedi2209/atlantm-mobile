@@ -106,10 +106,9 @@ const cardWidth = deviceWidth - 20;
 const SettingsScreen = props => {
   const {
     region,
-    pushActionSubscribeState,
     isAppRated,
     actionAppRated,
-    actionSetPushActionSubscribe,
+    pushActionSubscribeState,
     navigation,
   } = props;
 
@@ -135,7 +134,7 @@ const SettingsScreen = props => {
         region,
       );
       if (subscriptionStatus) {
-        actionSetPushActionSubscribe(value);
+        props.actionSetPushActionSubscribe(true);
         title = strings.Notifications.success.title;
         text = strings.Notifications.success.textPush;
         status = 'success';
@@ -145,7 +144,7 @@ const SettingsScreen = props => {
     } else {
       PushNotifications.unsubscribeFromTopic('actionsRegion');
       PushNotifications.unsubscribeFromTopic('actions');
-      actionSetPushActionSubscribe(value);
+      props.actionSetPushActionSubscribe(false);
     }
     toast.show({
       render: ({id}) => {

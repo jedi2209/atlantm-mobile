@@ -17,7 +17,6 @@ import Analytics from '../../utils/amplitude-analytics';
 import {connect} from 'react-redux';
 import {store} from '../store';
 import {
-  actionSetPushGranted,
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
   actionStoreUpdated,
@@ -56,7 +55,6 @@ const mapStateToProps = ({core, dealer, modal}) => {
 };
 
 const mapDispatchToProps = {
-  actionSetPushGranted,
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
   actionStoreUpdated,
@@ -113,7 +111,6 @@ const _awaitStoreToUpdate = async props => {
 const App = props => {
   const {
     auth,
-    actionSetPushGranted,
     actionSetPushActionSubscribe,
     dealerSelected,
     menuOpenedCount,
@@ -227,18 +224,8 @@ const App = props => {
       //Prompt for push on iOS
       OneSignal.Notifications.requestPermission().then(res => {
         if (OneSignal.Notifications.hasPermission()) {
-          actionSetPushGranted(true);
-          if (
-            Number(menuOpenedCount) <= 1 ||
-            menuOpenedCount === 0 ||
-            isStoreUpdated === false
-          ) {
-            actionSetPushActionSubscribe(true);
-          }
           OneSignal.User.pushSubscription.optIn();
         } else {
-          actionSetPushGranted(false);
-          actionSetPushActionSubscribe(false);
           PushNotifications.unsubscribeFromTopic(['actionsRegion', 'actions']);
           OneSignal.User.pushSubscription.optOut();
         }

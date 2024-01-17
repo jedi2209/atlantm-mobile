@@ -14,7 +14,6 @@ import indicators from '../indicators/reducers';
 import language from './lang/reducers';
 
 import {
-  APP_PUSH_GRANTED__SET,
   APP_PUSH_ACTION_SUBSCRIBE__SET,
   APP_MENU_OPENED_COUNTER,
   APP_WALKTROUGH_SHOWN,
@@ -26,24 +25,31 @@ import {
   MAIN_SCREEN__FAIL,
 } from './actionTypes';
 
-const pushGranted = (state = false, action) => {
-  switch (action.type) {
-    case APP_PUSH_GRANTED__SET:
-      return action.payload;
-    case APP_STORE_UPDATED:
-      return state;
-    default:
-      return state;
-  }
-};
-
-const pushActionSubscribeState = (state = true, action) => {
+const pushActionSubscribeState = (state = false, action) => {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'core.pushActionSubscribeState', true);
+      console.log(
+        '\r\n\r\n\t\tpushActionSubscribeState REHYDRATE',
+        state,
+        action,
+        get(action, 'payload.core.pushActionSubscribeState'),
+      );
+      return get(action, 'payload.core.pushActionSubscribeState', false);
     case APP_PUSH_ACTION_SUBSCRIBE__SET:
+      console.log(
+        '\r\n\r\n\t\tpushActionSubscribeState APP_PUSH_ACTION_SUBSCRIBE__SET',
+        state,
+        action,
+        get(action, 'payload.core.pushActionSubscribeState'),
+      );
       return action.payload;
     case APP_STORE_UPDATED:
+      console.log(
+        '\r\n\r\n\t\tpushActionSubscribeState APP_STORE_UPDATED',
+        state,
+        action,
+        get(action, 'payload.core.pushActionSubscribeState'),
+      );
       return state;
     default:
       return state;
@@ -53,7 +59,7 @@ const pushActionSubscribeState = (state = true, action) => {
 const menuOpenedCount = (state = 0, action) => {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'core.menuOpenedCount', 0);
+      return get(action, 'payload.core.menuOpenedCount', 0);
     case APP_MENU_OPENED_COUNTER:
       if (action.payload === 0) {
         return 0;
@@ -147,7 +153,6 @@ const mainScreenSettings = (state = {}, action) => {
 };
 
 const coreReducer = combineReducers({
-  pushGranted,
   pushActionSubscribeState,
   menuOpenedCount,
   isAppRated,
