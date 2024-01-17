@@ -164,14 +164,19 @@ const ServiceNonAuthStep4 = props => {
         strings.ServiceScreen.worksService[get(orderData, 'SERVICETYPE', '')],
       ].join(' / '),
       servicePrice,
-      vin: get(orderData, 'CARVIN', ''),
       car: {
         brand: get(orderData, 'CARBRAND', ''),
         model: get(orderData, 'CARMODEL', ''),
         plate: get(orderData, 'CARNUMBER', ''),
+        vin: get(orderData, 'CARVIN', ''),
       },
       text: get(dataFromForm, 'COMMENT', ''),
     };
+
+    data.car.name = [data.car.brand, data.car.model].join(' ');
+    if (data.car.plate) {
+      data.car.name = [data.car.name, '[' + data.car.plate + ']'].join(' ');
+    }
 
     if (get(orderData, 'lead', true)) {
       // отправляем ЛИД
