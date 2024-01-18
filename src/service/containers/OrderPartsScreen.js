@@ -502,7 +502,11 @@ const OrderPartsScreen = props => {
     const dataToSend = {
       car: get(dataFromForm, 'CARNAME', ''),
       brand: get(dataFromForm, 'CARBRAND', ''),
-      model: get(dataFromForm, 'CARMODEL.name', 'CARMODEL'),
+      model: get(
+        dataFromForm,
+        'CARMODEL.name',
+        get(dataFromForm, 'CARMODEL', ''),
+      ),
       vin: get(dataFromForm, 'CARVIN', ''),
       firstName: get(dataFromForm, 'NAME', ''),
       secondName: get(dataFromForm, 'SECOND_NAME', ''),
