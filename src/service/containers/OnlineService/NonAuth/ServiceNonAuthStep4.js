@@ -184,7 +184,7 @@ const ServiceNonAuthStep4 = props => {
         brand: get(data, 'car.brand', ''),
         model: get(data, 'car.model', ''),
         carNumber: get(data, 'car.plate', ''),
-        vin: get(data, 'vin', ''),
+        vin: get(data, 'car.vin', ''),
         date: format(dateFromForm?.date ? dateFromForm.date : dateFromForm),
         service: get(data, 'serviceName', ''),
         firstName: get(data, 'f_FirstName', ''),

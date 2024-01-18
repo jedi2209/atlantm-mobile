@@ -13,32 +13,9 @@ import {strings} from '../../../../core/lang/const';
 import Analytics from '../../../../utils/amplitude-analytics';
 
 const mapStateToProps = ({dealer, service, nav}) => {
-  let carLocalBrand = '';
-  let carLocalModel = '';
-  let carLocalNumber = '';
-  let carLocalVin = '';
-
   return {
     nav,
     date: service.date,
-    firstName: UserData.get('NAME'),
-    secondName: UserData.get('SECOND_NAME'),
-    lastName: UserData.get('LAST_NAME'),
-    phone: UserData.get('PHONE'),
-    email: UserData.get('EMAIL'),
-    carBrand: UserData.get('CARBRAND')
-      ? UserData.get('CARBRAND')
-      : carLocalBrand,
-    carModel: UserData.get('CARMODEL')
-      ? UserData.get('CARMODEL')
-      : carLocalModel,
-    carNumber: UserData.get('CARNUMBER')
-      ? UserData.get('CARNUMBER')
-      : carLocalNumber,
-    carVIN: UserData.get('CARVIN') ? UserData.get('CARVIN') : carLocalVin,
-    dealerSelectedLocal: dealer.selectedLocal,
-    region: dealer.region,
-    listDealers: dealer.listDealers,
   };
 };
 
