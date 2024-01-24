@@ -13,6 +13,7 @@ export default {
       reviews: 'Отзывы',
       indicators: 'Индикаторы',
       settings: 'Настройки',
+      notifications: 'Уведомления',
       service: 'Сервис',
       tva: 'Табло выдачи авто',
       bonus: 'Бонусная программа',

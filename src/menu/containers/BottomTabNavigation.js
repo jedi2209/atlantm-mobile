@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {Platform, Keyboard, Animated} from 'react-native';
-import {useDisclose, Icon, Text, View} from 'native-base';
+import {useDisclose, Icon, Text, View, Pressable} from 'native-base';
 import orderFunctions from '../../utils/orders';
 import Analytics from '../../utils/amplitude-analytics';
 import {connect} from 'react-redux';
@@ -33,6 +33,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ActionSheetMenu from '../../core/components/ActionSheetMenu';
 
 import {
@@ -146,6 +147,23 @@ const ContactsStackView = ({navigation, route}) => (
       options={{
         headerTitle: () => (
           <LogoTitle containerStyle={{marginTop: isApple ? 10 : 20}} />
+        ),
+        headerRight: () => (
+          <View style={stylesHeader.headerRightStyle}>
+            <Pressable
+              onPress={() => navigation.navigate('NotificationsScreen', {})}>
+              <Icon
+                size={7}
+                as={Ionicons}
+                name="notifications-outline"
+                color={styleConst.color.blueNew}
+                _dark={{
+                  color: styleConst.color.white,
+                }}
+                style={stylesHeader.headerRightButton}
+              />
+            </Pressable>
+          </View>
         ),
         headerBackButtonMenuEnabled: false,
         headerBackVisible: false,
