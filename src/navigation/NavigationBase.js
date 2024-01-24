@@ -85,6 +85,7 @@ import MapScreen from '../contacts/map/containers/MapScreen';
 
 import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 import SettingsScreen from '../settings/containers/SettingsScreen';
+import NotificationsScreen from '../settings/containers/NotificationsScreen';
 
 import ProfileSettingsScreen from '../profile/containers/ProfileSettingsScreen';
 import BonusScreenInfo from '../profile/bonus/containers/BonusInfoScreen';
@@ -375,6 +376,37 @@ export const Base = ({navigation, route}) => {
                 },
               );
             },
+          })}
+        />
+        <StackBase.Screen
+          name="NotificationsScreen"
+          component={NotificationsScreen}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ModalTransition,
+            headerTitle: strings.Menu.main.notifications,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+            headerRight: () => (
+              <View style={stylesHeader.headerRightStyle}>
+                <Pressable
+                  onPress={() =>
+                    navigation.navigate('NotificationsScreen', {})
+                  }>
+                  <Icon
+                    size={7}
+                    as={MaterialCommunityIcons}
+                    name="notification-clear-all"
+                    color={styleConst.color.blueNew}
+                    _dark={{
+                      color: styleConst.color.white,
+                    }}
+                    style={stylesHeader.headerRightButton}
+                  />
+                </Pressable>
+              </View>
+            ),
           })}
         />
         {/* ЭКО */}

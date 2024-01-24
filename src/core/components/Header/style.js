@@ -45,6 +45,9 @@ export default StyleSheet.create({
   headerRightStyle: {
     marginTop: 0,
   },
+  headerRightButton: {
+    marginRight: 20,
+  },
   blueHeader: {
     ...commonStyles,
     backgroundColor: styleConst.color.lightBlue,
