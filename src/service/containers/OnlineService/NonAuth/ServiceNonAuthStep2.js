@@ -135,44 +135,6 @@ const ServiceNonAuthStep2 = props => {
 
   const FormConfig = {
     groups: [
-      isAdditionalAvailable
-        ? {
-            name: strings.Form.field.label.serviceTypes[
-              get(orderData, 'SERVICE')
-            ].additional,
-            fields: [
-              {
-                name: 'additionalField',
-                type: 'checkbox',
-                label:
-                  strings.Form.field.label.serviceTypes[
-                    get(orderData, 'SERVICE')
-                  ].myTyresInStorage,
-                value: get(serviceData, 'additionalField', false),
-              },
-              {
-                name: 'leaveTyresInStorage',
-                type: 'checkbox',
-                label:
-                  strings.Form.field.label.serviceTypes[
-                    get(orderData, 'SERVICE')
-                  ].leaveTyresInStorage,
-                value: false,
-                props: {
-                  onSelect: val =>
-                    setTimeout(
-                      () =>
-                        setServiceData({
-                          leaveTyresInStorage: val,
-                          needUpdate: true,
-                        }),
-                      300,
-                    ),
-                },
-              },
-            ],
-          }
-        : null,
       {
         name: strings.Form.group.services,
         fields: [
@@ -220,6 +182,44 @@ const ServiceNonAuthStep2 = props => {
             : null,
         ],
       },
+      isAdditionalAvailable
+        ? {
+            name: strings.Form.field.label.serviceTypes[
+              get(orderData, 'SERVICE')
+            ].additional,
+            fields: [
+              {
+                name: 'additionalField',
+                type: 'checkbox',
+                label:
+                  strings.Form.field.label.serviceTypes[
+                    get(orderData, 'SERVICE')
+                  ].myTyresInStorage,
+                value: get(serviceData, 'additionalField', false),
+              },
+              {
+                name: 'leaveTyresInStorage',
+                type: 'checkbox',
+                label:
+                  strings.Form.field.label.serviceTypes[
+                    get(orderData, 'SERVICE')
+                  ].leaveTyresInStorage,
+                value: false,
+                props: {
+                  onSelect: val =>
+                    setTimeout(
+                      () =>
+                        setServiceData({
+                          leaveTyresInStorage: val,
+                          needUpdate: true,
+                        }),
+                      300,
+                    ),
+                },
+              },
+            ],
+          }
+        : null,
       get(serviceData, 'itemFullSelected.total')
         ? {
             name: strings.Form.group.additional,
