@@ -12,6 +12,7 @@ import contacts from '../contacts/reducers';
 import catalog from '../catalog/reducers';
 import indicators from '../indicators/reducers';
 import language from './lang/reducers';
+import settings from '../settings/reducers';
 
 import {
   APP_PUSH_ACTION_SUBSCRIBE__SET,
@@ -118,7 +119,7 @@ const isStoreUpdated = (state = false, action) => {
   }
 };
 
-const settings = (state = null, action) => {
+const settingsCore = (state = null, action) => {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'core.settings', false);
@@ -160,7 +161,7 @@ const coreReducer = combineReducers({
   isWalkthroughShown,
   isStoreUpdated,
   language,
-  settings,
+  settings: settingsCore,
   mainScreenSettings,
 });
 
@@ -177,6 +178,7 @@ const rootReducer = combineReducers({
   contacts,
   indicators,
   core: coreReducer,
+  settings,
 });
 
 export default rootReducer;
