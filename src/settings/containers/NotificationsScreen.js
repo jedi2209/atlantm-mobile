@@ -41,6 +41,13 @@ const types = {
   4: 'rgba(100, 227, 127, 0.1)', // ТВА
 };
 
+const imageBackgrounds = {
+  1: require('../../../assets/notifications/palette1.png'),
+  2: require('../../../assets/notifications/palette2.png'),
+  3: require('../../../assets/notifications/palette3.png'),
+  4: require('../../../assets/notifications/palette4.png'),
+};
+
 const isValidUrl = str => {
   const pattern = new RegExp(
     '^([a-zA-Z]+:\\/\\/)?' + // protocol
@@ -131,6 +138,9 @@ const NotificationsScreen = props => {
                   title={item.title}
                   text={item.text}
                   colorBackground={types[get(item, 'type.id', 2)]}
+                  borderBackgroundSource={
+                    imageBackgrounds[get(item, 'type.id', 2)]
+                  }
                 />
               </RNBounceable>
             </TransitionView>

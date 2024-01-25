@@ -388,12 +388,9 @@ export const Base = ({navigation, route}) => {
               stylesHeader.transparentHeaderTitle,
               {color: '#222B45'},
             ],
-            headerRight: () => (
+            headerRight: props => (
               <View style={stylesHeader.headerRightStyle}>
-                <Pressable
-                  onPress={() =>
-                    navigation.navigate('NotificationsScreen', {})
-                  }>
+                <Pressable onPress={() => console.info('props', props)}>
                   <Icon
                     size={7}
                     as={MaterialCommunityIcons}
