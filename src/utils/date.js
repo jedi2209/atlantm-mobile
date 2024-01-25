@@ -31,6 +31,9 @@ export const dayMonthYear = date =>
 export const dayMonthYearTime = date =>
   date ? moment(date).tz('Europe/Minsk').format('D.MM.YYYY, HH:mm') : null;
 
+export const dayMonthYearTime2 = date =>
+  date ? moment(date).tz('Europe/Minsk').format('D MMM YYYY, HH:mm') : null;
+
 export const humanDate = date =>
   date ? moment(date).tz('Europe/Minsk').format('DD MMMM') : null;
 

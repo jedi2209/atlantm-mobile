@@ -1,13 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {
-  View,
-  Alert,
-  FlatList,
-  StyleSheet,
-  ActivityIndicator,
-  Dimensions,
-} from 'react-native';
+import {View, Alert, FlatList, StyleSheet, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 import {Pressable, Box, Text, Badge, Icon, Fab} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -32,8 +25,6 @@ import {verticalScale} from '../../utils/scale';
 import {strings} from '../../core/lang/const';
 
 // components
-import PushNotifications from '../../core/components/PushNotifications';
-import style from '../../core/components/Footer/style';
 import LogoLoader from '../../core/components/LogoLoader';
 
 const styles = StyleSheet.create({

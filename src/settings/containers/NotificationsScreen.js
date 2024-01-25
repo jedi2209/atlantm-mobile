@@ -1,228 +1,142 @@
 /* eslint-disable react-native/no-inline-styles */
-import {PureComponent, useState, useEffect} from 'react';
+import {useEffect, useState} from 'react';
+import {Linking} from 'react-native';
 import PropTypes from 'prop-types';
-import {
-  ScrollView,
-  StyleSheet,
-  Platform,
-  Dimensions,
-  Linking,
-} from 'react-native';
-import {
-  Text,
-  Icon,
-  Button,
-  Box,
-  Pressable,
-  View,
-  Divider,
-  HStack,
-  VStack,
-  useToast,
-  Heading,
-} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import DeviceInfo from 'react-native-device-info';
+import {ScrollView, Text, View} from 'native-base';
+
 import * as NavigationService from '../../navigation/NavigationService';
-import LinearGradient from 'react-native-linear-gradient';
-import RNBounceable from '@freakycoder/react-native-bounceable';
-import Imager from '../../core/components/Imager';
 
 // redux
 import {connect} from 'react-redux';
-import {actionSetPushActionSubscribe} from '../../core/actions';
+import {actionGetNotifications} from '../actions';
 
 // components
-import PushNotifications from '../../core/components/PushNotifications';
-import RateThisApp from '../../core/components/RateThisApp';
-import FlagButton from '../../core/components/FlagButton';
 import TransitionView from '../../core/components/TransitionView';
+import RNBounceable from '@freakycoder/react-native-bounceable';
+import NotificationItem from '../components/NotificationItem';
+import LogoLoader from '../../core/components/LogoLoader';
 
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
-import {APP_EMAIL, APP_REGION, STORE_LINK} from '../../core/const';
-import {strings} from '../../core/lang/const';
-import ToastAlert from '../../core/components/ToastAlert';
-import NotificationItem from '../components/NotificationItem';
+import {get} from 'lodash';
+import {getDateFromTimestamp, dayMonthYearTime2} from '../../utils/date';
 
-const {width, height} = Dimensions.get('screen');
-
-const styles = StyleSheet.create({
-  VersionContainer: {
-    width: '100%',
-    alignItems: 'center',
-    alignContent: 'center',
-    justifyContent: 'center',
-  },
-  TextVersionInfo: {
-    fontSize: 12,
-    fontFamily: styleConst.font.light,
-    color: styleConst.color.lightBlue,
-  },
-  block: {
-    marginVertical: 10,
-    marginLeft: 10,
-  },
-  langHeading: {
-    color: styleConst.color.white,
-    fontFamily: styleConst.font.medium,
-  },
-  pushHeading: {
-    fontSize: 16,
-    color: styleConst.color.white,
-    fontFamily: styleConst.font.medium,
-  },
-  pushText: {
-    color: styleConst.color.white,
-    fontFamily: styleConst.font.light,
-  },
-  pushButton: {
-    borderColor: styleConst.color.white,
-    borderWidth: 1,
-    marginTop: 10,
-    marginBottom: 0,
-  },
-  userAgreementText: {
-    fontSize: 12,
-    fontFamily: styleConst.font.light,
-    color: styleConst.color.lightBlue,
-  },
-  badgeService: {
-    color: '#FFFFFF',
-    background: '#FB4D3D',
-  },
-  badgeCars: {
-    color: '#FFFFFF',
-    background: '#7765E3',
-  },
-});
-
-const mapStateToProps = ({dealer, nav, core}) => {
+const mapStateToProps = ({settings, nav, profile}) => {
   return {
     nav,
-    region: dealer.region,
-    pushActionSubscribeState: core.pushActionSubscribeState,
-    currentLang: core.language.selected || APP_REGION,
+    notifications: get(settings, 'notifications.data', []),
+    login: profile.login,
   };
 };
 
 const mapDispatchToProps = {
-  actionSetPushActionSubscribe,
+  actionGetNotifications,
 };
 
-const deviceWidth = Dimensions.get('window').width;
-const cardWidth = deviceWidth - 20;
-const imgHeight = 200;
+const types = {
+  1: 'rgba(251, 77, 61, 0.1)', // общее
+  2: 'rgba(119, 101, 227, 0.1)', // акции
+  3: 'rgba(251, 77, 61, 0.1)', // новости
+  4: 'rgba(100, 227, 127, 0.1)', // ТВА
+};
+
+const isValidUrl = str => {
+  const pattern = new RegExp(
+    '^([a-zA-Z]+:\\/\\/)?' + // protocol
+      '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' + // domain name
+      '((\\d{1,3}\\.){3}\\d{1,3}))' + // OR IP (v4) address
+      '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' + // port and path
+      '(\\?[;&a-z\\d%_.~+=-]*)?' + // query string
+      '(\\#[-a-z\\d_]*)?$', // fragment locator
+    'i',
+  );
+  return pattern.test(str);
+};
+
+const parseURL = async item => {
+  const {url, type} = item;
+
+  const supported = await Linking.canOpenURL(url);
+
+  if (isValidUrl(url) && supported) {
+    return await Linking.openURL(url);
+  } else {
+    // URL is not valid, do something else
+    switch (get(type, 'id')) {
+      case 2: // акция
+        return NavigationService.navigate('InfoPostScreen', {id: url});
+      case 1: // общее
+      case 3: // новости
+      case 4: // ТВА
+      default:
+        break;
+    }
+  }
+  return;
+};
 
 const NotificationsScreen = props => {
-  const {region, pushActionSubscribeState, navigation} = props;
-
-  const toast = useToast();
+  const {notifications, login: userData} = props;
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     Analytics.logEvent('screen', 'notifications');
+    setLoading(true);
+    props
+      .actionGetNotifications({userID: get(userData, 'SAP.ID', 20673608)})
+      .then(() => {
+        setLoading(false);
+      });
   }, []);
 
-  const _onSwitchActionSubscribe = async value => {
-    let title = strings.Notifications.success.titleSad,
-      text = strings.Notifications.success.textPushSad,
-      status = 'info';
+  if (isLoading) {
+    return (
+      <LogoLoader
+        style={{
+          position: 'relative',
+        }}
+      />
+    );
+  }
 
-    if (value) {
-      PushNotifications.unsubscribeFromTopic('actions');
-      const subscriptionStatus = await PushNotifications.subscribeToTopic(
-        'actionsRegion',
-        region,
-      );
-      if (subscriptionStatus) {
-        props.actionSetPushActionSubscribe(true);
-        title = strings.Notifications.success.title;
-        text = strings.Notifications.success.textPush;
-        status = 'success';
-      } else {
-        return false;
-      }
-    } else {
-      PushNotifications.unsubscribeFromTopic('actionsRegion');
-      PushNotifications.unsubscribeFromTopic('actions');
-      props.actionSetPushActionSubscribe(false);
-    }
-    toast.show({
-      render: ({id}) => {
-        return (
-          <ToastAlert
-            id={id}
-            description={text}
-            status={status}
-            title={title}
-            duration={5000}
-          />
-        );
-      },
-    });
-  };
+  if (!get(notifications, 'length')) {
+    return (
+      <View
+        style={{
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text>Нет уведомлений</Text>
+      </View>
+    );
+  }
 
   return (
     <ScrollView style={styleConst.safearea.default}>
-      <TransitionView
-        animation={styleConst.animation.zoomIn}
-        duration={250}
-        index={1}>
-        <RNBounceable onPress={() => console.info('asd')}>
-          <NotificationItem
-            date={'13 дек. 2023, 11:20'}
-            title={'Запишитесь на сервис через наше приложение!'}
-            text={
-              'Павел, добрый день!\nНапоминаем Вам про возможности записаться на сервис через наше мобильное приложение.'
-            }
-          />
-        </RNBounceable>
-      </TransitionView>
-      <TransitionView
-        animation={styleConst.animation.zoomIn}
-        duration={250}
-        index={2}>
-        <RNBounceable onPress={() => console.info('asd')}>
-          <NotificationItem
-            date={'12 дек. 2023, 22:20'}
-            title={'Давайте знакомиться выгодно!'}
-            colorBackground="rgba(119, 101, 227, 0.1)"
-            text={
-              'Павел Сушкевич, самое время воспользоваться нашим акционным предложением! Ваш промокод “ЗИМА2023”, введите его и получите скидку 20%.'
-            }
-          />
-        </RNBounceable>
-      </TransitionView>
-      <TransitionView
-        animation={styleConst.animation.zoomIn}
-        duration={250}
-        index={3}>
-        <RNBounceable onPress={() => console.info('asd')}>
-          <NotificationItem
-            date={'13 дек. 2023, 11:20'}
-            title={'Запишитесь на сервис через наше приложение!'}
-            text={
-              'Павел, добрый день!\nНапоминаем Вам про возможности записаться на сервис через наше мобильное приложение.'
-            }
-          />
-        </RNBounceable>
-      </TransitionView>
-      <TransitionView
-        animation={styleConst.animation.zoomIn}
-        duration={250}
-        index={4}>
-        <RNBounceable onPress={() => console.info('asd')}>
-          <NotificationItem
-            date={'12 дек. 2023, 22:20'}
-            title={'Давайте знакомиться выгодно!'}
-            colorBackground="rgba(119, 101, 227, 0.1)"
-            text={
-              'Павел Сушкевич, самое время воспользоваться нашим акционным предложением! Ваш промокод “ЗИМА2023”, введите его и получите скидку 20%.'
-            }
-          />
-        </RNBounceable>
-      </TransitionView>
+      <View pb={10}>
+        {notifications.map((item, index) => {
+          return (
+            <TransitionView
+              animation={styleConst.animation.zoomIn}
+              duration={250}
+              key={'notification-' + item.id}
+              index={index}>
+              <RNBounceable onPress={() => parseURL(item)}>
+                <NotificationItem
+                  date={dayMonthYearTime2(
+                    getDateFromTimestamp(item.date.timestamp),
+                  )}
+                  title={item.title}
+                  text={item.text}
+                  colorBackground={types[get(item, 'type.id', 2)]}
+                />
+              </RNBounceable>
+            </TransitionView>
+          );
+        })}
+      </View>
     </ScrollView>
   );
 };

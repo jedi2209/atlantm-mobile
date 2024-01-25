@@ -1017,6 +1017,24 @@ export default {
       });
   },
 
+  async fetchNotifications({userID}) {
+    if (!userID) {
+      return false;
+    }
+    const url =
+      `/notifications/?` +
+      new URLSearchParams(
+        _.omitBy(
+          {
+            userID,
+          },
+          _.isNil,
+        ),
+      );
+
+    return await this.request(url, baseRequestParams);
+  },
+
   async toggleArchieveCar(car, userSAP) {
     if (!car || !userSAP) {
       return false;
