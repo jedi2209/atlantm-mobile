@@ -25,7 +25,12 @@ import {get} from 'lodash';
 import styleConst from '../../core/style-const';
 import Analytics from '../../utils/amplitude-analytics';
 import {verticalScale} from '../../utils/scale';
-import {dayMonth, dayMonthYear} from '../../utils/date';
+import {
+  dayMonth,
+  dayMonthYear,
+  getTimestampFromDate,
+  getTimestampInSeconds,
+} from '../../utils/date';
 import {strings} from '../../core/lang/const';
 
 import {TransparentBack} from '../../navigation/const';
@@ -47,6 +52,14 @@ const processDate = date => {
   return `${strings.InfoPostScreen.filter.from} ${dayMonth(date?.from)} ${
     strings.InfoPostScreen.filter.to
   } ${dayMonthYear(date?.to)}`;
+};
+
+const _onPressCallMe = ({dealers, navigation, postID}) => {
+  // const dealers = get(postData, 'dealers');
+  navigation.navigate('CallMeBackScreen', {
+    actionID: postID,
+    dealerCustom: dealers,
+  });
 };
 
 const mapStateToProps = ({dealer, info, core}) => {
@@ -127,13 +140,14 @@ const InfoPostScreen = ({
     };
   }, []);
 
-  const _onPressCallMe = ({dealers}) => {
-    // const dealers = get(postData, 'dealers');
-    navigation.navigate('CallMeBackScreen', {
-      actionID: postID,
-      dealerCustom: dealers,
-    });
-  };
+  useEffect(() => {
+    if (
+      getTimestampInSeconds() > getTimestampFromDate(get(postData, 'date.to'))
+    ) {
+      // если акция уже закончилась, то возвращаемся с экрана
+      navigation.goBack();
+    }
+  }, [postData, navigation]);
 
   const _onPressOrder = ({dealers}) => {
     let customDealersList = [];
@@ -369,7 +383,7 @@ const InfoPostScreen = ({
               styleConst.button.footer.buttonRight,
               {backgroundColor: styleConst.color.lightBlue},
             ]}
-            onPress={() => _onPressCallMe({dealers})}>
+            onPress={() => _onPressCallMe({dealers, navigation, postID})}>
             <Text style={styles.buttonText} selectable={false}>
               {strings.InfoPostScreen.button.callMe}
             </Text>
