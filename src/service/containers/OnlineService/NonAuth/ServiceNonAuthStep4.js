@@ -367,11 +367,12 @@ const ServiceNonAuthStep4 = props => {
                         />
                         <VStack>
                           <Text>
-                            {
+                            {[
                               strings.ServiceScreen.worksService[
                                 orderData.SERVICETYPE
-                              ]
-                            }
+                              ],
+                              orderData.SERVICESecondFull.name,
+                            ].join('\r\n')}
                           </Text>
                         </VStack>
                       </HStack>
