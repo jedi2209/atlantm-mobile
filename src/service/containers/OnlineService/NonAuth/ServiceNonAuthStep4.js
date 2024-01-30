@@ -267,10 +267,10 @@ const ServiceNonAuthStep4 = props => {
   let heightBlock = 200;
 
   if (get(orderData, 'SERVICETYPE')) {
-    heightBlock = heightBlock + 45;
+    heightBlock = heightBlock + 55;
   }
   if (get(orderData, 'SERVICESecondFull.total')) {
-    heightBlock = heightBlock + 45;
+    heightBlock = heightBlock + 55;
   }
 
   const FormConfig = {
@@ -371,8 +371,10 @@ const ServiceNonAuthStep4 = props => {
                               strings.ServiceScreen.worksService[
                                 orderData.SERVICETYPE
                               ],
-                              orderData.SERVICESecondFull.name,
-                            ].join('\r\n')}
+                              get(orderData, 'SERVICESecondFull.name', null),
+                            ]
+                              .filter(key => key !== null)
+                              .join('\r\n')}
                           </Text>
                         </VStack>
                       </HStack>
