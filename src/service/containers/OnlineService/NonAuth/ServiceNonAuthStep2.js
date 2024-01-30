@@ -63,7 +63,16 @@ const ServiceNonAuthStep2 = props => {
 
   const orderData = get(route, 'params', {});
 
-  const isAdditionalAvailable = get(orderData, 'typeSecond') !== 'tyreRepair';
+  let isAdditionalAvailable = false;
+
+  if (get(orderData, 'itemsFull.length')) {
+    orderData.itemsFull.map(item => {
+      if (get(item, 'additional')) {
+        isAdditionalAvailable = true;
+        return;
+      }
+    });
+  }
 
   const [serviceData, setServiceData] = useReducer(reducerService, {
     typeFirst: get(orderData, 'SERVICE'),
@@ -72,8 +81,8 @@ const ServiceNonAuthStep2 = props => {
     leaveTyresInStorage: false,
     loading: false,
     lead: get(orderData, 'lead'),
-    items: get(orderData, 'items'),
-    itemsFull: get(orderData, 'itemsFull'),
+    items: [],
+    itemsFull: get(orderData, 'itemsFull', []),
     itemFullSelected: {},
   });
 
@@ -82,15 +91,15 @@ const ServiceNonAuthStep2 = props => {
   }, []);
 
   useEffect(() => {
-    if (
-      !isAdditionalAvailable &&
-      (!get(orderData, 'DEALER') ||
-        !get(orderData, 'SERVICE') ||
-        !get(orderData, 'SERVICETYPE'))
-    ) {
-      return;
-    }
-    if (!get(serviceData, 'items.length') || get(serviceData, 'needUpdate')) {
+    // if (
+    //   !isAdditionalAvailable &&
+    //   (!get(orderData, 'DEALER') ||
+    //     !get(orderData, 'SERVICE') ||
+    //     !get(orderData, 'SERVICETYPE'))
+    // ) {
+    //   return;
+    // }
+    if (!serviceData.itemsFull) {
       setServiceData({
         loading: true,
         items: [],
@@ -101,37 +110,53 @@ const ServiceNonAuthStep2 = props => {
       API.fetchServiceCalculation({
         dealerID: get(orderData, 'DEALER'),
         workType: get(orderData, 'SERVICETYPE'),
-        leaveTyresInStorage: get(serviceData, 'leaveTyresInStorage', false),
       }).then(servicesCalculation => {
-        let servicesTmp = [];
-        let servicesFull = [];
-        get(servicesCalculation, 'data', []).map(el => {
-          const id = get(el, 'id');
-          servicesTmp.push({
-            label: el.name,
-            value: id,
-            key: id,
+        if (servicesCalculation) {
+          setServiceData({
+            loading: false,
+            lead: false,
+            items: [],
+            itemsFull: servicesCalculation,
+            needUpdate: false,
           });
-          servicesFull.push(el);
-        });
-        if (!get(servicesTmp, 'length')) {
+        } else {
           setServiceData({lead: true, loading: false, needUpdate: false});
           return navigation.navigate('ServiceNonAuthStep3', {
             ...orderData,
             ...serviceData,
           });
         }
-        setServiceData({
-          loading: false,
-          lead: false,
-          items: servicesTmp,
-          itemsFull: servicesFull,
-          needUpdate: false,
-        });
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [orderData, serviceData?.leaveTyresInStorage]);
+
+  useEffect(() => {
+    let servicesTmp = [];
+    let servicesFull = [];
+    const isAdditionalValues = get(serviceData, 'leaveTyresInStorage', false);
+    get(serviceData, 'itemsFull', []).map(el => {
+      const id = get(el, 'id');
+      servicesFull.push(el);
+      if (isAdditionalValues === get(el, 'additional')) {
+        servicesTmp.push({
+          label: el.name,
+          value: id,
+          key: id,
+        });
+      }
+    });
+    setTimeout(() => {
+      setServiceData({
+        loading: false,
+        lead: false,
+        items: servicesTmp,
+        itemsFull: servicesFull,
+        needUpdate: false,
+      });
+    }, 500);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serviceData.needUpdate]);
 
   const FormConfig = {
     groups: [
@@ -212,6 +237,8 @@ const ServiceNonAuthStep2 = props => {
                         setServiceData({
                           leaveTyresInStorage: val,
                           needUpdate: true,
+                          loading: true,
+                          itemFullSelected: {},
                         }),
                       300,
                     ),

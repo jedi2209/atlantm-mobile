@@ -240,10 +240,12 @@ const ServiceNonAuthStep1 = props => {
       case 'carWash':
       case 'other':
       default:
+        setServiceData({typeSecond: null});
         setServicesCategoryField({});
         break;
     }
-  }, [serviceData]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [serviceData.typeFirst]);
 
   const FormConfig = {
     groups: [
@@ -342,34 +344,21 @@ const ServiceNonAuthStep1 = props => {
     let nextScreen = 'ServiceNonAuthStep3';
     let extData = {};
     setServiceData({loading: true});
-    if (get(serviceData, 'typeSecond')) {
-      const isDataAvailable = await API.fetchServiceCalculation({
-        dealerID: get(pushProps, 'DEALER'),
-        workType: get(pushProps, 'SERVICETYPE'),
-        leaveTyresInStorage: false,
-      });
-      if (isDataAvailable) {
-        let servicesTmp = [];
-        let servicesFull = [];
-        get(isDataAvailable, 'data', []).map(el => {
-          const id = get(el, 'id');
-          servicesTmp.push({
-            label: el.name,
-            value: id,
-            key: id,
-          });
-          servicesFull.push(el);
-        });
-        if (!get(servicesTmp, 'length')) {
-          setServiceData({lead: true, loading: false});
-        } else {
-          nextScreen = 'ServiceNonAuthStep2';
-          extData = {
-            items: servicesTmp,
-            itemsFull: servicesFull,
-            lead: false,
-          };
-        }
+    const workType = get(pushProps, 'SERVICETYPE', get(pushProps, 'SERVICE'));
+    const isDataAvailable = await API.fetchServiceCalculation({
+      dealerID: get(pushProps, 'DEALER'),
+      workType,
+    });
+    if (isDataAvailable) {
+      let servicesFull = get(isDataAvailable, 'data', []);
+      if (!get(servicesFull, 'length')) {
+        setServiceData({lead: true, loading: false});
+      } else {
+        nextScreen = 'ServiceNonAuthStep2';
+        extData = {
+          itemsFull: servicesFull,
+          lead: false,
+        };
       }
     }
     const dataForNextScreen = {...serviceData, ...pushProps, ...extData};

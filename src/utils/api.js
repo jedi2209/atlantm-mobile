@@ -1062,11 +1062,7 @@ export default {
     }
   },
 
-  async fetchServiceCalculation({
-    dealerID,
-    workType,
-    leaveTyresInStorage = false,
-  }) {
+  async fetchServiceCalculation({dealerID, workType}) {
     if (!workType || !dealerID) {
       return false;
     }
@@ -1076,7 +1072,6 @@ export default {
         _.omitBy(
           {
             type: workType,
-            additional: leaveTyresInStorage,
           },
           _.isNil,
         ),
