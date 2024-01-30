@@ -518,6 +518,7 @@ export default {
   InfoPostScreen: {
     button: {
       callMe: 'позвоните мне',
+      actionFinished: 'Акция завершена!',
     },
     filter: {
       from: 'с',

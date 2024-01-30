@@ -10,7 +10,7 @@ import {
 import {TransitionPresets} from '@react-navigation/stack';
 import {useFocusEffect} from '@react-navigation/native';
 import TransitionView from '../../core/components/TransitionView';
-import {Button, ScrollView, View} from 'native-base';
+import {Alert, Button, ScrollView, View} from 'native-base';
 import ResponsiveImageView from 'react-native-responsive-image-view';
 
 // redux
@@ -35,6 +35,8 @@ import {strings} from '../../core/lang/const';
 
 import {TransparentBack} from '../../navigation/const';
 import LogoLoader from '../../core/components/LogoLoader';
+import ToastAlert from '../../core/components/ToastAlert';
+import ModalView from '../../core/components/ModalView';
 
 // image
 const {width: screenWidth} = Dimensions.get('window');
@@ -94,6 +96,7 @@ const InfoPostScreen = ({
   const [refreshing, setRefreshing] = useState(false);
   const [isLoading, setLoading] = useState(true);
   const [postData, setPost] = useState(posts[postID]);
+  const [isFinished, setFinished] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -145,7 +148,7 @@ const InfoPostScreen = ({
       getTimestampInSeconds() > getTimestampFromDate(get(postData, 'date.to'))
     ) {
       // если акция уже закончилась, то возвращаемся с экрана
-      navigation.goBack();
+      setFinished(true);
     }
   }, [postData, navigation]);
 
@@ -306,6 +309,29 @@ const InfoPostScreen = ({
 
   if (text) {
     //text = processHtml(text, webViewWidth);
+  }
+
+  if (isFinished) {
+    return (
+      <ModalView
+        statusBarTranslucent
+        isModalVisible={true}
+        animationIn="slideInRight"
+        animationOut="slideOutLeft"
+        onHide={() => navigation.goBack()}
+        selfClosed={false}>
+        <View
+          style={{
+            padding: 10,
+            justifyContent: 'center',
+            alignContent: 'center',
+            alignSelf: 'center',
+            height: 50,
+          }}>
+          <Text>{strings.InfoPostScreen.button.actionFinished}</Text>
+        </View>
+      </ModalView>
+    );
   }
 
   return (
