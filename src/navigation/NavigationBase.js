@@ -362,9 +362,9 @@ export const Base = ({navigation, route}) => {
               return ArrowBack(
                 navigation,
                 {
-                  params: {
-                    returnScreen: 'BottomTabNavigation',
-                  },
+                  // params: {
+                  //   returnScreen: 'BottomTabNavigation',
+                  // },
                 },
                 {
                   icon: 'close-outline',
