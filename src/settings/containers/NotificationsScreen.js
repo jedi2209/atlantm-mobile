@@ -90,11 +90,9 @@ const NotificationsScreen = props => {
   useEffect(() => {
     Analytics.logEvent('screen', 'notifications');
     setLoading(true);
-    props
-      .actionGetNotifications({userID: get(userData, 'SAP.ID', 20673608)})
-      .then(() => {
-        setLoading(false);
-      });
+    props.actionGetNotifications({userID: get(userData, 'SAP.ID')}).then(() => {
+      setLoading(false);
+    });
   }, []);
 
   if (isLoading) {
