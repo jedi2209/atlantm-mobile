@@ -1371,7 +1371,10 @@ class Form extends Component {
             }}
             onValueChange={value => {
               this.onChangeField(data)(value);
-              if (data.props.onChange && Platform.OS !== 'ios') {
+              if (
+                (data.props.onChange && Platform.OS !== 'ios') ||
+                data.props?.iOSselectFix
+              ) {
                 data.props.onChange(value);
               }
             }}
