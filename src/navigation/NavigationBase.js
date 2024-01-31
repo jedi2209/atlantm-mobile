@@ -381,29 +381,48 @@ export const Base = ({navigation, route}) => {
         <StackBase.Screen
           name="NotificationsScreen"
           component={NotificationsScreen}
-          options={BigCloseButton(navigation, route, {
-            ...TransitionPresets.ModalTransition,
+          options={({route}) => ({
+            headerShown: true,
+            headerTransparent: false,
+            presentation: 'modal',
+            orientation: 'portrait',
             headerTitle: strings.Menu.main.notifications,
+            headerStyle: stylesHeader.whiteHeader,
             headerTitleStyle: [
               stylesHeader.transparentHeaderTitle,
               {color: '#222B45'},
             ],
-            headerRight: props => (
-              <View style={stylesHeader.headerRightStyle}>
-                <Pressable onPress={() => console.info('props', props)}>
-                  <Icon
-                    size={7}
-                    as={MaterialCommunityIcons}
-                    name="notification-clear-all"
-                    color={styleConst.color.blueNew}
-                    _dark={{
-                      color: styleConst.color.white,
-                    }}
-                    style={stylesHeader.headerRightButton}
-                  />
-                </Pressable>
-              </View>
-            ),
+            headerLeft: () => {
+              return ArrowBack(navigation, route, {
+                icon: 'close-outline',
+                IconStyle: {
+                  fontSize: 42,
+                  width: 40,
+                  color: '#222B45',
+                },
+              });
+            },
+            headerRight: props => {
+              if (!route?.params?.notificationsCount) {
+                return;
+              }
+              return (
+                <View style={stylesHeader.headerRightStyle}>
+                  <Pressable onPress={() => console.info('props', props)}>
+                    <Icon
+                      size={7}
+                      as={MaterialCommunityIcons}
+                      name="notification-clear-all"
+                      color={styleConst.color.blueNew}
+                      _dark={{
+                        color: styleConst.color.white,
+                      }}
+                      style={stylesHeader.headerRightButton}
+                    />
+                  </Pressable>
+                </View>
+              );
+            },
           })}
         />
         {/* ЭКО */}

@@ -84,15 +84,24 @@ const parseURL = async item => {
 };
 
 const NotificationsScreen = props => {
-  const {notifications, login: userData} = props;
+  const {notifications, login: userData, navigation} = props;
   const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     Analytics.logEvent('screen', 'notifications');
     setLoading(true);
-    props.actionGetNotifications({userID: get(userData, 'SAP.ID')}).then(() => {
-      setLoading(false);
-    });
+    props
+      .actionGetNotifications({userID: get(userData, 'SAP.ID', null)})
+      .then(() => {
+        setLoading(false);
+        if (get(notifications, 'length')) {
+          setTimeout(() => {
+            navigation.setParams({
+              notificationsCount: get(notifications, 'length'),
+            });
+          }, 500);
+        }
+      });
   }, []);
 
   if (isLoading) {
