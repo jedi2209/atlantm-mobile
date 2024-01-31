@@ -136,7 +136,7 @@ const ServiceNonAuthStep2 = props => {
     let servicesFull = [];
     const isAdditionalValues = get(serviceData, 'leaveTyresInStorage', false);
     get(serviceData, 'itemsFull', []).map(el => {
-      const id = get(el, 'id');
+      const id = get(el, 'id.sap');
       servicesFull.push(el);
       if (isAdditionalValues === get(el, 'additional')) {
         servicesTmp.push({
@@ -146,6 +146,13 @@ const ServiceNonAuthStep2 = props => {
         });
       }
     });
+    const itemsFull = get(serviceData, 'itemsFull');
+    const indexEl = Object.keys(itemsFull).find(
+      item =>
+        itemsFull[item].id.sap == get(serviceData, 'serviceSecondID') &&
+        itemsFull[item].additional ==
+          get(serviceData, 'leaveTyresInStorage', false),
+    );
     setTimeout(() => {
       setServiceData({
         loading: false,
@@ -153,6 +160,7 @@ const ServiceNonAuthStep2 = props => {
         items: servicesTmp,
         itemsFull: servicesFull,
         needUpdate: false,
+        itemFullSelected: indexEl ? serviceData.itemsFull[indexEl] : {},
       });
     }, 500);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -178,10 +186,11 @@ const ServiceNonAuthStep2 = props => {
                   strings.Form.field.label.serviceTypes[
                     get(orderData, 'SERVICE')
                   ].second,
-                value: null,
+                value: get(serviceData, 'serviceSecondID', null),
                 props: {
                   items: serviceData.items,
                   required: true,
+                  iOSselectFix: true,
                   // value: secondData.items,
                   placeholder: {
                     label:
@@ -194,8 +203,14 @@ const ServiceNonAuthStep2 = props => {
                   onChange: async serviceSecondID => {
                     const itemsFull = get(serviceData, 'itemsFull');
                     const indexEl = Object.keys(itemsFull).find(
-                      item => itemsFull[item].id == serviceSecondID,
+                      item =>
+                        itemsFull[item].id.sap == serviceSecondID &&
+                        itemsFull[item].additional ==
+                          get(serviceData, 'leaveTyresInStorage', false),
                     );
+                    setServiceData({
+                      serviceSecondID,
+                    });
                     if (indexEl) {
                       setServiceData({
                         itemFullSelected: serviceData.itemsFull[indexEl],
@@ -231,7 +246,7 @@ const ServiceNonAuthStep2 = props => {
                   ].leaveTyresInStorage,
                 value: false,
                 props: {
-                  onSelect: val =>
+                  onSelect: val => {
                     setTimeout(
                       () =>
                         setServiceData({
@@ -241,7 +256,8 @@ const ServiceNonAuthStep2 = props => {
                           itemFullSelected: {},
                         }),
                       300,
-                    ),
+                    );
+                  },
                 },
               },
             ],
