@@ -1,7 +1,23 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect, useMemo, useReducer} from 'react';
-import {get} from 'lodash';
+import {get, orderBy} from 'lodash';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableWithoutFeedback,
+  ScrollView,
+  ActivityIndicator,
+  Platform,
+  TouchableOpacity,
+  Alert,
+  Pressable,
+  TouchableHighlight,
+} from 'react-native';
+import RNBounceable from '@freakycoder/react-native-bounceable';
+import {CarCard} from '../../../../profile/components/CarCard';
 
+import styleConst from '../../../../core/style-const';
 import Form from '../../../../core/components/Form/Form';
 import UserData from '../../../../utils/user';
 
@@ -14,21 +30,46 @@ import {strings} from '../../../../core/lang/const';
 import Analytics from '../../../../utils/amplitude-analytics';
 import API from '../../../../utils/api';
 
-const mapStateToProps = ({dealer, service, nav}) => {
+const mapStateToProps = ({dealer, profile, nav}) => {
+  const cars = orderBy(profile.cars, ['owner'], ['desc']);
+
   let carLocalBrand = '';
   let carLocalModel = '';
   let carLocalNumber = '';
   let carLocalVin = '';
 
+  if (profile.cars && typeof profile.cars === 'object') {
+    let Cars = [];
+    profile.cars.map(item => {
+      if (!item.hidden) {
+        Cars.push(item);
+      }
+    });
+    if (Cars && Cars[0]) {
+      if (Cars[0].brand) {
+        carLocalBrand = Cars[0].brand;
+      }
+      if (Cars[0].model) {
+        carLocalModel = Cars[0].model;
+      }
+      if (Cars[0].number) {
+        carLocalNumber = Cars[0].number || '';
+      }
+      if (Cars[0].vin) {
+        carLocalVin = Cars[0].vin || '';
+      }
+    }
+  }
+
   return {
     nav,
     allDealers: dealer.listDealers,
-    date: service.date,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
     lastName: UserData.get('LAST_NAME'),
     phone: UserData.get('PHONE'),
     email: UserData.get('EMAIL'),
+    cars,
     carBrand: UserData.get('CARBRAND')
       ? UserData.get('CARBRAND')
       : carLocalBrand,
@@ -68,6 +109,93 @@ const reducerService = (state = {}, action) => {
   return {...state, ...action};
 };
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingVertical: 20,
+    paddingHorizontal: 14,
+  },
+  header: {
+    marginBottom: 36,
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  carContainer: {
+    marginLeft: -16,
+    marginRight: -16,
+  },
+  carContainerContent: {
+    // Добавляем отрицательный оступ, для контейнера с карточками,
+    // т.к. в карточках отступ снизу больше чем сверху из-за места использования.
+    marginVertical: 10,
+  },
+  group: {
+    marginBottom: 36,
+  },
+  field: {
+    marginBottom: 18,
+  },
+  textinput: {
+    height: Platform.OS === 'ios' ? 40 : 'auto',
+    borderColor: '#d8d8d8',
+    borderBottomWidth: 1,
+    color: '#222b45',
+    fontSize: 18,
+  },
+  label: {
+    fontSize: 14,
+    color: '#000',
+    marginBottom: -2,
+  },
+  picker: {
+    borderColor: '#d8d8d8',
+    borderBottomWidth: 1,
+    height: 40,
+  },
+  button: {
+    margin: 10,
+    justifyContent: 'center',
+    paddingHorizontal: 10,
+    borderColor: '#027aff',
+    borderRadius: 5,
+    borderWidth: 1,
+  },
+  buttonText: {
+    textTransform: 'uppercase',
+    fontSize: 16,
+    color: styleConst.color.white,
+  },
+  textPriceTitle: {
+    marginLeft: 5,
+    paddingTop: 7,
+    fontSize: 16,
+    fontFamily: styleConst.font.regular,
+    color: styleConst.color.greyText7,
+    width: '83%',
+  },
+  textPriceIcon: {
+    color: styleConst.color.blue,
+    marginTop: 3,
+  },
+  textPrice: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: styleConst.color.greyText,
+  },
+  scrollViewInner: {
+    flex: 1,
+    paddingLeft: 24,
+    paddingRight: 5,
+    marginVertical: 29.5,
+    textAlign: 'center',
+    alignContent: 'center',
+    width: '100%',
+    alignItems: 'center',
+  },
+});
+
 const ServiceNonAuthStep1 = props => {
   const {
     route,
@@ -80,6 +208,7 @@ const ServiceNonAuthStep1 = props => {
     region,
     allDealers,
     navigation,
+    cars,
   } = props;
 
   const [serviceData, setServiceData] = useReducer(
@@ -87,21 +216,19 @@ const ServiceNonAuthStep1 = props => {
     defaultFieldsData,
   );
 
-  // const [seed, setSeed] = useState(1);
-  // const resetForm = () => {
-  //   setSeed(Math.random());
-  // };
-
   const [dealerSelectedLocalState, setDealerSelectedLocal] = useState(null);
   const [servicesCategoryField, setServicesCategoryField] = useState({});
   const [car, setCar] = useState({
-    carBrand: carBrand,
-    carModel: carModel,
-    carVIN: carVIN,
-    carNumber: carNumber,
+    carBrand,
+    carModel,
+    carVIN,
+    carNumber,
   });
+  const [myCars, setMyCars] = useState([]);
 
   const dealer = get(route, 'params.dealerCustom', dealerSelectedLocal);
+  const carFromNavigation = get(route, 'params.car');
+  const settingsFromNavigation = get(route, 'params.settings');
 
   let listDealers = [];
   if (dealer) {
@@ -247,6 +374,129 @@ const ServiceNonAuthStep1 = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [serviceData.typeFirst]);
 
+  useEffect(() => {
+    let carsTmp = [];
+    if (carFromNavigation) {
+      carsTmp.push(carFromNavigation);
+    } else {
+      cars.map(item => {
+        if (item.hidden) {
+          return;
+        }
+        if (
+          get(settingsFromNavigation, 'disableCarBlock') &&
+          get(item, 'vin') !== car.carVIN
+        ) {
+          return;
+        }
+        carsTmp.push(item);
+      });
+    }
+    setMyCars(carsTmp);
+    const item = carsTmp[0];
+    setCar({
+      carBrand: get(item, 'carInfo.brand.name', get(item, 'brand')),
+      carModel: get(item, 'carInfo.model.name', get(item, 'model')),
+      carNumber: get(item, 'number'),
+      carVIN: get(item, 'vin'),
+    });
+  }, [cars]);
+
+  let carsFields = [];
+
+  if (myCars) {
+    carsFields = [
+      {
+        name: 'CARNAME',
+        type: 'component',
+        label: strings.Form.field.label.car2,
+        value: (
+          <ScrollView
+            showsHorizontalScrollIndicator={false}
+            horizontal
+            style={styles.carContainer}
+            contentContainerStyle={styles.carContainerContent}>
+            {myCars.map(item => {
+              return (
+                <RNBounceable
+                  activeOpacity={0.7}
+                  key={'carWrapper' + item.vin}
+                  onPress={() => {
+                    setCar({
+                      carBrand: get(
+                        item,
+                        'carInfo.brand.name',
+                        get(item, 'brand'),
+                      ),
+                      carModel: get(
+                        item,
+                        'carInfo.model.name',
+                        get(item, 'model'),
+                      ),
+                      carNumber: get(item, 'number'),
+                      carVIN: get(item, 'vin'),
+                    });
+                  }}>
+                  <View>
+                    <CarCard
+                      key={'carCard' + item.vin}
+                      data={item}
+                      type="check"
+                      checked={car.carVIN === item.vin}
+                      disabled={settingsFromNavigation?.disableCarBlock}
+                    />
+                  </View>
+                </RNBounceable>
+              );
+            })}
+          </ScrollView>
+        ),
+      },
+    ];
+  } else {
+    carsFields = [
+      {
+        name: 'CARBRAND',
+        type: 'input',
+        label: strings.Form.field.label.carBrand,
+        value: carBrand,
+        props: {
+          required: true,
+          placeholder: null,
+        },
+      },
+      {
+        name: 'CARMODEL',
+        type: 'input',
+        label: strings.Form.field.label.carModel,
+        value: carModel,
+        props: {
+          required: true,
+          placeholder: null,
+        },
+      },
+      {
+        name: 'CARNUMBER',
+        type: 'input',
+        label: strings.Form.field.label.carNumber,
+        value: carNumber,
+        props: {
+          placeholder: null,
+        },
+      },
+      {
+        name: 'CARVIN',
+        type: 'input',
+        label: strings.Form.field.label.carVIN,
+        value: carVIN,
+        props: {
+          placeholder: null,
+          autoCapitalize: 'characters',
+        },
+      },
+    ];
+  }
+
   const FormConfig = {
     groups: [
       {
@@ -295,47 +545,7 @@ const ServiceNonAuthStep1 = props => {
         : null,
       {
         name: strings.Form.group.car,
-        fields: [
-          {
-            name: 'CARBRAND',
-            type: 'input',
-            label: strings.Form.field.label.carBrand,
-            value: carBrand,
-            props: {
-              required: true,
-              placeholder: null,
-            },
-          },
-          {
-            name: 'CARMODEL',
-            type: 'input',
-            label: strings.Form.field.label.carModel,
-            value: carModel,
-            props: {
-              required: true,
-              placeholder: null,
-            },
-          },
-          {
-            name: 'CARNUMBER',
-            type: 'input',
-            label: strings.Form.field.label.carNumber,
-            value: carNumber,
-            props: {
-              placeholder: null,
-            },
-          },
-          {
-            name: 'CARVIN',
-            type: 'input',
-            label: strings.Form.field.label.carVIN,
-            value: carVIN,
-            props: {
-              placeholder: null,
-              autoCapitalize: 'characters',
-            },
-          },
-        ],
+        fields: carsFields,
       },
     ],
   };
@@ -360,6 +570,12 @@ const ServiceNonAuthStep1 = props => {
           lead: false,
         };
       }
+    }
+    if (car) {
+      pushProps.CARBRAND = car.carBrand;
+      pushProps.CARMODEL = car.carModel;
+      pushProps.CARNUMBER = car.carNumber;
+      pushProps.CARVIN = car.carVIN;
     }
     const dataForNextScreen = {...serviceData, ...pushProps, ...extData};
     navigation.navigate(nextScreen, dataForNextScreen);
