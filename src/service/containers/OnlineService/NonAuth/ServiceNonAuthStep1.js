@@ -358,7 +358,7 @@ const ServiceNonAuthStep1 = props => {
 
   let carsFields = [];
 
-  if (myCars) {
+  if (get(myCars, 'length')) {
     carsFields = [
       {
         name: 'CARNAME',
