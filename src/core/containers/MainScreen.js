@@ -23,7 +23,6 @@ import DeviceInfo from 'react-native-device-info';
 import {RefreshControl} from 'react-native-gesture-handler';
 import Carousel from 'react-native-snap-carousel';
 
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Tooltip from 'react-native-walkthrough-tooltip';
 
 import {MainScreenButton} from '../components/MainScreenButtons';
