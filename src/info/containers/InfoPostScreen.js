@@ -187,6 +187,7 @@ const InfoPostScreen = ({
         dealer: customDealersList,
       },
       dealerCustom: dealers,
+      dealerHide: true,
       actionID: postID,
       region,
     });
