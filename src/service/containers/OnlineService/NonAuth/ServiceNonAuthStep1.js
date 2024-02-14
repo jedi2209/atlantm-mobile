@@ -20,6 +20,7 @@ import {CarCard} from '../../../../profile/components/CarCard';
 import styleConst from '../../../../core/style-const';
 import Form from '../../../../core/components/Form/Form';
 import UserData from '../../../../utils/user';
+import dealerProcess from '../../../../utils/dealer-process';
 
 // redux
 import {connect} from 'react-redux';
@@ -254,61 +255,14 @@ const ServiceNonAuthStep1 = props => {
     }
   }
 
-  let dealerField = {};
-  if (listDealers) {
-    if (listDealers.length < 1) {
-      dealerField = {
-        name: 'DEALER',
-        type: 'dealerSelect',
-        label: strings.Form.group.dealer,
-        value: dealer,
-        props: {
-          required: true,
-          goBack: true,
-          isLocal: true,
-          showBrands: false,
-          dealerFilter: {
-            type: 'ST',
-          },
-        },
-      };
-    }
-    if (listDealers.length === 1) {
-      dealerField = {
-        name: 'DEALER',
-        type: 'dealerSelect',
-        label: strings.Form.group.dealer,
-        value: dealerSelectedLocal || allDealers[dealer] || dealer,
-        props: {
-          required: true,
-          goBack: true,
-          isLocal: true,
-          showBrands: false,
-          readonly: get(route, 'params.settings.dealerHide', false),
-          dealerFilter: {
-            type: 'ST',
-          },
-        },
-      };
-    }
-    if (listDealers.length > 1) {
-      dealerField = {
-        name: 'DEALER',
-        type: 'select',
-        label: strings.Form.field.label.dealer,
-        value: dealer,
-        props: {
-          items: listDealers,
-          required: true,
-          placeholder: {
-            label: strings.Form.field.placeholder.dealer,
-            value: null,
-            color: '#9EA0A4',
-          },
-        },
-      };
-    }
-  }
+  let dealerField = dealerProcess({
+    dealer,
+    listDealers,
+    dealerSelectedLocal,
+    allDealers,
+    route,
+    dealerFilter: 'ST',
+  });
 
   useEffect(() => {
     Analytics.logEvent('screen', 'service/step1');
@@ -503,7 +457,7 @@ const ServiceNonAuthStep1 = props => {
         name: strings.Form.group.dealer,
         fields: [dealerField],
       },
-      dealerSelectedLocal || dealerSelectedLocalState
+      dealer
         ? {
             name: strings.Form.group.services,
             fields: [
