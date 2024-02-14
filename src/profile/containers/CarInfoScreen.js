@@ -277,6 +277,7 @@ const CarInfoScreen = props => {
                         screen: 'OrderPartsScreen',
                         params: {
                           car: car,
+                          dealerHide: true,
                         },
                       };
                       break;

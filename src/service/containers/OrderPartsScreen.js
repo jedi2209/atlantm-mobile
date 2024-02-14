@@ -29,6 +29,7 @@ import {ERROR_NETWORK} from '../../core/const';
 import {PARTS_ORDER__SUCCESS, PARTS_ORDER__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
 import LogoLoader from '../../core/components/LogoLoader';
+import dealerProcess from '../../utils/dealer-process';
 
 const mapStateToProps = ({dealer, profile, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
@@ -184,80 +185,21 @@ const OrderPartsScreen = props => {
     setDealerSelectedLocal(dealerSelectedLocal);
   }, [dealerSelectedLocal]);
 
-  let dealerGroup = {};
-  if (listDealers) {
-    if (listDealers.length < 1) {
-      dealerGroup = {
-        name: strings.Form.group.dealer,
-        fields: [
-          {
-            name: 'DEALER',
-            type: 'dealerSelect',
-            label: strings.Form.group.dealer,
-            value: dealer,
-            props: {
-              required: true,
-              goBack: true,
-              isLocal: true,
-              showBrands: false,
-              dealerFilter: {
-                type: 'ZZ',
-              },
-            },
-          },
-        ],
-      };
-    }
-    if (listDealers.length === 1) {
-      dealerGroup = {
-        name: strings.Form.group.dealer,
-        fields: [
-          {
-            name: 'DEALER',
-            type: 'dealerSelect',
-            label: strings.Form.group.dealer,
-            value: dealerSelectedLocal || allDealers[dealer] || dealer,
-            props: {
-              required: true,
-              goBack: true,
-              isLocal: true,
-              showBrands: false,
-              readonly: true,
-              dealerFilter: {
-                type: 'ZZ',
-              },
-            },
-          },
-        ],
-      };
-    }
-    if (listDealers.length > 1) {
-      dealerGroup = {
-        name: strings.Form.group.dealer,
-        fields: [
-          {
-            name: 'DEALER',
-            type: 'select',
-            label: strings.Form.field.label.dealer,
-            value: null,
-            props: {
-              items: listDealers,
-              required: true,
-              placeholder: {
-                label: strings.Form.field.placeholder.dealer,
-                value: null,
-                color: '#9EA0A4',
-              },
-            },
-          },
-        ],
-      };
-    }
-  }
+  let dealerField = dealerProcess({
+    dealer,
+    listDealers,
+    dealerSelectedLocal,
+    allDealers,
+    route,
+    dealerFilter: 'ZZ',
+  });
 
   const formConfig = {
     groups: [
-      dealerGroup,
+      {
+        name: strings.Form.group.dealer,
+        fields: [dealerField],
+      },
       {
         name: strings.Form.group.part,
         fields: [
