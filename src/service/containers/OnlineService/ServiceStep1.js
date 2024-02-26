@@ -1,19 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect, useMemo, useReducer} from 'react';
-import {get, orderBy} from 'lodash';
-import {
-  StyleSheet,
-  View,
-  Text,
-  TouchableWithoutFeedback,
-  ScrollView,
-  ActivityIndicator,
-  Platform,
-  TouchableOpacity,
-  Alert,
-  Pressable,
-  TouchableHighlight,
-} from 'react-native';
+import {StyleSheet, View, ScrollView, Platform} from 'react-native';
+import {useToast} from 'native-base';
 import RNBounceable from '@freakycoder/react-native-bounceable';
 import {CarCard} from '../../../profile/components/CarCard';
 
@@ -21,6 +9,7 @@ import styleConst from '../../../core/style-const';
 import Form from '../../../core/components/Form/Form';
 import UserData from '../../../utils/user';
 import dealerProcess from '../../../utils/dealer-process';
+import {get, orderBy} from 'lodash';
 
 // redux
 import {connect} from 'react-redux';
@@ -30,6 +19,7 @@ import {strings} from '../../../core/lang/const';
 
 import Analytics from '../../../utils/amplitude-analytics';
 import API from '../../../utils/api';
+import ToastAlert from '../../../core/components/ToastAlert';
 
 const mapStateToProps = ({dealer, profile, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
@@ -231,6 +221,8 @@ const ServiceStep1 = props => {
   const carFromNavigation = get(route, 'params.car');
   const settingsFromNavigation = get(route, 'params.settings');
 
+  const toast = useToast();
+
   let listDealers = [];
   if (dealer) {
     if (dealer.length) {
@@ -321,7 +313,7 @@ const ServiceStep1 = props => {
       case 'carWash':
       case 'other':
       default:
-        setServiceData({typeSecond: null});
+        setServiceData({typeSecond: false});
         setServicesCategoryField({});
         break;
     }
@@ -507,6 +499,49 @@ const ServiceStep1 = props => {
   const _onSubmit = async pushProps => {
     let nextScreen = 'ServiceStep3';
     let extData = {};
+    if (!get(serviceData, 'typeFirst')) {
+      toast.show({
+        render: ({id}) => {
+          return (
+            <ToastAlert
+              id={id}
+              status="warning"
+              duration={3000}
+              description={[
+                strings.Form.status.fieldRequired1,
+                '"' + strings.Form.field.label.service + '"',
+                strings.Form.status.fieldRequired2,
+              ].join(' ')}
+              title={strings.Form.status.fieldRequiredMiss}
+            />
+          );
+        },
+      });
+      return;
+    }
+    if (
+      get(servicesCategoryField, 'props.required') === true &&
+      !get(serviceData, 'typeSecond')
+    ) {
+      toast.show({
+        render: ({id}) => {
+          return (
+            <ToastAlert
+              id={id}
+              status="warning"
+              duration={3000}
+              description={[
+                strings.Form.status.fieldRequired1,
+                '"' + strings.Form.field.label.serviceSecond + '"',
+                strings.Form.status.fieldRequired2,
+              ].join(' ')}
+              title={strings.Form.status.fieldRequiredMiss}
+            />
+          );
+        },
+      });
+      return;
+    }
     setServiceData({loading: true});
     const workType = get(pushProps, 'SERVICETYPE', get(pushProps, 'SERVICE'));
     const isDataAvailable = await API.fetchServiceCalculation({
