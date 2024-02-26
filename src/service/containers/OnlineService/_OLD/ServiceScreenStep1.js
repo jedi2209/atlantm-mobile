@@ -13,24 +13,24 @@ import {
 } from 'react-native';
 import {Icon, Button, Toast, Checkbox, HStack} from 'native-base';
 import {get, orderBy} from 'lodash';
-import styleConst from '../../../core/style-const';
+import styleConst from '../../../../core/style-const';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {CarCard} from '../../../profile/components/CarCard';
-import Form from '../../../core/components/Form/Form';
-import UserData from '../../../utils/user';
-import showPrice from '../../../utils/price';
+import {CarCard} from '../../../../profile/components/CarCard';
+import Form from '../../../../core/components/Form/Form';
+import UserData from '../../../../utils/user';
+import showPrice from '../../../../utils/price';
 
 // redux
 import {connect} from 'react-redux';
-import {localDealerClear} from '../../../dealer/actions';
-import {strings} from '../../../core/lang/const';
+import {localDealerClear} from '../../../../dealer/actions';
+import {strings} from '../../../../core/lang/const';
 
-import API from '../../../utils/api';
-import {ERROR_NETWORK} from '../../../core/const';
+import API from '../../../../utils/api';
+import {ERROR_NETWORK} from '../../../../core/const';
 
 const mapStateToProps = ({dealer, profile, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
@@ -417,7 +417,7 @@ class ServiceScreenStep1 extends Component {
   }
 
   onPressOrder = async dataFromForm => {
-    const isInternet = require('../../../utils/internet').default;
+    const isInternet = require('../../../../utils/internet').default;
     const isInternetExist = await isInternet();
     if (!isInternetExist) {
       Toast.show({

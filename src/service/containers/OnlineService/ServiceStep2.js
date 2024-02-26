@@ -3,18 +3,18 @@ import React, {useEffect, useReducer} from 'react';
 import {HStack, Text, View} from 'native-base';
 import {get} from 'lodash';
 
-import Form from '../../../../core/components/Form/Form';
-import UserData from '../../../../utils/user';
+import Form from '../../../core/components/Form/Form';
+import UserData from '../../../utils/user';
 
 // redux
 import {connect} from 'react-redux';
-import {orderService} from '../../../actions';
-import {localDealerClear} from '../../../../dealer/actions';
-import {strings} from '../../../../core/lang/const';
+import {orderService} from '../../actions';
+import {localDealerClear} from '../../../dealer/actions';
+import {strings} from '../../../core/lang/const';
 
-import API from '../../../../utils/api';
-import {getHumanTime} from '../../../../utils/date';
-import Analytics from '../../../../utils/amplitude-analytics';
+import API from '../../../utils/api';
+import {getHumanTime} from '../../../utils/date';
+import Analytics from '../../../utils/amplitude-analytics';
 
 const mapStateToProps = ({dealer, service, nav}) => {
   let carLocalBrand = '';
@@ -58,7 +58,7 @@ const reducerService = (state = {}, action) => {
   return {...state, ...action};
 };
 
-const ServiceNonAuthStep2 = props => {
+const ServiceStep2 = props => {
   const {route, region, navigation} = props;
 
   const orderData = get(route, 'params', {});
@@ -121,7 +121,7 @@ const ServiceNonAuthStep2 = props => {
           });
         } else {
           setServiceData({lead: true, loading: false, needUpdate: false});
-          return navigation.navigate('ServiceNonAuthStep3', {
+          return navigation.navigate('ServiceStep3', {
             ...orderData,
             ...serviceData,
           });
@@ -311,7 +311,7 @@ const ServiceNonAuthStep2 = props => {
   const _onSubmit = async pushProps => {
     pushProps.SERVICESecondFull = serviceData.itemFullSelected;
     delete serviceData.itemFullSelected;
-    navigation.navigate('ServiceNonAuthStep3', {
+    navigation.navigate('ServiceStep3', {
       ...orderData,
       ...serviceData,
       ...pushProps,
@@ -324,7 +324,7 @@ const ServiceNonAuthStep2 = props => {
         paddingHorizontal: 14,
         marginTop: 20,
       }}
-      key="ServiceNonAuthForm"
+      key="ServiceForm"
       fields={FormConfig}
       barStyle={'light-content'}
       defaultCountryCode={region}
@@ -342,7 +342,4 @@ const ServiceNonAuthStep2 = props => {
   );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ServiceNonAuthStep2);
+export default connect(mapStateToProps, mapDispatchToProps)(ServiceStep2);

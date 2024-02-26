@@ -15,9 +15,9 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
-import {MainScreenButton} from '../../../../core/components/MainScreenButtons';
+import {MainScreenButton} from '../../../core/components/MainScreenButtons';
 
-import Form from '../../../../core/components/Form/Form';
+import Form from '../../../core/components/Form/Form';
 import {
   dayMonthYear,
   humanDate,
@@ -25,24 +25,24 @@ import {
   getHumanTime,
   humanDateTime,
   getDateFromTimestamp,
-} from '../../../../utils/date';
-import UserData from '../../../../utils/user';
-import Analytics from '../../../../utils/amplitude-analytics';
+} from '../../../utils/date';
+import UserData from '../../../utils/user';
+import Analytics from '../../../utils/amplitude-analytics';
 
 // redux
 import {connect} from 'react-redux';
-import {orderService} from '../../../actions';
-import {localUserDataUpdate} from '../../../../profile/actions';
+import {orderService} from '../../actions';
+import {localUserDataUpdate} from '../../../profile/actions';
 import {
   SERVICE_ORDER__SUCCESS,
   SERVICE_ORDER__FAIL,
-} from '../../../actionTypes';
-import {strings} from '../../../../core/lang/const';
+} from '../../actionTypes';
+import {strings} from '../../../core/lang/const';
 
-import API from '../../../../utils/api';
-import {ERROR_NETWORK} from '../../../../core/const';
+import API from '../../../utils/api';
+import {ERROR_NETWORK} from '../../../core/const';
 
-import styleConst from '../../../../core/style-const';
+import styleConst from '../../../core/style-const';
 
 import {get} from 'lodash';
 
@@ -100,17 +100,17 @@ const CarIcon = props => {
 const getServiceImage = type => {
   switch (type) {
     case 'tyreChange':
-      return require('../../../../../assets/services/tyreChange.webp');
+      return require('../../../../assets/services/tyreChange.webp');
     case 'carWash':
-      return require('../../../../../assets/services/carWash.webp');
+      return require('../../../../assets/services/carWash.webp');
     case 'service':
     case 'other':
     default:
-      return require('../../../../../assets/services/service.webp');
+      return require('../../../../assets/services/service.webp');
   }
 };
 
-const ServiceNonAuthStep4 = props => {
+const ServiceStep4 = props => {
   const {route, region, listDealers, navigation} = props;
 
   const orderData = get(route, 'params', {});
@@ -122,7 +122,7 @@ const ServiceNonAuthStep4 = props => {
   const toast = useToast();
 
   const _onPressOrder = async dataFromForm => {
-    const isInternet = require('../../../../utils/internet').default;
+    const isInternet = require('../../../utils/internet').default;
     const isInternetExist = await isInternet();
     if (!isInternetExist) {
       toast.show({
@@ -615,7 +615,7 @@ const ServiceNonAuthStep4 = props => {
           marginTop: 20,
         }}
         scrollViewWrapperAvailable={false}
-        key="ServiceNonAuthForm"
+        key="ServiceForm"
         fields={FormConfig}
         barStyle={'light-content'}
         defaultCountryCode={region}
@@ -629,7 +629,4 @@ const ServiceNonAuthStep4 = props => {
   );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ServiceNonAuthStep4);
+export default connect(mapStateToProps, mapDispatchToProps)(ServiceStep4);
