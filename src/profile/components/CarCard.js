@@ -6,6 +6,7 @@ import {Icon, Checkbox, View, Text, Box} from 'native-base';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import {get} from 'lodash';
 
 const styles = {
@@ -32,8 +33,12 @@ const styles = {
 };
 
 export const CarCard = ({data, type, checked, onPress, disabled}) => {
-  const {brand, model, number, owner} = data;
+  const {brand, model, number, owner, vin} = data;
   const carColor = get(data, 'carInfo.color.picker.codes.hex', false);
+  let undefinedCar = false;
+  if (vin === 'undefinedCar') {
+    undefinedCar = true;
+  }
   let modelName = model;
   if (typeof model === 'object') {
     modelName = model?.name;
@@ -83,9 +88,9 @@ export const CarCard = ({data, type, checked, onPress, disabled}) => {
         </Text>
       </View>
       <Icon
-        name="car"
+        name={'car'}
         size={16}
-        as={FontAwesome5}
+        as={undefinedCar ? Fontisto : FontAwesome5}
         color={carColor ? carColor : styleConst.color.blue}
         mt={4}
         ml={2}
