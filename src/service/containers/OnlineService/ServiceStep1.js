@@ -15,21 +15,21 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import RNBounceable from '@freakycoder/react-native-bounceable';
-import {CarCard} from '../../../../profile/components/CarCard';
+import {CarCard} from '../../../profile/components/CarCard';
 
-import styleConst from '../../../../core/style-const';
-import Form from '../../../../core/components/Form/Form';
-import UserData from '../../../../utils/user';
-import dealerProcess from '../../../../utils/dealer-process';
+import styleConst from '../../../core/style-const';
+import Form from '../../../core/components/Form/Form';
+import UserData from '../../../utils/user';
+import dealerProcess from '../../../utils/dealer-process';
 
 // redux
 import {connect} from 'react-redux';
-import {orderService} from '../../../actions';
-import {localDealerClear} from '../../../../dealer/actions';
-import {strings} from '../../../../core/lang/const';
+import {orderService} from '../../actions';
+import {localDealerClear} from '../../../dealer/actions';
+import {strings} from '../../../core/lang/const';
 
-import Analytics from '../../../../utils/amplitude-analytics';
-import API from '../../../../utils/api';
+import Analytics from '../../../utils/amplitude-analytics';
+import API from '../../../utils/api';
 
 const mapStateToProps = ({dealer, profile, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
@@ -197,7 +197,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const ServiceNonAuthStep1 = props => {
+const ServiceStep1 = props => {
   const {
     route,
     carBrand,
@@ -505,7 +505,7 @@ const ServiceNonAuthStep1 = props => {
   };
 
   const _onSubmit = async pushProps => {
-    let nextScreen = 'ServiceNonAuthStep3';
+    let nextScreen = 'ServiceStep3';
     let extData = {};
     setServiceData({loading: true});
     const workType = get(pushProps, 'SERVICETYPE', get(pushProps, 'SERVICE'));
@@ -518,7 +518,7 @@ const ServiceNonAuthStep1 = props => {
       if (!get(servicesFull, 'length')) {
         setServiceData({lead: true, loading: false});
       } else {
-        nextScreen = 'ServiceNonAuthStep2';
+        nextScreen = 'ServiceStep2';
         extData = {
           itemsFull: servicesFull,
           lead: false,
@@ -556,7 +556,4 @@ const ServiceNonAuthStep1 = props => {
   );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ServiceNonAuthStep1);
+export default connect(mapStateToProps, mapDispatchToProps)(ServiceStep1);

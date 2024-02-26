@@ -1019,7 +1019,10 @@ export default {
 
   async fetchNotifications({userID}) {
     if (!userID) {
-      return false;
+      return {
+        status: 'success',
+        data: [],
+      };
     }
     const url =
       `/notifications/?` +

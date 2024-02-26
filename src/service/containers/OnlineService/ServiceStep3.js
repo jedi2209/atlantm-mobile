@@ -2,15 +2,15 @@
 import React, {useEffect} from 'react';
 import {get} from 'lodash';
 
-import Form from '../../../../core/components/Form/Form';
-import {addDays, dayMonthYear} from '../../../../utils/date';
-import UserData from '../../../../utils/user';
+import Form from '../../../core/components/Form/Form';
+import {addDays, dayMonthYear} from '../../../utils/date';
+import UserData from '../../../utils/user';
 
 // redux
 import {connect} from 'react-redux';
-import {orderService} from '../../../actions';
-import {strings} from '../../../../core/lang/const';
-import Analytics from '../../../../utils/amplitude-analytics';
+import {orderService} from '../../actions';
+import {strings} from '../../../core/lang/const';
+import Analytics from '../../../utils/amplitude-analytics';
 
 const mapStateToProps = ({dealer, service, nav}) => {
   return {
@@ -23,7 +23,7 @@ const mapDispatchToProps = {
   orderService,
 };
 
-const ServiceNonAuthStep3 = props => {
+const ServiceStep3 = props => {
   const {route, region, navigation} = props;
 
   const orderData = get(route, 'params', {});
@@ -33,7 +33,7 @@ const ServiceNonAuthStep3 = props => {
   }, []);
 
   const _onPressOrder = async pushProps => {
-    navigation.navigate('ServiceNonAuthStep4', {
+    navigation.navigate('ServiceStep4', {
       ...orderData,
       ...pushProps,
     });
@@ -73,7 +73,7 @@ const ServiceNonAuthStep3 = props => {
         paddingHorizontal: 14,
         marginTop: 20,
       }}
-      key="ServiceNonAuthForm"
+      key="ServiceForm"
       fields={FormConfig}
       barStyle={'light-content'}
       defaultCountryCode={region}
@@ -86,7 +86,4 @@ const ServiceNonAuthStep3 = props => {
   );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ServiceNonAuthStep3);
+export default connect(mapStateToProps, mapDispatchToProps)(ServiceStep3);

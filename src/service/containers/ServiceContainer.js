@@ -2,8 +2,7 @@ import React from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 
 import Service from './ServiceScreen';
-import ServiceScreenStep1 from './OnlineService/ServiceScreenStep1';
-import ServiceNonAuthStep1 from './OnlineService/NonAuth/ServiceNonAuthStep1';
+import ServiceStep1 from './OnlineService/ServiceStep1';
 import {connect} from 'react-redux';
 import {get} from 'lodash';
 
@@ -22,11 +21,11 @@ const ServiceContainer = props => {
   const {region, loginID, cars} = props;
   if (!actionID && region === 'by') {
     if (loginID && cars && cars.length > 0) {
-      console.info('\t\tService Screen => ServiceScreenStep1');
-      return <ServiceNonAuthStep1 navigation={navigation} route={route} />;
+      console.info('\t\tService Screen => ServiceStep1');
+      return <ServiceStep1 navigation={navigation} route={route} />;
     } else {
-      console.info('\t\tService Screen => ServiceNewNonAuth');
-      return <ServiceNonAuthStep1 navigation={navigation} route={route} />;
+      console.info('\t\tService Screen => ServiceStep1NonAuth');
+      return <ServiceStep1 navigation={navigation} route={route} />;
     }
   }
   console.info('\t\tService Screen => Service');
