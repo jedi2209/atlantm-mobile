@@ -337,6 +337,12 @@ const ServiceStep1 = props => {
         }
         carsTmp.push(item);
       });
+      carsTmp.push({
+        brand: 'Другое авто',
+        model: null,
+        number: null,
+        vin: 'undefinedCar',
+      });
     }
     setMyCars(carsTmp);
     const item = carsTmp[0];
