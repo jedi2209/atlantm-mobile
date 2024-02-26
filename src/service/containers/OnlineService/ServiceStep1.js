@@ -543,22 +543,23 @@ const ServiceStep1 = props => {
       return;
     }
     setServiceData({loading: true});
-    const workType = get(pushProps, 'SERVICETYPE', get(pushProps, 'SERVICE'));
+    let workType = get(pushProps, 'SERVICE');
+    if (get(serviceData, 'typeSecond')) {
+      workType = get(pushProps, 'SERVICETYPE');
+    }
     const isDataAvailable = await API.fetchServiceCalculation({
       dealerID: get(pushProps, 'DEALER'),
       workType,
     });
-    if (isDataAvailable) {
-      let servicesFull = get(isDataAvailable, 'data', []);
-      if (!get(servicesFull, 'length')) {
-        setServiceData({lead: true, loading: false});
-      } else {
-        nextScreen = 'ServiceStep2';
-        extData = {
-          itemsFull: servicesFull,
-          lead: false,
-        };
-      }
+    let servicesFull = get(isDataAvailable, 'data', []);
+    if (!get(servicesFull, 'length')) {
+      setServiceData({lead: true, loading: false});
+    } else {
+      nextScreen = 'ServiceStep2';
+      extData = {
+        itemsFull: servicesFull,
+        lead: false,
+      };
     }
     if (car) {
       pushProps.CARBRAND = car.carBrand;

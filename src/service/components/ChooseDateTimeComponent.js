@@ -153,7 +153,7 @@ export default class ChooseDateTimeComponent extends Component {
       date: yearMonthDay(date),
       service: this.state?.serviceID,
       seconds: this.state?.reqiredTime,
-      dealer: this.props.dealer.id,
+      dealerID: this.props.dealer.id,
     });
 
     if (availablePeriods && availablePeriods.status === 'error') {

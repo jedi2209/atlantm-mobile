@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useReducer} from 'react';
-import {HStack, Text, View} from 'native-base';
+import {HStack, Text, View, useToast} from 'native-base';
 import {get} from 'lodash';
 
 import Form from '../../../core/components/Form/Form';
@@ -15,6 +15,7 @@ import {strings} from '../../../core/lang/const';
 import API from '../../../utils/api';
 import {getHumanTime} from '../../../utils/date';
 import Analytics from '../../../utils/amplitude-analytics';
+import ToastAlert from '../../../core/components/ToastAlert';
 
 const mapStateToProps = ({dealer, service, nav}) => {
   let carLocalBrand = '';
@@ -61,23 +62,25 @@ const reducerService = (state = {}, action) => {
 const ServiceStep2 = props => {
   const {route, region, navigation} = props;
 
+  const toast = useToast();
+
   const orderData = get(route, 'params', {});
 
   let isAdditionalAvailable = false;
 
   if (get(orderData, 'itemsFull.length')) {
-    orderData.itemsFull.map(item => {
-      if (get(item, 'additional')) {
+    for (var i = 0; i < get(orderData, 'itemsFull.length'); i++) {
+      if (get(orderData.itemsFull[i], 'additional', false)) {
         isAdditionalAvailable = true;
-        return;
+        break;
       }
-    });
+    }
   }
 
   const [serviceData, setServiceData] = useReducer(reducerService, {
     typeFirst: get(orderData, 'SERVICE'),
     typeSecond: get(orderData, 'SERVICETYPE'),
-    additionalField: false,
+    myTyresInStorage: false,
     leaveTyresInStorage: false,
     loading: false,
     lead: get(orderData, 'lead'),
@@ -191,7 +194,6 @@ const ServiceStep2 = props => {
                   items: serviceData.items,
                   required: true,
                   iOSselectFix: true,
-                  // value: secondData.items,
                   placeholder: {
                     label:
                       strings.Form.field.label.serviceTypes[
@@ -229,13 +231,13 @@ const ServiceStep2 = props => {
             ].additional,
             fields: [
               {
-                name: 'additionalField',
+                name: 'myTyresInStorage',
                 type: 'checkbox',
                 label:
                   strings.Form.field.label.serviceTypes[
                     get(orderData, 'SERVICE')
                   ].myTyresInStorage,
-                value: get(serviceData, 'additionalField', false),
+                value: get(serviceData, 'myTyresInStorage', false),
               },
               {
                 name: 'leaveTyresInStorage',
@@ -309,6 +311,30 @@ const ServiceStep2 = props => {
   };
 
   const _onSubmit = async pushProps => {
+    if (!get(pushProps, 'SERVICESecond')) {
+      toast.show({
+        render: ({id}) => {
+          return (
+            <ToastAlert
+              id={id}
+              status="warning"
+              duration={3000}
+              description={[
+                strings.Form.status.fieldRequired1,
+                '"' +
+                  strings.Form.field.label.serviceTypes[
+                    get(orderData, 'SERVICE')
+                  ].second +
+                  '"',
+                strings.Form.status.fieldRequired2,
+              ].join(' ')}
+              title={strings.Form.status.fieldRequiredMiss}
+            />
+          );
+        },
+      });
+      return;
+    }
     pushProps.SERVICESecondFull = serviceData.itemFullSelected;
     delete serviceData.itemFullSelected;
     navigation.navigate('ServiceStep3', {

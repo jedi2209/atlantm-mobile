@@ -444,10 +444,14 @@ export default {
       dealerID,
       actionID,
       text,
+      dontCallMe,
       service,
     } = props;
 
     const textModified = [];
+    if (dontCallMe) {
+      textModified.push('Не звонить клиенту для подтверждения! ' + text);
+    }
     if (service) {
       textModified.push('Требуемые работы: ' + service);
     }
@@ -1104,12 +1108,21 @@ export default {
     );
   },
 
-  getPeriodForServiceInfo({dealer, date, service, seconds}) {
+  async getPeriodForServiceInfo({dealerID, date, service, seconds}) {
     // Дата в формате [YYYY-MM-DD] или [YYYYMMDD] или [DD.MM.YYYY]
-    return this.request(
-      `/service/online/${dealer}/?seconds=${seconds}&date=${date}&type=${service}`,
-      baseRequestParams,
-    );
+    const url =
+      `/service/online/${dealerID}/?` +
+      new URLSearchParams(
+        _.omitBy(
+          {
+            seconds,
+            date,
+            type: service,
+          },
+          _.isNil,
+        ),
+      );
+    return await this.request(url, baseRequestParams);
   },
 
   saveOrderToService(body) {
