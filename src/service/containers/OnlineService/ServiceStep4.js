@@ -33,10 +33,7 @@ import Analytics from '../../../utils/amplitude-analytics';
 import {connect} from 'react-redux';
 import {orderService} from '../../actions';
 import {localUserDataUpdate} from '../../../profile/actions';
-import {
-  SERVICE_ORDER__SUCCESS,
-  SERVICE_ORDER__FAIL,
-} from '../../actionTypes';
+import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../../actionTypes';
 import {strings} from '../../../core/lang/const';
 
 import API from '../../../utils/api';
@@ -157,6 +154,9 @@ const ServiceStep4 = props => {
       f_LastName: get(dataFromForm, 'LAST_NAME', ''),
       phone: get(dataFromForm, 'PHONE', ''),
       email: get(dataFromForm, 'EMAIL', ''),
+      dontCallMe: get(dataFromForm, 'DONTCALLME', false),
+      leaveTyresInStorage: get(orderData, 'leaveTyresInStorage', false),
+      myTyresInStorage: get(orderData, 'myTyresInStorage', false),
       tech_place: get(dateFromForm, 'tech_place', ''),
       service: get(orderData, 'SERVICE', ''),
       serviceName: [
@@ -194,6 +194,7 @@ const ServiceStep4 = props => {
         email: get(data, 'email', ''),
         phone: get(data, 'phone', ''),
         text: get(data, 'text', ''),
+        dontCallMe: get(data, 'dontCallMe', ''),
         dealerID: get(data, 'dealer'),
       };
       const action = await props.orderService(dataToSend);
@@ -332,7 +333,13 @@ const ServiceStep4 = props => {
                                 get(orderData, 'DATETIME.time'),
                               ),
                             )
-                          : dayMonthYear(get(orderData, 'DATETIME'))}
+                          : dayMonthYear(
+                              get(
+                                orderData,
+                                'DATETIME.date',
+                                get(orderData, 'DATETIME'),
+                              ),
+                            )}
                       </Text>
                     </HStack>
                     <HStack alignItems="center">
@@ -480,6 +487,11 @@ const ServiceStep4 = props => {
             props: {
               placeholder: strings.Form.field.placeholder.comment,
             },
+          },
+          {
+            name: 'DONTCALLME',
+            type: 'checkbox',
+            label: strings.Form.field.label.dontcallMe,
           },
         ],
       },

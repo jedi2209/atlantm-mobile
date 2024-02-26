@@ -27,6 +27,7 @@ const ServiceStep3 = props => {
   const {route, region, navigation} = props;
 
   const orderData = get(route, 'params', {});
+  const myTyresInStorage = get(orderData, 'myTyresInStorage', false);
 
   useEffect(() => {
     Analytics.logEvent('screen', 'service/step3');
@@ -50,11 +51,12 @@ const ServiceStep3 = props => {
             label: strings.Form.field.label.date,
             props: {
               placeholder:
-                strings.Form.field.placeholder.date + dayMonthYear(addDays(1)),
+                strings.Form.field.placeholder.date +
+                dayMonthYear(addDays(myTyresInStorage ? 3 : 1)),
               required: true,
               type: 'service',
               serviceID: get(orderData, 'SERVICE', null),
-              minimumDate: new Date(addDays(1)),
+              minimumDate: new Date(addDays(myTyresInStorage ? 3 : 1)),
               maximumDate: new Date(addDays(62)),
               dealer: {
                 id: get(orderData, 'DEALER'),
