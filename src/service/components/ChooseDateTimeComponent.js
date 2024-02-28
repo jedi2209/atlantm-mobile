@@ -9,11 +9,11 @@ import {
   Text,
   StyleSheet,
   ActivityIndicator,
-  Platform,
 } from 'react-native';
 import {Button, Toast} from 'native-base';
 import {DatePickerCustom} from '../../core/components/DatePickerCustom';
 import {time, yearMonthDay} from '../../utils/date';
+import {get} from 'lodash';
 import ToastAlert from '../../core/components/ToastAlert';
 import styleConst from '../../core/style-const';
 import API from '../../utils/api';
@@ -98,6 +98,8 @@ export default class ChooseDateTimeComponent extends Component {
       serviceID: props.serviceID ? props.serviceID : undefined,
       reqiredTime: props.reqiredTime ? props.reqiredTime : undefined,
     };
+
+    this.maxTimeAttemps = get(props, 'maxTimeAttemps', 3);
   }
 
   static propTypes = {
@@ -156,15 +158,15 @@ export default class ChooseDateTimeComponent extends Component {
       dealerID: this.props.dealer.id,
     });
 
-    if (availablePeriods && availablePeriods.status === 'error') {
-      if (availablePeriods.error.code !== 521) {
+    if (get(availablePeriods, 'status') === 'error') {
+      if (get(availablePeriods, 'error.code') !== 521) {
         this.setState({
           availablePeriodsFetch: false,
           availablePeriods: false,
           availablePeriodsFetchCounts:
             this.state.availablePeriodsFetchCounts + 1,
         });
-        if (this.state.availablePeriodsFetchCounts < 3) {
+        if (this.state.availablePeriodsFetchCounts < this.maxTimeAttemps) {
           Toast.show({
             render: ({id}) => {
               return (

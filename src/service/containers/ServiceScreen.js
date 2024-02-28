@@ -327,7 +327,7 @@ const ServiceScreen = props => {
                 strings.Form.field.placeholder.date + dayMonthYear(addDays(2)),
               required: true,
               minimumDate: new Date(addDays(2)),
-              maximumDate: new Date(addDays(62)),
+              maximumDate: new Date(addDays(31)),
             },
           },
         ],
