@@ -162,6 +162,7 @@ const ServiceStep4 = props => {
       serviceName: [
         strings.ServiceScreen.works[get(orderData, 'SERVICE', '')],
         strings.ServiceScreen.worksService[get(orderData, 'SERVICETYPE', '')],
+        get(orderData, 'SERVICESecondFull.name'),
       ].join(' / '),
       servicePrice,
       car: {
@@ -194,7 +195,7 @@ const ServiceStep4 = props => {
         email: get(data, 'email', ''),
         phone: get(data, 'phone', ''),
         text: get(data, 'text', ''),
-        dontCallMe: get(data, 'dontCallMe', ''),
+        dontCallMe: get(data, 'dontCallMe', false),
         dealerID: get(data, 'dealer'),
       };
       const action = await props.orderService(dataToSend);
@@ -488,11 +489,16 @@ const ServiceStep4 = props => {
               placeholder: strings.Form.field.placeholder.comment,
             },
           },
-          {
-            name: 'DONTCALLME',
-            type: 'checkbox',
-            label: strings.Form.field.label.dontcallMe,
-          },
+          get(orderData, 'lead', true)
+            ? {
+                name: 'DONTCALLME',
+                type: 'checkbox',
+                label: strings.Form.field.label.dontcallMe,
+                props: {
+                  left: true,
+                },
+              }
+            : {},
         ],
       },
     ],

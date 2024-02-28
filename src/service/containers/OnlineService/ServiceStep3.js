@@ -34,6 +34,12 @@ const ServiceStep3 = props => {
   }, []);
 
   const _onPressOrder = async pushProps => {
+    if (
+      get(pushProps, 'DATETIME.noTimeAlways') === true ||
+      !get(pushProps, 'DATETIME.time')
+    ) {
+      pushProps.lead = true;
+    }
     navigation.navigate('ServiceStep4', {
       ...orderData,
       ...pushProps,
@@ -57,10 +63,11 @@ const ServiceStep3 = props => {
               type: 'service',
               serviceID: get(orderData, 'SERVICE', null),
               minimumDate: new Date(addDays(myTyresInStorage ? 3 : 1)),
-              maximumDate: new Date(addDays(62)),
+              maximumDate: new Date(addDays(31)),
               dealer: {
                 id: get(orderData, 'DEALER'),
               },
+              maxTimeAttemps: 999,
               reqiredTime: get(orderData, 'SERVICESecondFull.total.time', null),
             },
           },

@@ -450,13 +450,13 @@ export default {
 
     const textModified = [];
     if (dontCallMe) {
-      textModified.push('Не звонить клиенту для подтверждения! ' + text);
+      textModified.push('\r\nНе звонить клиенту для подтверждения!');
     }
     if (service) {
       textModified.push('Требуемые работы: ' + service);
     }
     if (text) {
-      textModified.push('Комментарий клиента: ' + text);
+      textModified.push('\r\nКомментарий клиента: ' + text);
     }
 
     const body = {

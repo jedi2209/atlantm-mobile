@@ -1440,10 +1440,13 @@ class Form extends Component {
             }
           }}
           key={'field' + num + name}>
-          <HStack justifyContent={'space-between'}>
-            <Text selectable={false} style={styles.checkboxText}>
-              {label}
-            </Text>
+          <HStack
+            justifyContent={!data?.props?.left ? 'space-between' : 'unset'}>
+          {!data?.props?.left ? (
+              <Text selectable={false} style={styles.checkboxText}>
+                {label}
+              </Text>
+            ) : null}
             <Checkbox
               aria-label={label}
               onChange={val => {
@@ -1458,6 +1461,16 @@ class Form extends Component {
               ref={this.inputRefs[groupNum + 'Input' + num]}
               {...data.props}
             />
+            {data?.props?.left ? (
+              <Text
+                selectable={false}
+                style={[
+                  styles.checkboxText,
+                  {marginLeft: data?.props?.left ? 10 : 0},
+                ]}>
+                {label}
+              </Text>
+            ) : null}
           </HStack>
         </Pressable>
       );
@@ -1505,6 +1518,7 @@ class Form extends Component {
                     mb={1}
                     justifyContent={'space-between'}
                     padding={2}
+                    paddingLeft={4}
                     rounded={4}
                     backgroundColor={styleConst.color.white}>
                     {APP_REGION !== UKRAINE ? (

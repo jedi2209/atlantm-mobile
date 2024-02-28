@@ -232,7 +232,7 @@ const ServiceScreenStep2 = props => {
               required: true,
               type: 'service',
               minimumDate: new Date(addDays(2)),
-              maximumDate: new Date(addDays(62)),
+              maximumDate: new Date(addDays(31)),
               dealer,
               serviceID: service && service.value,
               reqiredTime: recommended
