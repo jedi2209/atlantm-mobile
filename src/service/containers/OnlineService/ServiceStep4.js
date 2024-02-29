@@ -169,7 +169,10 @@ const ServiceStep4 = props => {
         brand: get(orderData, 'CARBRAND', ''),
         model: get(orderData, 'CARMODEL', ''),
         plate: get(orderData, 'CARNUMBER', ''),
-        vin: get(orderData, 'CARVIN', ''),
+        vin:
+          get(orderData, 'CARVIN', '') !== 'undefinedCar'
+            ? get(orderData, 'CARVIN', '')
+            : null,
       },
       text: get(dataFromForm, 'COMMENT', ''),
     };
@@ -489,7 +492,7 @@ const ServiceStep4 = props => {
               placeholder: strings.Form.field.placeholder.comment,
             },
           },
-          get(orderData, 'lead', true)
+          !get(orderData, 'lead', true)
             ? {
                 name: 'DONTCALLME',
                 type: 'checkbox',

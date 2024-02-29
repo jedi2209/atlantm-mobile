@@ -774,6 +774,7 @@ export default {
         dealer: 'Автоцентр',
         name: 'Имя',
         date: 'Выберите удобную для вас дату',
+        datetime: 'Выберите удобную для вас дату и время',
         secondName: 'Отчество',
         lastName: 'Фамилия',
         carMileage: 'Пробег [в км.]',
