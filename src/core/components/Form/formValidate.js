@@ -48,8 +48,11 @@ export const validateDateTime = dateTime => {
   if (typeof dateTime === 'undefined' || !dateTime) {
     return false;
   }
+  if (!dateTime?.date) {
+    return false;
+  }
   if (!dateTime.noTimeAlways) {
-    return dateTime.date && dateTime.time;
+    return dateTime?.time ? true : false;
   } else {
     return typeof dateTime.date !== 'undefined';
   }

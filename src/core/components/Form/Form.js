@@ -476,7 +476,7 @@ class Form extends Component {
             valid = validateEmail(this.state[val.name]);
             break;
           case 'datetime':
-            valid = validateDateTime(this.state[val.name]);
+            //valid = validateDateTime(this.state[val.name]);
             break;
           case 'date':
             valid = validateDate(this.state[val.name]);
@@ -500,7 +500,6 @@ class Form extends Component {
         }
       }
     });
-
     if (requredLabels && requredLabels.length) {
       if (requredLabels.length > 1) {
         Toast.show({

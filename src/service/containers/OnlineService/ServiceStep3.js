@@ -54,7 +54,9 @@ const ServiceStep3 = props => {
           {
             name: 'DATETIME',
             type: get(orderData, 'lead', true) ? 'date' : 'dateTime',
-            label: strings.Form.field.label.date,
+            label: get(orderData, 'lead', true)
+              ? strings.Form.field.label.date
+              : strings.Form.field.label.datetime,
             props: {
               placeholder:
                 strings.Form.field.placeholder.date +
