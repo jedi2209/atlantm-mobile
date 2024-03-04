@@ -21,7 +21,6 @@ import {
   CAR_HIDE__REQUEST,
   CAR_HIDE__FAIL,
   LOGOUT,
-  REGISTER__SUCCESS,
   CAR_HISTORY__REQUEST,
   CAR_HISTORY__SUCCESS,
   CAR_HISTORY__FAIL,
@@ -152,8 +151,6 @@ function carVIN(state = '', action) {
       return get(action.payload, 'profile.localUserData.carVIN', null);
     case PROFILE_CAR_VIN__FILL:
       return action.payload;
-    case REGISTER__SUCCESS:
-      return '';
     default:
       return state;
   }
@@ -494,6 +491,5 @@ export default combineReducers({
   meta: combineReducers({
     isFetchProfileData,
     // isLoginRequest,
-    // isRegisterRequest,
   }),
 });

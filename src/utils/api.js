@@ -830,29 +830,6 @@ export default {
     );
   },
 
-  registerRequest({dealerId, name, phone, email, carVIN, carNumber}) {
-    const body = {
-      posting: 1,
-      f_Dealer: dealerId,
-      f_Name: name,
-      f_Phone: phone,
-      f_Email: email,
-      f_Source: SourceID,
-      f_VIN: carVIN,
-      f_Number: carNumber,
-    };
-
-    const requestParams = _.merge({}, baseRequestParams, {
-      method: 'POST',
-      // headers: {
-      //   'Content-Type': 'application/x-www-form-urlencoded',
-      // },
-      body: body,
-    });
-
-    return this.request('/lkk/register/', requestParams);
-  },
-
   forgotPassRequest(forgotPassLogin) {
     return this.request(
       `/lkk/auth/restore/?login=${forgotPassLogin}`,
