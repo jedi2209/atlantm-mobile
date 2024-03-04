@@ -1,4 +1,4 @@
-import Reactotron from 'reactotron-react-native';
+import Reactotron, {asyncStorage, networking} from 'reactotron-react-native';
 import ReactotronFlipper from 'reactotron-react-native/dist/flipper';
 import {reactotronRedux as reduxPlugin} from 'reactotron-redux'; // https://github.com/infinitered/reactotron/blob/master/docs/plugin-redux.md#options
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,6 +9,8 @@ const tron = Reactotron.setAsyncStorageHandler(AsyncStorage) // AsyncStorage wou
     name: APP_NAME,
     createSocket: path => new ReactotronFlipper(path),
   }) // controls connection & communication settings
+  .use(asyncStorage())
+  .use(networking())
   .useReactNative() // add all built-in react native plugins
   .use(reduxPlugin()) // add redux plugin
   .connect(); // let's connect!

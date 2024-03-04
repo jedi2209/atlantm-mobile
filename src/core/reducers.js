@@ -144,6 +144,8 @@ const modal = (state = {application: false}, action) => {
 
 const mainScreenSettings = (state = {}, action) => {
   switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'core.mainScreenSettings', []);
     case MAIN_SCREEN__SUCCESS:
       return action.payload;
     case MAIN_SCREEN__FAIL:

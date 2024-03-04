@@ -29,7 +29,6 @@ import {MainScreenButton} from '../components/MainScreenButtons';
 import RefreshSpinner from '../components/RefreshSpinner';
 import Offer from '../components/Offer';
 import RateThisApp from '../components/RateThisApp';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList} from '../../info/actions';
@@ -42,7 +41,7 @@ import {
   actionWalktroughVisible,
 } from '../actions';
 
-import {STORE_LINK, APP_EMAIL, ERROR_NETWORK} from '../const';
+import {ERROR_NETWORK} from '../const';
 import styleConst from '../style-const';
 import {strings} from '../lang/const';
 
@@ -59,18 +58,18 @@ const cardWidth = width - 40;
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
-    infoList: info.list,
-    isFetchInfoList: info.meta.isFetchInfoList,
+    infoList: get(info, 'list'),
+    isFetchInfoList: get(info, 'meta.isFetchInfoList'),
     nav,
     profile,
-    region: dealer.region,
-    listDealers: dealer.listDealers,
+    region: get(dealer, 'region'),
+    listDealers: get(dealer, 'listDealers'),
 
-    isAppRated: core.isAppRated,
-    isAppLoaded: core.isAppLoaded,
-    isWalkthroughShownAlready: core.isWalkthroughShown,
-    menuOpenedCount: core.menuOpenedCount,
-    mainScreenSettings: core.mainScreenSettings,
+    isAppRated: get(core, 'isAppRated'),
+    isAppLoaded: get(core, 'isAppLoaded'),
+    isWalkthroughShownAlready: get(core, 'isWalkthroughShown', false),
+    menuOpenedCount: get(core, 'menuOpenedCount', 0),
+    mainScreenSettings: get(core, 'mainScreenSettings', []),
   };
 };
 
@@ -412,6 +411,7 @@ const MainScreen = props => {
     navigation,
     region,
     mainScreenSettings,
+    core,
     fetchInfoList,
     fetchBrands,
     fetchDealers,
@@ -480,7 +480,7 @@ const MainScreen = props => {
     setLoading(false);
   };
 
-  if (isLoading || !mainScreenSettings || !mainScreenSettings.length) {
+  if (isLoading || !get(mainScreenSettings, 'length')) {
     return <LogoLoader />;
   }
 

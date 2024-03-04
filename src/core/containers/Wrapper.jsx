@@ -36,8 +36,6 @@ let sentryParams = {
   },
 };
 
-let appsFlyerSettings = Object.assign(APPSFLYER_SETTINGS, {isDebug: false});
-
 if (__DEV__) {
   LogBox.ignoreLogs([
     'NativeBase: The contrast ratio of',
@@ -57,7 +55,6 @@ if (__DEV__) {
       profilesSampleRate: 1.0,
     },
   };
-  appsFlyerSettings.isDebug = true;
 }
 
 const _defaultHandler = ErrorUtils.getGlobalHandler();
@@ -85,7 +82,7 @@ const Wrapper = () => {
     Text.defaultProps.selectable = false;
     Sentry.init(sentryParams);
     appsFlyer.initSdk(
-      appsFlyerSettings,
+      APPSFLYER_SETTINGS,
       result => {
         console.info('appsFlyer.initSdk result => ', result);
       },

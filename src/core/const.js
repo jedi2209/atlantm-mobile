@@ -49,6 +49,7 @@ switch (bundle) {
       onInstallConversionDataListener: false, //Optional
       onDeepLinkListener: true, //Optional
       timeToWaitForATTUserAuthorization: 10, //for iOS 14.5
+      isDebug: __DEV__,
     };
     sentryDSN = 'https://2e35f2a2455b4a3d97a1687270845d33@sentry.io/219899';
     oneSignalKey = '2094a3e1-3c9a-479d-90ae-93adfcd15dab';
@@ -83,6 +84,7 @@ switch (bundle) {
       onInstallConversionDataListener: false, //Optional
       onDeepLinkListener: true, //Optional
       timeToWaitForATTUserAuthorization: 10, //for iOS 14.5
+      isDebug: __DEV__,
     };
     sentryDSN =
       'https://3bf79e8300e2427ca03f48301da3a7d9@o76005.ingest.sentry.io/6367469';
