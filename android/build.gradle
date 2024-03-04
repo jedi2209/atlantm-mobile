@@ -29,8 +29,6 @@ buildscript {
     }
 }
 
-apply plugin: "com.facebook.react.rootproject"
-
 def getVersionFile() {
     return file('app/versioning/app_version.properties')
 }
@@ -94,3 +92,5 @@ subprojects {
         }
     }
 }
+
+apply plugin: "com.facebook.react.rootproject"

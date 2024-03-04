@@ -4,8 +4,8 @@ import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
-import android.content.Intent;
-import android.content.res.Configuration;
+import android.content.Intent
+import android.content.res.Configuration
 
 
 class MainActivity : ReactActivity() {
