@@ -47,6 +47,7 @@ if (__DEV__) {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
     }),
+    enhancers: getDefaultEnhancers => getDefaultEnhancers(),
   });
 }
 
