@@ -30,13 +30,14 @@ const createdEnhancer = Reactotron.createEnhancer();
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 if (__DEV__) {
+  const createDebugger = require('redux-flipper').default;
   store = configureStore({
     reducer: persistedReducer,
     middleware: getDefaultMiddleware => getDefaultMiddleware({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(createLogger({collapsed: true, diff: true})),
+    }).concat(createDebugger(), createLogger({collapsed: true, diff: true})),
     enhancers: getDefaultEnhancers => getDefaultEnhancers().concat(createdEnhancer),
   });
 } else {
