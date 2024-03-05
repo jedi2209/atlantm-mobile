@@ -109,7 +109,6 @@ platform :ios do
       workspace: ENV['XCODE_WORKSPACE'],
       scheme: ENV['XCODE_TARGET'],
       export_method: "app-store",
-      include_bitcode: true,
       export_xcargs: "-allowProvisioningUpdates",
       # export_options: {
       #   provisioningProfiles: {
