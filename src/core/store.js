@@ -1,3 +1,4 @@
+import thunk from 'redux-thunk';
 import {
   persistStore,
   persistReducer,
@@ -8,9 +9,9 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createLogger} from 'redux-logger';
+import Reactotron from './containers/ReactotronConfig';
 
 import {configureStore} from '@reduxjs/toolkit';
 
@@ -25,33 +26,27 @@ const persistConfig = {
 
 let store;
 
+const createdEnhancer = Reactotron.createEnhancer();
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 if (__DEV__) {
   store = configureStore({
     reducer: persistedReducer,
-    middleware: getDefaultMiddleware =>
-      getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
-      }).concat(createLogger({collapsed: true, diff: true})),
-    enhancers: getDefaultEnhancers =>
-      __DEV__
-        ? getDefaultEnhancers().concat(
-            require('./containers/ReactotronConfig').default.createEnhancer(),
-          )
-        : getDefaultEnhancers(),
+    middleware: getDefaultMiddleware => getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }).concat(createLogger({collapsed: true, diff: true})),
+    enhancers: getDefaultEnhancers => getDefaultEnhancers().concat(createdEnhancer),
   });
 } else {
   store = configureStore({
     reducer: persistedReducer,
-    middleware: getDefaultMiddleware =>
-      getDefaultMiddleware({
-        serializableCheck: {
-          ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-        },
-      }),
+    middleware: getDefaultMiddleware => getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+      },
+    }),
   });
 }
 

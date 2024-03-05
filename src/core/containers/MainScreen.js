@@ -58,16 +58,16 @@ const cardWidth = width - 40;
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
-    infoList: get(info, 'list'),
-    isFetchInfoList: get(info, 'meta.isFetchInfoList'),
+    infoList: get(info, 'list', []),
+    isFetchInfoList: info.meta.isFetchInfoList,
     nav,
     profile,
     region: get(dealer, 'region'),
     listDealers: get(dealer, 'listDealers'),
 
-    isAppRated: get(core, 'isAppRated'),
-    isAppLoaded: get(core, 'isAppLoaded'),
-    isWalkthroughShownAlready: get(core, 'isWalkthroughShown', false),
+    isAppRated: core.isAppRated,
+    isAppLoaded: core.isAppLoaded,
+    isWalkthroughShownAlready: core.isWalkthroughShown,
     menuOpenedCount: get(core, 'menuOpenedCount', 0),
     mainScreenSettings: get(core, 'mainScreenSettings', []),
   };
@@ -220,19 +220,20 @@ const _processRow = props => {
     let heightNew = null;
     let styleNew = {};
     let titleBackgroundStyle = {};
+    let itemTitleText = get(item, 'title.text', '');
+    let itemTitleStyle = get(item, 'titleStyle');
+    let itemType = get(item, 'type');
 
     const screenName = item.link.path;
     const isDealerButton =
       screenName === 'ChooseDealerScreen' || screenName === 'DealerInfoScreen';
     if (isDealerButton) {
-      if (!item.title.text) {
-        item.title.text = strings.Menu.main.autocenters;
-      }
-      item.titleStyle = {
+      itemTitleText = get(item, 'title.text', strings.Menu.main.autocenters);
+      itemTitleStyle = {
         fontSize: 9,
         bottom: 0,
       };
-      item.type = 'dealersButton';
+      itemType = 'dealersButton';
       titleBackgroundStyle = {
         borderBottomRightRadius: styleConst.borderRadius,
         borderBottomLeftRadius: styleConst.borderRadius,
@@ -240,7 +241,7 @@ const _processRow = props => {
       };
     }
 
-    if (item.type === 'half') {
+    if (itemType === 'half') {
       widthNew = width / 2.1;
       heightNew = width / 2.1;
     }
@@ -256,7 +257,7 @@ const _processRow = props => {
       styleNew = {marginRight: 18};
     }
 
-    switch (item.type) {
+    switch (itemType) {
       case 'dealersButton':
         let backgroundImage;
         if (get(item, 'img', false)) {
@@ -312,12 +313,12 @@ const _processRow = props => {
             onClose={() => setTooltipVisible()}>
             <MainScreenButton
               key={['button', rowNum, i].join('_')}
-              title={item.title?.text.replace('||', '\n')}
-              titleStyle={item?.titleStyle}
+              title={itemTitleText.replace('||', '\n')}
+              titleStyle={itemTitleStyle}
               subTitle={item.subTitle?.replace('||', '\n')}
               subTitleStyle={item?.subTitleStyle}
-              type={item?.titleStyle ? null : item.title?.position}
-              size={item.type}
+              type={itemTitleStyle ? null : item.title?.position}
+              size={itemType}
               link={item.link}
               width={widthNew ? widthNew : null}
               height={heightNew ? heightNew : null}
@@ -346,7 +347,8 @@ const fetchInfoData = async props => {
       }
       return false;
     }
-    return true;
+  }).catch(err => {
+    console.error('fetchInfoData error', err);
   });
 };
 
@@ -411,7 +413,7 @@ const MainScreen = props => {
     navigation,
     region,
     mainScreenSettings,
-    core,
+    isFetchInfoList,
     fetchInfoList,
     fetchBrands,
     fetchDealers,
