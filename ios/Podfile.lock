@@ -1083,8 +1083,6 @@ PODS:
     - FBSDKGamingServicesKit (~> 16.3.1)
     - FBSDKShareKit (~> 16.3.1)
     - React-Core
-  - react-native-flipper (0.212.0):
-    - React-Core
   - react-native-google-maps (1.10.3):
     - Google-Maps-iOS-Utils (= 4.2.2)
     - GoogleMaps (= 7.4.0)
@@ -1424,7 +1422,6 @@ DEPENDENCIES:
   - react-native-appsflyer (from `../node_modules/react-native-appsflyer`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-fbsdk-next (from `../node_modules/react-native-fbsdk-next`)
-  - react-native-flipper (from `../node_modules/react-native-flipper`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
@@ -1586,8 +1583,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-date-picker"
   react-native-fbsdk-next:
     :path: "../node_modules/react-native-fbsdk-next"
-  react-native-flipper:
-    :path: "../node_modules/react-native-flipper"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-maps:
@@ -1759,7 +1754,6 @@ SPEC CHECKSUMS:
   react-native-appsflyer: c8a9afac66f178f0ca634159abeb204b2430717e
   react-native-date-picker: 5637f417bb0c1981bc9d483324d5eb5929a1651c
   react-native-fbsdk-next: a929da980a4ec199391da637d3d2ce22b6e7779e
-  react-native-flipper: 9c1957af24b76493ba74f46d000a5c1d485e7731
   react-native-google-maps: 1bcc1f9f13f798fcf230db7fe476f3566d0bc0a3
   react-native-maps: 72a8a903f8a1b53e2c777ba79102078ab502e0bf
   react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
