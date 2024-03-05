@@ -193,7 +193,6 @@ const ImageCarousel = ({
         removeClippedSubviews={false}
         useScrollView={true}
         enableSnap={false}
-        lockScrollWhileSnapping={true}
         firstItem={firstItem}
         data={entries}
         renderItem={renderItem}

@@ -396,8 +396,6 @@ const _renderActions = params => {
           }}
           sliderWidth={width}
           itemWidth={cardWidth}
-          lockScrollWhileSnapping={true}
-          swipeThreshold={10}
           decelerationRate="fast"
           inactiveSlideScale={0.98}
           layoutCardOffset={18}
