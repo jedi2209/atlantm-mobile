@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import PropTypes from 'prop-types';
 import {
   Alert,
   TouchableWithoutFeedback,
@@ -34,7 +33,6 @@ import {get, orderBy, valuesIn} from 'lodash';
 import {ERROR_NETWORK} from '../../../core/const';
 
 import {strings} from '../../../core/lang/const';
-import {RotationGestureHandler} from 'react-native-gesture-handler';
 import ToastAlert from '../../../core/components/ToastAlert';
 
 const mapStateToProps = ({dealer, profile, catalog}) => {
@@ -720,13 +718,6 @@ const CarCostScreen = ({
       onSubmit={_onPressOrder}
     />
   );
-};
-
-CarCostScreen.propTypes = {
-  dealerSelectedLocal: PropTypes.object,
-  name: PropTypes.string,
-  phone: PropTypes.string,
-  email: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarCostScreen);

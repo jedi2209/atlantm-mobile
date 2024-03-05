@@ -1,6 +1,5 @@
 import React from 'react';
 import {StyleSheet, Dimensions} from 'react-native';
-import PropTypes from 'prop-types';
 import {HStack, Text, Pressable, VStack, Icon, View} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 
@@ -230,20 +229,6 @@ const DealerItemList = props => {
       </HStack>
     </MainWrapper>
   );
-};
-
-DealerItemList.propTypes = {
-  city: PropTypes.shape({
-    name: PropTypes.string,
-  }),
-  brands: PropTypes.array,
-  returnScreen: PropTypes.string,
-  goBack: PropTypes.bool,
-  isLocal: PropTypes.bool,
-  readonly: PropTypes.bool,
-  showBrands: PropTypes.bool,
-  placeholder: PropTypes.string,
-  dealerFilter: PropTypes.object,
 };
 
 DealerItemList.defaultProps = {

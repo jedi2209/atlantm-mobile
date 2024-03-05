@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {StyleSheet, Alert, Platform} from 'react-native';
 import Form from '../../core/components/Form/Form';
 // redux
@@ -208,16 +207,6 @@ class OrderMyPriceScreen extends Component {
       },
     };
   }
-
-  static propTypes = {
-    localUserDataUpdate: PropTypes.func,
-    firstName: PropTypes.string,
-    secondName: PropTypes.string,
-    lastName: PropTypes.string,
-    phone: PropTypes.string,
-    email: PropTypes.string,
-    comment: PropTypes.string,
-  };
 
   onPressOrder = async data => {
     const isInternetExist = await isInternet();

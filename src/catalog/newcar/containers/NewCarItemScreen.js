@@ -37,7 +37,6 @@ import LogoLoader from '../../../core/components/LogoLoader';
 
 // helpers
 import {get} from 'lodash';
-import PropTypes from 'prop-types';
 import UserData from '../../../utils/user';
 import Analytics from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
@@ -1117,10 +1116,6 @@ const NewCarItemScreen = ({
       ) : null}
     </>
   );
-};
-
-NewCarItemScreen.propTypes = {
-  region: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewCarItemScreen);

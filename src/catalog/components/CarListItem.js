@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {useNavigation} from '@react-navigation/native';
-import PropTypes from 'prop-types';
 import {
   Text,
   StyleSheet,
@@ -608,13 +607,6 @@ const CarListItem = ({
       </View>
     </View>
   );
-};
-
-CarListItem.propTypes = {
-  car: PropTypes.object,
-  prices: PropTypes.object,
-  itemScreen: PropTypes.string,
-  key: PropTypes.string,
 };
 
 CarListItem.defaultProps = {

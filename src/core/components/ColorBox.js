@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 
 // helpers
-import PropTypes from 'prop-types';
 import styleConst from '../style-const';
 import {get} from 'lodash';
 import ModalView from './ModalView';
@@ -92,12 +91,6 @@ const ColorBox = props => {
       </ModalView>
     </>
   );
-};
-
-ColorBox.propTypes = {
-  color: PropTypes.object,
-  touchableStyle: PropTypes.object,
-  containerStyle: PropTypes.object,
 };
 
 export default ColorBox;

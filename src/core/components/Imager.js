@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
 
 // components
 import {Image, View, ActivityIndicator, StyleSheet} from 'react-native';
@@ -96,12 +95,6 @@ const Imager = props => {
     </View>
   );
 };
-
-// Imager.propTypes = {
-//   source: PropTypes.shape({
-//     uri: PropTypes.string.isRequired,
-//   }).isRequired,
-// };
 
 Imager.defaultProps = {
   testID: 'Imager.Wrapper',

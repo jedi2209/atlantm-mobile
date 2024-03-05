@@ -1,7 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {View, Platform, StyleSheet} from 'react-native';
-import PropTypes from 'prop-types';
 import styleConst from '../style-const';
 import RNPickerSelect from 'react-native-picker-select';
 import {actionSetGlobalLanguage} from '../../core/lang/actions';
@@ -98,12 +97,6 @@ const LangSwitcher = props => {
       />
     </View>
   );
-};
-
-LangSwitcher.propTypes = {
-  name: PropTypes.string.isRequired,
-  bgColor: PropTypes.string.isRequired,
-  textColor: PropTypes.string.isRequired,
 };
 
 LangSwitcher.defaultProps = {

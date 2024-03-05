@@ -1,6 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
-import PropTypes from 'prop-types';
 import BigList from 'react-native-big-list';
 
 // redux
@@ -132,14 +131,6 @@ const CarList = props => {
       onEndReachedThreshold={0.7}
     />
   );
-};
-
-CarList.propTypes = {
-  pages: PropTypes.object,
-  data: PropTypes.array,
-  itemScreen: PropTypes.string,
-  isFetchItems: PropTypes.bool,
-  prices: PropTypes.object,
 };
 
 CarList.defaultProps = {

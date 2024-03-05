@@ -1,6 +1,5 @@
 import React, {PureComponent} from 'react';
 import {StyleSheet, TextInput, View} from 'react-native';
-import PropTypes from 'prop-types';
 
 // helpers
 import styleConst from '../../core/style-const';
@@ -23,11 +22,6 @@ const styles = StyleSheet.create({
 });
 
 export default class MessageForm extends PureComponent {
-  static propTypes = {
-    message: PropTypes.string,
-    messageFill: PropTypes.func,
-  };
-
   static defaultProps = {};
 
   onChangeText = (text) => {

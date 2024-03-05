@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {PureComponent} from 'react';
-import PropTypes from 'prop-types';
 import {
   StyleSheet,
   Alert,
@@ -158,16 +157,6 @@ class TestDriveScreen extends PureComponent {
       this.state.dealerID = this.listAll[0].value;
     }
   }
-
-  static propTypes = {
-    localUserDataUpdate: PropTypes.func,
-    firstName: PropTypes.string,
-    secondName: PropTypes.string,
-    lastName: PropTypes.string,
-    phone: PropTypes.string,
-    email: PropTypes.string,
-    comment: PropTypes.string,
-  };
 
   onPressOrder = async data => {
     const isInternetExist = await isInternet();

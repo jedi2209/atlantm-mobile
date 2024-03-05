@@ -8,7 +8,6 @@ import LogoLoader from '../../../core/components/LogoLoader';
 import FlatListFooter from '../../../core/components/FlatListFooter';
 
 // helpers
-import PropTypes from 'prop-types';
 import {
   EVENT_DEFAULT,
   EVENT_LOAD_MORE,
@@ -110,14 +109,6 @@ const ReviewsList = props => {
       onEndReached={_handleLoadMore}
     />
   );
-};
-
-ReviewsList.propTypes = {
-  pages: PropTypes.object,
-  items: PropTypes.array,
-  dataHandler: PropTypes.func,
-  isFetchItems: PropTypes.bool,
-  onPressItemHandler: PropTypes.func,
 };
 
 ReviewsList.defaultProps = {

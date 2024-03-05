@@ -1,5 +1,4 @@
 import React, {useRef, useState, forwardRef} from 'react';
-import PropTypes from 'prop-types';
 import {
   Alert,
   VStack,
@@ -91,20 +90,6 @@ const ToastAlert = forwardRef(
     );
   },
 );
-
-ToastAlert.propTypes = {
-  title: PropTypes.string.isRequired,
-  variant: PropTypes.oneOf([
-    'solid',
-    'subtle',
-    'left-accent',
-    'top-accent',
-    'outline',
-  ]),
-  status: PropTypes.oneOf(['info', 'warning', 'success', 'error']),
-  description: PropTypes.string.isRequired,
-  isClosable: PropTypes.bool,
-};
 
 ToastAlert.defaultProps = {
   title: strings.Notifications.error.title,

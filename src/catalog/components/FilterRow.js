@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {StyleSheet} from 'react-native';
 import {Icon, View, Text, HStack, Box, Checkbox, Pressable} from 'native-base';
 
@@ -121,13 +120,6 @@ const styles = StyleSheet.create({
     width: '50%',
   },
 });
-
-FilterRow.propTypes = {
-  type: PropTypes.oneOf(['singleCheckbox', 'multipleCheckbox', 'multiSlider']),
-  bounceable: PropTypes.bool,
-  onPress: PropTypes.func,
-  icon: PropTypes.object,
-};
 
 FilterRow.defaultProps = {
   type: 'singleCheckbox',

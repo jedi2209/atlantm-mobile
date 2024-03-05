@@ -8,28 +8,13 @@ import {
   Platform,
 } from 'react-native';
 
-// helpers
-import PropTypes from 'prop-types';
-
 // components
-import {
-  StandaloneGallery,
-  GalleryItemType,
-  StandaloneGalleryHandler,
-} from 'react-native-gallery-toolkit';
-
 import GallerySwiper from 'react-native-gallery-swiper';
 import {Icon} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 import styleConst from '../style-const';
 import {strings} from '../../core/lang/const';
-
-const _renderError = () => (
-  <View style={styles.errorContainer}>
-    <Text style={styles.errorText}>{strings.PhotoViewer.errorLoad}</Text>
-  </View>
-);
 
 const galleryCount = (index, length) => (
   <View style={styles.count}>
@@ -40,10 +25,8 @@ const galleryCount = (index, length) => (
 );
 
 const PhotoViewer = ({items, index, onPressClose, enableScale, onChange}) => {
-  const [visible, setVisible] = useState(false);
-  const [counter, setCounter] = useState(true);
   return (
-    <Modal transparent={true} visible={visible} onRequestClose={onPressClose}>
+    <Modal transparent={true} visible={false} onRequestClose={onPressClose}>
       <GallerySwiper
         images={items}
         // Change this to render how many items before it.
@@ -56,7 +39,7 @@ const PhotoViewer = ({items, index, onPressClose, enableScale, onChange}) => {
         onPageSelected={onChange}
         style={styles.gallery}
       />
-      {counter ? galleryCount(index, items.length) : null}
+      {galleryCount(index, items.length)}
       <TouchableOpacity style={styles.close} onPress={onPressClose}>
         <Icon style={styles.closeIcon} name="close" as={MaterialIcons} />
       </TouchableOpacity>
@@ -120,22 +103,6 @@ const styles = StyleSheet.create({
 PhotoViewer.defaultProps = {
   counter: true,
   enableScale: false,
-};
-
-PhotoViewer.propTypes = {
-  index: PropTypes.number,
-  visible: PropTypes.bool,
-  counter: PropTypes.bool,
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      source: PropTypes.shape({
-        uri: PropTypes.string,
-      }),
-    }),
-  ),
-  enableScale: PropTypes.bool,
-  onChange: PropTypes.func,
-  onPressClose: PropTypes.func,
 };
 
 export default PhotoViewer;

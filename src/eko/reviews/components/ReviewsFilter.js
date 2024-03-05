@@ -5,7 +5,6 @@ import {TouchableOpacity, Image, StyleSheet} from 'react-native';
 import {View} from 'native-base';
 
 // helpers
-import PropTypes from 'prop-types';
 import styleConst from '../../../core/style-const';
 import styleFooter from '../../../core/components/Footer/style';
 
@@ -69,12 +68,6 @@ ReviewsFilter.defaultProps = {
   onPressDate: null,
   onPressRating: null,
   onPressAddReview: null,
-};
-
-ReviewsFilter.propTypes = {
-  onPressDate: PropTypes.func,
-  onPressRating: PropTypes.func,
-  onPressAddReview: PropTypes.func,
 };
 
 export default ReviewsFilter;

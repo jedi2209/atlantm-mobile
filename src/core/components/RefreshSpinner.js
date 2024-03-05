@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {RefreshControl, StyleSheet, SafeAreaView} from 'react-native';
 
 import styleConst from '../style-const';
