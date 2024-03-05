@@ -22,7 +22,7 @@ import {
   Icon,
 } from 'native-base';
 import ToastAlert from '../ToastAlert';
-import {get} from 'lodash';
+import _ from 'lodash';
 import {connect} from 'react-redux';
 import * as NavigationService from '../../../navigation/NavigationService';
 import {ActivityIndicator} from 'react-native-paper';
@@ -318,11 +318,12 @@ class Form extends Component {
           group.fields = group.fields.filter(field => {
             return (
               typeof field === 'object' &&
-              get(field, 'name', false) &&
-              get(field, 'type', false)
+              _.get(field, 'name', false) &&
+              _.get(field, 'type', false)
             );
           });
-          group.fields.map(field => {
+          const fields = _.reject(group.fields, _.isEmpty);
+          fields.map(field => {
             if (field.value && field.type !== 'component') {
               if (field.id) {
                 this.state[field.name] = Object.assign(
@@ -434,12 +435,12 @@ class Form extends Component {
             break;
           case 'dealerselect':
             valid = false;
-            valid = get(this.props, 'dealerSelectedLocal', false);
+            valid = _.get(this.props, 'dealerSelectedLocal', false);
             if (!valid) {
               valid = this.state[val.name] ? true : false;
             }
             if (
-              get(
+              _.get(
                 this.props,
                 'dealerSelectedLocal',
                 this.state[val.name] ? true : false,
@@ -675,12 +676,13 @@ class Form extends Component {
     ) {
       return;
     }
-    let totalFields = group.fields.length;
+    const fields = _.reject(group.fields, _.isEmpty);
+    let totalFields = fields.length;
 
     let groupStyle = [styles.groupFields, group?.style];
 
     if (
-      typeof group.fields.find(e => e?.type === 'dealerSelect') !==
+      typeof fields.find(e => e?.type === 'dealerSelect') !==
         'undefined' &&
       totalFields === 1
     ) {
@@ -693,7 +695,7 @@ class Form extends Component {
           {group.name}
         </Text>
         <View style={[groupStyle]}>
-          {group.fields.map((field, fieldNum, totalFields) => {
+          {fields.map((field, fieldNum, totalFields) => {
             if (field && typeof field === 'object' && field.type) {
               const returnField = this._fieldsRender[field.type](
                 field,
@@ -701,7 +703,7 @@ class Form extends Component {
                 totalFields,
                 num,
               );
-              if (fieldNum !== group.fields.length - 1) {
+              if (fieldNum !== fields.length - 1) {
                 return [
                   returnField,
                   this._fieldsDivider('divider' + field.name),
@@ -741,7 +743,7 @@ class Form extends Component {
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
       let val = this.state[name] || '';
-      switch (get(data, 'props.keyboardType', 'default')) {
+      switch (_.get(data, 'props.keyboardType', 'default')) {
         case 'number-pad':
           break;
         default:
@@ -1119,9 +1121,9 @@ class Form extends Component {
       let countriesList = [];
       let countriesCodes = {};
       countriesListStatic.map(el => {
-        if (countrySettings.includes(get(el, 'iso2'))) {
+        if (countrySettings.includes(_.get(el, 'iso2'))) {
           countriesList.push(el);
-          countriesCodes[get(el, 'iso2')] = el;
+          countriesCodes[_.get(el, 'iso2')] = el;
         }
       });
 
@@ -1268,7 +1270,7 @@ class Form extends Component {
         <View
           testID={'Form.ComponentWrapper.' + name}
           style={
-            get(data, 'props.unstyle', false)
+            _.get(data, 'props.unstyle', false)
               ? null
               : [styles.field, styles.component]
           }

@@ -24,10 +24,10 @@ import ToastAlert from '../../../core/components/ToastAlert';
 const mapStateToProps = ({dealer, profile, nav}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
 
-  let carLocalBrand = '';
-  let carLocalModel = '';
-  let carLocalNumber = '';
-  let carLocalVin = '';
+  let carLocalBrand = undefined;
+  let carLocalModel = undefined;
+  let carLocalNumber = undefined;
+  let carLocalVin = undefined;
 
   if (profile.cars && typeof profile.cars === 'object') {
     let Cars = [];
@@ -44,10 +44,10 @@ const mapStateToProps = ({dealer, profile, nav}) => {
         carLocalModel = Cars[0].model;
       }
       if (Cars[0].number) {
-        carLocalNumber = Cars[0].number || '';
+        carLocalNumber = Cars[0].number;
       }
       if (Cars[0].vin) {
-        carLocalVin = Cars[0].vin || '';
+        carLocalVin = Cars[0].vin;
       }
     }
   }
@@ -348,12 +348,14 @@ const ServiceStep1 = props => {
     }
     setMyCars(carsTmp);
     const item = carsTmp[0];
-    setCar({
-      carBrand: get(item, 'carInfo.brand.name', get(item, 'brand')),
-      carModel: get(item, 'carInfo.model.name', get(item, 'model')),
-      carNumber: get(item, 'number'),
-      carVIN: get(item, 'vin'),
-    });
+    if (typeof item !== undefined) {
+      setCar({
+        carBrand: get(item, 'carInfo.brand.name', get(item, 'brand')),
+        carModel: get(item, 'carInfo.model.name', get(item, 'model')),
+        carNumber: get(item, 'number'),
+        carVIN: get(item, 'vin'),
+      });
+    }
   }, [cars]);
 
   let carsFields = [];
@@ -570,10 +572,10 @@ const ServiceStep1 = props => {
       };
     }
     if (car) {
-      pushProps.CARBRAND = car.carBrand;
-      pushProps.CARMODEL = car.carModel;
-      pushProps.CARNUMBER = car.carNumber;
-      pushProps.CARVIN = car.carVIN;
+      extData.CARBRAND = get(car, 'carBrand', pushProps.CARBRAND);
+      extData.CARMODEL = get(car, 'carModel', pushProps.CARMODEL);
+      extData.CARNUMBER = get(car, 'carNumber', pushProps.CARNUMBER);
+      extData.CARVIN = get(car, 'carVIN', pushProps.CARVIN);
     }
     const dataForNextScreen = {...serviceData, ...pushProps, ...extData};
     navigation.navigate(nextScreen, dataForNextScreen);
