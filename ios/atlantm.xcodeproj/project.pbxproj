@@ -699,7 +699,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 4F07161ACEAEA5E1DCDE082C /* Pods-atlantm.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = atlantm/atlantm.entitlements;
@@ -731,7 +730,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = E1C814D12D89BE8DD87ACBAA /* Pods-atlantm.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = atlantm/atlantm.entitlements;
