@@ -8,11 +8,6 @@ import {configureStore} from '@reduxjs/toolkit';
 
 import rootReducer from './reducers';
 
-const middleware = [
-  thunk,
-  __DEV__ && createLogger({collapsed: true, diff: true}),
-].filter(Boolean);
-
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
@@ -28,13 +23,13 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 if (__DEV__) {
   store = configureStore({
     reducer: persistedReducer,
-    middleware: middleware,
+    middleware: [thunk, createLogger({collapsed: true, diff: true})],
     enhancers: [createdEnhancer],
   });
 } else {
   store = configureStore({
     reducer: persistedReducer,
-    middleware,
+    middleware: [thunk],
   });
 }
 
