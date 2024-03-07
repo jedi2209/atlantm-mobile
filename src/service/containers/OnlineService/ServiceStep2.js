@@ -89,6 +89,10 @@ const ServiceStep2 = props => {
     itemFullSelected: {},
   });
 
+  const isWheelService = ['tyreChange', 'tyreRepair', 'wheelChange'].includes(
+    get(orderData, 'SERVICE'),
+  );
+
   useEffect(() => {
     Analytics.logEvent('screen', 'service/step2');
   }, []);
@@ -225,42 +229,45 @@ const ServiceStep2 = props => {
         ],
       },
       {
-        name: strings.Form.field.label.serviceTypes[
-          get(orderData, 'SERVICE')
-        ].additional,
+        name: strings.Form.field.label.serviceTypes[get(orderData, 'SERVICE')]
+          .additional,
         fields: [
-          {
-            name: 'myTyresInStorage',
-            type: 'checkbox',
-            label:
-              strings.Form.field.label.serviceTypes[
-                get(orderData, 'SERVICE')
-              ].myTyresInStorage,
-            value: get(serviceData, 'myTyresInStorage', false),
-          },
-          isAdditionalAvailable ? {
-            name: 'leaveTyresInStorage',
-            type: 'checkbox',
-            label:
-              strings.Form.field.label.serviceTypes[
-                get(orderData, 'SERVICE')
-              ].leaveTyresInStorage,
-            value: false,
-            props: {
-              onSelect: val => {
-                setTimeout(
-                  () =>
-                    setServiceData({
-                      leaveTyresInStorage: val,
-                      needUpdate: true,
-                      loading: true,
-                      itemFullSelected: {},
-                    }),
-                  300,
-                );
-              },
-            },
-          } : null,
+          isWheelService
+            ? {
+                name: 'myTyresInStorage',
+                type: 'checkbox',
+                label:
+                  strings.Form.field.label.serviceTypes[
+                    get(orderData, 'SERVICE')
+                  ].myTyresInStorage,
+                value: get(serviceData, 'myTyresInStorage', false),
+              }
+            : {},
+          isAdditionalAvailable
+            ? {
+                name: 'leaveTyresInStorage',
+                type: 'checkbox',
+                label:
+                  strings.Form.field.label.serviceTypes[
+                    get(orderData, 'SERVICE')
+                  ].leaveTyresInStorage,
+                value: false,
+                props: {
+                  onSelect: val => {
+                    setTimeout(
+                      () =>
+                        setServiceData({
+                          leaveTyresInStorage: val,
+                          needUpdate: true,
+                          loading: true,
+                          itemFullSelected: {},
+                        }),
+                      300,
+                    );
+                  },
+                },
+              }
+            : {},
         ],
       },
       get(serviceData, 'itemFullSelected.total')

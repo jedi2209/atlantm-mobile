@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 // components
 import {Image, View, ActivityIndicator, StyleSheet} from 'react-native';
 import FastImage from 'react-native-fast-image';
-import {SvgCssUri} from 'react-native-svg';
+import {SvgCssUri} from 'react-native-svg/css';
 import styleConst from '../style-const';
 import {get} from 'lodash';
 
