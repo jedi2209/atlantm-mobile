@@ -224,47 +224,45 @@ const ServiceStep2 = props => {
             : null,
         ],
       },
-      isAdditionalAvailable
-        ? {
-            name: strings.Form.field.label.serviceTypes[
-              get(orderData, 'SERVICE')
-            ].additional,
-            fields: [
-              {
-                name: 'myTyresInStorage',
-                type: 'checkbox',
-                label:
-                  strings.Form.field.label.serviceTypes[
-                    get(orderData, 'SERVICE')
-                  ].myTyresInStorage,
-                value: get(serviceData, 'myTyresInStorage', false),
+      {
+        name: strings.Form.field.label.serviceTypes[
+          get(orderData, 'SERVICE')
+        ].additional,
+        fields: [
+          {
+            name: 'myTyresInStorage',
+            type: 'checkbox',
+            label:
+              strings.Form.field.label.serviceTypes[
+                get(orderData, 'SERVICE')
+              ].myTyresInStorage,
+            value: get(serviceData, 'myTyresInStorage', false),
+          },
+          isAdditionalAvailable ? {
+            name: 'leaveTyresInStorage',
+            type: 'checkbox',
+            label:
+              strings.Form.field.label.serviceTypes[
+                get(orderData, 'SERVICE')
+              ].leaveTyresInStorage,
+            value: false,
+            props: {
+              onSelect: val => {
+                setTimeout(
+                  () =>
+                    setServiceData({
+                      leaveTyresInStorage: val,
+                      needUpdate: true,
+                      loading: true,
+                      itemFullSelected: {},
+                    }),
+                  300,
+                );
               },
-              {
-                name: 'leaveTyresInStorage',
-                type: 'checkbox',
-                label:
-                  strings.Form.field.label.serviceTypes[
-                    get(orderData, 'SERVICE')
-                  ].leaveTyresInStorage,
-                value: false,
-                props: {
-                  onSelect: val => {
-                    setTimeout(
-                      () =>
-                        setServiceData({
-                          leaveTyresInStorage: val,
-                          needUpdate: true,
-                          loading: true,
-                          itemFullSelected: {},
-                        }),
-                      300,
-                    );
-                  },
-                },
-              },
-            ],
-          }
-        : null,
+            },
+          } : null,
+        ],
+      },
       get(serviceData, 'itemFullSelected.total')
         ? {
             name: strings.Form.group.additional,
