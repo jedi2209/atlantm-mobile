@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {Text, View, StyleSheet} from 'react-native';
 import {Icon} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -38,12 +37,6 @@ const styles = StyleSheet.create({
 });
 
 export default class InfoLine extends Component {
-  static propTypes = {
-    text: PropTypes.string.isRequired,
-    infoIcon: PropTypes.bool,
-    gap: PropTypes.bool,
-  };
-
   render() {
     const {gap, text, infoIcon} = this.props;
 

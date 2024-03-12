@@ -6,8 +6,6 @@ import Imager from './Imager';
 import styleConst from '../style-const';
 import {get} from 'lodash';
 
-import PropTypes from 'prop-types';
-
 const {width: widthDefault, height: heightDefault} = Dimensions.get('screen');
 
 let smallScreen = false;
@@ -283,17 +281,7 @@ export const MainScreenButtons = () => {
   return <></>;
 };
 
-MainScreenButton.propTypes = {
-  background: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number,
-    PropTypes.object,
-  ]),
-  type: PropTypes.oneOf(['top', 'bottom']),
-  size: PropTypes.oneOf(['small', '2/3', 'half', 'full']),
-  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-};
+
 MainScreenButton.defaultProps = {
   background: null,
   type: 'top',
@@ -303,9 +291,6 @@ MainScreenButton.defaultProps = {
   onPress: () => {},
 };
 
-MainScreenButtons.propTypes = {
-  config: PropTypes.object,
-};
 MainScreenButtons.defaultProps = {
   config: {},
 };

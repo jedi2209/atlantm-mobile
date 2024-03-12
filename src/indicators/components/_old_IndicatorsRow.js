@@ -13,7 +13,6 @@ import {Pressable, Popover, Button} from 'native-base';
 import IndicatorDescription from '../components/IndicatorDescription';
 
 // helpers
-import PropTypes from 'prop-types';
 import styleConst from '../../core/style-const';
 
 // const isTablet = DeviceInfo.isTablet();
@@ -69,12 +68,6 @@ const styles = StyleSheet.create({
 });
 
 export default class IndicatorRow extends PureComponent {
-  static propTypes = {
-    items: PropTypes.array,
-    activeItem: PropTypes.object,
-    onPressItem: PropTypes.func,
-  };
-
   constructor(props) {
     super(props);
 

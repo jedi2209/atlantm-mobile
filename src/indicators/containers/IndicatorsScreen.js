@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {findNodeHandle, Image, Dimensions} from 'react-native';
 import {
   ScrollView,
@@ -46,14 +45,6 @@ const mapDispatchToProps = {
 };
 
 class IndicatorsScreen extends Component {
-  static propTypes = {
-    items: PropTypes.array,
-    activeItem: PropTypes.object,
-    isRequest: PropTypes.bool,
-    actionSetActiveIndicator: PropTypes.func,
-    actionFetchIndicators: PropTypes.func,
-  };
-
   componentDidMount() {
     const {actionFetchIndicators, actionSetActiveIndicator, region} =
       this.props;

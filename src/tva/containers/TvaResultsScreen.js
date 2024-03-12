@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect, useRef} from 'react';
-import PropTypes from 'prop-types';
 import {Alert, StyleSheet, Platform} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 import {
@@ -338,16 +337,6 @@ const TvaResultsScreen = props => {
       </View>
     </ScrollView>
   );
-};
-
-TvaResultsScreen.propTypes = {
-  isMessageSending: PropTypes.bool,
-  actionTvaMessageFill: PropTypes.func,
-  actionTvaMessageSend: PropTypes.func,
-  actionSetActiveTvaOrderId: PropTypes.func,
-  comment: PropTypes.string,
-  results: PropTypes.object,
-  activeOrderId: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TvaResultsScreen);

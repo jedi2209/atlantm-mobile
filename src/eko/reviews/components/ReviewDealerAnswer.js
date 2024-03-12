@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {Text, StyleSheet} from 'react-native';
 import {View, Box} from 'native-base';
 
@@ -39,10 +38,6 @@ const styles = StyleSheet.create({
 });
 
 export default class ReviewDealerAnswer extends Component {
-  static propTypes = {
-    text: PropTypes.string,
-  };
-
   static defaultProps = {
     text: '',
   };

@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect} from 'react';
-import PropTypes from 'prop-types';
 import {Fab, Icon, useToast} from 'native-base';
 import ToastAlert from '../../core/components/ToastAlert';
 import {useNavigation} from '@react-navigation/native';
@@ -286,13 +285,6 @@ const TvaScreen = props => {
       ) : null}
     </>
   );
-};
-
-TvaScreen.propTypes = {
-  region: PropTypes.string,
-  isTvaRequest: PropTypes.bool,
-  actionFetchTva: PropTypes.func,
-  pushTracking: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TvaScreen);

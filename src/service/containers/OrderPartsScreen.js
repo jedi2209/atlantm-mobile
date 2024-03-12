@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import PropTypes from 'prop-types';
 import {get, orderBy} from 'lodash';
 import {
   StyleSheet,
@@ -524,12 +523,6 @@ const OrderPartsScreen = props => {
       onSubmit={_onPressOrder}
     />
   );
-};
-
-OrderPartsScreen.propTypes = {
-  dealerSelected: PropTypes.object,
-  localUserDataUpdate: PropTypes.func,
-  isOrderServiceRequest: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderPartsScreen);

@@ -1,6 +1,5 @@
 import React from 'react';
 import {View, Text, StyleSheet, TouchableWithoutFeedback} from 'react-native';
-import PropTypes from 'prop-types';
 import styleConst from '../../core/style-const';
 
 const styles = StyleSheet.create({
@@ -95,14 +94,6 @@ const Plate = props => {
       </View>
     </TouchableWithoutFeedback>
   );
-};
-
-Plate.propTypes = {
-  title: PropTypes.string,
-  subtitle: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
-  onPress: PropTypes.func,
-  type: PropTypes.oneOf(['default', 'danger', 'primary', 'red', 'orange']),
-  active: PropTypes.oneOf(['enabled', 'disabled']),
 };
 
 Plate.defaultProps = {

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {Text, StyleSheet} from 'react-native';
 import {Icon, View, VStack, HStack, Box, Pressable} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -84,13 +83,6 @@ const styles = StyleSheet.create({
 });
 
 export default class Review extends Component {
-  static propTypes = {
-    review: PropTypes.object,
-    visited: PropTypes.array,
-    onPressHandler: PropTypes.func,
-    inList: PropTypes.bool,
-  };
-
   static defaultProps = {
     review: null,
     visited: [],

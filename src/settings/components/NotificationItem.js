@@ -1,5 +1,4 @@
 /* eslint-disable react-native/no-inline-styles */
-import PropTypes from 'prop-types';
 import {StyleSheet, Dimensions, ImageBackground} from 'react-native';
 import {Text, Box, VStack, Heading, View} from 'native-base';
 import LinearGradient from 'react-native-linear-gradient';
@@ -83,16 +82,6 @@ const NotificationItem = props => {
       </View>
     </Box>
   );
-};
-
-NotificationItem.propTypes = {
-  isMessageSending: PropTypes.bool,
-  actionTvaMessageFill: PropTypes.func,
-  actionTvaMessageSend: PropTypes.func,
-  actionSetActiveTvaOrderId: PropTypes.func,
-  message: PropTypes.string,
-  results: PropTypes.object,
-  activeOrderId: PropTypes.string,
 };
 
 NotificationItem.defaultProps = {

@@ -9,7 +9,6 @@ import {Icon} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
-import PropTypes from 'prop-types';
 import styleConst from '../../style-const';
 
 import {localDealerClear} from '../../../dealer/actions';
@@ -108,12 +107,6 @@ const HeaderBackButton = props => {
       </View>
     </TouchableOpacity>
   );
-};
-
-HeaderBackButton.propTypes = {
-  returnScreen: PropTypes.string,
-  color: PropTypes.string,
-  IconStyle: PropTypes.object,
 };
 
 HeaderBackButton.defaultProps = {

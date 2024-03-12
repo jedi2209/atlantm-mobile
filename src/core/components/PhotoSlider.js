@@ -8,7 +8,6 @@ import Carousel, {Pagination} from 'react-native-snap-carousel';
 import Imager from '../../core/components/Imager';
 
 // helpers
-import PropTypes from 'prop-types';
 import styleConst from '../style-const';
 
 const {width: screenWidth} = Dimensions.get('window');
@@ -127,15 +126,6 @@ const PhotoSlider = ({
       ) : null}
     </View>
   );
-};
-
-PhotoSlider.propTypes = {
-  photos: PropTypes.array,
-  resizeMode: PropTypes.string,
-  paginationStyle: PropTypes.object,
-  onPressItem: PropTypes.func,
-  onIndexChanged: PropTypes.func,
-  height: PropTypes.number,
 };
 
 PhotoSlider.defaultProps = {

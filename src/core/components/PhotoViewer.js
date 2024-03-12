@@ -8,9 +8,6 @@ import {
   Platform,
 } from 'react-native';
 
-// helpers
-import PropTypes from 'prop-types';
-
 // components
 import {
   StandaloneGallery,
@@ -120,22 +117,6 @@ const styles = StyleSheet.create({
 PhotoViewer.defaultProps = {
   counter: true,
   enableScale: false,
-};
-
-PhotoViewer.propTypes = {
-  index: PropTypes.number,
-  visible: PropTypes.bool,
-  counter: PropTypes.bool,
-  items: PropTypes.arrayOf(
-    PropTypes.shape({
-      source: PropTypes.shape({
-        uri: PropTypes.string,
-      }),
-    }),
-  ),
-  enableScale: PropTypes.bool,
-  onChange: PropTypes.func,
-  onPressClose: PropTypes.func,
 };
 
 export default PhotoViewer;
