@@ -672,7 +672,7 @@ export default {
     worksService: {
       service: 'Сервис',
       tyreChange: 'Замена шин',
-      wheelChange: 'Замена колёс',
+      wheelChange: 'Замена колёс (шины на дисках)',
       tyreRepair: 'Ремонт шин',
       carWash: 'Мойка',
       other: 'Прочий сервис',
@@ -680,14 +680,14 @@ export default {
     works2: {
       tyreChange: [
         {
-          label: 'Замена колёс',
-          value: 'wheelChange',
-          key: 'wheelChange',
-        },
-        {
           label: 'Замена шин',
           value: 'tyreChange',
           key: 'tyreChange',
+        },
+        {
+          label: 'Замена колёс (шины на дисках)',
+          value: 'wheelChange',
+          key: 'wheelChange',
         },
         {
           label: 'Ремонт шин',
