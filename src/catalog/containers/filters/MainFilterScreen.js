@@ -430,7 +430,10 @@ const MainFilterScreen = ({
           const totalCarsCount = get(res, 'payload.total.count', 0);
           setTotalCars(totalCarsCount);
           if (res.payload.data) {
-            if (res.payload.data.city) {
+            if (
+              res.payload.data.city &&
+              Object.keys(res.payload.data.city).length > 1
+            ) {
               let tmp = {};
               Object.keys(res.payload.data.city).map(val => {
                 tmp[Number(val)] = res.payload.data.city[Number(val)];
@@ -704,7 +707,9 @@ const MainFilterScreen = ({
         </Box>
         {dataFilters && dataFilters.data ? (
           <View mb="1/4">
-            {dataFilters && dataFilters.data.city ? (
+            {dataFilters &&
+            dataFilters.data.city &&
+            Object.keys(dataFilters.data.city).length > 1 ? (
               <Box
                 px="3"
                 py="3"
@@ -1128,7 +1133,8 @@ const MainFilterScreen = ({
               ) : null}
             </Box>
             {/* Модалка Город */}
-            {dataFilters.data.city ? (
+            {dataFilters.data.city &&
+            Object.keys(dataFilters.data.city).length > 1 ? (
               <ModalViewFilter
                 isModalVisible={showModal === modals.city}
                 onHide={() => _showHideModal(false)}
