@@ -41,7 +41,7 @@ switch (bundle) {
     googleID = 'com.atlantm';
     appName = 'Atlant-M';
     dealersSettings = {
-      hideBrands: [220, 137],
+      hideBrands: [220],
     };
     appsFlyerSettings = {
       devKey: 'XXXX',
