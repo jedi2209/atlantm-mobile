@@ -814,7 +814,7 @@ export default {
             subtitle: 'Выберите услуги',
             second: 'Выберите размер ваших шин',
             additional: 'Дополнительно',
-            myTyresInStorage: 'Мои шины у вас',
+            myTyresInStorage: 'Мои шины хранятся у вас',
             leaveTyresInStorage: 'Оставить шины на хранение',
           },
           carWash: {

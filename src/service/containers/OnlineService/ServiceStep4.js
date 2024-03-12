@@ -118,6 +118,10 @@ const ServiceStep4 = props => {
 
   const toast = useToast();
 
+  const dateTimeText = get(orderData, 'DATETIME.time')
+    ? humanDateTime(getDateFromTimestamp(get(orderData, 'DATETIME.time')))
+    : dayMonthYear(get(orderData, 'DATETIME.date', get(orderData, 'DATETIME')));
+
   const _onPressOrder = async dataFromForm => {
     const isInternet = require('../../../utils/internet').default;
     const isInternetExist = await isInternet();
@@ -256,8 +260,12 @@ const ServiceStep4 = props => {
           strings.Notifications.success.title,
           '\r\n' +
             strings.Notifications.success.textOnline +
-            '\r\n\r\n Номер бронирования #' +
-            get(order, 'data.id'),
+            '\r\n\r\nЖдём вас ' +
+            dateTimeText +
+            ' в ' +
+            listDealers[orderData.DEALER].name,
+          // '\r\n\r\n Номер бронирования #' +
+          // get(order, 'data.id'),
           [
             {
               text: 'ОК',
@@ -330,21 +338,7 @@ const ServiceStep4 = props => {
                         mr={2}
                         color={styleConst.color.blue}
                       />
-                      <Text>
-                        {get(orderData, 'DATETIME.time')
-                          ? humanDateTime(
-                              getDateFromTimestamp(
-                                get(orderData, 'DATETIME.time'),
-                              ),
-                            )
-                          : dayMonthYear(
-                              get(
-                                orderData,
-                                'DATETIME.date',
-                                get(orderData, 'DATETIME'),
-                              ),
-                            )}
-                      </Text>
+                      <Text>{dateTimeText}</Text>
                     </HStack>
                     <HStack alignItems="center">
                       <CarIcon

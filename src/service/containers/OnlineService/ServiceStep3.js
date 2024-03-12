@@ -23,6 +23,11 @@ const mapDispatchToProps = {
   orderService,
 };
 
+const minDate = {
+  inStorage: 4,
+  default: 1,
+};
+
 const ServiceStep3 = props => {
   const {route, region, navigation} = props;
 
@@ -60,11 +65,17 @@ const ServiceStep3 = props => {
             props: {
               placeholder:
                 strings.Form.field.placeholder.date +
-                dayMonthYear(addDays(myTyresInStorage ? 3 : 1)),
+                dayMonthYear(
+                  addDays(
+                    myTyresInStorage ? minDate.inStorage : minDate.default,
+                  ),
+                ),
               required: true,
               type: 'service',
               serviceID: get(orderData, 'SERVICE', null),
-              minimumDate: new Date(addDays(myTyresInStorage ? 3 : 1)),
+              minimumDate: new Date(
+                addDays(myTyresInStorage ? minDate.inStorage : minDate.default),
+              ),
               maximumDate: new Date(addDays(31)),
               dealer: {
                 id: get(orderData, 'DEALER'),
