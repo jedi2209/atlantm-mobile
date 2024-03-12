@@ -320,6 +320,9 @@ export default {
       gearbox: {
         title: 'Коробка передач',
       },
+      seatsCount: {
+        title: 'Кол-во мест',
+      },
       body: {
         title: 'Кузов',
       },

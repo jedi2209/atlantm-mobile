@@ -72,6 +72,7 @@ const modals = {
   gearbox: 'gearbox',
   body: 'body',
   enginetype: 'enginetype',
+  seatsCount: 'seatsCount',
   drive: 'drive',
   colors: 'colors',
 };
@@ -1044,7 +1045,42 @@ const MainFilterScreen = ({
                     type="multipleCheckbox"
                   />
                 ) : null}
-                {stockType != 'Used' &&
+                {stockType !== 'Used' &&
+                dataFilters &&
+                dataFilters.data.seatsCount?.values ? (
+                  <FilterRow
+                    onPress={() => {
+                      _showHideModal(true, modals.seatsCount);
+                    }}
+                    title={strings.CarsFilterScreen.filters.seatsCount.title}
+                    type="multiSlider"
+                    values={{
+                      from:
+                        strings.CarsFilterScreen.filters.year.from +
+                        ' ' +
+                        get(
+                          stateFilters,
+                          'seatsCount[from]',
+                          dataFilters.data.seatsCount.min,
+                        ),
+                      to:
+                        strings.CarsFilterScreen.filters.year.to +
+                        ' ' +
+                        get(
+                          stateFilters,
+                          'seatsCount[to]',
+                          dataFilters.data.seatsCount.max,
+                        ),
+                    }}
+                    icon={{
+                      as: MaterialCommunityIcons,
+                      name: 'car-seat',
+                      size: 'lg',
+                    }}
+                    bounceable={true}
+                  />
+                ) : null}
+                {stockType !== 'Used' &&
                 dataFilters &&
                 dataFilters.data.colors ? (
                   <FilterRow
@@ -1390,6 +1426,79 @@ const MainFilterScreen = ({
                       )
                     }
                   />
+                </View>
+              </ModalViewFilter>
+            ) : null}
+            {dataFilters.data.seatsCount?.values ? (
+              <ModalViewFilter
+                isModalVisible={showModal === modals.seatsCount}
+                onHide={() => _showHideModal(false)}
+                onReset={() =>
+                  _onChangeFilter({
+                    'seatsCount[from]': dataFilters?.data?.seatsCount?.min,
+                    'seatsCount[to]': dataFilters?.data?.seatsCount?.max,
+                  })
+                }
+                title={strings.CarsFilterScreen.filters.seatsCount.title}>
+                <View style={styles.multiSliderViewWrapper}>
+                  <MultiSlider
+                    values={[
+                      parseInt(
+                        get(
+                          stateFilters,
+                          'seatsCount[from]',
+                          dataFilters?.data?.seatsCount?.min,
+                        ),
+                      ),
+                      parseInt(
+                        get(
+                          stateFilters,
+                          'seatsCount[to]',
+                          dataFilters?.data?.seatsCount?.max,
+                        ),
+                      ),
+                    ]}
+                    step={1}
+                    min={dataFilters.data.seatsCount.min}
+                    max={dataFilters.data.seatsCount.max}
+                    sliderLength={sliderWidth}
+                    onValuesChange={values =>
+                      _onChangeFilter({
+                        'seatsCount[from]': parseInt(values[0]),
+                        'seatsCount[to]': parseInt(values[1]),
+                      })
+                    }
+                    trackStyle={styles.multiSliderTrackStyle}
+                    selectedStyle={styles.multiSliderSelectedStyle}
+                    customMarker={() => (
+                      <View
+                        style={[
+                          styleConst.shadow.default,
+                          styles.multiSliderCustomMarker,
+                        ]}
+                      />
+                    )}
+                  />
+                  <View style={styles.multiSliderCaptionView}>
+                    <Text style={styles.multiSliderCaptionText}>
+                      {parseFloat(
+                        get(
+                          stateFilters,
+                          'seatsCount[from]',
+                          dataFilters?.data.seatsCount?.min,
+                        ),
+                      ).toFixed(0)}
+                    </Text>
+                    <Text style={styles.multiSliderCaptionText}>
+                      {parseFloat(
+                        get(
+                          stateFilters,
+                          'seatsCount[to]',
+                          dataFilters?.data.seatsCount?.max,
+                        ),
+                      ).toFixed(0)}
+                    </Text>
+                  </View>
                 </View>
               </ModalViewFilter>
             ) : null}
