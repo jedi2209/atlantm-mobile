@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {StyleSheet} from 'react-native';
 import {Icon} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -21,10 +20,6 @@ const RadioIcon = ({containerStyle, selected}) => {
       as={Ionicons}
     />
   );
-};
-
-RadioIcon.propTypes = {
-  selected: PropTypes.bool,
 };
 
 RadioIcon.defaultProps = {

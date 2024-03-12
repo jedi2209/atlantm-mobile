@@ -13,9 +13,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import ActionSheet from '@alessiocancian/react-native-actionsheet';
 import ImagePicker from 'react-native-image-crop-picker';
 
-// helpers
-import PropTypes from 'prop-types';
-
 import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
 
@@ -58,11 +55,6 @@ const styles = StyleSheet.create({
 });
 
 export default class CarCostPhotos extends Component {
-  static propTypes = {
-    photos: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    photosFill: PropTypes.func,
-  };
-
   constructor(props) {
     super(props);
 

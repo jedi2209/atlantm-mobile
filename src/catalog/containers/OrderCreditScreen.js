@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {
   StyleSheet,
   View,
@@ -139,16 +138,6 @@ class OrderCreditScreen extends Component {
     }
     this.optionsPrice.push(this.carPrice);
   }
-
-  static propTypes = {
-    localUserDataUpdate: PropTypes.func,
-    firstName: PropTypes.string,
-    secondName: PropTypes.string,
-    lastName: PropTypes.string,
-    phone: PropTypes.string,
-    email: PropTypes.string,
-    comment: PropTypes.string,
-  };
 
   onPressOrder = async data => {
     const isInternetExist = await isInternet();

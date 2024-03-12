@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 
 import {
   Animated,
@@ -399,15 +398,6 @@ class Form extends Component {
   // }
 
   _setFieldValue(field) {}
-
-  static propTypes = {
-    fields: PropTypes.oneOfType([PropTypes.array, PropTypes.object]),
-    barStyle: PropTypes.string,
-    defaultCountryCode: PropTypes.string,
-    SubmitButton: PropTypes.object,
-    parentState: PropTypes.object,
-    onSubmit: PropTypes.func.isRequired,
-  };
 
   _validate = () => {
     let requredLabels = [];

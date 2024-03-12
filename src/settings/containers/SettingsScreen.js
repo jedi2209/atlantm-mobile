@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import {PureComponent, useState, useEffect} from 'react';
-import PropTypes from 'prop-types';
 import {
   ScrollView,
   Alert,
@@ -380,16 +379,6 @@ const SettingsScreen = props => {
       </TransitionView>
     </ScrollView>
   );
-};
-
-SettingsScreen.propTypes = {
-  isMessageSending: PropTypes.bool,
-  actionTvaMessageFill: PropTypes.func,
-  actionTvaMessageSend: PropTypes.func,
-  actionSetActiveTvaOrderId: PropTypes.func,
-  message: PropTypes.string,
-  results: PropTypes.object,
-  activeOrderId: PropTypes.string,
 };
 
 SettingsScreen.defaultProps = {};

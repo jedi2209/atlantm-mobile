@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 
 // helpers
 import {get} from 'lodash';
-import PropTypes from 'prop-types';
 import styleConst from '../../../core/style-const';
 import Analytics from '../../../utils/amplitude-analytics';
 import {strings} from '../../../core/lang/const';
@@ -64,10 +63,6 @@ const mapStateToProps = ({profile, nav}) => {
 
 class DiscountsScreen extends Component {
   state = {isRefreshing: false};
-
-  static propTypes = {
-    discounts: PropTypes.array,
-  };
 
   shouldComponentUpdate(nextProps) {
     const nav = nextProps.nav.newState;

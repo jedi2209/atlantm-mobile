@@ -2,7 +2,6 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/react-in-jsx-scope */
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import {
   Animated,
   View,
@@ -101,12 +100,6 @@ export default class ChooseDateTimeComponent extends Component {
 
     this.maxTimeAttemps = get(props, 'maxTimeAttemps', 3);
   }
-
-  static propTypes = {
-    onChange: PropTypes.func,
-    onFinishedSelection: PropTypes.func.isRequired,
-    type: PropTypes.string.isRequired,
-  };
 
   _animated = {};
 

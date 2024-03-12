@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import {useEffect, useState} from 'react';
 import {Linking} from 'react-native';
-import PropTypes from 'prop-types';
 import {ScrollView, Text, View} from 'native-base';
 
 import * as NavigationService from '../../navigation/NavigationService';
@@ -156,16 +155,6 @@ const NotificationsScreen = props => {
       </View>
     </ScrollView>
   );
-};
-
-NotificationsScreen.propTypes = {
-  isMessageSending: PropTypes.bool,
-  actionTvaMessageFill: PropTypes.func,
-  actionTvaMessageSend: PropTypes.func,
-  actionSetActiveTvaOrderId: PropTypes.func,
-  message: PropTypes.string,
-  results: PropTypes.object,
-  activeOrderId: PropTypes.string,
 };
 
 NotificationsScreen.defaultProps = {};

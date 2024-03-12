@@ -6,7 +6,6 @@ import {Icon} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // helpers
-import PropTypes from 'prop-types';
 import styleConst from '../../../core/style-const';
 
 const styles = StyleSheet.create({
@@ -31,13 +30,6 @@ const styles = StyleSheet.create({
 });
 
 export default class RatingStars extends PureComponent {
-  static propTypes = {
-    rating: PropTypes.number,
-    itemId: PropTypes.string,
-    theme: PropTypes.string,
-    size: PropTypes.string,
-  };
-
   static defaultProps = {
     rating: null,
     itemId: '',

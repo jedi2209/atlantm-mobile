@@ -33,7 +33,6 @@ import {
   REVIEWS_RATING_TYPE__FROM,
   REVIEWS_RATING_TYPE__TO,
 } from '../../constants';
-import PropTypes from 'prop-types';
 
 import {
   substructMonth,
@@ -190,10 +189,6 @@ const ReviewsFilter = props => {
       </Button>
     </View>
   );
-};
-
-ReviewsFilter.propTypes = {
-  filterDatePeriod: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ReviewsFilter);

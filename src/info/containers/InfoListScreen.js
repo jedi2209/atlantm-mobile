@@ -1,7 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {View, Alert, FlatList, StyleSheet, Dimensions} from 'react-native';
-import PropTypes from 'prop-types';
 import {Pressable, Box, Text, Badge, Icon, Fab} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Offer from '../../core/components/Offer';
@@ -293,13 +292,6 @@ const InfoListScreen = ({
 
 InfoListScreen.defaultProps = {
   type: null,
-};
-
-InfoListScreen.propTypes = {
-  region: PropTypes.string.isRequired,
-  visited: PropTypes.array.isRequired,
-  fetchInfoList: PropTypes.func.isRequired,
-  isFetchInfoList: PropTypes.bool.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InfoListScreen);

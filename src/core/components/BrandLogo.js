@@ -2,19 +2,12 @@ import React, {useState} from 'react';
 import {Image, View, StyleSheet} from 'react-native';
 import Imager from './Imager';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
-import requireALeastOne from '../../utils/requireALeastOneProps';
 
 const mapStateToProps = ({dealer}) => {
   return {
     brandsAll: dealer.listBrands,
   };
 };
-
-const requireALeast = requireALeastOne({
-  width: PropTypes.number,
-  height: PropTypes.number,
-});
 
 const BrandLogo = props => {
   const {brand} = props;
@@ -87,14 +80,6 @@ const BrandLogo = props => {
     }
   }
   return <View />;
-};
-
-BrandLogo.propTypes = {
-  brand: PropTypes.number.isRequired,
-  type: PropTypes.oneOf(['black', 'white']),
-  width: requireALeast,
-  height: requireALeast,
-  aspectRatio: PropTypes.number,
 };
 
 BrandLogo.defaultProps = {

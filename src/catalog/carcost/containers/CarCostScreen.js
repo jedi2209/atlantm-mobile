@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import PropTypes from 'prop-types';
 import {
   Alert,
   TouchableWithoutFeedback,
@@ -720,13 +719,6 @@ const CarCostScreen = ({
       onSubmit={_onPressOrder}
     />
   );
-};
-
-CarCostScreen.propTypes = {
-  dealerSelectedLocal: PropTypes.object,
-  name: PropTypes.string,
-  phone: PropTypes.string,
-  email: PropTypes.string,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarCostScreen);

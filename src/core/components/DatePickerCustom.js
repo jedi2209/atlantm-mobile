@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {View, Text, Pressable, StyleSheet, Platform} from 'react-native';
 import {Button} from 'native-base';
 import {format} from '../../utils/date';
@@ -82,18 +81,6 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
     </Pressable>
   );
 });
-
-DatePickerCustom.propTypes = {
-  mode: PropTypes.oneOf(['date', 'time', 'datetime', 'countdown']),
-  styleContainer: PropTypes.object,
-  confirmBtnText: PropTypes.string,
-  placeholder: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
-  isActive: PropTypes.bool,
-  onChange: PropTypes.func,
-  onPressButton: PropTypes.func.isRequired,
-  onHideModal: PropTypes.func.isRequired,
-};
 
 DatePickerCustom.defaultProps = {
   mode: 'date',

@@ -32,7 +32,6 @@ import LogoLoader from '../../../core/components/LogoLoader';
 
 // helpers
 import {get} from 'lodash';
-import PropTypes from 'prop-types';
 import Analytics from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 import numberWithGap from '../../../utils/number-with-gap';
@@ -1030,10 +1029,6 @@ const UsedCarItemScreen = props => {
       />
     </>
   );
-};
-
-UsedCarItemScreen.propTypes = {
-  region: PropTypes.string,
 };
 
 const stylesFooter = StyleSheet.create({

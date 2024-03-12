@@ -1,7 +1,6 @@
 import React, {useState, useRef} from 'react';
 import {Animated, StyleSheet} from 'react-native';
 import {Pressable, Text, Avatar, Button} from 'native-base';
-import PropTypes from 'prop-types';
 
 import styleConst from '../style-const';
 import Imager from './Imager';
@@ -127,14 +126,6 @@ const FlagButton = props => {
         </Pressable>
       );
   }
-};
-
-FlagButton.propTypes = {
-  buttonSize: PropTypes.number,
-  type: PropTypes.oneOf(['text', 'avatar', 'flag', 'button']),
-  showCaption: PropTypes.bool,
-  flagSize: PropTypes.number,
-  country: PropTypes.oneOf(['by', 'belarus', 'ru', 'russia']),
 };
 
 FlagButton.defaultProps = {

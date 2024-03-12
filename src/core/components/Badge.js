@@ -1,6 +1,5 @@
 import React from 'react';
 import {TouchableHighlight, View, Text, StyleSheet} from 'react-native';
-import PropTypes from 'prop-types';
 import styleConst from '../style-const';
 
 const styles = StyleSheet.create({
@@ -47,12 +46,6 @@ const Badge = props => {
       </Text>
     </View>
   );
-};
-
-Badge.propTypes = {
-  name: PropTypes.string.isRequired,
-  bgColor: PropTypes.string.isRequired,
-  textColor: PropTypes.string.isRequired,
 };
 
 Badge.defaultProps = {

@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 
 // helpers
-import PropTypes from 'prop-types';
 import styleConst from '../style-const';
 import {get} from 'lodash';
 import ModalView from './ModalView';
@@ -65,7 +64,13 @@ const ColorBox = props => {
         selfClosed={true}>
         <View style={{padding: 10}}>
           {color?.name?.official ? (
-            <Text ellipsizeMode="clip" style={{fontSize: 18, marginBottom: 10, color: styleConst.color.greyText4}}>
+            <Text
+              ellipsizeMode="clip"
+              style={{
+                fontSize: 18,
+                marginBottom: 10,
+                color: styleConst.color.greyText4,
+              }}>
               {color?.name?.official}
             </Text>
           ) : null}
@@ -83,7 +88,9 @@ const ColorBox = props => {
               ]}
             />
             {color.code ? (
-              <Text style={{fontSize: 16, color: styleConst.color.greyText2}} selectable={true}>
+              <Text
+                style={{fontSize: 16, color: styleConst.color.greyText2}}
+                selectable={true}>
                 {strings.ColorBox.code} - {color.code}
               </Text>
             ) : null}
@@ -92,12 +99,6 @@ const ColorBox = props => {
       </ModalView>
     </>
   );
-};
-
-ColorBox.propTypes = {
-  color: PropTypes.object,
-  touchableStyle: PropTypes.object,
-  containerStyle: PropTypes.object,
 };
 
 export default ColorBox;

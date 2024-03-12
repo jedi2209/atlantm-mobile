@@ -1,6 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
 import {get, orderBy, isNil} from 'lodash';
 import {
   StyleSheet,
@@ -539,11 +538,6 @@ const ServiceScreen = props => {
       onSubmit={_onPressOrder}
     />
   );
-};
-
-ServiceScreen.propTypes = {
-  localUserDataUpdate: PropTypes.func,
-  isOrderServiceRequest: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ServiceScreen);
