@@ -33,7 +33,6 @@ import {get, orderBy, valuesIn} from 'lodash';
 import {ERROR_NETWORK} from '../../../core/const';
 
 import {strings} from '../../../core/lang/const';
-import {RotationGestureHandler} from 'react-native-gesture-handler';
 import ToastAlert from '../../../core/components/ToastAlert';
 
 const mapStateToProps = ({dealer, profile, catalog}) => {
@@ -155,7 +154,7 @@ const CarCostScreen = ({
     return () => {
       localDealerClear();
     };
-  }, [localDealerClear]);
+  }, []);
 
   useEffect(() => {
     const carFromNavigation = get(route, 'params.car');
@@ -175,7 +174,7 @@ const CarCostScreen = ({
                 name: 'DEALER',
                 type: 'dealerSelect',
                 label: strings.Form.field.label.dealer,
-                value: dealer ? dealer : dealerSelectedLocal,
+                value: dealer,
                 props: {
                   goBack: true,
                   isLocal: true,
