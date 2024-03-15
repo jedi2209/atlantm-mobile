@@ -477,15 +477,17 @@ const ServiceStep1 = props => {
                       label: strings.ServiceScreen.works.tyreChange,
                       value: 'tyreChange',
                     },
-                    {
-                      label: strings.ServiceScreen.works.carWash,
-                      value: 'carWash',
-                    },
+                    get(dealer, 'id') && ![232, 234].includes(dealer?.id)
+                      ? {
+                          label: strings.ServiceScreen.works.carWash,
+                          value: 'carWash',
+                        }
+                      : null,
                     {
                       label: strings.ServiceScreen.works.other,
                       value: 'other',
                     },
-                  ],
+                  ].filter(x => x !== null),
                   required: true,
                   onChange: typeFirst => setServiceData({typeFirst}),
                   placeholder: {
