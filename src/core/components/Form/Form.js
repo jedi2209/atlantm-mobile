@@ -1416,8 +1416,11 @@ class Form extends Component {
             style={[styles.switch]}
             ref={this.inputRefs[groupNum + 'Input' + num]}
             value={this.state[name] ? true : false}
-            onValueChange={val => {
+            onToggle={val => {
               this.onChangeField(data)(val);
+              if (data?.props?.onChange) {
+                data.props.onChange(val);
+              }
             }}
             {...data.props}
           />
