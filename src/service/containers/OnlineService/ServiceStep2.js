@@ -237,12 +237,22 @@ const ServiceStep2 = props => {
               isWheelService
                 ? {
                     name: 'myTyresInStorage',
-                    type: 'checkbox',
+                    type: 'switch',
                     label:
                       strings.Form.field.label.serviceTypes[
                         get(orderData, 'SERVICE')
                       ].myTyresInStorage,
                     value: get(serviceData, 'myTyresInStorage', false),
+                    props: {
+                      style: {
+                        right: 10,
+                        top: 12,
+                        position: 'absolute',
+                        height: 31,
+                        width: 51,
+                        transform: [{scale: 0.75}],
+                      },
+                    },
                   }
                 : {},
               isAdditionalAvailable

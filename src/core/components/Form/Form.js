@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     maxHeight: 100,
   },
   switchWrapper: {
-    marginVertical: 10,
+    marginBottom: 5,
   },
   checkboxWrapper: {
     marginVertical: 0,
@@ -1400,8 +1400,14 @@ class Form extends Component {
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
       return (
-        <View
+      <Pressable
           style={[styles.field, styles.textinput, styles.switchWrapper]}
+          onPress={() => {
+            this.onChangeField(data)(!this.state[name]);
+            if (data?.props?.onChange) {
+              data.props.onChange(!this.state[name]);
+            }
+          }}
           key={'field' + num + name}>
           <Text selectable={false} style={styles.switchText}>
             {label}
@@ -1409,10 +1415,13 @@ class Form extends Component {
           <Switch
             style={[styles.switch]}
             ref={this.inputRefs[groupNum + 'Input' + num]}
-            value={value}
+            value={this.state[name] ? true : false}
+            onValueChange={val => {
+              this.onChangeField(data)(val);
+            }}
             {...data.props}
           />
-        </View>
+        </Pressable>
       );
     },
     checkbox: (data, num, totalFields, groupNum) => {
