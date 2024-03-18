@@ -258,25 +258,28 @@ const ServiceStep2 = props => {
               isAdditionalAvailable
                 ? {
                     name: 'leaveTyresInStorage',
-                    type: 'checkbox',
+                    type: 'switch',
                     label:
                       strings.Form.field.label.serviceTypes[
                         get(orderData, 'SERVICE')
                       ].leaveTyresInStorage,
-                    value: false,
+                    value: get(serviceData, 'leaveTyresInStorage', false),
                     props: {
-                      onSelect: val => {
-                        setTimeout(
-                          () =>
-                            setServiceData({
-                              leaveTyresInStorage: val,
-                              needUpdate: true,
-                              loading: true,
-                              itemFullSelected: {},
-                            }),
-                          300,
-                        );
+                      style: {
+                        right: 10,
+                        top: 12,
+                        position: 'absolute',
+                        height: 31,
+                        width: 51,
+                        transform: [{scale: 0.75}],
                       },
+                      onChange: val =>
+                        setServiceData({
+                          leaveTyresInStorage: val,
+                          needUpdate: true,
+                          loading: true,
+                          itemFullSelected: {},
+                        }),
                     },
                   }
                 : {},
