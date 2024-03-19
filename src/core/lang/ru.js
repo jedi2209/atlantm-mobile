@@ -870,6 +870,7 @@ export default {
     button: {
       send: 'Отправить',
       sending: 'Отправляем...',
+      loading: 'Загрузка...',
       receiveCode: 'Получить код',
       nextToDate: 'Далее к выбору даты',
       next: 'Далее',

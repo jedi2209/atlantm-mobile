@@ -243,16 +243,6 @@ const ServiceStep2 = props => {
                         get(orderData, 'SERVICE')
                       ].myTyresInStorage,
                     value: get(serviceData, 'myTyresInStorage', false),
-                    props: {
-                      style: {
-                        right: 10,
-                        top: 12,
-                        position: 'absolute',
-                        height: 31,
-                        width: 51,
-                        transform: [{scale: 0.75}],
-                      },
-                    },
                   }
                 : {},
               isAdditionalAvailable
@@ -265,14 +255,6 @@ const ServiceStep2 = props => {
                       ].leaveTyresInStorage,
                     value: get(serviceData, 'leaveTyresInStorage', false),
                     props: {
-                      style: {
-                        right: 10,
-                        top: 12,
-                        position: 'absolute',
-                        height: 31,
-                        width: 51,
-                        transform: [{scale: 0.75}],
-                      },
                       onChange: val =>
                         setServiceData({
                           leaveTyresInStorage: val,
@@ -382,7 +364,7 @@ const ServiceStep2 = props => {
         props: {
           isDisabled: serviceData.loading,
           isLoading: serviceData.loading,
-          isLoadingText: null,
+          isLoadingText: strings.Form.button.loading,
         },
       }}
     />
