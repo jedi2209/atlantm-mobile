@@ -71,6 +71,11 @@ const platformStyle = {
     textarea: {
       height: 80,
     },
+    switch: {
+      transform: {
+        scale: 0.75,
+      },
+    },
   },
   android: {
     textinput: {
@@ -83,6 +88,11 @@ const platformStyle = {
     },
     textarea: {
       height: 'auto',
+    },
+    switch: {
+      transform: {
+        scale: 1.1,
+      },
     },
   },
 };
@@ -182,16 +192,19 @@ const styles = StyleSheet.create({
     marginVertical: 0,
   },
   switchText: {
-    marginTop: 5,
+    marginBottom: 10,
     color: styleConst.color.greyText7,
   },
   checkboxText: {
     color: styleConst.color.greyText7,
   },
   switch: {
-    right: 15,
-    top: 10,
+    right: 10,
+    top: 12,
     position: 'absolute',
+    height: 31,
+    width: 51,
+    transform: [{scale: platformStyle[Platform.OS].switch.transform.scale}],
   },
   buttonText: {
     color: styleConst.color.white,
@@ -1304,7 +1317,7 @@ class Form extends Component {
               ? styleConst.color.blueNew
               : styleConst.color.blue
           }
-          style={{marginTop: 15, marginBottom: 15}}
+          style={{marginTop: 15, marginBottom: 16}}
         />
       );
     },
