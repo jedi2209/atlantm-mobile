@@ -809,6 +809,7 @@ export default {
         foto: 'Прикрепи фото',
         comment: 'Комментарий',
         dontcallMe: 'Не звонить для подтверждения заявки',
+        callMe: 'Хочу что бы со мной связался сотрудник сервиса',
         login: 'Логин',
         pass: 'Пароль',
         birthday: 'Когда у вас день рождения?',
@@ -820,7 +821,7 @@ export default {
             subtitle: 'Выберите услуги',
             second: 'Выберите размер ваших шин',
             additional: 'Дополнительно',
-            myTyresInStorage: 'Мои шины хранятся у вас',
+            myTyresInStorage: 'Мои шины хранятся в Атлант-М',
             leaveTyresInStorage: 'Оставить шины на хранение',
           },
           carWash: {
