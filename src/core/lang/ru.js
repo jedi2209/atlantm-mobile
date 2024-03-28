@@ -344,6 +344,9 @@ export default {
       onlineOrder: {
         title: 'Можно забронировать онлайн',
       },
+      onlyFree: {
+        title: 'Скрыть забронированные авто',
+      },
       colors: {
         title: 'Цвет',
       },
