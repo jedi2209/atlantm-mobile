@@ -677,12 +677,16 @@ const MainFilterScreen = ({
     }
   }, [updateFromApi, brandModel[stockType]]);
 
-  const minPrice = numberWithGap(
-    get(stateFilters, 'price[from]', get(dataFilters, 'prices.min')),
+  const minPrice = get(
+    stateFilters,
+    'price[from]',
+    get(dataFilters, 'prices.min'),
   );
 
-  const maxPrice = numberWithGap(
-    get(stateFilters, 'price[to]', get(dataFilters, 'prices.max')),
+  const maxPrice = get(
+    stateFilters,
+    'price[to]',
+    get(dataFilters, 'prices.max'),
   );
 
   return (
@@ -1426,7 +1430,9 @@ const MainFilterScreen = ({
                       }}
                       onChangeText={val => {
                         _onChangeFilter({
-                          'price[from]': val,
+                          'price[from]': val
+                            ? parseInt(val.replace(/\D/g, ''))
+                            : '',
                           'price[to]': get(
                             stateFilters,
                             'price[to]',
@@ -1446,7 +1452,11 @@ const MainFilterScreen = ({
                         const val = parseInt(
                           get(nativeEvent, 'text').replace(/\D/g, ''),
                         );
-                        if (val > get(dataFilters, 'prices.max') || !val) {
+                        if (
+                          val <= get(dataFilters, 'prices.min') ||
+                          val > get(dataFilters, 'prices.max') ||
+                          !val
+                        ) {
                           _onChangeFilter({
                             'price[from]': get(
                               stateFilters,
@@ -1464,7 +1474,9 @@ const MainFilterScreen = ({
                             'price[from]',
                             get(dataFilters, 'prices.min'),
                           ),
-                          'price[to]': val,
+                          'price[to]': val
+                            ? parseInt(val.replace(/\D/g, ''))
+                            : '',
                         });
                       }}
                     />
@@ -1486,7 +1498,7 @@ const MainFilterScreen = ({
                     min={get(dataFilters, 'prices.min', 0)}
                     max={dataFilters?.prices?.max}
                     sliderLength={sliderWidth}
-                    onValuesChange={values =>
+                    onValuesChangeFinish={values =>
                       _onChangeFilter({
                         'price[from]': values[0],
                         'price[to]': values[1],
@@ -1505,22 +1517,10 @@ const MainFilterScreen = ({
                   />
                   <View style={styles.multiSliderCaptionView}>
                     <Text style={styles.multiSliderCaptionText}>
-                      {numberWithGap(
-                        get(
-                          stateFilters,
-                          'price[from]',
-                          dataFilters?.prices?.min,
-                        ),
-                      )}
+                      {numberWithGap(get(dataFilters, 'prices.min'))}
                     </Text>
                     <Text style={styles.multiSliderCaptionText}>
-                      {numberWithGap(
-                        get(
-                          stateFilters,
-                          'price[to]',
-                          dataFilters?.prices?.max,
-                        ),
-                      )}
+                      {numberWithGap(get(dataFilters, 'prices.max'))}
                     </Text>
                   </View>
                 </View>
