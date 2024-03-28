@@ -1348,12 +1348,14 @@ const MainFilterScreen = ({
                     trackStyle={styles.multiSliderTrackStyle}
                     selectedStyle={styles.multiSliderSelectedStyle}
                     customMarker={() => (
-                      <View
-                        style={[
-                          styleConst.shadow.default,
-                          styles.multiSliderCustomMarker,
-                        ]}
-                      />
+                      <View p={10}>
+                        <View
+                          style={[
+                            styleConst.shadow.default,
+                            styles.multiSliderCustomMarker,
+                          ]}
+                        />
+                      </View>
                     )}
                   />
                   <View style={styles.multiSliderCaptionView}>
@@ -1391,6 +1393,7 @@ const MainFilterScreen = ({
                   })
                 }
                 avoidKeyboard={true}
+                statusBarTranslucent={false}
                 title={strings.CarsFilterScreen.filters.price.title}
                 selfClosed={false}>
                 <View style={styles.multiSliderViewWrapper}>
@@ -1401,10 +1404,13 @@ const MainFilterScreen = ({
                       label={strings.CarsFilterScreen.filters.year.from}
                       placeholder={strings.CarsFilterScreen.filters.year.from}
                       style={{width: 120}}
-                      value={(minPrice ? minPrice : '').toString()}
+                      value={(minPrice
+                        ? numberWithGap(minPrice)
+                        : ''
+                      ).toString()}
                       onBlur={({nativeEvent}) => {
                         const val = parseInt(
-                          get(nativeEvent, 'text').replace(/\D/g, ''),
+                          get(nativeEvent, 'text', '').replace(/\D/g, ''),
                         );
                         if (val < get(dataFilters, 'prices.min') || !val) {
                           _onChangeFilter({
@@ -1447,10 +1453,13 @@ const MainFilterScreen = ({
                       label={strings.CarsFilterScreen.filters.year.to}
                       placeholder={strings.CarsFilterScreen.filters.year.to}
                       style={{width: 120}}
-                      value={(maxPrice ? maxPrice : '').toString()}
+                      value={(maxPrice
+                        ? numberWithGap(maxPrice)
+                        : ''
+                      ).toString()}
                       onBlur={({nativeEvent}) => {
                         const val = parseInt(
-                          get(nativeEvent, 'text').replace(/\D/g, ''),
+                          get(nativeEvent, 'text', '').replace(/\D/g, ''),
                         );
                         if (
                           val <= get(dataFilters, 'prices.min') ||
@@ -1507,12 +1516,14 @@ const MainFilterScreen = ({
                     trackStyle={styles.multiSliderTrackStyle}
                     selectedStyle={styles.multiSliderSelectedStyle}
                     customMarker={() => (
-                      <View
-                        style={[
-                          styleConst.shadow.default,
-                          styles.multiSliderCustomMarker,
-                        ]}
-                      />
+                      <View p={10}>
+                        <View
+                          style={[
+                            styleConst.shadow.default,
+                            styles.multiSliderCustomMarker,
+                          ]}
+                        />
+                      </View>
                     )}
                   />
                   <View style={styles.multiSliderCaptionView}>
@@ -1592,12 +1603,14 @@ const MainFilterScreen = ({
                     trackStyle={styles.multiSliderTrackStyle}
                     selectedStyle={styles.multiSliderSelectedStyle}
                     customMarker={() => (
-                      <View
-                        style={[
-                          styleConst.shadow.default,
-                          styles.multiSliderCustomMarker,
-                        ]}
-                      />
+                      <View p={10}>
+                        <View
+                          style={[
+                            styleConst.shadow.default,
+                            styles.multiSliderCustomMarker,
+                          ]}
+                        />
+                      </View>
                     )}
                   />
                   <View style={styles.multiSliderCaptionView}>
@@ -1722,12 +1735,14 @@ const MainFilterScreen = ({
                     trackStyle={styles.multiSliderTrackStyle}
                     selectedStyle={styles.multiSliderSelectedStyle}
                     customMarker={() => (
-                      <View
-                        style={[
-                          styleConst.shadow.default,
-                          styles.multiSliderCustomMarker,
-                        ]}
-                      />
+                      <View p={10}>
+                        <View
+                          style={[
+                            styleConst.shadow.default,
+                            styles.multiSliderCustomMarker,
+                          ]}
+                        />
+                      </View>
                     )}
                   />
                   <View style={styles.multiSliderCaptionView}>
@@ -1792,12 +1807,14 @@ const MainFilterScreen = ({
                     trackStyle={styles.multiSliderTrackStyle}
                     selectedStyle={styles.multiSliderSelectedStyle}
                     customMarker={() => (
-                      <View
-                        style={[
-                          styleConst.shadow.default,
-                          styles.multiSliderCustomMarker,
-                        ]}
-                      />
+                      <View p={10}>
+                        <View
+                          style={[
+                            styleConst.shadow.default,
+                            styles.multiSliderCustomMarker,
+                          ]}
+                        />
+                      </View>
                     )}
                   />
                   <View style={styles.multiSliderCaptionView}>
@@ -2079,8 +2096,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   multiSliderCustomMarker: {
-    height: 21,
-    width: 21,
+    height: 27,
+    width: 27,
     borderRadius: 7,
     backgroundColor: styleConst.color.lightBlue,
   },

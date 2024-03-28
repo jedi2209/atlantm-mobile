@@ -13,7 +13,7 @@ const ModalViewFilter = props => {
   return (
     <View onPress={props.onHide}>
       <Modal
-        statusBarTranslucent
+        statusBarTranslucent={true}
         style={[styles.modalView, props?.stylesModal]}
         useNativeDriver={true}
         isVisible={props.isModalVisible}
