@@ -841,6 +841,11 @@ export default {
         birthday: 'Мы обязательно поздравим!',
         service: 'Что будем делать с авто?',
         part: 'Номер, название или перечень необходимых зап.частей',
+        serviceTypes: {
+          tyreChange: {
+            myTyresInStorage: 'Необходимо ли подготовить шины для вас?',
+          },
+        },
       },
       value: {
         gearbox: {

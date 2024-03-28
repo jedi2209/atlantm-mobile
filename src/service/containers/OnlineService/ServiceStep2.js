@@ -237,12 +237,39 @@ const ServiceStep2 = props => {
               isWheelService
                 ? {
                     name: 'myTyresInStorage',
-                    type: 'switch',
+                    type: 'select',
                     label:
                       strings.Form.field.label.serviceTypes[
                         get(orderData, 'SERVICE')
                       ].myTyresInStorage,
                     value: get(serviceData, 'myTyresInStorage', false),
+                    props: {
+                      items: [
+                        {
+                          label: 'Шины у вас',
+                          value: 1,
+                        },
+                        {
+                          label: 'Шины не у вас',
+                          value: 2,
+                        },
+                      ],
+                      required: true,
+                      iOSselectFix: true,
+                      onChange: val => {
+                        setServiceData({
+                          myTyresInStorage: val,
+                        });
+                      },
+                      placeholder: {
+                        label:
+                          strings.Form.field.placeholder.serviceTypes[
+                            get(orderData, 'SERVICE')
+                          ].myTyresInStorage,
+                        value: null,
+                        color: '#9EA0A4',
+                      },
+                    },
                   }
                 : {},
               isAdditionalAvailable

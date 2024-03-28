@@ -145,6 +145,11 @@ const ServiceStep4 = props => {
       ].join(' ');
     }
 
+    let myTyresInStorage = false;
+    if (get(orderData, 'myTyresInStorage') === 1) {
+      myTyresInStorage = true;
+    }
+
     let data = {
       dealer: orderData.DEALER,
       time: {
@@ -160,7 +165,7 @@ const ServiceStep4 = props => {
       email: get(dataFromForm, 'EMAIL', ''),
       dontCallMe: get(dataFromForm, 'DONTCALLME', false),
       leaveTyresInStorage: get(orderData, 'leaveTyresInStorage', false),
-      myTyresInStorage: get(orderData, 'myTyresInStorage', false),
+      myTyresInStorage,
       tech_place: get(dateFromForm, 'tech_place', ''),
       service: get(orderData, 'SERVICE', ''),
       serviceName: [
