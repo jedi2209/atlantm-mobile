@@ -83,6 +83,7 @@ const initialStateFilters = {
   breakInsurance: false,
   fullServiceHistory: false,
   onlineOrder: false,
+  ordered: false,
   enginetypeType: [],
   'price-special': false,
 };
@@ -643,6 +644,11 @@ const MainFilterScreen = ({
         });
       });
     }
+    if (stateFilters['ordered']) {
+      Object.assign(filtersLocal, stateFilters, {
+        ordered: 'active',
+      });
+    }
     switch (stockType) {
       case 'New':
         actionFetchNewCar({
@@ -1150,6 +1156,16 @@ const MainFilterScreen = ({
                     bounceable={false}
                     type="singleCheckbox"
                   />
+                  <FilterRow
+                    onPress={() => {
+                      _onChangeFilter('ordered', !stateFilters.ordered);
+                      setUpdateFromApi(!updateFromApi);
+                    }}
+                    title={strings.CarsFilterScreen.filters.onlyFree.title}
+                    isChecked={get(stateFilters, 'ordered', false)}
+                    bounceable={false}
+                    type="singleCheckbox"
+                  />
                 </VStack>
               ) : region === 'by' ? (
                 <VStack
@@ -1162,6 +1178,16 @@ const MainFilterScreen = ({
                     }}
                     title={strings.CarsFilterScreen.filters.onlineOrder.title}
                     isChecked={get(stateFilters, 'onlineOrder', false)}
+                    bounceable={false}
+                    type="singleCheckbox"
+                  />
+                  <FilterRow
+                    onPress={() => {
+                      _onChangeFilter('ordered', !stateFilters.ordered);
+                      setUpdateFromApi(!updateFromApi);
+                    }}
+                    title={strings.CarsFilterScreen.filters.onlyFree.title}
+                    isChecked={get(stateFilters, 'ordered', false)}
                     bounceable={false}
                     type="singleCheckbox"
                   />
