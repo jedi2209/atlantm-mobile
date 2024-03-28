@@ -163,7 +163,7 @@ const ServiceStep4 = props => {
       f_LastName: get(dataFromForm, 'LAST_NAME', ''),
       phone: get(dataFromForm, 'PHONE', ''),
       email: get(dataFromForm, 'EMAIL', ''),
-      dontCallMe: get(dataFromForm, 'DONTCALLME', false),
+      callMePls: get(dataFromForm, 'CALLMEPLS', true),
       leaveTyresInStorage: get(orderData, 'leaveTyresInStorage', false),
       myTyresInStorage,
       tech_place: get(dateFromForm, 'tech_place', ''),
@@ -207,7 +207,7 @@ const ServiceStep4 = props => {
         email: get(data, 'email', ''),
         phone: get(data, 'phone', ''),
         text: get(data, 'text', ''),
-        dontCallMe: get(data, 'dontCallMe', false),
+        callMePls: get(data, 'callMePls', true),
         dealerID: get(data, 'dealer'),
       };
       const action = await props.orderService(dataToSend);
@@ -493,9 +493,9 @@ const ServiceStep4 = props => {
           },
           !get(orderData, 'lead', true)
             ? {
-                name: 'DONTCALLME',
+                name: 'CALLMEPLS',
                 type: 'checkbox',
-                label: strings.Form.field.label.dontcallMe,
+                label: strings.Form.field.label.callMe,
                 props: {
                   left: true,
                 },

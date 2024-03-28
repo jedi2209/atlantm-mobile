@@ -246,11 +246,11 @@ const ServiceStep2 = props => {
                     props: {
                       items: [
                         {
-                          label: 'Шины у вас',
+                          label: strings.ContactsScreen.closedDealer.yes,
                           value: 1,
                         },
                         {
-                          label: 'Шины не у вас',
+                          label: strings.ContactsScreen.closedDealer.no,
                           value: 2,
                         },
                       ],

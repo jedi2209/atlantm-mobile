@@ -444,13 +444,13 @@ export default {
       dealerID,
       actionID,
       text,
-      dontCallMe,
+      callMePls,
       service,
     } = props;
 
     const textModified = [];
-    if (dontCallMe) {
-      textModified.push('\r\nНе звонить клиенту для подтверждения!');
+    if (callMePls) {
+      textModified.push('\r\nНеобходимо позвонить клиенту для подтверждения!');
     }
     if (service) {
       textModified.push('Требуемые работы: ' + service);
