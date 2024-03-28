@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect, useReducer} from 'react';
+import React, {useState, useEffect, useReducer, useRef} from 'react';
 import {
   Animated,
   ActivityIndicator,
@@ -50,6 +50,8 @@ import {get} from 'lodash';
 import numberWithGap from '../../../utils/number-with-gap';
 
 import {strings} from '../../../core/lang/const';
+import {TextInput} from 'react-native-paper';
+import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -278,6 +280,7 @@ const MainFilterScreen = ({
   const [bodys, setBody] = useState({});
   const [accordionModels, setAccordion] = useState({});
   const [dataFilters, setDataFilters] = useState(null);
+  const mainRef = useRef(null);
 
   const _showHideSubmitButton = show => {
     if (show) {
@@ -588,63 +591,63 @@ const MainFilterScreen = ({
     _showHideSubmitButton(false);
     let filtersLocal = {};
     Object.assign(filtersLocal, stateFilters);
-    if (stateFilters['cityIDs']) {
-      stateFilters['cityIDs'].map(val => {
+    if (stateFilters.cityIDs) {
+      stateFilters.cityIDs.map(val => {
         Object.assign(filtersLocal, stateFilters, {
           ['city[' + val.value + ']']: parseInt(val.value, 10),
         });
       });
     }
-    if (brandModel[stockType]['brand']) {
-      Object.keys(brandModel[stockType]['brand']).map(key => {
+    if (brandModel[stockType].brand) {
+      Object.keys(brandModel[stockType].brand).map(key => {
         Object.assign(filtersLocal, stateFilters, {
           ['brand[' + key + ']']: parseInt(key, 10),
         });
       });
     }
-    if (brandModel[stockType]['model']) {
-      Object.keys(brandModel[stockType]['model']).map(key => {
+    if (brandModel[stockType].model) {
+      Object.keys(brandModel[stockType].model).map(key => {
         Object.assign(filtersLocal, stateFilters, {
           ['model[' + key + ']']: key,
         });
       });
     }
-    if (stateFilters['gearboxType']) {
-      stateFilters['gearboxType'].map(val => {
+    if (stateFilters.gearboxType) {
+      stateFilters.gearboxType.map(val => {
         Object.assign(filtersLocal, stateFilters, {
           ['gearbox[' + val.value + ']']: parseInt(val.value, 10),
         });
       });
     }
-    if (stateFilters['bodyType']) {
-      stateFilters['bodyType'].map(val => {
+    if (stateFilters.bodyType) {
+      stateFilters.bodyType.map(val => {
         Object.assign(filtersLocal, stateFilters, {
           ['body[' + val.value + ']']: parseInt(val.value, 10),
         });
       });
     }
-    if (stateFilters['enginetypeType']) {
-      stateFilters['enginetypeType'].map(val => {
+    if (stateFilters.enginetypeType) {
+      stateFilters.enginetypeType.map(val => {
         Object.assign(filtersLocal, stateFilters, {
           ['enginetype[' + val.value + ']']: parseInt(val.value, 10),
         });
       });
     }
-    if (stateFilters['driveType']) {
-      stateFilters['driveType'].map(val => {
+    if (stateFilters.driveType) {
+      stateFilters.driveType.map(val => {
         Object.assign(filtersLocal, stateFilters, {
           ['drive[' + val.value + ']']: parseInt(val.value, 10),
         });
       });
     }
-    if (stateFilters['colorType']) {
-      stateFilters['colorType'].map(val => {
+    if (stateFilters.colorType) {
+      stateFilters.colorType.map(val => {
         Object.assign(filtersLocal, stateFilters, {
           ['colors[' + val.value + ']']: parseInt(val.value, 10),
         });
       });
     }
-    if (stateFilters['ordered']) {
+    if (stateFilters.ordered) {
       Object.assign(filtersLocal, stateFilters, {
         ordered: 'active',
       });
@@ -673,6 +676,14 @@ const MainFilterScreen = ({
         break;
     }
   }, [updateFromApi, brandModel[stockType]]);
+
+  const minPrice = numberWithGap(
+    get(stateFilters, 'price[from]', get(dataFilters, 'prices.min')),
+  );
+
+  const maxPrice = numberWithGap(
+    get(stateFilters, 'price[to]', get(dataFilters, 'prices.max')),
+  );
 
   return (
     <>
@@ -1209,7 +1220,7 @@ const MainFilterScreen = ({
                     onPressCallback={({value, label}) =>
                       _onChangeFilter(
                         'cityIDs',
-                        _makeFilterData(stateFilters['cityIDs'], {
+                        _makeFilterData(stateFilters.cityIDs, {
                           value,
                           label,
                         }),
@@ -1371,24 +1382,108 @@ const MainFilterScreen = ({
                 onHide={() => _showHideModal(false)}
                 onReset={() =>
                   _onChangeFilter({
-                    'price[from]': dataFilters?.prices?.min,
-                    'price[to]': dataFilters?.prices?.max,
+                    'price[from]': get(dataFilters, 'prices.min'),
+                    'price[to]': get(dataFilters, 'prices.max'),
                   })
                 }
+                avoidKeyboard={true}
                 title={strings.CarsFilterScreen.filters.price.title}
                 selfClosed={false}>
                 <View style={styles.multiSliderViewWrapper}>
+                  <HStack justifyContent={'space-between'}>
+                    <TextInput
+                      mode="outlined"
+                      inputMode="numeric"
+                      label={strings.CarsFilterScreen.filters.year.from}
+                      placeholder={strings.CarsFilterScreen.filters.year.from}
+                      style={{width: 120}}
+                      value={(minPrice ? minPrice : '').toString()}
+                      onBlur={({nativeEvent}) => {
+                        const val = parseInt(
+                          get(nativeEvent, 'text').replace(/\D/g, ''),
+                        );
+                        if (val < get(dataFilters, 'prices.min') || !val) {
+                          _onChangeFilter({
+                            'price[from]': get(dataFilters, 'prices.min'),
+                            'price[to]': get(
+                              stateFilters,
+                              'price[to]',
+                              get(dataFilters, 'prices.max'),
+                            ),
+                          });
+                        } else if (val >= get(dataFilters, 'prices.max')) {
+                          _onChangeFilter({
+                            'price[from]':
+                              get(dataFilters, 'prices.max') -
+                              get(dataFilters, 'prices.step'),
+                            'price[to]': get(
+                              stateFilters,
+                              'price[to]',
+                              get(dataFilters, 'prices.max'),
+                            ),
+                          });
+                        }
+                      }}
+                      onChangeText={val => {
+                        _onChangeFilter({
+                          'price[from]': val,
+                          'price[to]': get(
+                            stateFilters,
+                            'price[to]',
+                            get(dataFilters, 'prices.max'),
+                          ),
+                        });
+                      }}
+                    />
+                    <TextInput
+                      mode="outlined"
+                      inputMode="numeric"
+                      label={strings.CarsFilterScreen.filters.year.to}
+                      placeholder={strings.CarsFilterScreen.filters.year.to}
+                      style={{width: 120}}
+                      value={(maxPrice ? maxPrice : '').toString()}
+                      onBlur={({nativeEvent}) => {
+                        const val = parseInt(
+                          get(nativeEvent, 'text').replace(/\D/g, ''),
+                        );
+                        if (val > get(dataFilters, 'prices.max') || !val) {
+                          _onChangeFilter({
+                            'price[from]': get(
+                              stateFilters,
+                              'price[from]',
+                              get(dataFilters, 'prices.min'),
+                            ),
+                            'price[to]': get(dataFilters, 'prices.max'),
+                          });
+                        }
+                      }}
+                      onChangeText={val => {
+                        _onChangeFilter({
+                          'price[from]': get(
+                            stateFilters,
+                            'price[from]',
+                            get(dataFilters, 'prices.min'),
+                          ),
+                          'price[to]': val,
+                        });
+                      }}
+                    />
+                  </HStack>
                   <MultiSlider
                     values={[
                       get(
                         stateFilters,
                         'price[from]',
-                        dataFilters?.prices?.min,
+                        get(dataFilters, 'prices.min', 0),
                       ),
-                      get(stateFilters, 'price[to]', dataFilters?.prices?.max),
+                      get(
+                        stateFilters,
+                        'price[to]',
+                        get(dataFilters, 'prices.max'),
+                      ),
                     ]}
                     step={dataFilters?.prices?.step}
-                    min={dataFilters?.prices?.min}
+                    min={get(dataFilters, 'prices.min', 0)}
                     max={dataFilters?.prices?.max}
                     sliderLength={sliderWidth}
                     onValuesChange={values =>
@@ -1445,7 +1540,7 @@ const MainFilterScreen = ({
                     onPressCallback={({value, label}) =>
                       _onChangeFilter(
                         'gearboxType',
-                        _makeFilterData(stateFilters['gearboxType'], {
+                        _makeFilterData(stateFilters.gearboxType, {
                           value,
                           label,
                         }),
@@ -1544,7 +1639,7 @@ const MainFilterScreen = ({
                     onPressCallback={({value, label}) =>
                       _onChangeFilter(
                         'bodyType',
-                        _makeFilterData(stateFilters['bodyType'], {
+                        _makeFilterData(stateFilters.bodyType, {
                           value,
                           label,
                         }),
@@ -1568,7 +1663,7 @@ const MainFilterScreen = ({
                     onPressCallback={({value, label}) =>
                       _onChangeFilter(
                         'enginetypeType',
-                        _makeFilterData(stateFilters['enginetypeType'], {
+                        _makeFilterData(stateFilters.enginetypeType, {
                           value,
                           label,
                         }),
@@ -1738,7 +1833,7 @@ const MainFilterScreen = ({
                     onPressCallback={({value, label}) =>
                       _onChangeFilter(
                         'driveType',
-                        _makeFilterData(stateFilters['driveType'], {
+                        _makeFilterData(stateFilters.driveType, {
                           value,
                           label,
                         }),
@@ -1770,7 +1865,7 @@ const MainFilterScreen = ({
                     onPressCallback={({value, label}) =>
                       _onChangeFilter(
                         'colorType',
-                        _makeFilterData(stateFilters['colorType'], {
+                        _makeFilterData(stateFilters.colorType, {
                           value,
                           label,
                         }),
