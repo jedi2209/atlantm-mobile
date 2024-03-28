@@ -1408,9 +1408,13 @@ const MainFilterScreen = ({
                         ? numberWithGap(minPrice)
                         : ''
                       ).toString()}
-                      onBlur={({nativeEvent}) => {
+                      onBlur={e => {
                         const val = parseInt(
-                          get(nativeEvent, 'text', '').replace(/\D/g, ''),
+                          get(
+                            e,
+                            'nativeEvent.text',
+                            get(e, '_targetInst.pendingProps.text', ''),
+                          ).replace(/\D/g, ''),
                         );
                         if (val < get(dataFilters, 'prices.min') || !val) {
                           _onChangeFilter({
@@ -1435,10 +1439,16 @@ const MainFilterScreen = ({
                         }
                       }}
                       onChangeText={val => {
+                        let tmpVal = '';
+                        if (val) {
+                          const minVal = get(dataFilters, 'prices.min');
+                          let tmpVal = parseInt(val.replace(/\D/g, ''));
+                          if (tmpVal < minVal) {
+                            tmpVal = minVal;
+                          }
+                        }
                         _onChangeFilter({
-                          'price[from]': val
-                            ? parseInt(val.replace(/\D/g, ''))
-                            : '',
+                          'price[from]': tmpVal,
                           'price[to]': get(
                             stateFilters,
                             'price[to]',
@@ -1457,9 +1467,13 @@ const MainFilterScreen = ({
                         ? numberWithGap(maxPrice)
                         : ''
                       ).toString()}
-                      onBlur={({nativeEvent}) => {
+                      onBlur={e => {
                         const val = parseInt(
-                          get(nativeEvent, 'text', '').replace(/\D/g, ''),
+                          get(
+                            e,
+                            'nativeEvent.text',
+                            get(e, '_targetInst.pendingProps.text', ''),
+                          ).replace(/\D/g, ''),
                         );
                         if (
                           val <= get(dataFilters, 'prices.min') ||
@@ -1477,15 +1491,21 @@ const MainFilterScreen = ({
                         }
                       }}
                       onChangeText={val => {
+                        let tmpVal = '';
+                        if (val) {
+                          const maxVal = get(dataFilters, 'prices.max');
+                          let tmpVal = parseInt(val.replace(/\D/g, ''));
+                          if (tmpVal > maxVal) {
+                            tmpVal = maxVal;
+                          }
+                        }
                         _onChangeFilter({
                           'price[from]': get(
                             stateFilters,
                             'price[from]',
                             get(dataFilters, 'prices.min'),
                           ),
-                          'price[to]': val
-                            ? parseInt(val.replace(/\D/g, ''))
-                            : '',
+                          'price[to]': tmpVal,
                         });
                       }}
                     />
