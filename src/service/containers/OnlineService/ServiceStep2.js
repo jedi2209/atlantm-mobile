@@ -89,8 +89,8 @@ const ServiceStep2 = props => {
     itemFullSelected: {},
   });
 
-  const isWheelService = ['tyreChange', 'tyreRepair', 'wheelChange'].includes(
-    get(orderData, 'SERVICE'),
+  const isWheelService = ['tyreChange', 'wheelChange'].includes(
+    get(orderData, 'SERVICETYPE'),
   );
 
   useEffect(() => {

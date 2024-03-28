@@ -1317,7 +1317,7 @@ class Form extends Component {
               ? styleConst.color.blueNew
               : styleConst.color.blue
           }
-          style={{marginTop: 15, marginBottom: 16}}
+          style={{marginTop: isAndroid ? 15 : 10, marginBottom: 16}}
         />
       );
     },
