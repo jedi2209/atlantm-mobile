@@ -37,7 +37,7 @@ export default {
     // выбор даты в формах
     chooseDate: 'Выберите дату',
     chooseDateButton: 'Выбрать дату',
-    choose: 'выбрать',
+    choose: 'Выбрать',
     month: {
       1: 'Январь',
       2: 'Февраль',
@@ -82,10 +82,10 @@ export default {
   LangSwitcher: {
     // переключатель языка
     lang: 'Язык',
-    chooseLang: 'выбрать язык',
+    chooseLang: 'Выбрать язык',
   },
   Picker: {
-    choose: 'выбрать',
+    choose: 'Выбрать',
   },
   MessageForm: {
     // форма отправки отзыва
