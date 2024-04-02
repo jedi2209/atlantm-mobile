@@ -163,7 +163,7 @@ const ServiceStep4 = props => {
       f_LastName: get(dataFromForm, 'LAST_NAME', ''),
       phone: get(dataFromForm, 'PHONE', ''),
       email: get(dataFromForm, 'EMAIL', ''),
-      callMePls: get(dataFromForm, 'CALLMEPLS', true),
+      callMePls: get(dataFromForm, 'CALLMEPLS', false),
       leaveTyresInStorage: get(orderData, 'leaveTyresInStorage', false),
       myTyresInStorage,
       tech_place: get(dateFromForm, 'tech_place', ''),
@@ -207,7 +207,7 @@ const ServiceStep4 = props => {
         email: get(data, 'email', ''),
         phone: get(data, 'phone', ''),
         text: get(data, 'text', ''),
-        callMePls: get(data, 'callMePls', true),
+        callMePls: get(data, 'callMePls', false),
         dealerID: get(data, 'dealer'),
       };
       const action = await props.orderService(dataToSend);

@@ -5,7 +5,8 @@
   "scripts": {
     "build": "yarn ios-version; yarn android-version;",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "patch-package; cd ios; pod update; cd ../; npx pod-install;",
+    "postinstallOLD": "patch-package; cd ios; pod update; cd ../; npx pod-install;",
+    "postinstall": "patch-package; cd ios; bundle exec pod update; bundle exec pod install; cd ../;",
     "react": "watchman watch-del $(pwd); watchman watch-project $(pwd); npx react-native start --reset-cache",
     "check-dependencies": "rnx-dep-check",
     "fix-dependencies": "rnx-dep-check --write",
