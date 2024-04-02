@@ -89,43 +89,43 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
-  - OneSignalXCFramework (5.1.0):
-    - OneSignalXCFramework/OneSignalComplete (= 5.1.0)
-  - OneSignalXCFramework/OneSignal (5.1.0):
+  - OneSignalXCFramework (5.1.3):
+    - OneSignalXCFramework/OneSignalComplete (= 5.1.3)
+  - OneSignalXCFramework/OneSignal (5.1.3):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalComplete (5.1.0):
+  - OneSignalXCFramework/OneSignalComplete (5.1.3):
     - OneSignalXCFramework/OneSignal
     - OneSignalXCFramework/OneSignalInAppMessages
     - OneSignalXCFramework/OneSignalLocation
-  - OneSignalXCFramework/OneSignalCore (5.1.0)
-  - OneSignalXCFramework/OneSignalExtension (5.1.0):
+  - OneSignalXCFramework/OneSignalCore (5.1.3)
+  - OneSignalXCFramework/OneSignalExtension (5.1.3):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalInAppMessages (5.1.0):
+  - OneSignalXCFramework/OneSignalInAppMessages (5.1.3):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLocation (5.1.0):
+  - OneSignalXCFramework/OneSignalLocation (5.1.3):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalNotifications (5.1.0):
+  - OneSignalXCFramework/OneSignalNotifications (5.1.3):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOSCore (5.1.0):
+  - OneSignalXCFramework/OneSignalOSCore (5.1.3):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalOutcomes (5.1.0):
+  - OneSignalXCFramework/OneSignalOutcomes (5.1.3):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalUser (5.1.0):
+  - OneSignalXCFramework/OneSignalUser (5.1.3):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
@@ -421,22 +421,22 @@ PODS:
     - FBSDKGamingServicesKit (~> 16.3.1)
     - FBSDKShareKit (~> 16.3.1)
     - React-Core
-  - react-native-google-maps (1.10.3):
+  - react-native-google-maps (1.13.0):
     - Google-Maps-iOS-Utils (= 4.2.2)
     - GoogleMaps (= 7.4.0)
     - React-Core
-  - react-native-maps (1.10.3):
+  - react-native-maps (1.13.0):
     - React-Core
   - react-native-netinfo (11.3.1):
     - React-Core
-  - react-native-onesignal (5.0.6):
-    - OneSignalXCFramework (= 5.1.0)
+  - react-native-onesignal (5.1.0):
+    - OneSignalXCFramework (= 5.1.3)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-orientation-locker (1.6.0):
     - React-Core
   - react-native-otp-auto-fill (0.1.17):
     - React-Core
-  - react-native-pager-view (6.2.3):
+  - react-native-pager-view (6.3.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-pure-jwt (3.0.2):
@@ -568,13 +568,13 @@ PODS:
     - React-Core
   - RNAppleAuthentication (2.3.0):
     - React-Core
-  - RNCAsyncStorage (1.22.3):
+  - RNCAsyncStorage (1.23.1):
     - React-Core
   - RNCClipboard (1.13.2):
     - React-Core
   - RNCMaskedView (0.3.1):
     - React-Core
-  - RNCPicker (2.6.1):
+  - RNCPicker (2.7.2):
     - React-Core
   - RNDateTimePicker (7.6.3):
     - React-Core
@@ -584,7 +584,7 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNGestureHandler (2.15.0):
+  - RNGestureHandler (2.16.0):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - RNGoogleSignin (11.0.1):
@@ -599,16 +599,16 @@ PODS:
     - React-Core
     - React-RCTImage
     - TOCropViewController
-  - RNReanimated (3.7.2):
+  - RNReanimated (3.8.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNScreens (3.29.0):
+  - RNScreens (3.30.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
-  - RNSentry (5.19.2):
+  - RNSentry (5.20.0):
     - React-Core
-    - Sentry/HybridSDK (= 8.20.0)
+    - Sentry/HybridSDK (= 8.21.0)
   - RNSha256 (1.4.10):
     - React-Core
   - RNSVG (14.1.0):
@@ -622,9 +622,9 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (8.20.0):
-    - SentryPrivate (= 8.20.0)
-  - SentryPrivate (8.20.0)
+  - Sentry/HybridSDK (8.21.0):
+    - SentryPrivate (= 8.21.0)
+  - SentryPrivate (8.21.0)
   - SocketRocket (0.6.1)
   - TOCropViewController (2.6.1)
   - VK-ios-sdk (1.6.4)
@@ -921,7 +921,7 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 0e876eea9782ec6462e91ab872711c357322c94f
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
-  OneSignalXCFramework: 72a6dbc5d97b7eba09a51837f7858d8957ac2629
+  OneSignalXCFramework: 613f696d70d7e544b9f99e7a21c8b49fa47d7942
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 83bca1c184feb4d2e51c72c8369b83d641443f95
   RCTTypeSafety: 13c4a87a16d7db6cd66006ce9759f073402ef85b
@@ -940,13 +940,13 @@ SPEC CHECKSUMS:
   react-native-appsflyer: 2cc1f96348065fc23e976fc7a27e371789fb349e
   react-native-date-picker: ebcb936d72fc3bbde0dea47c6641e913523231ca
   react-native-fbsdk-next: a929da980a4ec199391da637d3d2ce22b6e7779e
-  react-native-google-maps: 1bcc1f9f13f798fcf230db7fe476f3566d0bc0a3
-  react-native-maps: 72a8a903f8a1b53e2c777ba79102078ab502e0bf
+  react-native-google-maps: a7f275b5f117725280ceb916e0b0b8302ed8986c
+  react-native-maps: fa054512735831f232e822ee6bdb0afcdd88de4a
   react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
-  react-native-onesignal: 644153586b70f8bfb73a238edcdfbe1582fe0a8c
+  react-native-onesignal: dc3b84ccc2b73669b152fccbfc45716dbe0ef9b7
   react-native-orientation-locker: 4409c5b12b65f942e75449872b4f078b6f27af81
   react-native-otp-auto-fill: 722b3b99ddad3a2e92b6dacafdad6ab533e6ae2a
-  react-native-pager-view: e26d35e382d86950c936f8917e3beb9188115ccc
+  react-native-pager-view: 40d9ec4a63ed74f8aa2f1e1bba7c1e0b4080d8a6
   react-native-pure-jwt: c7aabf3e38f688922741774c5b37d1288fc64311
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
@@ -974,26 +974,26 @@ SPEC CHECKSUMS:
   ReactNativeLocalization: fb171138cdc80d5d0d4f20243d2fc82c2b3cc48f
   rn-fetch-blob: d469adb2e1d17f9d02ceb2b7bdd35ae5bd5db66b
   RNAppleAuthentication: e99eaf3c4c01ad8ecb6125dd6f0cfd98871685b5
-  RNCAsyncStorage: 10591b9e0a91eaffee14e69b3721009759235125
+  RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNCClipboard: 60fed4b71560d7bfe40e9d35dea9762b024da86d
   RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
-  RNCPicker: b18aaf30df596e9b1738e7c1f9ee55402a229dca
+  RNCPicker: 82ccad5b08259dc09310082118cbb6c136d7da67
   RNDateTimePicker: 7b38b71bcd7c4cfa1cb95f2dff9a4f1faed2dced
   RNDeviceInfo: 4f9c7cfd6b9db1b05eb919620a001cf35b536423
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
-  RNGestureHandler: 7909c50383a18f0cb10ce1db7262b9a6da504c03
+  RNGestureHandler: 69d0a928253547ef857a7be4f453220b9c472e07
   RNGoogleSignin: 24d3b3261f78b0fae0aa013f8ab6f8d25e369b0c
   RNImageCropPicker: e7ab6fb43d2fc3e84651e786ef4a080d63b0ed3d
-  RNReanimated: ab1295f59541cb26000d394b4b4aea72cb7ca448
-  RNScreens: 3c5b9f4a9dcde752466854b6109b79c0e205dad3
-  RNSentry: 6a9dcd2e7fedea4d817ad96f0f7f71ad83a91464
+  RNReanimated: f4798af7dede23d41039f0bc372710ead86e90c7
+  RNScreens: bb06f14b5c352e603f2527caac02ca0d6398c6e5
+  RNSentry: fb15f17d0f074c089c38bb913625ceab8665c8fd
   RNSha256: e1bc64e9e50b293d5282bb4caa1b2043931f1c9d
   RNSVG: ba3e7232f45e34b7b47e74472386cf4e1a676d0a
   RNVectorIcons: 64e6a523ac30a3241efa9baf1ffbcc5e76ff747a
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: a8d7b373b9f9868442b02a0c425192f693103cbf
-  SentryPrivate: 006b24af16828441f70e2ab6adf241bd0a8ad130
+  Sentry: ebc12276bd17613a114ab359074096b6b3725203
+  SentryPrivate: d651efb234cf385ec9a1cdd3eff94b5e78a0e0fe
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   TOCropViewController: edfd4f25713d56905ad1e0b9f5be3fbe0f59c863
   VK-ios-sdk: 21091f214d271a74b3a3313ec62d1c4da98ce00f
