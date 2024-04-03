@@ -6,7 +6,6 @@ import appsFlyer from 'react-native-appsflyer';
 // redux
 import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/es/integration/react';
-import {enableLatestRenderer} from 'react-native-maps';
 import {store, storePersist} from '../store';
 
 // components
@@ -18,8 +17,6 @@ import {LogBox} from 'react-native';
 
 import {SENTRY_DSN, APPSFLYER_SETTINGS} from '../const';
 import styleConst from '../style-const';
-
-enableLatestRenderer();
 
 const colorScheme = Appearance.getColorScheme();
 

@@ -23,7 +23,6 @@ const DatePickerWrapper = props => {
       open={isActive}
       title={label}
       mode={mode}
-      androidVariant={'nativeAndroid'}
       timeZoneOffsetInMinutes={180}
       date={value ? new Date(value) : defaultDate}
       locale="ru-RU"
