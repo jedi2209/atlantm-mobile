@@ -12,11 +12,7 @@ import {
 import {Icon, Button, Text, View} from 'native-base';
 
 // Maps
-import MapView, {
-  Marker,
-  enableLatestRenderer,
-  PROVIDER_GOOGLE,
-} from 'react-native-maps';
+import MapView, {Marker, PROVIDER_GOOGLE} from 'react-native-maps';
 
 // Redux
 import {connect} from 'react-redux';
@@ -37,8 +33,6 @@ import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
 import {APP_REGION, RUSSIA, BELARUSSIA, UKRAINE} from '../../../core/const';
 import LogoLoader from '../../../core/components/LogoLoader';
-
-enableLatestRenderer();
 
 const isAndroid = Platform.OS === 'android';
 const {width, height} = Dimensions.get('window');

@@ -1,7 +1,5 @@
 #import "AppDelegate.h"
-// #import <Firebase.h>
 #import <GoogleMaps/GoogleMaps.h>
-
 #import <OneSignalFramework/OneSignalFramework.h>
 #import "Orientation.h"
 #import <AuthenticationServices/AuthenticationServices.h>
@@ -20,9 +18,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-  // [FIRApp configure];
   [GMSServices provideAPIKey:@"XXXX"];
-  // [FBSDKApplicationDelegate.sharedInstance initializeSDK];
   [[FBSDKApplicationDelegate sharedInstance] application:application
                       didFinishLaunchingWithOptions:launchOptions];
   self.moduleName = @"atlantm";
@@ -39,6 +35,11 @@
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
+  return [self getBundleURL];
+}
+
+- (NSURL *)getBundleURL
+{
 #if DEBUG
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
 #else
@@ -50,9 +51,11 @@
             openURL:(NSURL *)url
             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
-  return [[FBSDKApplicationDelegate sharedInstance]application:app
-                                                      openURL:url
-                                                      options:options];
+  return [
+    [FBSDKApplicationDelegate sharedInstance]application:app
+    openURL:url
+    options:options
+  ];
 }
 
 @end
