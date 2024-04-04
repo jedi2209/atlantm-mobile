@@ -901,7 +901,7 @@ class Form extends Component {
             label={label + (data.props && data.props.required ? '*' : '')}
             locale={this.locale}
             styleContainer={{paddingLeft: 3}}
-            confirmBtnText={strings.Base.choose.toLowerCase()}
+            confirmBtnText={strings.Base.choose}
             value={this.state[name] || null}
             isActive={this.state.active[name] || false}
             onPressButton={() => {
