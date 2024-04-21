@@ -5,7 +5,7 @@
   "scripts": {
     "build": "yarn ios-version; yarn android-version;",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "postinstall": "./postinstall.sh",
+    "postinstall": "bash ./postinstall.sh",
     "pod-update": "cd ios; bundle exec pod update; bundle exec pod install; cd ../",
     "react": "watchman watch-del $(pwd); watchman watch-project $(pwd); npx react-native start --reset-cache",
     "clean:android": "cd android && ./gradlew clean && cd ../",
