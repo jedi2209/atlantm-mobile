@@ -4,7 +4,7 @@ printf "This is Your Android Devices that you can choose to start \n";
 if [[ "$OSTYPE" == "darwin"* ]]; then
     emulators=`$(echo emulator -list-avds)`;
 elif [[ "$OSTYPE" == "msys" || "$OSTYPE" == "cygwin" || "$OSTYPE" == "win32" ]]; then
-    . "$env:ANDROID_HOME/emulator/emulator.exe" -list-avds
+    emulators=`$(. "$env:ANDROID_HOME/emulator/emulator.exe" -list-avds)`;
 fi
 
 while read -r line; do lines+=("$line"); done <<< "$emulators"
