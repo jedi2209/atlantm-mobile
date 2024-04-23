@@ -150,43 +150,43 @@ PODS:
   - libwebp/sharpyuv (1.3.2)
   - libwebp/webp (1.3.2):
     - libwebp/sharpyuv
-  - OneSignalXCFramework (5.1.3):
-    - OneSignalXCFramework/OneSignalComplete (= 5.1.3)
-  - OneSignalXCFramework/OneSignal (5.1.3):
+  - OneSignalXCFramework (5.1.5):
+    - OneSignalXCFramework/OneSignalComplete (= 5.1.5)
+  - OneSignalXCFramework/OneSignal (5.1.5):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalComplete (5.1.3):
+  - OneSignalXCFramework/OneSignalComplete (5.1.5):
     - OneSignalXCFramework/OneSignal
     - OneSignalXCFramework/OneSignalInAppMessages
     - OneSignalXCFramework/OneSignalLocation
-  - OneSignalXCFramework/OneSignalCore (5.1.3)
-  - OneSignalXCFramework/OneSignalExtension (5.1.3):
+  - OneSignalXCFramework/OneSignalCore (5.1.5)
+  - OneSignalXCFramework/OneSignalExtension (5.1.5):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalInAppMessages (5.1.3):
+  - OneSignalXCFramework/OneSignalInAppMessages (5.1.5):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLocation (5.1.3):
+  - OneSignalXCFramework/OneSignalLocation (5.1.5):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalNotifications (5.1.3):
+  - OneSignalXCFramework/OneSignalNotifications (5.1.5):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOSCore (5.1.3):
+  - OneSignalXCFramework/OneSignalOSCore (5.1.5):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalOutcomes (5.1.3):
+  - OneSignalXCFramework/OneSignalOutcomes (5.1.5):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalUser (5.1.3):
+  - OneSignalXCFramework/OneSignalUser (5.1.5):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
@@ -1066,7 +1066,7 @@ PODS:
   - react-native-appsflyer (6.13.1):
     - AppsFlyerFramework (= 6.13.1)
     - React
-  - react-native-date-picker (5.0.0):
+  - react-native-date-picker (5.0.2):
     - React-Core
   - react-native-fbsdk-next (12.1.4):
     - React-Core
@@ -1083,18 +1083,18 @@ PODS:
     - FBSDKGamingServicesKit (~> 16.3.1)
     - FBSDKShareKit (~> 16.3.1)
     - React-Core
-  - react-native-google-maps (1.13.0):
+  - react-native-google-maps (1.14.0):
     - Google-Maps-iOS-Utils (= 4.2.2)
     - GoogleMaps (= 7.4.0)
     - React-Core
-  - react-native-maps (1.13.0):
+  - react-native-maps (1.14.0):
     - React-Core
   - react-native-netinfo (11.3.1):
     - React-Core
-  - react-native-onesignal (5.1.0):
-    - OneSignalXCFramework (= 5.1.3)
+  - react-native-onesignal (5.1.2):
+    - OneSignalXCFramework (= 5.1.5)
     - React (< 1.0.0, >= 0.13.0)
-  - react-native-orientation-locker (1.6.0):
+  - react-native-orientation-locker (1.7.0):
     - React-Core
   - react-native-otp-auto-fill (0.1.17):
     - React-Core
@@ -1109,7 +1109,7 @@ PODS:
     - React-Core
   - react-native-safe-area-context (4.9.0):
     - React-Core
-  - react-native-slider (4.5.1):
+  - react-native-slider (4.5.2):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1118,7 +1118,7 @@ PODS:
   - react-native-vkontakte-login (1.0.1):
     - React
     - VK-ios-sdk
-  - react-native-webview (13.8.4):
+  - react-native-webview (13.8.6):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
@@ -1301,11 +1301,11 @@ PODS:
     - React-Core
   - RNCMaskedView (0.3.1):
     - React-Core
-  - RNCPicker (2.7.2):
+  - RNCPicker (2.7.5):
     - React-Core
-  - RNDateTimePicker (7.6.4):
+  - RNDateTimePicker (7.7.0):
     - React-Core
-  - RNDeviceInfo (10.13.1):
+  - RNDeviceInfo (10.13.2):
     - React-Core
   - RNFastImage (8.6.3):
     - React-Core
@@ -1332,18 +1332,19 @@ PODS:
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
     - ReactCommon/turbomodule/core
-  - RNScreens (3.30.1):
+  - RNScreens (3.31.1):
     - glog
     - RCT-Folly (= 2022.05.16.00)
     - React-Core
-  - RNSentry (5.20.0):
+    - React-RCTImage
+  - RNSentry (5.22.0):
     - hermes-engine
     - React-Core
     - React-hermes
-    - Sentry/HybridSDK (= 8.21.0)
+    - Sentry/HybridSDK (= 8.24.0)
   - RNSha256 (1.4.10):
     - React-Core
-  - RNSVG (15.1.0):
+  - RNSVG (15.2.0):
     - React-Core
   - RNVectorIcons (10.0.3):
     - glog
@@ -1355,9 +1356,7 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - Sentry/HybridSDK (8.21.0):
-    - SentryPrivate (= 8.21.0)
-  - SentryPrivate (8.21.0)
+  - Sentry/HybridSDK (8.24.0)
   - SocketRocket (0.6.1)
   - TOCropViewController (2.7.3)
   - VK-ios-sdk (1.6.4)
@@ -1513,7 +1512,6 @@ SPEC REPOS:
     - SDWebImage
     - SDWebImageWebPCoder
     - Sentry
-    - SentryPrivate
     - SocketRocket
     - TOCropViewController
     - VK-ios-sdk
@@ -1731,7 +1729,7 @@ SPEC CHECKSUMS:
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
   libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
-  OneSignalXCFramework: 613f696d70d7e544b9f99e7a21c8b49fa47d7942
+  OneSignalXCFramework: 0eeeb73a829a12ee05849b669494006236c4cc0b
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 7169b2b1c44399c76a47b5deaaba715eeeb476c0
   RCTRequired: ca1d7414aba0b27efcfa2ccd37637edb1ab77d96
@@ -1755,22 +1753,22 @@ SPEC CHECKSUMS:
   React-logger: 3eb80a977f0d9669468ef641a5e1fabbc50a09ec
   React-Mapbuffer: 84ea43c6c6232049135b1550b8c60b2faac19fab
   react-native-appsflyer: 2cc1f96348065fc23e976fc7a27e371789fb349e
-  react-native-date-picker: 656d78c3f8a5e79bc1642b8d1c587ce10aab2195
+  react-native-date-picker: 90687f1dbd374ff0265dca99d949998364c22fa9
   react-native-fbsdk-next: a929da980a4ec199391da637d3d2ce22b6e7779e
-  react-native-google-maps: a7f275b5f117725280ceb916e0b0b8302ed8986c
-  react-native-maps: fa054512735831f232e822ee6bdb0afcdd88de4a
+  react-native-google-maps: 94df984b1647973baffe17c0b7b52828d6b69d94
+  react-native-maps: cbf2f03bfeebfd7ec45966b066db13a075fd2af3
   react-native-netinfo: bdb108d340cdb41875c9ced535977cac6d2ff321
-  react-native-onesignal: dc3b84ccc2b73669b152fccbfc45716dbe0ef9b7
-  react-native-orientation-locker: 4409c5b12b65f942e75449872b4f078b6f27af81
+  react-native-onesignal: 788854579298ce9c147ce21412efd03939f3a4a5
+  react-native-orientation-locker: 5819fd23ca89cbac0d736fb4314745f62716d517
   react-native-otp-auto-fill: 722b3b99ddad3a2e92b6dacafdad6ab533e6ae2a
   react-native-pager-view: 0eb900a8c5d83c02a74b0125d4b5f9fdcc5b8f44
   react-native-pure-jwt: c7aabf3e38f688922741774c5b37d1288fc64311
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
   react-native-safe-area-context: b97eb6f9e3b7f437806c2ce5983f479f8eb5de4b
-  react-native-slider: b42e578d7c1ee4cd5f53e1dcfca232d3007b3d3e
+  react-native-slider: 7a39874fc1fcdfee48e448fa72cce0a8f2c7c5d6
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
-  react-native-webview: 9395e82c917d81407deb9b1fe53158dd6c8880ff
+  react-native-webview: d6607cbbe7bad689cc08d6d5e35cbf9938093223
   React-nativeconfig: b4d4e9901d4cabb57be63053fd2aa6086eb3c85f
   React-NativeModulesApple: cd26e56d56350e123da0c1e3e4c76cb58a05e1ee
   React-perflogger: 5f49905de275bac07ac7ea7f575a70611fa988f2
@@ -1797,23 +1795,22 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNCClipboard: 090462274cc05b02628bd158baf6d73c3abe8441
   RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
-  RNCPicker: 82ccad5b08259dc09310082118cbb6c136d7da67
-  RNDateTimePicker: 08f00a2c341bf96e4b30da15799fbdd4c5fa48a3
-  RNDeviceInfo: 4f9c7cfd6b9db1b05eb919620a001cf35b536423
+  RNCPicker: 3e2c37a8328f368ce14da050cdc8231deb5fc9f9
+  RNDateTimePicker: 4f3c4dbd4f908be32ec8c93f086e8924bd4a2e07
+  RNDeviceInfo: 42aadf1282ffa0a88dc38a504a7be145eb010dfa
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNGestureHandler: bc2cdb2dc42facdf34992ae364b8a728e19a3686
   RNGoogleSignin: 24d3b3261f78b0fae0aa013f8ab6f8d25e369b0c
   RNImageCropPicker: e7ab6fb43d2fc3e84651e786ef4a080d63b0ed3d
   RNReanimated: 8a4d86eb951a4a99d8e86266dc71d7735c0c30a9
-  RNScreens: b6b64d956af3715adbfe84808694ae82d3fec74f
-  RNSentry: 5381e9284aec59a546e4a7d40e33ad0839b99c1e
+  RNScreens: 134a7511b12b8eb440b87aac21e36a71295d6024
+  RNSentry: 7ae2a06a5563de39ec09dcb1e751ac0c67f1883c
   RNSha256: e1bc64e9e50b293d5282bb4caa1b2043931f1c9d
-  RNSVG: 50cf2c7018e57cf5d3522d98d0a3a4dd6bf9d093
+  RNSVG: 43b64ed39c14ce830d840903774154ca0c1f27ec
   RNVectorIcons: 73ab573085f65a572d3b6233e68996d4707fd505
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  Sentry: ebc12276bd17613a114ab359074096b6b3725203
-  SentryPrivate: d651efb234cf385ec9a1cdd3eff94b5e78a0e0fe
+  Sentry: 2f6baed15a3f8056b875fc903dc3dcb2903117f4
   SocketRocket: f32cd54efbe0f095c4d7594881e52619cfe80b17
   TOCropViewController: b9b2905938c0424f289ea2d9964993044913fac6
   VK-ios-sdk: 21091f214d271a74b3a3313ec62d1c4da98ce00f
