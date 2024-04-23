@@ -1,6 +1,6 @@
 {
   "name": "Atlant-M",
-  "version": "9.1.0",
+  "version": "10.0.0",
   "private": true,
   "scripts": {
     "build": "yarn ios-version; yarn android-version;",
@@ -163,8 +163,15 @@
     "node": ">=18",
     "yarn": "^1.22.0"
   },
-  "os": ["darwin", "win32"],
-  "cpu": ["x64", "ia32", "arm64"],
+  "os": [
+    "darwin",
+    "win32"
+  ],
+  "cpu": [
+    "x64",
+    "ia32",
+    "arm64"
+  ],
   "resolutions": {
     "@react-native-picker/picker": "^2.7.2",
     "@react-native-community/datetimepicker": "^7.4.1"
