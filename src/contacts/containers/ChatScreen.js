@@ -85,14 +85,18 @@ const ChatScreen = ({
     Orientation.lockToPortrait();
     console.info('== ChatScreen ==');
     let userID = get(userTmp, 'id');
-    if (userID === null || userID === undefined) {
-      let senderIDNew = getUserID(PushNotifications.getUserID());
-      setSenderID(senderIDNew);
-      actionChatIDSave(senderIDNew);
-      makeUserToken(senderIDNew);
-    } else {
-      makeUserToken(userID);
-    }
+    const oneSignalData = async () => {
+      if (userID === null || userID === undefined) {
+        let senderIDNew = getUserID(PushNotifications.getUserID());
+        setSenderID(senderIDNew);
+        actionChatIDSave(senderIDNew);
+        makeUserToken(senderIDNew);
+      } else {
+        makeUserToken(userID);
+      }
+    };
+
+    oneSignalData(userID);
     loadCookies();
   }, []);
 
