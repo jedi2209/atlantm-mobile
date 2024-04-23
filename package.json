@@ -104,7 +104,7 @@
     "react-native-maps": "^1.7.1",
     "react-native-modal": "^13.0.0",
     "react-native-nested-listview": "0.14.2",
-    "react-native-onesignal": "5.1.0",
+    "react-native-onesignal": "5.1.2",
     "react-native-orientation-locker": "^1.3.1",
     "react-native-otp-auto-fill": "^0.1.17",
     "react-native-pager-view": "^6.1.4",
