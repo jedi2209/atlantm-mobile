@@ -88,7 +88,16 @@ const MultiSliderType = props => {
 };
 
 const FilterRow = props => {
-  switch (props.type) {
+  const {
+    type = 'singleCheckbox',
+    bounceable = false,
+    onPress = () => {},
+    icon = {
+      name: 'car-convertible',
+      size: 'lg',
+    },
+  } = props;
+  switch (type) {
     case 'singleCheckbox':
       return <SingleCheckboxType {...props} />;
     case 'multipleCheckbox':
@@ -120,15 +129,5 @@ const styles = StyleSheet.create({
     width: '50%',
   },
 });
-
-FilterRow.defaultProps = {
-  type: 'singleCheckbox',
-  bounceable: false,
-  onPress: () => {},
-  icon: {
-    name: 'car-convertible',
-    size: 'lg',
-  },
-};
 
 export default FilterRow;

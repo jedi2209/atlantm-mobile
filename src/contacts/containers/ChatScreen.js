@@ -55,7 +55,15 @@ let template = `<!doctype html>
     <body></body>
 </html>`;
 
-const ChatScreen = ({route, SubmitButton, profile, session, saveCookies}) => {
+const ChatScreen = ({
+  route,
+  SubmitButton = {
+    text: strings.ModalView.close,
+  },
+  profile,
+  session,
+  saveCookies,
+}) => {
   const [data, setData] = useState(null);
   const mainRef = useRef(null);
   const [userToken, setUserToken] = useState('');
@@ -225,12 +233,6 @@ const ChatScreen = ({route, SubmitButton, profile, session, saveCookies}) => {
   } else {
     return <LogoLoader />;
   }
-};
-
-ChatScreen.defaultProps = {
-  SubmitButton: {
-    text: strings.ModalView.close,
-  },
 };
 
 const styles = StyleSheet.create({

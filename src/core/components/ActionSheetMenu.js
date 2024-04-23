@@ -15,7 +15,7 @@ const ActionSheetMenuWrapper = ({actionSheetData, children}) => {
 };
 
 const ActionSheetMenu = props => {
-  const {actionSheetData, isOpen, onClose, hideDragIndicator} = props;
+  const {actionSheetData, isOpen, onClose, hideDragIndicator = true} = props;
   const navigation = useNavigation();
 
   if (!actionSheetData || !actionSheetData['options']) {
@@ -92,10 +92,6 @@ const ActionSheetMenu = props => {
       </Actionsheet.Content>
     </Actionsheet>
   );
-};
-
-ActionSheetMenu.defaultProps = {
-  hideDragIndicator: true,
 };
 
 export default ActionSheetMenu;
