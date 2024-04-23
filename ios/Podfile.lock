@@ -5,11 +5,11 @@ PODS:
     - Amplitude (= 8.18.0)
     - React-Core
   - AnalyticsConnector (1.0.3)
-  - AppAuth (1.7.4):
-    - AppAuth/Core (= 1.7.4)
-    - AppAuth/ExternalUserAgent (= 1.7.4)
-  - AppAuth/Core (1.7.4)
-  - AppAuth/ExternalUserAgent (1.7.4):
+  - AppAuth (1.7.5):
+    - AppAuth/Core (= 1.7.5)
+    - AppAuth/ExternalUserAgent (= 1.7.5)
+  - AppAuth/Core (1.7.5)
+  - AppAuth/ExternalUserAgent (1.7.5):
     - AppAuth/Core
   - AppsFlyerFramework (6.13.1):
     - AppsFlyerFramework/Main (= 6.13.1)
@@ -1697,7 +1697,7 @@ SPEC CHECKSUMS:
   Amplitude: 184def4f87aa26f94a93a7faa334e06b1cae704d
   amplitude-react-native: 9e5e0f4609366a2f714ab05dd7924f3c3073c075
   AnalyticsConnector: a53214d38ae22734c6266106c0492b37832633a9
-  AppAuth: 182c5b88630569df5acb672720534756c29b3358
+  AppAuth: 501c04eda8a8d11f179dbe8637b7a91bb7e5d2fa
   AppsFlyerFramework: 971521cf5b890c2afeab2f2c91734547b8b169ca
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
