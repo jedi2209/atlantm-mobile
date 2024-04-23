@@ -39,8 +39,8 @@ const types = {
   orange2: styleConst.color.orange2,
 };
 
-const status = {
-  enabled: '#43a451',
+const statusColors = {
+  enabled: '#06D6A0',
   disabled: '#d62828',
 };
 
