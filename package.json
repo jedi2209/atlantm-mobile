@@ -19,7 +19,7 @@
     "ios-version": "yarn clean:ios; bundle exec fastlane ios version",
     "android": "yarn clean:android; open -a iTerm ./android/dev.sh && adb wait-for-device && sleep 10; adb uninstall com.atlantm; sleep 10; npx react-native run-android --active-arch-only",
     "android:mac": "yarn android",
-    "android:win": "yarn clean:android:win; bash ./android/dev.sh; adb wait-for-device; sleep 10; adb uninstall com.atlantm; sleep 10; npx react-native run-android --active-arch-only",
+    "android:win": "yarn clean:android:win; ./android/dev.ps1; adb wait-for-device; sleep 10; adb uninstall com.atlantm; sleep 10; npx react-native run-android --active-arch-only",
     "android-local": "yarn clean:android; bundle exec fastlane android test && adb uninstall com.atlantm; adb install ./android/app/build/outputs/bundle/release/app-release.aab && adb shell am start -n com.atlantm/.MainActivity",
     "android-release": "yarn clean:android; git checkout ./android/app/versioning/app_version.properties && bundle exec fastlane android release && open ./android/app/build/outputs/bundle/release;",
     "android-version": "yarn clean:android; bundle exec fastlane android version",
