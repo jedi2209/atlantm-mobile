@@ -71,6 +71,7 @@ const mapDispatchToProps = {
 const InfoListScreen = ({
   navigation,
   region,
+  type = null,
   fetchInfoList,
   isFetchInfoList,
   isFetchInfoListDealer,
@@ -288,10 +289,6 @@ const InfoListScreen = ({
       ) : null}
     </>
   );
-};
-
-InfoListScreen.defaultProps = {
-  type: null,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InfoListScreen);

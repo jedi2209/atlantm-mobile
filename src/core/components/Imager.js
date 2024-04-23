@@ -25,6 +25,20 @@ const styles = StyleSheet.create({
 });
 
 const Imager = props => {
+  const {
+    testID = 'Imager.Wrapper',
+    priority = 'normal',
+    resizeMode = 'cover',
+    absoluteFill = true,
+    onLoadError = e => console.error('Imager error image loading', e),
+    onLoadStart = () => {
+      return true;
+    },
+    onLoadEnd = () => {
+      return true;
+    },
+  } = props;
+
   const [isLoading, setLoading] = useState(false);
 
   let path = get(props, 'source.uri', null);
@@ -51,11 +65,11 @@ const Imager = props => {
   }
 
   return (
-    <View testID={props.testID}>
+    <View testID={testID}>
       {extension === 'svg' ? (
         <View
           style={[
-            props?.absoluteFill ? StyleSheet.absoluteFill : {},
+            absoluteFill ? StyleSheet.absoluteFill : {},
             styles.svgWrapper,
             props?.style,
           ]}>
@@ -69,22 +83,22 @@ const Imager = props => {
             <FastImage
               source={{
                 uri: path,
-                priority: FastImage.priority[props.priority],
+                priority: FastImage.priority[priority],
                 cache: FastImage.cacheControl.web,
               }}
-              resizeMode={FastImage.resizeMode[props.resizeMode]}
+              resizeMode={FastImage.resizeMode[resizeMode]}
               onLoadStart={() => {
                 console.log('start');
-                props.onLoadStart();
+                onLoadStart();
               }}
               onError={e => {
                 console.log('error');
-                props.onLoadError(e);
+                onLoadError(e);
                 setLoading(false);
               }}
               onLoadEnd={() => {
                 console.log('end');
-                props.onLoadEnd();
+                onLoadEnd();
                 setLoading(false);
               }}
               {...props}
@@ -94,20 +108,6 @@ const Imager = props => {
       )}
     </View>
   );
-};
-
-Imager.defaultProps = {
-  testID: 'Imager.Wrapper',
-  priority: 'normal',
-  resizeMode: 'cover',
-  absoluteFill: true,
-  onLoadError: e => console.error('Imager error image loading', e),
-  onLoadStart: () => {
-    return true;
-  },
-  onLoadEnd: () => {
-    return true;
-  },
 };
 
 export default Imager;

@@ -18,7 +18,12 @@ const mapStateToProps = ({dealer}) => {
   };
 };
 
-const UserAgreementScreen = ({region, SubmitButton}) => {
+const UserAgreementScreen = ({
+  SubmitButton = {
+    text: strings.ModalView.close,
+  },
+  region,
+}) => {
   const [HTML, setHTML] = useState(null);
 
   useEffect(() => {
@@ -48,12 +53,6 @@ const UserAgreementScreen = ({region, SubmitButton}) => {
   } else {
     return <LogoLoader />;
   }
-};
-
-UserAgreementScreen.defaultProps = {
-  SubmitButton: {
-    text: strings.ModalView.close,
-  },
 };
 
 const styles = StyleSheet.create({

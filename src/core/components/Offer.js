@@ -59,14 +59,14 @@ const MainWrapper = props => {
 };
 
 const Offer = ({
+  imagePressable = false,
+  bounceable = false,
+  dealerCustom = null,
   data,
   height,
   cardWidth,
   theme,
-  bounceable,
   imageStyle,
-  imagePressable,
-  dealerCustom,
 }) => {
   const currLang = useSelector(state => state.core.language.selected);
 
@@ -138,12 +138,6 @@ const Offer = ({
       </View>
     </MainWrapper>
   );
-};
-
-Offer.defaultProps = {
-  imagePressable: false,
-  bounceable: false,
-  dealerCustom: null,
 };
 
 export default Offer;

@@ -5,7 +5,7 @@ import LinearGradient from 'react-native-linear-gradient';
 
 // helpers
 import styleConst from '../../core/style-const';
-import { background } from 'native-base/lib/typescript/theme/styled-system';
+import {background} from 'native-base/lib/typescript/theme/styled-system';
 
 const {width, height} = Dimensions.get('screen');
 
@@ -29,7 +29,14 @@ const cardWidth = deviceWidth - 20;
 const imgHeight = 200;
 
 const NotificationItem = props => {
-  const {date, title, img, text, colorBackground, borderBackgroundSource} = props;
+  const {
+    colorBackground = 'rgba(251, 77, 61, 0.1)',
+    borderBackgroundSource = require('../../../assets/notifications/palette1.png'),
+    date,
+    title,
+    img,
+    text,
+  } = props;
 
   return (
     <Box
@@ -82,11 +89,6 @@ const NotificationItem = props => {
       </View>
     </Box>
   );
-};
-
-NotificationItem.defaultProps = {
-  colorBackground: 'rgba(251, 77, 61, 0.1)',
-  borderBackgroundSource: require('../../../assets/notifications/palette1.png'),
 };
 
 export default NotificationItem;

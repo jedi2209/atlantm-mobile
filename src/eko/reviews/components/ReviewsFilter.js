@@ -43,7 +43,11 @@ const icons = {
 };
 
 const ReviewsFilter = props => {
-  const {onPressDate, onPressRating, onPressAddReview} = props;
+  const {
+    onPressDate = null,
+    onPressRating = null,
+    onPressAddReview = null,
+  } = props;
 
   const _renderIcon = (iconName, onPressHandler) => (
     <TouchableOpacity style={styles.icon} onPress={onPressHandler}>
@@ -62,12 +66,6 @@ const ReviewsFilter = props => {
       </View>
     </View>
   );
-};
-
-ReviewsFilter.defaultProps = {
-  onPressDate: null,
-  onPressRating: null,
-  onPressAddReview: null,
 };
 
 export default ReviewsFilter;

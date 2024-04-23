@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const RadioIcon = ({containerStyle, selected}) => {
+const RadioIcon = ({selected = false, containerStyle = null}) => {
   return (
     <Icon
       name={selected ? 'radio-button-on' : 'radio-button-off'}
@@ -20,11 +20,6 @@ const RadioIcon = ({containerStyle, selected}) => {
       as={Ionicons}
     />
   );
-};
-
-RadioIcon.defaultProps = {
-  selected: false,
-  containerStyle: null,
 };
 
 export default RadioIcon;
