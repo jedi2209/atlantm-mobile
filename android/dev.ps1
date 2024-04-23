@@ -27,5 +27,5 @@ if($?) {
     $opt = $lines[$number-1]
     clear
     Write-Host "OK, started Android emulator based on $opt`n"
-    Start-Process -NoNewWindow -FilePath "$env:ANDROID_HOME/emulator/emulator" -ArgumentList "-avd $opt", "-dns-server 8.8.8.8", "-no-snapshot", "-wipe-data", "-logcat *:e", "-verbose"
+    Start-Process -FilePath "$env:ANDROID_HOME/emulator/emulator" -ArgumentList "-avd $opt", "-dns-server 8.8.8.8", "-no-snapshot", "-wipe-data", "-logcat *:e", "-verbose"
 }
