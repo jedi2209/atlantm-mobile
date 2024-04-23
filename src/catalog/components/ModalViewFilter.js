@@ -10,18 +10,25 @@ import {get} from 'lodash';
 const isAndroid = Platform.OS === 'android';
 
 const ModalViewFilter = props => {
+  const {
+    isModalVisible = false,
+    selfClosed = true,
+    onClose = () => {},
+    onHide = () => {},
+    onReset = () => {},
+  } = props;
   return (
-    <View onPress={props.onHide}>
+    <View onPress={onHide}>
       <Modal
         statusBarTranslucent={true}
         style={[styles.modalView, props?.stylesModal]}
         useNativeDriver={true}
-        isVisible={props.isModalVisible}
-        onBackButtonPress={props.onHide}
-        onBackdropPress={props.selfClosed ? props.onHide : null}
-        swipeDirection={props.selfClosed ? ['down'] : []}
-        onSwipeComplete={props.selfClosed ? props.onHide : null}
-        selfClosed={props.selfClosed}
+        isVisible={isModalVisible}
+        onBackButtonPress={onHide}
+        onBackdropPress={selfClosed ? onHide : null}
+        swipeDirection={selfClosed ? ['down'] : []}
+        onSwipeComplete={selfClosed ? onHide : null}
+        selfClosed={selfClosed}
         {...props}>
         <View
           style={[
@@ -54,7 +61,7 @@ const ModalViewFilter = props => {
                     color: 'warmGray.50',
                   }}
                   style={styles.closeButton}
-                  onPress={props.onHide ? props.onHide : props.onClose}
+                  onPress={onHide ? onHide : onClose}
                 />
               }
             />
@@ -63,7 +70,7 @@ const ModalViewFilter = props => {
           <HStack justifyContent="space-between" px="1">
             <Button
               variant="unstyled"
-              onPress={props.onReset ? props.onReset : props.onHide}
+              onPress={onReset ? onReset : onHide}
               py="10"
               px="5">
               <Text
@@ -78,7 +85,7 @@ const ModalViewFilter = props => {
             <Button
               variant="unstyled"
               borderRadius="full"
-              onPress={props.onHide}
+              onPress={onHide}
               py="10"
               px="5">
               <Text
@@ -133,11 +140,5 @@ const styles = StyleSheet.create({
     fontWeight: 'normal',
   },
 });
-
-ModalViewFilter.defaultProps = {
-  isModalVisible: false,
-  selfClosed: true,
-  onClose: () => {},
-};
 
 export default ModalViewFilter;

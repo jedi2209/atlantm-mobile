@@ -60,7 +60,9 @@ const BonusInfoScreen = props => {
     isFetchBonusInfo,
     actionFetchBonusInfo,
     region,
-    submitButton,
+    submitButton = {
+      text: strings.ModalView.close,
+    },
   } = props;
 
   useEffect(() => {
@@ -100,12 +102,6 @@ const BonusInfoScreen = props => {
       </Button>
     </>
   );
-};
-
-BonusInfoScreen.defaultProps = {
-  submitButton: {
-    text: strings.ModalView.close,
-  },
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(BonusInfoScreen);

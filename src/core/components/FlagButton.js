@@ -23,15 +23,24 @@ const defaultOpacity = 0.7;
 
 const FlagButton = props => {
   const {
+    buttonSize = 32,
+    flagSize = 188,
+    country = 'belarus',
+    showCaption = false,
+    shadow = styleConst.shadow.prop,
+    style = {
+      width: 150,
+      height: 100,
+      borderRadius: 10,
+    },
+    styleImage = {
+      width: 50,
+      height: 10,
+      borderRadius: 10,
+    },
+    type = 'text',
     onPress,
-    country,
-    buttonSize,
-    showCaption,
-    type,
-    style,
     styleText,
-    styleImage,
-    shadow,
     backgroundColor,
   } = props;
 
@@ -126,25 +135,6 @@ const FlagButton = props => {
         </Pressable>
       );
   }
-};
-
-FlagButton.defaultProps = {
-  buttonSize: 32,
-  flagSize: 188,
-  country: 'belarus',
-  showCaption: false,
-  shadow: styleConst.shadow.prop,
-  style: {
-    width: 150,
-    height: 100,
-    borderRadius: 10,
-  },
-  styleImage: {
-    width: 50,
-    height: 10,
-    borderRadius: 10,
-  },
-  type: 'text',
 };
 
 export default FlagButton;

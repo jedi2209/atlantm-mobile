@@ -36,7 +36,13 @@ const galleryCount = (index, length) => (
   </View>
 );
 
-const PhotoViewer = ({items, index, onPressClose, enableScale, onChange}) => {
+const PhotoViewer = ({
+  items,
+  index,
+  onPressClose,
+  enableScale = false,
+  onChange,
+}) => {
   const [visible, setVisible] = useState(false);
   const [counter, setCounter] = useState(true);
   return (
@@ -113,10 +119,5 @@ const styles = StyleSheet.create({
     fontFamily: styleConst.font.regular,
   },
 });
-
-PhotoViewer.defaultProps = {
-  counter: true,
-  enableScale: false,
-};
 
 export default PhotoViewer;
