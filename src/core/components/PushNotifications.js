@@ -126,8 +126,9 @@ export default {
     OneSignal.User.addTag(name, value.toString());
   },
 
-  getUserID() {
-    return OneSignal.User.pushSubscription.getPushSubscriptionId();
+  async getUserID() {
+    const res = await OneSignal.User.pushSubscription.getIdAsync();
+    return res;
   },
 
   removeTag(name) {
