@@ -13,18 +13,18 @@ import styleConst from '../style-const';
 const {width: screenWidth} = Dimensions.get('window');
 
 const PhotoSlider = ({
-  height,
-  firstItem,
+  photos = [],
+  height = 300,
+  paginationStyle = {},
+  dotColor = 'rgba(0,0,0,.2)',
+  resizeMode = 'contain',
+  firstItem = 0,
+  loop = false,
+  themeFull = 'black',
+  fullScreen = 'FullScreenGallery',
   styleWrapper,
-  photos,
   photosFull,
-  paginationStyle,
-  dotColor,
-  loop,
   onPressItem,
-  resizeMode,
-  themeFull,
-  fullScreen,
 }) => {
   const [activeSlide, setActiveSlide] = useState(0);
 
@@ -126,18 +126,6 @@ const PhotoSlider = ({
       ) : null}
     </View>
   );
-};
-
-PhotoSlider.defaultProps = {
-  photos: [],
-  height: 300,
-  paginationStyle: {},
-  dotColor: 'rgba(0,0,0,.2)',
-  resizeMode: 'contain',
-  firstItem: 0,
-  loop: false,
-  themeFull: 'black',
-  fullScreen: 'FullScreenGallery',
 };
 
 const styles = StyleSheet.create({

@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
 });
 
-let UserCars = ({activePanel, cars}) => {
+let UserCars = ({activePanel = 'default', cars}) => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [carsPanel, setActivePanel] = useState(activePanel);
@@ -238,10 +238,6 @@ let UserCars = ({activePanel, cars}) => {
       )}
     </>
   );
-};
-
-UserCars.defaultProps = {
-  activePanel: 'default',
 };
 
 export default connect(mapStateToProps, {})(UserCars);

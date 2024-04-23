@@ -253,8 +253,8 @@ const MainFilterScreen = ({
   navigation,
   route,
   region,
-  stockTypeDefault,
-  updateFromApiDefault,
+  stockTypeDefault = 'New',
+  updateFromApiDefault = false,
   actionFetchNewCar,
   actionFetchUsedCar,
   actionFetchNewCarFilters,
@@ -1973,11 +1973,6 @@ const MainFilterScreen = ({
       )}
     </>
   );
-};
-
-MainFilterScreen.defaultProps = {
-  stockTypeDefault: 'New',
-  updateFromApiDefault: false,
 };
 
 const styles = StyleSheet.create({

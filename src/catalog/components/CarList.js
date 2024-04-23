@@ -33,13 +33,13 @@ const _keyExtractor = item => {
 
 const CarList = props => {
   const {
-    data,
-    pages,
-    isFetchItems,
+    data = null,
+    isFetchItems = false,
     dataHandler,
-    itemScreen,
-    prices,
-    resizeMode,
+    itemScreen = null,
+    prices = {},
+    resizeMode = 'cover',
+    pages = {},
   } = props;
 
   let ITEM_HEIGHT = 280;
@@ -131,15 +131,6 @@ const CarList = props => {
       onEndReachedThreshold={0.7}
     />
   );
-};
-
-CarList.defaultProps = {
-  pages: {},
-  prices: {},
-  data: null,
-  itemScreen: null,
-  isFetchItems: false,
-  resizeMode: 'cover',
 };
 
 export default CarList;

@@ -16,6 +16,7 @@ const styles = StyleSheet.create({
 });
 
 const Badge = props => {
+  const {textColor = 'black'} = props;
   return props?.onPress ? (
     <TouchableHighlight
       activeOpacity={0.6}
@@ -28,7 +29,7 @@ const Badge = props => {
       ]}>
       <Text
         selectable={false}
-        style={[styles.badgeName, {color: props.textColor}, props.textStyle]}>
+        style={[styles.badgeName, {color: textColor}, props.textStyle]}>
         {props.name}
       </Text>
     </TouchableHighlight>
@@ -41,15 +42,11 @@ const Badge = props => {
       ]}>
       <Text
         selectable={false}
-        style={[styles.badgeName, {color: props.textColor}, props.textStyle]}>
+        style={[styles.badgeName, {color: textColor}, props.textStyle]}>
         {props.name}
       </Text>
     </View>
   );
-};
-
-Badge.defaultProps = {
-  textColor: 'black',
 };
 
 export default Badge;

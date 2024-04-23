@@ -9,7 +9,12 @@ import moment from 'moment';
 import styleConst from '../style-const';
 import {strings} from '../lang/const';
 
-const WebviewScreen = ({route, SubmitButton, minHeight}) => {
+const WebviewScreen = ({
+  route,
+  SubmitButton = {
+    text: strings.ModalView.close,
+  },
+}) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -51,12 +56,6 @@ const WebviewScreen = ({route, SubmitButton, minHeight}) => {
       </View>
     );
   }
-};
-
-WebviewScreen.defaultProps = {
-  SubmitButton: {
-    text: strings.ModalView.close,
-  },
 };
 
 const styles = StyleSheet.create({

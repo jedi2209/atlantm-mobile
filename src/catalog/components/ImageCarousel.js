@@ -13,10 +13,11 @@ const {width: screenWidth} = Dimensions.get('window');
 
 const ImageCarousel = ({
   data,
-  height,
-  resizeMode,
-  style,
-  firstItem,
+  height = 200,
+  resizeMode = 'cover',
+  style = {},
+  firstItem = 0,
+  onPress = () => {},
   onPressCustom,
 }) => {
   const [entries, setEntries] = useState([]);
@@ -200,14 +201,6 @@ const ImageCarousel = ({
       />
     </View>
   );
-};
-
-ImageCarousel.defaultProps = {
-  height: 200,
-  resizeMode: 'cover',
-  style: {},
-  firstItem: 0,
-  onPress: () => {},
 };
 
 export default ImageCarousel;

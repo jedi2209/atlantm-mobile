@@ -36,19 +36,26 @@ const types = {
   orange: styleConst.color.orange,
 };
 
-const status = {
+const statusColors = {
   enabled: '#06D6A0',
   disabled: '#d62828',
 };
 
-const Plate = props => {
+const Plate = ({
+  type = 'default',
+  status = 'enabled',
+  onPress = () => {},
+  titleStyle = {},
+  title = '',
+  subtitle = '',
+}) => {
   return (
-    <TouchableWithoutFeedback onPress={props.onPress}>
+    <TouchableWithoutFeedback onPress={onPress}>
       <View
         style={[
           styles.plateContainer,
           {
-            backgroundColor: types[props.type],
+            backgroundColor: types[type],
           },
         ]}>
         <View
@@ -56,7 +63,7 @@ const Plate = props => {
             styles.plateDot,
             styleConst.shadow.light,
             {
-              backgroundColor: status[props.status],
+              backgroundColor: statusColors[status],
             },
           ]}
         />
@@ -65,11 +72,11 @@ const Plate = props => {
             selectable={false}
             ellipsizeMode="tail"
             numberOfLines={1}
-            style={[styles.plateTitle, props.titleStyle]}>
-            {props.title}
+            style={[styles.plateTitle, titleStyle]}>
+            {title}
           </Text>
-          {typeof props.subtitle === 'object' ? (
-            props.subtitle.map((el, num) => {
+          {typeof subtitle === 'object' ? (
+            subtitle.map((el, num) => {
               return (
                 <Text
                   key={'plateTextSubtitle' + num}
@@ -87,18 +94,13 @@ const Plate = props => {
               ellipsizeMode="tail"
               numberOfLines={3}
               style={styles.plateSubTitle}>
-              {props.subtitle}
+              {subtitle}
             </Text>
           )}
         </View>
       </View>
     </TouchableWithoutFeedback>
   );
-};
-
-Plate.defaultProps = {
-  type: 'default',
-  status: 'enabled',
 };
 
 export default Plate;
