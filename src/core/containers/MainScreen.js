@@ -55,7 +55,7 @@ import LogoLoader from '../components/LogoLoader';
 const {width, height} = Dimensions.get('screen');
 const isApple = Platform.OS === 'ios';
 const firstRowMarginTop = 3;
-const infoListHeight = 250;
+const infoListHeight = 320;
 const cardWidth = width - 40;
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
@@ -163,7 +163,7 @@ const RowConstruct = props => {
     return (
       <View
         mt={firstRow ? firstRowMarginTop : 0}
-        p={rowType === 'actions' ? 0 : 2}
+        p={rowType === 'actions' ? 0 : 1}
         key={'containerRow' + rowNum}>
         {_processRow({rowData: json, rowNum, navigation, ...props})}
       </View>
@@ -172,9 +172,9 @@ const RowConstruct = props => {
     return (
       <View
         mt={firstRow ? firstRowMarginTop : 0}
-        p={2}
+        p={1}
         key={'containerRow' + rowNum}>
-        <HStack justifyContent={'left'} space={2}>
+        <HStack justifyContent={'left'} space={1}>
           {_processRow({rowData: json, rowNum, navigation, ...props})}
         </HStack>
       </View>
@@ -186,7 +186,7 @@ const RowConstruct = props => {
         showsHorizontalScrollIndicator={false}
         bounces={false}
         horizontal={true}>
-        <HStack justifyContent={'space-around'} space={3} p={2}>
+        <HStack justifyContent={'space-around'} space={2} p={1}>
           {_processRow({rowData: json, rowNum, navigation, ...props})}
         </HStack>
       </ScrollView>
@@ -243,7 +243,7 @@ const _processRow = props => {
     }
 
     if (item.type === 'half') {
-      widthNew = width / 2.1;
+      widthNew = width / 2.06;
       heightNew = width / 2.1;
     }
 
@@ -269,9 +269,7 @@ const _processRow = props => {
         return (
           <Tooltip
             isVisible={item.key === get(walkthroughData, 'visible')}
-            content={
-              <Text>{item.walkthroughText ? item.walkthroughText : ''}</Text>
-            }
+            content={<Text>{get(item, 'walkthroughText', '')}</Text>}
             allowChildInteraction={false}
             key={['tooltip', item.key].join('_')}
             showChildInTooltip={true}
