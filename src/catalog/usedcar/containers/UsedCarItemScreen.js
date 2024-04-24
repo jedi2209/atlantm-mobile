@@ -490,11 +490,14 @@ const UsedCarItemScreen = props => {
             ) : null}
             <PhotoSlider
               height={300}
+              styleWrapper={{paddingLeft: '2.5%'}}
               photosFull={photosFull}
               photos={photosData}
               resizeMode={'cover'}
-              dotColor={styleConst.color.white}
-              paginationStyle={{bottom: -20}}
+              autoPlay={true}
+              loop={true}
+              pagination={true}
+              paginationStyle={{bottom: -5}}
             />
           </View>
           <View
