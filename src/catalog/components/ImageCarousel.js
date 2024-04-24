@@ -1,9 +1,9 @@
 import React, {useRef, useState, useEffect} from 'react';
-import Carousel from 'react-native-snap-carousel';
 import {View, Dimensions, StyleSheet, Platform, Pressable} from 'react-native';
 import {Button, HStack, Icon, VStack} from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
+import Carousel from '../../core/components/Carousel';
 import Imager from '../../core/components/Imager';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
@@ -176,26 +176,10 @@ const ImageCarousel = ({
   return (
     <View style={[styles.container, style]}>
       <Carousel
-        ref={carouselRef}
-        sliderWidth={screenWidth}
-        sliderHeight={height}
-        itemWidth={screenWidth / 1.68}
-        inactiveSlideOpacity={1}
-        inactiveSlideScale={1}
-        apparitionDelay={100}
+        style={{width: '100%'}}
+        height={height}
+        width={screenWidth / 1.68}
         onPress={onPressCustom}
-        onLayout={() => {
-          if (entries.length > 3) {
-            setTimeout(() => {
-              carouselRef?.current?.snapToItem(firstItem + 1, false);
-            }, 300);
-          }
-        }}
-        removeClippedSubviews={false}
-        useScrollView={true}
-        enableSnap={false}
-        lockScrollWhileSnapping={true}
-        firstItem={firstItem}
         data={entries}
         renderItem={renderItem}
       />
