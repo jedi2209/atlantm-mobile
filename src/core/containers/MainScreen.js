@@ -21,7 +21,7 @@ import {
 } from 'native-base';
 import DeviceInfo from 'react-native-device-info';
 import {RefreshControl} from 'react-native-gesture-handler';
-import Carousel from 'react-native-snap-carousel';
+import Carousel from '../components/Carousel';
 
 import Tooltip from 'react-native-walkthrough-tooltip';
 
@@ -381,7 +381,13 @@ const _renderActions = params => {
         </HStack>
         <Carousel
           data={infoList}
-          renderItem={item => {
+          mode={'parallax'}
+          modeConfig={{
+            parallaxScrollingScale: 0.9,
+            parallaxScrollingOffset: 50,
+          }}
+          autoPlay={true}
+          renderItem={({item}) => {
             return (
               <Offer
                 key={`carousel-article-${item.hash}`}
@@ -393,13 +399,7 @@ const _renderActions = params => {
               />
             );
           }}
-          sliderWidth={width}
-          itemWidth={cardWidth}
-          lockScrollWhileSnapping={true}
-          swipeThreshold={10}
-          decelerationRate="fast"
-          inactiveSlideScale={0.98}
-          layoutCardOffset={18}
+          height={420}
         />
       </View>
     );
