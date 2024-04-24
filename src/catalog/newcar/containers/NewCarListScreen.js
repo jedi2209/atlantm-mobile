@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, {useState, useEffect, useReducer} from 'react';
-import {StyleSheet, View, StatusBar, ActivityIndicator} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, View, StatusBar} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
