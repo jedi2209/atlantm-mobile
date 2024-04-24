@@ -18,7 +18,6 @@ import {
   Pressable,
   useToast,
   VStack,
-  Image,
 } from 'native-base';
 
 import {Button} from 'react-native-paper';
@@ -30,7 +29,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Plate from '../../core/components/Plate';
 import RateThisApp from '../../core/components/RateThisApp';
 import Imager from '../../core/components/Imager';
-import RNBounceable from '@freakycoder/react-native-bounceable';
 
 import ToastAlert from '../../core/components/ToastAlert';
 
@@ -43,7 +41,6 @@ import {callMe} from '../../contacts/actions';
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList} from '../../info/actions';
 import {actionMenuOpenedCount, actionAppRated} from '../../core/actions';
-import Offer from '../../core/components/Offer';
 
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
@@ -191,22 +188,25 @@ const _renderInfoList = params => {
         </View>
         <Carousel
           data={infoList}
-          renderItem={item => {
+          mode={'parallax'}
+          modeConfig={{
+            parallaxScrollingScale: 0.9,
+            parallaxScrollingOffset: 50,
+          }}
+          autoPlay={true}
+          renderItem={({item}) => {
             return (
               <Offer
                 key={`carousel-article-${item.hash}`}
                 data={item}
                 width={cardWidth}
                 height={infoListHeight}
-                imagePressable={false}
-                dealerCustom={dealerID}
+                imageStyle={{borderRadius: styleConst.borderRadius}}
+                imagePressable={true}
               />
             );
           }}
-          sliderWidth={deviceWidth}
-          itemWidth={cardWidth}
-          inactiveSlideScale={0.97}
-          activeSlideAlignment={'center'}
+          height={420}
         />
       </View>
     );

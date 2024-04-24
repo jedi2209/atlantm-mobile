@@ -895,8 +895,11 @@ const NewCarItemScreen = ({
             photosFull={photosFull}
             themeFull={'white'}
             photos={photosData}
+            loop={true}
+            autoPlay={true}
             resizeMode={isCarImgReal ? 'cover' : 'contain'}
-            dotColor={!isCarImgReal ? styleConst.color.black : null}
+            pagination={true}
+            paginationStyle={{marginTop: -30, marginBottom: 20}}
           />
         </View>
         <View
@@ -905,7 +908,7 @@ const NewCarItemScreen = ({
           pb={6}
           shadow={7}
           borderRadius={30}
-          style={[styles.carTopWrapper, {marginTop: -20}]}>
+          style={[styles.carTopWrapper, {marginTop: 0}]}>
           <View>
             <View style={styles.modelBrandView}>
               <View style={{marginBottom: 10, flexShrink: 1}}>
