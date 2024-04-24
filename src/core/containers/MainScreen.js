@@ -5,6 +5,7 @@ import {
   Platform,
   StyleSheet,
   ActivityIndicator,
+  StatusBar,
   useColorScheme,
 } from 'react-native';
 import {connect} from 'react-redux';
@@ -496,6 +497,7 @@ const MainScreen = props => {
           <RefreshControl refreshing={isLoading} onRefresh={_onRefresh} />
         )
       }>
+      <StatusBar hidden />
       <VStack paddingBottom={styleConst.menu.paddingBottom}>
         {mainScreenSettings.map(el => {
           i++;
