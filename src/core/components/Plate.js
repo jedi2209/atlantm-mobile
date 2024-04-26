@@ -34,13 +34,12 @@ const types = {
   // red: '#EB1E4E',
   red: styleConst.color.red,
   orange: styleConst.color.orange,
-  green: '#43d551',
-  blue: '#0179ff',
-  orange2: '#fe7c1d',
+  green: styleConst.color.green3,
+  blue: styleConst.color.blue2,
+  orange2: styleConst.color.orange2,
 };
 
 const status = {
-  // enabled: '#06D6A0',
   enabled: '#43a451',
   disabled: '#d62828',
 };
