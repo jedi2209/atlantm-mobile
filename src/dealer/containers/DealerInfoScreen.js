@@ -105,17 +105,6 @@ const styles = StyleSheet.create({
     height: infoListHeight,
     backgroundColor: styleConst.color.bg,
   },
-  addressTextOneLine: {
-    fontSize: 14,
-    lineHeight: 23,
-    marginTop: 10,
-    color: styleConst.color.accordeonGrey2,
-    backgroundColor: styleConst.color.blue2,
-    paddingHorizontal: 8,
-    borderRadius: 10,
-    paddingLeft: 15,
-    paddingRight: 15,
-  },
 });
 
 const deviceWidth = Number(Dimensions.get('window').width) || 350;
