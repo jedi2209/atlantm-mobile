@@ -401,7 +401,7 @@ export default {
       title: 'Чат',
       subTitle: 'Отвечаем с 8 до 20',
     },
-    timework: 'часы работы',
+    timework: 'Часы работы',
     timework2: 'Время работы',
     navigate: 'Построить маршрут',
     address: 'Адрес',
