@@ -5,25 +5,25 @@ import styleConst from '../../core/style-const';
 const styles = StyleSheet.create({
   plateContainer: {
     marginRight: 10,
-    padding: 10,
-    width: 150,
-    height: 98,
-    borderRadius: 5,
+    paddingLeft: 10,
+    width: 160,
+    height: 85,
+    borderRadius: 9,
   },
   plateDot: {
     borderRadius: 7.5,
-    width: 15,
-    height: 15,
+    marginTop: 7,
+    width: 10,
+    height: 10,
   },
   plateTitle: {
     color: styleConst.color.white,
     fontSize: 14,
     fontWeight: '600',
-    marginBottom: 4,
   },
   plateSubTitle: {
     color: styleConst.color.white,
-    fontSize: 12,
+    fontSize: 13,
   },
 });
 
@@ -34,10 +34,14 @@ const types = {
   // red: '#EB1E4E',
   red: styleConst.color.red,
   orange: styleConst.color.orange,
+  green: '#43d551',
+  blue: '#0179ff',
+  orange2: '#fe7c1d',
 };
 
 const status = {
-  enabled: '#06D6A0',
+  // enabled: '#06D6A0',
+  enabled: '#43a451',
   disabled: '#d62828',
 };
 
