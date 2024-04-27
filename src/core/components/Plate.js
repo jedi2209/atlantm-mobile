@@ -40,7 +40,7 @@ const types = {
 };
 
 const statusColors = {
-  enabled: '#06D6A0',
+  enabled: '#43a451',
   disabled: '#d62828',
 };
 
