@@ -201,13 +201,6 @@ const _renderInfoList = params => {
           }}
           autoPlay={true}
           renderItem={({item}) => {
-          mode={'parallax'}
-          modeConfig={{
-            parallaxScrollingScale: 0.9,
-            parallaxScrollingOffset: 50,
-          }}
-          autoPlay={true}
-          renderItem={({item}) => {
             return (
               <Offer
                 key={`carousel-article-${item.hash}`}
@@ -216,12 +209,9 @@ const _renderInfoList = params => {
                 height={infoListHeight}
                 imageStyle={{borderRadius: styleConst.borderRadius}}
                 imagePressable={true}
-                imageStyle={{borderRadius: styleConst.borderRadius}}
-                imagePressable={true}
               />
             );
           }}
-          height={420}
           height={420}
         />
       </View>
