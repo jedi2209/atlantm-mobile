@@ -362,6 +362,9 @@ const _renderActions = params => {
       </View>
     );
   } else if (infoList?.length) {
+    if (infoList?.length > 20 && !isApple) {
+      infoList.slice(0, 20);
+    }
     return (
       <View
         py={2}
@@ -391,7 +394,6 @@ const _renderActions = params => {
               <Offer
                 key={`carousel-article-${item.hash}`}
                 data={item}
-                width={cardWidth}
                 height={infoListHeight}
                 imageStyle={{borderRadius: styleConst.borderRadius}}
                 imagePressable={true}
