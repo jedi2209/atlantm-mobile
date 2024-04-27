@@ -9,18 +9,7 @@ import {
   useColorScheme,
 } from 'react-native';
 import {connect} from 'react-redux';
-import {
-  HStack,
-  ScrollView,
-  Text,
-  VStack,
-  View,
-  Button,
-  Pressable,
-  Box,
-  Icon,
-} from 'native-base';
-import DeviceInfo from 'react-native-device-info';
+import {HStack, ScrollView, Text, VStack, View} from 'native-base';
 import {RefreshControl} from 'react-native-gesture-handler';
 import Carousel from '../components/Carousel';
 
@@ -29,8 +18,6 @@ import Tooltip from 'react-native-walkthrough-tooltip';
 import {MainScreenButton} from '../components/MainScreenButtons';
 import RefreshSpinner from '../components/RefreshSpinner';
 import Offer from '../components/Offer';
-import RateThisApp from '../components/RateThisApp';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList} from '../../info/actions';
@@ -43,7 +30,7 @@ import {
   actionWalktroughVisible,
 } from '../actions';
 
-import {STORE_LINK, APP_EMAIL, ERROR_NETWORK} from '../const';
+import {ERROR_NETWORK} from '../const';
 import styleConst from '../style-const';
 import {strings} from '../lang/const';
 
@@ -52,7 +39,7 @@ import Analytics from '../../utils/amplitude-analytics';
 import {usePrevious} from '../../utils/hooks';
 import LogoLoader from '../components/LogoLoader';
 
-const {width, height} = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 const isApple = Platform.OS === 'ios';
 const firstRowMarginTop = 3;
 const infoListHeight = 320;
