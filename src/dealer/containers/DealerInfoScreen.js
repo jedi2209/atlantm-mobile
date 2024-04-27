@@ -20,8 +20,11 @@ import {
   VStack,
 } from 'native-base';
 
+import {Button} from 'react-native-paper';
+import LinearGradient from 'react-native-linear-gradient';
+
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Plate from '../../core/components/Plate';
 import RateThisApp from '../../core/components/RateThisApp';
@@ -47,13 +50,13 @@ import chatStatus from '../../utils/chatStatus';
 
 import {get} from 'lodash';
 import styleConst from '../../core/style-const';
-import {DEALERS_SETTINGS, ERROR_NETWORK, BELARUSSIA} from '../../core/const';
+import {ERROR_NETWORK, BELARUSSIA} from '../../core/const';
 import Carousel from '../../core/components/Carousel';
 import Offer from '../../core/components/Offer';
 import {strings} from '../../core/lang/const';
 
 const HEADER_MAX_HEIGHT = 416;
-const infoListHeight = 300;
+const infoListHeight = 350;
 
 const styles = StyleSheet.create({
   imgHero: {
@@ -62,9 +65,11 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   blackBack: {
-    height: 80,
-    backgroundColor: '#000',
+    height: 170,
     width: '100%',
+    position: 'absolute',
+    top: -90,
+    zIndex: 1,
   },
   address: {
     marginBottom: 0,
@@ -78,37 +83,35 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 23,
   },
-  addressTextSmall: {
-    fontSize: 12,
-    lineHeight: 18,
-    color: styleConst.color.accordeonGrey2,
+  buttonNavigate: {
+    borderRadius: 10,
+    width: 170,
+    height: 25,
+  },
+  labelStyle: {
+    marginVertical: 2,
+    marginHorizontal: 0,
+    fontSize: 14,
+    flexWrap: 'wrap',
+    alignSelf: 'flex-start',
   },
   scrollView: {paddingLeft: 14, marginTop: 8, zIndex: 3},
-  buttonPrimary: {
-    marginTop: 60,
-    marginHorizontal: '2%',
-    paddingHorizontal: 10,
-    position: 'absolute',
-    zIndex: 100,
-    width: '96%',
-  },
-  buttonPrimaryText: {
-    color: styleConst.color.greyText4,
-    fontSize: 16,
-    fontWeight: 'normal',
-  },
-  brand: {
-    marginLeft: 5,
-    marginRight: 15,
-    marginTop: 3,
-    height: 25,
-    width: 30,
-  },
   spinnerContainer: {
     flex: 1,
     marginTop: infoListHeight / 2,
     height: infoListHeight,
     backgroundColor: styleConst.color.bg,
+  },
+  addressTextOneLine: {
+    fontSize: 14,
+    lineHeight: 23,
+    marginTop: 10,
+    color: styleConst.color.accordeonGrey2,
+    backgroundColor: styleConst.color.blue2,
+    paddingHorizontal: 8,
+    borderRadius: 10,
+    paddingLeft: 15,
+    paddingRight: 15,
   },
 });
 
@@ -192,6 +195,13 @@ const _renderInfoList = params => {
           }}
           autoPlay={true}
           renderItem={({item}) => {
+          mode={'parallax'}
+          modeConfig={{
+            parallaxScrollingScale: 0.9,
+            parallaxScrollingOffset: 50,
+          }}
+          autoPlay={true}
+          renderItem={({item}) => {
             return (
               <Offer
                 key={`carousel-article-${item.hash}`}
@@ -200,9 +210,12 @@ const _renderInfoList = params => {
                 height={infoListHeight}
                 imageStyle={{borderRadius: styleConst.borderRadius}}
                 imagePressable={true}
+                imageStyle={{borderRadius: styleConst.borderRadius}}
+                imagePressable={true}
               />
             );
           }}
+          height={420}
           height={420}
         />
       </View>
@@ -250,31 +263,31 @@ const DealerInfoScreen = ({
       return <View h="8" />;
     }
 
+    const onPressMultiplyAddress = () => {
+      setActionSheetData({
+        options: addresses.concat([
+          {
+            priority: addresses.length + 1,
+            id: 'cancel',
+            text: strings.Base.cancel.toLowerCase(),
+            icon: {
+              name: 'close',
+              color: '#f70707',
+            },
+          },
+        ]),
+        cancelButtonIndex: addresses.length - 1,
+        title: strings.ContactsScreen.navigate,
+        destructiveButtonIndex: addresses.length || null,
+      });
+      onOpen();
+    };
+
     if (addresses.length > 1) {
       return (
         <>
           <HStack mx={2} my={2} justifyContent={'space-between'} zIndex={10}>
-            <Pressable
-              onPress={() => {
-                setActionSheetData({
-                  options: addresses.concat([
-                    {
-                      priority: addresses.length + 1,
-                      id: 'cancel',
-                      text: strings.Base.cancel.toLowerCase(),
-                      icon: {
-                        name: 'close',
-                        color: '#f70707',
-                      },
-                    },
-                  ]),
-                  cancelButtonIndex: addresses.length - 1,
-                  title: strings.ContactsScreen.navigate,
-                  destructiveButtonIndex: addresses.length || null,
-                });
-                onOpen();
-              }}
-              w={'4/5'}>
+            <Pressable onPress={onPressMultiplyAddress} w={'4/5'}>
               <HStack alignItems={'center'}>
                 <Icon
                   size={10}
@@ -286,12 +299,16 @@ const DealerInfoScreen = ({
                   }}
                   mr={0.5}
                 />
-                <Text
-                  numberOfLines={1}
-                  ellipsizeMode="tail"
-                  style={styles.addressText}>
+                <Button
+                  mode="contained"
+                  compact={true}
+                  onPress={onPressMultiplyAddress}
+                  buttonColor={styleConst.color.blue2}
+                  style={styles.buttonNavigate}
+                  labelStyle={styles.labelStyle}
+                  textColor={styleConst.color.white}>
                   {strings.ContactsScreen.navigate}
-                </Text>
+                </Button>
               </HStack>
             </Pressable>
             <Pressable
@@ -302,8 +319,8 @@ const DealerInfoScreen = ({
               {/* <HStack alignItems={'center'}> */}
               <Icon
                 size={8}
-                as={MaterialCommunityIcons}
-                name="timetable"
+                as={Ionicons}
+                name="time-outline"
                 color="warmGray.50"
                 _dark={{
                   color: 'warmGray.50',
@@ -319,12 +336,13 @@ const DealerInfoScreen = ({
               </Text>
             </Pressable>
           </HStack>
-          <View
+          <LinearGradient
+            colors={[
+              'rgba(0, 0, 0, 0)',
+              'rgba(0, 0, 0, 0.6)',
+              'rgba(0, 0, 0, 0.9)',
+            ]}
             style={styles.blackBack}
-            opacity={0.7}
-            position={'absolute'}
-            left={0}
-            zIndex={1}
           />
         </>
       );
@@ -351,12 +369,18 @@ const DealerInfoScreen = ({
                     style={styles.addressText}>
                     {addresses.length === 1 ? addresses[0]?.text : ''}
                   </Text>
-                  <Text
-                    numberOfLines={1}
-                    ellipsizeMode="tail"
-                    style={[styles.addressText, styles.addressTextSmall]}>
-                    {strings.ContactsScreen.navigate}
-                  </Text>
+                  <View>
+                    <Button
+                      mode="contained"
+                      compact={true}
+                      onPress={() => onPressMap(addresses[0])}
+                      buttonColor={styleConst.color.blue2}
+                      style={styles.buttonNavigate}
+                      labelStyle={styles.labelStyle}
+                      textColor={styleConst.color.white}>
+                      {strings.ContactsScreen.navigate}
+                    </Button>
+                  </View>
                 </VStack>
               </HStack>
             </Pressable>
@@ -368,8 +392,8 @@ const DealerInfoScreen = ({
               {/* <HStack alignItems={'center'}> */}
               <Icon
                 size={8}
-                as={MaterialCommunityIcons}
-                name="timetable"
+                as={Ionicons}
+                name="time-outline"
                 color="warmGray.50"
                 _dark={{
                   color: 'warmGray.50',
@@ -385,12 +409,13 @@ const DealerInfoScreen = ({
               </Text>
             </Pressable>
           </HStack>
-          <View
+          <LinearGradient
+            colors={[
+              'rgba(0, 0, 0, 0)',
+              'rgba(0, 0, 0, 0.6)',
+              'rgba(0, 0, 0, 0.9)',
+            ]}
             style={styles.blackBack}
-            opacity={0.7}
-            position={'absolute'}
-            left={0}
-            zIndex={1}
           />
         </View>
       );
@@ -425,6 +450,7 @@ const DealerInfoScreen = ({
                 'phonesMobile[0].subtitle',
                 get(dealerSelected, 'phones[0].subtitle', null),
               )}
+              type="green"
               onPress={() => {
                 if (!isOpened) {
                   Alert.alert(
@@ -482,6 +508,7 @@ const DealerInfoScreen = ({
               testID="ContactsScreen.ButtonCallMe"
               title={strings.ContactsScreen.callOrder}
               subtitle=""
+              type="blue"
               onPress={onPressCallMe}
             />
           ) : null}
@@ -489,7 +516,7 @@ const DealerInfoScreen = ({
             <Plate
               title={strings.ContactsScreen.chat.title}
               subtitle={strings.ContactsScreen.chat.subTitle}
-              type="orange"
+              type="green"
               status={chatAvailable ? 'enabled' : 'disabled'}
               onPress={onPressChat}
             />
@@ -497,7 +524,7 @@ const DealerInfoScreen = ({
           <Plate
             title={strings.ContactsScreen.order}
             subtitle={strings.ContactsScreen.sendOrder}
-            type="primary"
+            type="blue"
             testID="ContactsScreen.ButtonOrders"
             onPress={onPressOrders}
           />
@@ -505,7 +532,7 @@ const DealerInfoScreen = ({
             testID="ContactsScreen.ButtonTimework"
             title={strings.ContactsScreen.timework2}
             subtitle=""
-            type="orange"
+            type="orange2"
             status={callAvailable ? 'enabled' : 'disabled'}
             onPress={onPressTime}
           />
@@ -513,7 +540,7 @@ const DealerInfoScreen = ({
             testID="ContactsScreen.ButtonTimework"
             title={strings.ContactsScreen.address}
             subtitle={addresses.length === 1 ? addresses[0]?.text : ''}
-            type="default"
+            type="green"
             status={callAvailable ? 'enabled' : 'disabled'}
             onPress={() => {
               if (addresses.length > 1) {
@@ -554,7 +581,7 @@ const DealerInfoScreen = ({
                   : null
               }
               testID="ContactsScreen.ButtonSites"
-              type="red"
+              type="orange2"
               onPress={() => {
                 if (sites.length > 1) {
                   setActionSheetData({
@@ -586,7 +613,7 @@ const DealerInfoScreen = ({
             <Plate
               title={strings.ContactsScreen.socialNetworks.title}
               subtitle={strings.ContactsScreen.socialNetworks.subtitle}
-              type="orange"
+              type="orange2"
               status={'enabled'}
               onPress={() => {
                 setActionSheetData({

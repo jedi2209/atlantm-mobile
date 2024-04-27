@@ -4,13 +4,16 @@ import {verticalScale} from '../utils/scale';
 export default {
   color: {
     blue: '#0061ED',
+    blue2: '#0179ff',
     blueNew: '#013da7',
     black: '#000000',
     lightBlack: '#222B45',
     lightBlue: '#027aff',
     green: '#34BD78',
     green2: '#4cd864',
+    green3: '#43d551',
     orange: '#FFA51D',
+    orange2: '#fe7c1d',
     bg: '#f2f2f2',
     white: '#ffffff',
     accordeonGrey1: '#ededed',
