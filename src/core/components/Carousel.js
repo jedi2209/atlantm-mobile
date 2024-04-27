@@ -108,7 +108,7 @@ const Carousel = props => {
         autoPlayInterval={autoPlayInterval}
         data={data}
         pagingEnabled={isPagingEnabled}
-        // onSnapToItem={index => console.log('current index:', index)}
+        onSnapToItem={index => console.log('current index:', index)}
         onProgressChange={(_, absoluteProgress) =>
           (progressValue.value = absoluteProgress)
         }
