@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   Linking,
   ScrollView,
+  Platform,
 } from 'react-native';
 
 import {
@@ -57,6 +58,8 @@ import {strings} from '../../core/lang/const';
 
 const HEADER_MAX_HEIGHT = 416;
 const infoListHeight = 350;
+
+const isAndroid = Platform.OS === 'android';
 
 const styles = StyleSheet.create({
   imgHero: {
@@ -158,6 +161,9 @@ const _renderInfoList = params => {
     );
   }
   if (infoList && infoList.length) {
+    if (infoList?.length > 20 && isAndroid) {
+      infoList.slice(0, 20);
+    }
     return (
       <View
         style={{
@@ -195,13 +201,6 @@ const _renderInfoList = params => {
           }}
           autoPlay={true}
           renderItem={({item}) => {
-          mode={'parallax'}
-          modeConfig={{
-            parallaxScrollingScale: 0.9,
-            parallaxScrollingOffset: 50,
-          }}
-          autoPlay={true}
-          renderItem={({item}) => {
             return (
               <Offer
                 key={`carousel-article-${item.hash}`}
@@ -210,12 +209,9 @@ const _renderInfoList = params => {
                 height={infoListHeight}
                 imageStyle={{borderRadius: styleConst.borderRadius}}
                 imagePressable={true}
-                imageStyle={{borderRadius: styleConst.borderRadius}}
-                imagePressable={true}
               />
             );
           }}
-          height={420}
           height={420}
         />
       </View>
