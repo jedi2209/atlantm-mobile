@@ -39,16 +39,16 @@ const mapStateToProps = ({dealer, profile}) => {
 };
 
 const CarListItem = ({
-  car,
-  prices,
-  itemScreen,
-  resizeMode,
+  car = null,
+  prices = {},
+  itemScreen = null,
+  resizeMode = 'cover',
   region,
   dealerList,
   profile,
-  currency,
+  currency = 'руб',
   testID,
-  key,
+  key = '',
 }) => {
   const navigation = useNavigation();
 
@@ -607,15 +607,6 @@ const CarListItem = ({
       </View>
     </View>
   );
-};
-
-CarListItem.defaultProps = {
-  car: null,
-  prices: {},
-  itemScreen: null,
-  currency: 'руб',
-  resizeMode: 'cover',
-  key: '',
 };
 
 const styles = StyleSheet.create({

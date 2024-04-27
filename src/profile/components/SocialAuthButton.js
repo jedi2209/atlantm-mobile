@@ -15,12 +15,14 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 import styleConst from '../../core/style-const';
 
-export const SocialAuthButton = props => {
-  const extStyle = props.style;
+export const SocialAuthButton = (
+  {type = '', onPress = () => {}, style},
+  props,
+) => {
   let propsData = props;
   delete propsData?.style;
 
-  switch (props.type.toLowerCase()) {
+  switch (type.toLowerCase()) {
     case 'apple':
       if (!appleAuth.isSupported) {
         return;
@@ -31,8 +33,8 @@ export const SocialAuthButton = props => {
           buttonType={AppleButton.Type.SIGN_IN}
           cornerRadius={5}
           {...propsData}
-          style={[styles.SocialLoginBt, styles.buttonApple, extStyle]}
-          onPress={() => Apple.signIn(props.onPress)}
+          style={[styles.SocialLoginBt, styles.buttonApple, style]}
+          onPress={() => Apple.signIn(onPress)}
         />
       );
     case 'facebook':
@@ -46,8 +48,8 @@ export const SocialAuthButton = props => {
           }}
           shadow={3}
           {...propsData}
-          style={[styles.SocialLoginBt, styles.colorFacebook, extStyle]}
-          onPress={() => Facebook.signIn(props.onPress)}
+          style={[styles.SocialLoginBt, styles.colorFacebook, style]}
+          onPress={() => Facebook.signIn(onPress)}
         />
       );
     case 'google':
@@ -61,8 +63,8 @@ export const SocialAuthButton = props => {
           }}
           shadow={3}
           {...propsData}
-          style={[styles.SocialLoginBt, styles.colorGoogle, extStyle]}
-          onPress={() => Google.signIn(props.onPress)}
+          style={[styles.SocialLoginBt, styles.colorGoogle, style]}
+          onPress={() => Google.signIn(onPress)}
         />
       );
     case 'vk':
@@ -76,18 +78,14 @@ export const SocialAuthButton = props => {
           }}
           shadow={3}
           {...propsData}
-          style={[styles.SocialLoginBt, styles.colorVK, extStyle]}
-          onPress={() => VK.signIn(props.onPress)}
+          style={[styles.SocialLoginBt, styles.colorVK, style]}
+          onPress={() => VK.signIn(onPress)}
         />
       );
 
     default:
       return <></>;
   }
-};
-
-SocialAuthButton.defaultProps = {
-  type: '',
 };
 
 const styles = StyleSheet.create({

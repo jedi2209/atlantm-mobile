@@ -14,7 +14,16 @@ import {strings} from '../lang/const';
 
 const ToastAlert = forwardRef(
   (
-    {id, status, variant, title, description, duration, isClosable, ...rest},
+    {
+      title = strings.Notifications.error.title,
+      variant = 'left-accent',
+      description = strings.Notifications.error.text,
+      isClosable = true,
+      status = 'error',
+      duration = 3000,
+      id,
+      ...rest
+    },
     ref,
   ) => {
     // const toast = useToast();
@@ -90,14 +99,5 @@ const ToastAlert = forwardRef(
     );
   },
 );
-
-ToastAlert.defaultProps = {
-  title: strings.Notifications.error.title,
-  variant: 'left-accent',
-  description: strings.Notifications.error.text,
-  isClosable: true,
-  status: 'error',
-  duration: 3000,
-};
 
 export default ToastAlert;

@@ -71,6 +71,7 @@ const mapDispatchToProps = {
 const InfoListScreen = ({
   navigation,
   region,
+  type = null,
   fetchInfoList,
   isFetchInfoList,
   isFetchInfoListDealer,
@@ -142,12 +143,12 @@ const InfoListScreen = ({
     });
   };
 
-  const renderItem = data => {
+  const renderItem = ({item, index}) => {
     return (
       <TransitionView
         animation={zoomIn}
         duration={350}
-        index={data.index}
+        index={index}
         style={[
           styleConst.shadow.default,
           {
@@ -160,8 +161,8 @@ const InfoListScreen = ({
         ]}>
         <Offer
           theme="round"
-          key={`carousel-article-${data.item.hash}`}
-          data={data}
+          key={`carousel-article-${item.hash}`}
+          data={item}
           bounceable={true}
           width={cardWidth}
           height={300}
@@ -288,10 +289,6 @@ const InfoListScreen = ({
       ) : null}
     </>
   );
-};
-
-InfoListScreen.defaultProps = {
-  type: null,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(InfoListScreen);

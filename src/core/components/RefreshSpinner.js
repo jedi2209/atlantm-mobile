@@ -19,7 +19,14 @@ const styles = StyleSheet.create({
 });
 
 const RefreshSpinner = props => {
-  const {isRequest, onRefresh, containerStyle, text, enabled} = props;
+  const {
+    text = 'обновление экрана...',
+    refreshing = false,
+    enabled = true,
+    onRefresh = () => {},
+    isRequest,
+    containerStyle,
+  } = props;
   return (
     <RefreshControl
       tintColor={styleConst.color.blueNew}
@@ -31,13 +38,6 @@ const RefreshSpinner = props => {
       title={text}
     />
   );
-};
-
-RefreshSpinner.defaultProps = {
-  text: 'обновление экрана...',
-  refreshing: false,
-  enabled: true,
-  onRefresh: () => {},
 };
 
 export default RefreshSpinner;

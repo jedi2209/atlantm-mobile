@@ -6,6 +6,7 @@ import {
   Dimensions,
   StyleSheet,
   Platform,
+  StatusBar,
 } from 'react-native';
 import {
   Button,
@@ -253,8 +254,8 @@ const MainFilterScreen = ({
   navigation,
   route,
   region,
-  stockTypeDefault,
-  updateFromApiDefault,
+  stockTypeDefault = 'New',
+  updateFromApiDefault = false,
   actionFetchNewCar,
   actionFetchUsedCar,
   actionFetchNewCarFilters,
@@ -691,6 +692,7 @@ const MainFilterScreen = ({
 
   return (
     <>
+      <StatusBar hidden />
       <ScrollView style={styles.container}>
         <Box px="3" py="3" bg={styleConst.color.white}>
           <Button.Group
@@ -1973,11 +1975,6 @@ const MainFilterScreen = ({
       )}
     </>
   );
-};
-
-MainFilterScreen.defaultProps = {
-  stockTypeDefault: 'New',
-  updateFromApiDefault: false,
 };
 
 const styles = StyleSheet.create({
