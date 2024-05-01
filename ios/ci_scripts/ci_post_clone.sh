@@ -8,6 +8,7 @@ brew install node@18
 echo 'export PATH="/usr/local/opt/node@18/bin:$PATH"' >> ~/.zshrc
 export LDFLAGS="-L/usr/local/opt/node@18/lib"
 export CPPFLAGS="-I/usr/local/opt/node@18/include"
+source $HOME/.zshrc
 echo "===== Installing yarn ====="
 brew install yarn
 
