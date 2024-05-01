@@ -6,6 +6,7 @@ echo ">>> INSTALL RVM"
 # rvm install 3.3.0
 echo ">>> SETUP ENVIRONMENT"
 source $HOME/.rvm/scripts/rvm
+rvm install "ruby-3.3.0"
 rvm use 3.3.0 --default
 export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
 echo 'export PATH="$PATH:$GEM_HOME/bin"' >> ~/.zshrc
