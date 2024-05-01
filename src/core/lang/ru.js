@@ -31,7 +31,7 @@ export default {
   },
   ColorBox: {
     // всплывашка с цветом на складе
-    code: 'код цвета',
+    code: 'Код цвета',
   },
   DatePickerCustom: {
     // выбор даты в формах
@@ -94,7 +94,7 @@ export default {
     continue: 'Продолжить',
   },
   ModalView: {
-    close: 'закрыть',
+    close: 'Закрыть',
   },
   PhotoViewer: {
     errorLoad: 'Не удалось загрузить фото',
@@ -631,9 +631,9 @@ export default {
   },
   UserCars: {
     title: 'Мои автомобили',
-    current: 'текущие',
-    archive: 'архив',
-    intoArchive: 'в архиве',
+    current: 'Текущие',
+    archive: 'Архив',
+    intoArchive: 'В архиве',
     archiveCheck: 'Проверим архив?',
     empty: {
       text: 'У вас нет текущих автомобилей.',
