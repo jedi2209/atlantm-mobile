@@ -3,8 +3,9 @@ cd ../../;
 export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
 echo 'export PATH="$PATH:$GEM_HOME/bin"' >> ~/.zshrc
 source $HOME/.zshrc
+gem install --default bundler -v 2.5.6 --user-install
+gem update --system
 bundle update --bundler
-# gem install bundler --user-install
 echo "===== Installling CocoaPods ====="
 export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
 bundle install
