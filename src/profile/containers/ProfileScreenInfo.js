@@ -662,7 +662,7 @@ const ProfileScreenInfo = props => {
           style={[
             styleConst.shadow.default,
             styles.buttonPrimary,
-            {backgroundColor: styleConst.color.green, marginTop: 20},
+            {backgroundColor: styleConst.color.lightBlue, marginTop: 20},
           ]}>
           {strings.ProfileScreenInfo.editData}
         </Button>
