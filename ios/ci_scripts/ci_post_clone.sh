@@ -1,15 +1,17 @@
 #!/bin/zsh
 cd ../../;
+echo ">>> SETUP ENVIRONMENT"
 export GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
 echo 'export PATH="$PATH:$GEM_HOME/bin"' >> ~/.zshrc
 source $HOME/.zshrc
-gem install --default bundler -v 2.5.6 --user-install
-gem update --system
-bundle update --bundler
+echo ">>> INSTALL BUNDLER"
+gem install bundler --install-dir $GEM_HOME
+echo ">>> INSTALL DEPENDENCIES"
+bundle install
 echo "===== Installling CocoaPods ====="
 export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
-bundle install
-# brew install cocoapods
+echo ">>> INSTALL PODS"
+bundle exec pod install
 echo "===== Installing Node.js ====="
 brew install node@18
 echo 'export PATH="/usr/local/opt/node@18/bin:$PATH"' >> ~/.zshrc
