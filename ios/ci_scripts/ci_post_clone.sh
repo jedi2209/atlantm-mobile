@@ -1,9 +1,9 @@
 #!/bin/zsh
 cd ../../;
-gem install bundler:2.5.6
+gem install bundler --user-install
 echo "===== Installling CocoaPods ====="
 export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
-bundler install
+bundle install
 # brew install cocoapods
 echo "===== Installing Node.js ====="
 brew install node@18
