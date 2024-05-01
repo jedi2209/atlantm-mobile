@@ -1,5 +1,6 @@
 #!/bin/zsh
 cd ../../;
+gem install bundler:2.5.6
 echo "===== Installling CocoaPods ====="
 export HOMEBREW_NO_INSTALL_CLEANUP=TRUE
 bundler install
