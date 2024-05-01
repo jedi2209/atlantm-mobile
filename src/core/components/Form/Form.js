@@ -208,7 +208,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: styleConst.color.white,
-    textTransform: 'uppercase',
     fontSize: 16,
   },
   PhoneInputWrapper: {

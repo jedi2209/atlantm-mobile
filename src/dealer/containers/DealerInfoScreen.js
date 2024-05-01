@@ -593,7 +593,7 @@ const DealerInfoScreen = ({
                     {
                       priority: socialNetworks.length + 1,
                       id: 'cancel',
-                      text: strings.Base.cancel.toLowerCase(),
+                      text: strings.Base.cancel,
                       icon: {
                         name: 'close',
                         color: '#f70707',

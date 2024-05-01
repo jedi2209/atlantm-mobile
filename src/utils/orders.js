@@ -23,7 +23,7 @@ async function getOrders(type = 'default', dealerData = null) {
         {
           priority: 15,
           id: 'cancel',
-          text: strings.Base.cancel.toLowerCase(),
+          text: strings.Base.cancel,
           icon: {
             name: 'close',
             color: '#f70707',
@@ -38,7 +38,7 @@ async function getOrders(type = 'default', dealerData = null) {
         {
           priority: 15,
           id: 'cancel',
-          text: strings.Base.cancel.toLowerCase(),
+          text: strings.Base.cancel,
           icon: {
             name: 'close',
             color: '#f70707',
