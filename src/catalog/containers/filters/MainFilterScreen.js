@@ -387,8 +387,17 @@ const MainFilterScreen = ({
               let bodyNames = {};
               let tmp = {};
               Object.keys(res.payload.data.body).map(val => {
-                tmp[Number(val)] = strings.CarParams.body[Number(val)];
-                bodyNames[strings.CarParams.body[Number(val)]] = Number(val);
+                const number = Number(val);
+                tmp[number] = strings.CarParams.body[number];
+                const nameLocal = get(strings, 'CarParams.body');
+                if (nameLocal[number]) {
+                  bodyNames[strings.CarParams.body[number]] = number;
+                } else {
+                  bodyNames[strings.CarParams.body[number]] = get(
+                    res,
+                    'payload.data.body',
+                  )[val];
+                }
               });
               setBody(bodyNames);
               res.payload.data.body = _convertSelect(tmp);
