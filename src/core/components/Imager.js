@@ -88,16 +88,16 @@ const Imager = props => {
               }}
               resizeMode={FastImage.resizeMode[resizeMode]}
               onLoadStart={() => {
-                console.log('start');
+                console.log('Imager => start load image');
                 onLoadStart();
               }}
               onError={e => {
-                console.log('error');
+                console.log('Imager => error load image');
                 onLoadError(e);
                 setLoading(false);
               }}
               onLoadEnd={() => {
-                console.log('end');
+                console.log('Imager => end load image');
                 onLoadEnd();
                 setLoading(false);
               }}
