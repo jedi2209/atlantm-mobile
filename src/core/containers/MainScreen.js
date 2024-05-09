@@ -42,8 +42,7 @@ import LogoLoader from '../components/LogoLoader';
 const {width} = Dimensions.get('screen');
 const isApple = Platform.OS === 'ios';
 const firstRowMarginTop = 3;
-const infoListHeight = 320;
-const cardWidth = width - 40;
+const infoListHeight = width / 1.12;
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
@@ -339,6 +338,7 @@ const fetchInfoData = async props => {
 
 const _renderActions = params => {
   const {isFetchInfoList, infoList, navigation} = params;
+  let infoListChanged = infoList;
   if (isFetchInfoList) {
     return (
       <View style={styles.spinnerContainer} key={'actionsLoader'}>
@@ -350,7 +350,7 @@ const _renderActions = params => {
     );
   } else if (infoList?.length) {
     if (infoList?.length > 20 && !isApple) {
-      infoList.slice(0, 20);
+      infoListChanged = infoList.slice(0, 20);
     }
     return (
       <View
@@ -369,7 +369,7 @@ const _renderActions = params => {
           </Text>
         </HStack>
         <Carousel
-          data={infoList}
+          data={infoListChanged}
           mode={'parallax'}
           modeConfig={{
             parallaxScrollingScale: 0.9,
