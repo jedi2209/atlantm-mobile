@@ -165,7 +165,7 @@ const InfoListScreen = ({
           data={item}
           bounceable={true}
           width={cardWidth}
-          height={300}
+          height={cardWidth / 1.12}
           dealerCustom={dealerAPIRequest}
           navigation={navigation.navigate}
         />
