@@ -383,7 +383,7 @@ const _renderActions = params => {
                 data={item}
                 height={infoListHeight}
                 imageStyle={{borderRadius: styleConst.borderRadius}}
-                imagePressable={true}
+                imagePressable={false}
               />
             );
           }}
