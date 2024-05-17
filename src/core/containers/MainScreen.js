@@ -41,7 +41,7 @@ import LogoLoader from '../components/LogoLoader';
 
 const {width} = Dimensions.get('screen');
 const isApple = Platform.OS === 'ios';
-const firstRowMarginTop = 3;
+const firstRowMarginTop = 1;
 const infoListHeight = width / 1.12;
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
