@@ -146,7 +146,7 @@ const ContactsStackView = ({navigation, route}) => (
       component={MainScreen}
       options={{
         headerTitle: () => (
-          <LogoTitle containerStyle={{marginTop: isApple ? 10 : 20}} />
+          <LogoTitle containerStyle={{marginTop: isApple ? 10 : 5}} />
         ),
         headerRight: () => (
           <View style={stylesHeader.headerRightStyle}>
@@ -171,7 +171,7 @@ const ContactsStackView = ({navigation, route}) => (
         headerLeft: null,
         headerTitleAlign: 'center',
         headerStyle: {
-          height: isApple ? 90 : 50,
+          height: isApple ? 90 : 70,
           backgroundColor: '#f2f2f2',
           elevation: 0,
           shadowOpacity: 0,
@@ -278,14 +278,14 @@ const BottomTabNavigation = ({navigation, route, region}) => {
           tabBarHideOnKeyboard: true,
           tabBarStyle: {
             position: 'absolute',
-            bottom: keyboardShow ? -100 : 25,
+            // bottom: keyboardShow ? -100 : 25,
             opacity: _animated.bottomMenu,
-            left: 7,
-            right: 7,
-            borderRadius: 15,
-            height: 60,
-            paddingBottom: 0,
+            borderTopLeftRadius: 15,
+            borderTopRightRadius: 15,
+            height: 80,
+            paddingBottom: 10,
             paddingHorizontal: 5,
+            paddingVertical: 15,
             ...styleConst.shadow.light,
           },
           // tabBarShowLabel: false,
@@ -311,8 +311,8 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             tabBarIcon: ({focused, color}) => (
               <Icon
                 size={focused ? iconSizeFocused : iconSize}
-                as={AntDesign}
-                name="home"
+                as={Ionicons}
+                name="home-outline"
                 color={color}
                 _dark={{
                   color: color,
@@ -371,8 +371,8 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             tabBarIcon: ({color, focused}) => (
               <Icon
                 size={focused ? iconSizeFocused : iconSize}
-                as={AntDesign}
-                name="user"
+                as={Ionicons}
+                name="person-outline"
                 color={color}
                 _dark={{
                   color: color,
@@ -401,8 +401,8 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             tabBarIcon: ({color, focused}) => (
               <Icon
                 size={focused ? iconSizeFocused : iconSize}
-                as={MaterialCommunityIcons}
-                name="phone-message-outline"
+                as={Ionicons}
+                name="call-outline"
                 color={color}
                 _dark={{
                   color: {color},
@@ -433,8 +433,8 @@ const BottomTabNavigation = ({navigation, route, region}) => {
               tabBarIcon: ({color, focused}) => (
                 <Icon
                   size={focused ? iconSizeFocused : iconSize}
-                  as={AntDesign}
-                  name="message1"
+                  as={Ionicons}
+                  name="chatbox-ellipses-outline"
                   color={color}
                   _dark={{
                     color: color,
