@@ -381,6 +381,4 @@ const SettingsScreen = props => {
   );
 };
 
-SettingsScreen.defaultProps = {};
-
 export default connect(mapStateToProps, mapDispatchToProps)(SettingsScreen);

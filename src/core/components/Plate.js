@@ -5,25 +5,25 @@ import styleConst from '../../core/style-const';
 const styles = StyleSheet.create({
   plateContainer: {
     marginRight: 10,
-    padding: 10,
-    width: 150,
-    height: 98,
-    borderRadius: 5,
+    paddingLeft: 10,
+    width: 160,
+    height: 85,
+    borderRadius: 9,
   },
   plateDot: {
     borderRadius: 7.5,
-    width: 15,
-    height: 15,
+    marginTop: 7,
+    width: 10,
+    height: 10,
   },
   plateTitle: {
     color: styleConst.color.white,
     fontSize: 14,
     fontWeight: '600',
-    marginBottom: 4,
   },
   plateSubTitle: {
     color: styleConst.color.white,
-    fontSize: 12,
+    fontSize: 13,
   },
 });
 
@@ -34,21 +34,31 @@ const types = {
   // red: '#EB1E4E',
   red: styleConst.color.red,
   orange: styleConst.color.orange,
+  green: styleConst.color.green3,
+  blue: styleConst.color.blue2,
+  orange2: styleConst.color.orange2,
 };
 
-const status = {
-  enabled: '#06D6A0',
+const statusColors = {
+  enabled: '#43a451',
   disabled: '#d62828',
 };
 
-const Plate = props => {
+const Plate = ({
+  type = 'default',
+  status = 'enabled',
+  onPress = () => {},
+  titleStyle = {},
+  title = '',
+  subtitle = '',
+}) => {
   return (
-    <TouchableWithoutFeedback onPress={props.onPress}>
+    <TouchableWithoutFeedback onPress={onPress}>
       <View
         style={[
           styles.plateContainer,
           {
-            backgroundColor: types[props.type],
+            backgroundColor: types[type],
           },
         ]}>
         <View
@@ -56,7 +66,7 @@ const Plate = props => {
             styles.plateDot,
             styleConst.shadow.light,
             {
-              backgroundColor: status[props.status],
+              backgroundColor: statusColors[status],
             },
           ]}
         />
@@ -65,11 +75,11 @@ const Plate = props => {
             selectable={false}
             ellipsizeMode="tail"
             numberOfLines={1}
-            style={[styles.plateTitle, props.titleStyle]}>
-            {props.title}
+            style={[styles.plateTitle, titleStyle]}>
+            {title}
           </Text>
-          {typeof props.subtitle === 'object' ? (
-            props.subtitle.map((el, num) => {
+          {typeof subtitle === 'object' ? (
+            subtitle.map((el, num) => {
               return (
                 <Text
                   key={'plateTextSubtitle' + num}
@@ -87,18 +97,13 @@ const Plate = props => {
               ellipsizeMode="tail"
               numberOfLines={3}
               style={styles.plateSubTitle}>
-              {props.subtitle}
+              {subtitle}
             </Text>
           )}
         </View>
       </View>
     </TouchableWithoutFeedback>
   );
-};
-
-Plate.defaultProps = {
-  type: 'default',
-  status: 'enabled',
 };
 
 export default Plate;

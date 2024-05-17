@@ -59,21 +59,21 @@ const MainWrapper = props => {
 };
 
 const Offer = ({
+  imagePressable = false,
+  bounceable = false,
+  dealerCustom = null,
   data,
   height,
   cardWidth,
   theme,
-  bounceable,
   imageStyle,
-  imagePressable,
-  dealerCustom,
 }) => {
   const currLang = useSelector(state => state.core.language.selected);
 
   const params = {
-    id: data.item.id,
-    date: data.item.date,
-    type: data.item?.type,
+    id: data.id,
+    date: data.date,
+    type: data?.type,
     dealerCustom,
   };
   return (
@@ -84,15 +84,15 @@ const Offer = ({
       }}
       bounceable={bounceable}
       style={{width: cardWidth}}>
-      {data.item.img.main ? (
+      {data.img.main ? (
         <ImageWrapper
           pressable={imagePressable}
           onPress={() => {
             NavigationService.navigate('InfoPostScreen', params);
           }}>
           <Imager
-            key={'id' + data.item.img.main}
-            source={{uri: data.item.img.main}}
+            key={'id' + data.img.main}
+            source={{uri: data.img.main}}
             style={[
               styles.image,
               {
@@ -115,9 +115,9 @@ const Offer = ({
             letterSpacing={0.25}
             textAlign={'left'}
             lineHeight={24}>
-            {data.item.name}
+            {data.name}
           </Text>
-          {data.item.type?.badge ? (
+          {data.type?.badge ? (
             <View pr={theme === 'round' ? 9 : 0} flexDirection={'row'} mt={1}>
               <Badge
                 id={params.id}
@@ -131,19 +131,11 @@ const Offer = ({
           ) : null}
         </VStack>
         {theme === 'round' && (
-          <Text style={[styles.title, styles.titleRound]}>
-            {data.item.announce}
-          </Text>
+          <Text style={[styles.title, styles.titleRound]}>{data.announce}</Text>
         )}
       </View>
     </MainWrapper>
   );
-};
-
-Offer.defaultProps = {
-  imagePressable: false,
-  bounceable: false,
-  dealerCustom: null,
 };
 
 export default Offer;

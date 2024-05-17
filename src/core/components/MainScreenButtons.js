@@ -85,7 +85,7 @@ const sizeType = {
     height: 96,
   },
   full: {
-    width: widthDefault * 0.97,
+    width: widthDefault * 0.98,
     height: 128,
   },
 };
@@ -140,9 +140,12 @@ const styles = StyleSheet.create({
 });
 
 export const MainScreenButton = ({
-  size,
-  type,
-  background,
+  background = null,
+  type = 'top',
+  size = 'small',
+  width = null,
+  height = null,
+  onPress = () => {},
   backgroundProps,
   hash,
   title,
@@ -151,10 +154,7 @@ export const MainScreenButton = ({
   icon,
   subTitle,
   subTitleStyle,
-  onPress,
   style,
-  width,
-  height,
 }) => {
   const [styleState, setStyleState] = useState({
     opacity: defaultOpacity,
@@ -277,20 +277,6 @@ export const MainScreenButton = ({
   );
 };
 
-export const MainScreenButtons = () => {
+export const MainScreenButtons = ({config = {}}) => {
   return <></>;
-};
-
-
-MainScreenButton.defaultProps = {
-  background: null,
-  type: 'top',
-  size: 'small',
-  width: null,
-  height: null,
-  onPress: () => {},
-};
-
-MainScreenButtons.defaultProps = {
-  config: {},
 };

@@ -629,8 +629,8 @@ const codeInject = html => {
 const LogoLoader = ({
   onNavigationStateChange,
   style,
-  mode,
-  show,
+  mode = 'absolute',
+  show = true,
   ...otherProps
 }) => {
   return (
@@ -651,11 +651,6 @@ const LogoLoader = ({
       dataDetectorTypes="all"
     />
   );
-};
-
-LogoLoader.defaultProps = {
-  show: true,
-  mode: 'absolute',
 };
 
 export default LogoLoader;

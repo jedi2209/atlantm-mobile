@@ -11,11 +11,11 @@ import {View, Text} from 'native-base';
 import LogoLoader from './LogoLoader';
 
 const FullScreenGallery = ({
+  images = [],
+  backgroundColor = styleConst.color.black,
+  theme = 'black',
+  imageIndex = 0,
   route,
-  imageIndex,
-  images,
-  backgroundColor,
-  theme,
 }) => {
   const [loading, setLoading] = useState(true);
   const [currIndex, setIndex] = useState(imageIndex);
@@ -96,13 +96,6 @@ const FullScreenGallery = ({
       </View>
     </View>
   );
-};
-
-FullScreenGallery.defaultProps = {
-  images: [],
-  backgroundColor: styleConst.color.black,
-  theme: 'black',
-  imageIndex: 0,
 };
 
 const styles = StyleSheet.create({

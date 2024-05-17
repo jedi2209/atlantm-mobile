@@ -120,8 +120,8 @@ const WebViewAutoHeight = ({
   onNavigationStateChange,
   source,
   style,
-  minHeight,
-  fetchURL,
+  minHeight = 400,
+  fetchURL = false,
   ...otherProps
 }) => {
   if (!minHeight) {
@@ -215,11 +215,6 @@ const WebViewAutoHeight = ({
       {...otherProps}
     />
   );
-};
-
-WebViewAutoHeight.defaultProps = {
-  minHeight: 400,
-  fetchURL: false,
 };
 
 export default WebViewAutoHeight;

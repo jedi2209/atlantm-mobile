@@ -501,6 +501,7 @@ const makeLists = props => {
 
 const ChooseDealerScreen = props => {
   const {
+    itemLayout = 'dealer',
     isFetchDealer,
     region,
     route,
@@ -649,10 +650,6 @@ const ChooseDealerScreen = props => {
       />
     </>
   );
-};
-
-ChooseDealerScreen.defaultProps = {
-  itemLayout: 'dealer',
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChooseDealerScreen);
