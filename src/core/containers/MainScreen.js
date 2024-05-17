@@ -5,31 +5,19 @@ import {
   Platform,
   StyleSheet,
   ActivityIndicator,
+  StatusBar,
   useColorScheme,
 } from 'react-native';
 import {connect} from 'react-redux';
-import {
-  HStack,
-  ScrollView,
-  Text,
-  VStack,
-  View,
-  Button,
-  Pressable,
-  Box,
-  Icon,
-} from 'native-base';
-import DeviceInfo from 'react-native-device-info';
+import {HStack, ScrollView, Text, VStack, View} from 'native-base';
 import {RefreshControl} from 'react-native-gesture-handler';
-import Carousel from 'react-native-snap-carousel';
+import Carousel from '../components/Carousel';
 
 import Tooltip from 'react-native-walkthrough-tooltip';
 
 import {MainScreenButton} from '../components/MainScreenButtons';
 import RefreshSpinner from '../components/RefreshSpinner';
 import Offer from '../components/Offer';
-import RateThisApp from '../components/RateThisApp';
-import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList} from '../../info/actions';
@@ -42,7 +30,7 @@ import {
   actionWalktroughVisible,
 } from '../actions';
 
-import {STORE_LINK, APP_EMAIL, ERROR_NETWORK} from '../const';
+import {ERROR_NETWORK} from '../const';
 import styleConst from '../style-const';
 import {strings} from '../lang/const';
 
@@ -51,11 +39,10 @@ import Analytics from '../../utils/amplitude-analytics';
 import {usePrevious} from '../../utils/hooks';
 import LogoLoader from '../components/LogoLoader';
 
-const {width, height} = Dimensions.get('screen');
+const {width} = Dimensions.get('screen');
 const isApple = Platform.OS === 'ios';
 const firstRowMarginTop = 3;
-const infoListHeight = 250;
-const cardWidth = width - 40;
+const infoListHeight = width / 1.12;
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
@@ -162,7 +149,7 @@ const RowConstruct = props => {
     return (
       <View
         mt={firstRow ? firstRowMarginTop : 0}
-        p={rowType === 'actions' ? 0 : 2}
+        p={rowType === 'actions' ? 0 : 1}
         key={'containerRow' + rowNum}>
         {_processRow({rowData: json, rowNum, navigation, ...props})}
       </View>
@@ -171,9 +158,9 @@ const RowConstruct = props => {
     return (
       <View
         mt={firstRow ? firstRowMarginTop : 0}
-        p={2}
+        p={1}
         key={'containerRow' + rowNum}>
-        <HStack justifyContent={'left'} space={2}>
+        <HStack justifyContent={'left'} space={1}>
           {_processRow({rowData: json, rowNum, navigation, ...props})}
         </HStack>
       </View>
@@ -185,7 +172,7 @@ const RowConstruct = props => {
         showsHorizontalScrollIndicator={false}
         bounces={false}
         horizontal={true}>
-        <HStack justifyContent={'space-around'} space={3} p={2}>
+        <HStack justifyContent={'space-around'} space={2} p={1}>
           {_processRow({rowData: json, rowNum, navigation, ...props})}
         </HStack>
       </ScrollView>
@@ -242,7 +229,7 @@ const _processRow = props => {
     }
 
     if (item.type === 'half') {
-      widthNew = width / 2.1;
+      widthNew = width / 2.06;
       heightNew = width / 2.1;
     }
 
@@ -268,9 +255,7 @@ const _processRow = props => {
         return (
           <Tooltip
             isVisible={item.key === get(walkthroughData, 'visible')}
-            content={
-              <Text>{item.walkthroughText ? item.walkthroughText : ''}</Text>
-            }
+            content={<Text>{get(item, 'walkthroughText', '')}</Text>}
             allowChildInteraction={false}
             key={['tooltip', item.key].join('_')}
             showChildInTooltip={true}
@@ -353,6 +338,7 @@ const fetchInfoData = async props => {
 
 const _renderActions = params => {
   const {isFetchInfoList, infoList, navigation} = params;
+  let infoListChanged = infoList;
   if (isFetchInfoList) {
     return (
       <View style={styles.spinnerContainer} key={'actionsLoader'}>
@@ -363,6 +349,9 @@ const _renderActions = params => {
       </View>
     );
   } else if (infoList?.length) {
+    if (infoList?.length > 20 && !isApple) {
+      infoListChanged = infoList.slice(0, 20);
+    }
     return (
       <View
         py={2}
@@ -380,26 +369,25 @@ const _renderActions = params => {
           </Text>
         </HStack>
         <Carousel
-          data={infoList}
-          renderItem={item => {
+          data={infoListChanged}
+          mode={'parallax'}
+          modeConfig={{
+            parallaxScrollingScale: 0.9,
+            parallaxScrollingOffset: 50,
+          }}
+          autoPlay={true}
+          renderItem={({item}) => {
             return (
               <Offer
                 key={`carousel-article-${item.hash}`}
                 data={item}
-                width={cardWidth}
                 height={infoListHeight}
                 imageStyle={{borderRadius: styleConst.borderRadius}}
-                imagePressable={true}
+                imagePressable={false}
               />
             );
           }}
-          sliderWidth={width}
-          itemWidth={cardWidth}
-          lockScrollWhileSnapping={true}
-          swipeThreshold={10}
-          decelerationRate="fast"
-          inactiveSlideScale={0.98}
-          layoutCardOffset={18}
+          height={420}
         />
       </View>
     );
@@ -496,6 +484,7 @@ const MainScreen = props => {
           <RefreshControl refreshing={isLoading} onRefresh={_onRefresh} />
         )
       }>
+      <StatusBar hidden />
       <VStack paddingBottom={styleConst.menu.paddingBottom}>
         {mainScreenSettings.map(el => {
           i++;

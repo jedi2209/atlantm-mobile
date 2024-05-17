@@ -1647,26 +1647,26 @@ class Form extends Component {
     );
     return res;
   }
-}
 
-Form.defaultProps = {
-  SubmitButton: {
-    text: strings.Form.button.send,
-    props: {},
+  static defaultProps = {
+    SubmitButton: {
+      text: strings.Form.button.send,
+      props: {},
+      region: APP_REGION,
+      noAgreement: false,
+    },
+    scrollViewWrapperAvailable: true,
     region: APP_REGION,
-    noAgreement: false,
-  },
-  scrollViewWrapperAvailable: true,
-  region: APP_REGION,
-  testID: 'Form',
-  barStyle: 'light-content',
-  contentContainerStyle: {},
-  formScrollViewStyle: {
-    flex: 1,
-    backgroundColor: '#f2f2f2',
-    paddingBottom: 0,
-  },
-  keyboardAvoidingViewProps: {},
-};
+    testID: 'Form',
+    barStyle: 'light-content',
+    contentContainerStyle: {},
+    formScrollViewStyle: {
+      flex: 1,
+      backgroundColor: '#f2f2f2',
+      paddingBottom: 0,
+    },
+    keyboardAvoidingViewProps: {},
+  };
+}
 
 export default connect(mapStateToProps, {})(Form);

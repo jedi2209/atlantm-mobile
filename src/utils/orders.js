@@ -271,7 +271,7 @@ async function getArchieveCarMenu() {
           },
           {
             id: 'cancel',
-            text: strings.Base.cancel.toLowerCase(),
+            text: strings.Base.cancel,
             icon: {
               name: 'close',
               color: 'red',
@@ -301,7 +301,7 @@ async function getArchieveCarMenu() {
           },
           {
             id: 'cancel',
-            text: strings.Base.cancel.toLowerCase(),
+            text: strings.Base.cancel,
             icon: {
               name: 'close',
               color: 'red',

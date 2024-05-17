@@ -110,13 +110,18 @@ const MainWrapper = props => {
 
 const DealerItemList = props => {
   const {
-    city,
+    city = null,
+    brands = [],
+    returnScreen = null,
+    goBack = false,
+    isLocal = false,
+    readonly = false,
+    showBrands = false,
+    placeholder = null,
+    dealerFilter = {},
     dealer,
     style,
     wrapperProps,
-    placeholder,
-    showBrands,
-    readonly,
     required,
   } = props;
   const navigation = useNavigation();
@@ -229,18 +234,6 @@ const DealerItemList = props => {
       </HStack>
     </MainWrapper>
   );
-};
-
-DealerItemList.defaultProps = {
-  city: null,
-  brands: [],
-  returnScreen: null,
-  goBack: false,
-  isLocal: false,
-  readonly: false,
-  showBrands: false,
-  placeholder: null,
-  dealerFilter: {},
 };
 
 export default DealerItemList;

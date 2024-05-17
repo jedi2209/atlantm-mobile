@@ -11,9 +11,9 @@ const DatePickerWrapper = props => {
     isActive,
     onDateChange,
     onHideModal,
-    confirmBtnText,
+    confirmBtnText = strings.DatePickerCustom.choose,
     label,
-    mode,
+    mode = 'date',
     value,
   } = props;
   const defaultDate = new Date();
@@ -39,15 +39,18 @@ const DatePickerWrapper = props => {
 };
 
 export const DatePickerCustom = React.forwardRef((props, ref) => {
-  const dateHuman = props.value ? format(props.value, 'DD MMMM YYYY') : null;
+  const {
+    onPressButton = () => {},
+    styleContainer = {},
+    placeholder = strings.DatePickerCustom.chooseDate,
+    value,
+  } = props;
+  const dateHuman = value ? format(value, 'DD MMMM YYYY') : null;
 
   return (
     <Pressable
-      onPress={props.onPressButton}
-      style={[
-        styles.container,
-        props.styleContainer ? props.styleContainer : {},
-      ]}>
+      onPress={onPressButton}
+      style={[styles.container, styleContainer]}>
       {props.label ? (
         <Text
           style={[
@@ -66,25 +69,16 @@ export const DatePickerCustom = React.forwardRef((props, ref) => {
       ) : null}
       <Button
         variant="unstyled"
-        onPress={props.onPressButton}
+        onPress={onPressButton}
         ref={ref}
         style={styles.button}
         _text={[styles.text, dateHuman && styles.textSelected]}>
-        {dateHuman
-          ? dateHuman
-          : props.placeholder
-          ? props.placeholder
-          : strings.DatePickerCustom.chooseDate}
+        {dateHuman ? dateHuman : props.placeholder}
       </Button>
       {DatePickerWrapper(props)}
     </Pressable>
   );
 });
-
-DatePickerCustom.defaultProps = {
-  mode: 'date',
-  confirmBtnText: strings.DatePickerCustom.choose,
-};
 
 const styles = StyleSheet.create({
   container: {

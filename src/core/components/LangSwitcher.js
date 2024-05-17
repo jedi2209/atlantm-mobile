@@ -62,6 +62,12 @@ const pickerSelectStyles = StyleSheet.create({
 });
 
 const LangSwitcher = props => {
+  const {
+    textColor = 'black',
+    bgColor = styleConst.color.white,
+    name = strings.LangSwitcher.lang,
+    placeholder = {},
+  } = props;
   const _onValueChange = value => {
     if (value !== APP_LANG && value !== UKRAINE) {
       value = APP_LANG;
@@ -97,13 +103,6 @@ const LangSwitcher = props => {
       />
     </View>
   );
-};
-
-LangSwitcher.defaultProps = {
-  textColor: 'black',
-  bgColor: styleConst.color.white,
-  name: strings.LangSwitcher.lang,
-  placeholder: {},
 };
 
 export default connect(null, mapDispatchToProps)(LangSwitcher);

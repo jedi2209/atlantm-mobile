@@ -4,8 +4,8 @@ import {View, StyleSheet, Dimensions, Platform, Pressable} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
 
 // components
-import Carousel, {Pagination} from 'react-native-snap-carousel';
-import Imager from '../../core/components/Imager';
+import Carousel from './Carousel';
+import Imager from './Imager';
 
 // helpers
 import styleConst from '../style-const';
@@ -13,18 +13,20 @@ import styleConst from '../style-const';
 const {width: screenWidth} = Dimensions.get('window');
 
 const PhotoSlider = ({
-  height,
-  firstItem,
+  photos = [],
+  width = screenWidth,
+  height = 300,
+  pagination = false,
+  paginationStyle = {},
+  dotColor = styleConst.color.blue,
+  resizeMode = 'contain',
+  loop = false,
+  autoPlay = false,
+  themeFull = 'black',
+  fullScreen = 'FullScreenGallery',
   styleWrapper,
-  photos,
   photosFull,
-  paginationStyle,
-  dotColor,
-  loop,
   onPressItem,
-  resizeMode,
-  themeFull,
-  fullScreen,
 }) => {
   const [activeSlide, setActiveSlide] = useState(0);
 
@@ -82,62 +84,19 @@ const PhotoSlider = ({
     <View style={[styles.container, styleWrapper]}>
       <Carousel
         ref={carouselRef}
-        sliderWidth={screenWidth}
-        sliderHeight={height}
-        itemWidth={screenWidth * 0.95}
-        inactiveSlideOpacity={1}
-        inactiveSlideScale={1}
-        removeClippedSubviews={false}
-        useScrollView={true}
-        // enableSnap={true}
-        // lockScrollWhileSnapping={true}
-        firstItem={firstItem}
+        width={width}
+        height={height}
         loop={loop}
         data={entries}
+        autoPlay={autoPlay}
         renderItem={renderItem}
-        onLayout={() => {
-          if (entries.length > 3 && firstItem !== 0) {
-            setTimeout(() => {
-              carouselRef?.current?.snapToItem(firstItem, true);
-            }, 100);
-          }
-        }}
         onSnapToItem={index => setActiveSlide(index)}
+        pagination={pagination}
+        paginationColor={dotColor}
+        paginationStyle={paginationStyle}
       />
-      {dotColor ? (
-        <Pagination
-          dotsLength={entries.length}
-          activeDotIndex={activeSlide}
-          containerStyle={[styles.paginationStyle, paginationStyle]}
-          dotStyle={[
-            styles.dotStyle,
-            {
-              backgroundColor: dotColor,
-            },
-          ]}
-          inactiveDotStyle={
-            {
-              // Define styles for inactive dots here
-            }
-          }
-          inactiveDotOpacity={0.4}
-          inactiveDotScale={0.6}
-        />
-      ) : null}
     </View>
   );
-};
-
-PhotoSlider.defaultProps = {
-  photos: [],
-  height: 300,
-  paginationStyle: {},
-  dotColor: 'rgba(0,0,0,.2)',
-  resizeMode: 'contain',
-  firstItem: 0,
-  loop: false,
-  themeFull: 'black',
-  fullScreen: 'FullScreenGallery',
 };
 
 const styles = StyleSheet.create({

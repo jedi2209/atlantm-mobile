@@ -10,15 +10,30 @@ const mapStateToProps = ({dealer}) => {
 };
 
 const BrandLogo = props => {
-  const {brand} = props;
+  const {
+    brand,
+    type = 'black',
+    aspectRatio = 1.5,
+    brandsAssets = {
+      black: [
+        2, 3, 4, 5, 6, 7, 9, 10, 12, 13, 14, 19, 20, 23, 30, 46, 77, 92, 153,
+        157, 159,
+      ],
+      white: [
+        2, 3, 4, 5, 6, 7, 9, 10, 12, 13, 14, 19, 20, 23, 30, 46, 77, 92, 153,
+        157, 159,
+      ],
+    },
+    testID = 'BrandLogo.Wrapper',
+  } = props;
 
   let currPath = null;
   if (
-    props.brandsAssets[props.type] &&
-    props.brandsAssets[props.type].includes(brand) &&
-    brandsSVG[props.type][brand]
+    brandsAssets[type] &&
+    brandsAssets[type].includes(brand) &&
+    brandsSVG[type][brand]
   ) {
-    currPath = brandsSVG[props.type][brand];
+    currPath = brandsSVG[type][brand];
   } else {
     if (props.brandsAll && props.brandsAll[brand]) {
       currPath = props.brandsAll[brand].logo;
@@ -27,29 +42,29 @@ const BrandLogo = props => {
   const [currentLogoPath, setCurrentLogoPath] = useState(currPath);
 
   let width = 30;
-  let height = props.width / props.aspectRatio;
+  let height = props.width / aspectRatio;
   if (props.height) {
-    width = props.height * props.aspectRatio;
+    width = props.height * aspectRatio;
     height = props.height;
   } else {
     if (props.width) {
       width = props.width;
-      height = props.width / props.aspectRatio;
+      height = props.width / aspectRatio;
     }
   }
 
   if (
-    props.brandsAssets[props.type] &&
-    props.brandsAssets[props.type].includes(brand) &&
+    brandsAssets[type] &&
+    brandsAssets[type].includes(brand) &&
     currentLogoPath
   ) {
     return (
-      <View style={[{}, {...props.style}]} testID={props.testID}>
+      <View style={[{}, {...props.style}]} testID={testID}>
         <View
           style={[
             styles.containerSVG,
             {
-              aspectRatio: props.aspectRatio,
+              aspectRatio,
               width: props.width,
               height: props.height,
             },
@@ -64,7 +79,7 @@ const BrandLogo = props => {
         <Imager
           resizeMode="contain"
           style={{
-            aspectRatio: props.aspectRatio,
+            aspectRatio,
             width: props.width,
             height: props.height,
           }}
@@ -80,22 +95,6 @@ const BrandLogo = props => {
     }
   }
   return <View />;
-};
-
-BrandLogo.defaultProps = {
-  type: 'black',
-  aspectRatio: 1.5,
-  brandsAssets: {
-    black: [
-      2, 3, 4, 5, 6, 7, 9, 10, 12, 13, 14, 19, 20, 23, 30, 46, 77, 92, 153, 157,
-      159,
-    ],
-    white: [
-      2, 3, 4, 5, 6, 7, 9, 10, 12, 13, 14, 19, 20, 23, 30, 46, 77, 92, 153, 157,
-      159,
-    ],
-  },
-  testID: 'BrandLogo.Wrapper',
 };
 
 const styles = StyleSheet.create({

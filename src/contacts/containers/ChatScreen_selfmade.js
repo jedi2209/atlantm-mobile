@@ -488,15 +488,19 @@ const ChatScreen = ({
 
   useEffect(() => {
     setLoadingHistory(true);
-    if (session === null) {
-      let senderIDNew = getUserID(PushNotifications.getUserID());
-      setUser({id: senderIDNew});
-      actionChatIDSave(senderIDNew);
-      updateChat(senderIDNew);
-    } else {
-      setUser({id: session});
-      updateChat(session);
-    }
+    const oneSignalData = async () => {
+      if (session === null) {
+        let senderIDNew = getUserID(PushNotifications.getUserID());
+        setUser({id: senderIDNew});
+        actionChatIDSave(senderIDNew);
+        updateChat(senderIDNew);
+      } else {
+        setUser({id: session});
+        updateChat(session);
+      }
+    };
+
+    oneSignalData();
     return () => {
       // закрытие экрана чата 2
       // chatSocket.close();

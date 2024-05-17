@@ -39,11 +39,20 @@ const mapDispatchToProps = {
 
 const MENU_SCREEN_NAME = 'BottomTabNavigation';
 
-const HeaderBackButton = props => {
+const HeaderBackButton = ({
+  ContainerStyle = {},
+  InnerStyle = {},
+  IconStyle = {},
+  type = 'Ionicons',
+  iconSize = 10,
+  icon = 'arrow-back',
+  theme = 'blue',
+  returnScreen,
+  onPressBackCallBack,
+  dealerClear,
+  localDealerClear,
+}) => {
   const onPressBack = () => {
-    const {returnScreen, onPressBackCallBack, dealerClear, localDealerClear} =
-      props;
-
     if (onPressBackCallBack && typeof onPressBackCallBack === 'function') {
       onPressBackCallBack();
     }
@@ -77,7 +86,7 @@ const HeaderBackButton = props => {
 
   let fontType = null;
 
-  switch (props.type) {
+  switch (type) {
     default:
       fontType = Ionicons;
       break;
@@ -85,36 +94,28 @@ const HeaderBackButton = props => {
 
   return (
     <TouchableOpacity
-      style={[styles.container, props.ContainerStyle]}
+      style={[styles.container, ContainerStyle]}
       testID="HeaderIconBack.Button"
       onPress={onPressBack}>
-      <View style={[styles.inner, props.InnerStyle]}>
+      <View style={[styles.inner, InnerStyle]}>
         <Icon
-          size={props.iconSize}
+          size={iconSize}
           as={fontType}
-          name={props.icon}
+          name={icon}
           color={styleConst.color.white}
           _dark={{
             color: styleConst.color.white,
           }}
           style={[
             {
-              color: fontColor[props.theme],
+              color: fontColor[theme],
             },
-            props.IconStyle,
+            IconStyle,
           ]}
         />
       </View>
     </TouchableOpacity>
   );
-};
-
-HeaderBackButton.defaultProps = {
-  ContainerStyle: {},
-  type: 'Ionicons',
-  iconSize: 10,
-  icon: 'arrow-back',
-  theme: 'blue',
 };
 
 export default connect(null, mapDispatchToProps)(HeaderBackButton);

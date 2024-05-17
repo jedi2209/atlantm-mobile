@@ -157,8 +157,6 @@ const NotificationsScreen = props => {
   );
 };
 
-NotificationsScreen.defaultProps = {};
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps,

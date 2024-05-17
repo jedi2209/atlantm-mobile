@@ -25,12 +25,12 @@ const styles = StyleSheet.create({
 
 const ReviewsList = props => {
   const {
-    items,
+    pages = {},
+    items = null,
+    isFetchItems = false,
+    onPressItemHandler = null,
     extraData,
-    isFetchItems,
-    onPressItemHandler,
     dataHandler,
-    pages,
   } = props;
 
   const [bounces, setBounces] = useState(true);
@@ -109,13 +109,6 @@ const ReviewsList = props => {
       onEndReached={_handleLoadMore}
     />
   );
-};
-
-ReviewsList.defaultProps = {
-  pages: {},
-  items: null,
-  isFetchItems: false,
-  onPressItemHandler: null,
 };
 
 export default ReviewsList;

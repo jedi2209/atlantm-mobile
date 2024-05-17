@@ -18,8 +18,8 @@ const excludeValFromSelect = list => {
 };
 
 const CheckboxList = ({
-  items,
-  selectedItems,
+  items = [],
+  selectedItems = {},
   type,
   dataExtra,
   onPressCallback,
@@ -143,10 +143,5 @@ const styles = StyleSheet.create({
     borderColor: styleConst.color.greyText5,
   },
 });
-
-CheckboxList.defaultProps = {
-  selectedItems: {},
-  items: [],
-};
 
 export default CheckboxList;
