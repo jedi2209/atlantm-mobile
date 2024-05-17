@@ -267,7 +267,6 @@ const BrandModelFilterScreen = ({
         <Button
           shadow={7}
           w={'70%'}
-          _text={{textTransform: 'uppercase'}}
           onPress={() => {
             saveBrandModelFilter({stateFilters, stockType});
             navigation.goBack();
