@@ -53,10 +53,7 @@ export default {
     const notif = data.notification.additionalData;
 
     const target = get(notif, 'target');
-    const dealer = get(notif, 'dealer', null);
-    const carNumber = get(notif, 'car_number', null);
-    const actionId = get(notif, 'action_id', null);
-    const actionDate = get(notif, 'action_date', null);
+    // const actionDate = get(notif, 'action_date', null);
     const params = {};
 
     params.isPush = true;
@@ -64,16 +61,20 @@ export default {
     switch (target) {
       case 'tva':
         routeName = 'TvaResultsScreen';
-        params.dealerId = dealer;
-        params.carNumber = carNumber;
+        params.dealerId = get(notif, 'dealer', null);
+        params.carNumber = get(notif, 'car_number', null);
         break;
       case 'action':
         routeName = 'InfoPostScreen';
-        params.id = actionId;
+        params.id = get(notif, 'action_id', null);
         break;
       case 'chat':
         routeName = 'ChatScreen';
         params.refresh = true;
+        break;
+      case 'screen':
+        routeName = get(notif, 'screenName');
+        break;
       default:
         break;
     }
