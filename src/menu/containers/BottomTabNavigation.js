@@ -1,9 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {Platform, Keyboard, Animated} from 'react-native';
+import {Platform, Keyboard, Animated, StyleSheet} from 'react-native';
 import {useDisclose, Icon, Text, View, Pressable} from 'native-base';
 import orderFunctions from '../../utils/orders';
 import Analytics from '../../utils/amplitude-analytics';
+import DeviceInfo from 'react-native-device-info';
 import {connect} from 'react-redux';
 
 // import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
@@ -57,7 +58,41 @@ const StackContacts = createStackNavigator();
 
 const iconSize = 7;
 const iconSizeFocused = 9;
-const isApple = Platform.OS === 'ios';
+const isDynamicIsland = DeviceInfo.hasDynamicIsland();
+
+let logoStyle = 'logo' + Platform.OS + (isDynamicIsland ? 'Island' : '');
+let headerStyle = 'header' + Platform.OS + (isDynamicIsland ? 'Island' : '');
+let styleImage = 'logoStyle' + Platform.OS + (isDynamicIsland ? 'Island' : '');
+
+const styles = StyleSheet.create({
+  logoandroid: {
+    marginTop: 5,
+  },
+  logoStyleandroid: {
+    width: '80%',
+  },
+  logoios: {
+    marginTop: 0,
+  },
+  logoStyleios: {
+    width: '85%',
+  },
+  logoiosIsland: {
+    marginTop: 0,
+  },
+  logoStyleiosIsland: {
+    width: '60%',
+  },
+  headerandroid: {
+    height: 70,
+  },
+  headerios: {
+    height: 60,
+  },
+  headeriosIsland: {
+    height: 110,
+  },
+});
 
 const ProfileStackView = ({navigation, route}) => (
   <ProfileStack.Navigator
@@ -146,7 +181,10 @@ const ContactsStackView = ({navigation, route}) => (
       component={MainScreen}
       options={{
         headerTitle: () => (
-          <LogoTitle containerStyle={{marginTop: isApple ? 0 : 5}} />
+          <LogoTitle
+            styleImage={styles[styleImage]}
+            containerStyle={styles[logoStyle]}
+          />
         ),
         headerRight: () => (
           <View style={stylesHeader.headerRightStyle}>
@@ -170,12 +208,14 @@ const ContactsStackView = ({navigation, route}) => (
         headerBackTitleVisible: false,
         headerLeft: null,
         headerTitleAlign: 'center',
-        headerStyle: {
-          height: isApple ? 60 : 70,
-          backgroundColor: '#f2f2f2',
-          elevation: 0,
-          shadowOpacity: 0,
-        },
+        headerStyle: [
+          {
+            backgroundColor: '#f2f2f2',
+            elevation: 0,
+            shadowOpacity: 0,
+          },
+          styles[headerStyle],
+        ],
       }}
     />
   </StackContacts.Navigator>
