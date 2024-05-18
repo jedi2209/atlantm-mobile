@@ -20,9 +20,6 @@ import AuthContainer from '../../profile/containers/AuthContainer';
 import PhoneChangeScreen from '../../profile/containers/PhoneChangeScreen';
 import BonusScreen from '../../profile/bonus/containers/BonusScreen';
 import DiscountsScreen from '../../profile/discounts/containers/DiscountsScreen';
-// import ReestablishScreen from '../../profile/containers/_old-ReestablishScreen';
-
-import MenuScreen from './MenuScreen';
 
 // helpers
 import {strings} from '../../core/lang/const';
@@ -30,18 +27,9 @@ import styleConst from '../../core/style-const';
 import stylesHeader from '../../core/components/Header/style';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import ActionSheetMenu from '../../core/components/ActionSheetMenu';
 
-import {
-  ClassicHeaderWhite,
-  ClassicHeaderBlue,
-  BigCloseButton,
-} from '../../navigation/const';
+import {ClassicHeaderWhite, BigCloseButton} from '../../navigation/const';
 import {BELARUSSIA} from '../../core/const';
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
@@ -52,8 +40,6 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
 
 const Tab = createBottomTabNavigator();
 const ProfileStack = createStackNavigator();
-const MenuStack = createStackNavigator();
-const ChatStack = createStackNavigator();
 const StackContacts = createStackNavigator();
 
 const iconSize = 7;
@@ -154,24 +140,6 @@ const ProfileStackView = ({navigation, route}) => (
       )}
     />
   </ProfileStack.Navigator>
-);
-
-const MenuStackView = ({navigation, route}) => (
-  <MenuStack.Navigator>
-    <MenuStack.Screen
-      name="MenuScreen"
-      component={MenuScreen}
-      options={{
-        headerTitle: () => <LogoTitle />,
-        headerStyle: {
-          height: 120,
-          backgroundColor: 'transparent',
-          elevation: 0,
-          shadowOpacity: 0,
-        },
-      }}
-    />
-  </MenuStack.Navigator>
 );
 
 const ContactsStackView = ({navigation, route}) => (
