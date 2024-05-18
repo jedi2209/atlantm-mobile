@@ -73,7 +73,7 @@ export default {
         params.refresh = true;
         break;
       case 'screen':
-        routeName = get(notif, 'screenName');
+        routeName = get(notif, 'screenName', get(notif, 'value'));
         break;
       default:
         break;
