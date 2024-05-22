@@ -699,6 +699,30 @@ const MainFilterScreen = ({
     get(dataFilters, 'prices.max'),
   );
 
+  const minPower = get(
+    stateFilters,
+    'power[from]',
+    get(dataFilters, 'data.power.min'),
+  );
+
+  const maxPower = get(
+    stateFilters,
+    'power[to]',
+    get(dataFilters, 'data.power.max'),
+  );
+
+  const minMileage = get(
+    stateFilters,
+    'mileage[from]',
+    get(dataFilters, 'data.mileage.min'),
+  );
+
+  const maxMileage = get(
+    stateFilters,
+    'mileage[to]',
+    get(dataFilters, 'data.mileage.max'),
+  );
+
   return (
     <>
       <StatusBar hidden />
@@ -1333,24 +1357,133 @@ const MainFilterScreen = ({
                 }
                 title={strings.CarsFilterScreen.filters.mileage.title}>
                 <View style={styles.multiSliderViewWrapper}>
+                  <HStack justifyContent={'space-between'}>
+                    <TextInput
+                      mode="outlined"
+                      inputMode="numeric"
+                      label={strings.CarsFilterScreen.filters.year.from}
+                      placeholder={strings.CarsFilterScreen.filters.year.from}
+                      style={{width: 120}}
+                      value={(minMileage
+                        ? numberWithGap(minMileage)
+                        : ''
+                      ).toString()}
+                      onBlur={e => {
+                        const val = parseInt(
+                          get(
+                            e,
+                            'nativeEvent.text',
+                            get(e, '_targetInst.pendingProps.text', ''),
+                          ).replace(/\D/g, ''),
+                        );
+                        if (
+                          val < get(dataFilters, 'data.mileage.min') ||
+                          !val
+                        ) {
+                          _onChangeFilter({
+                            'mileage[from]': get(
+                              dataFilters,
+                              'data.mileage.min',
+                            ),
+                            'mileage[to]': get(
+                              stateFilters,
+                              'mileage[to]',
+                              get(dataFilters, 'data.mileage.max'),
+                            ),
+                          });
+                        } else if (
+                          val >= get(dataFilters, 'data.mileage.max')
+                        ) {
+                          _onChangeFilter({
+                            'mileage[from]':
+                              get(dataFilters, 'data.mileage.max') -
+                              get(dataFilters, 'data.mileage.step'),
+                            'mileage[to]': get(
+                              stateFilters,
+                              'mileage[to]',
+                              get(dataFilters, 'data.mileage.max'),
+                            ),
+                          });
+                        }
+                      }}
+                      onChangeText={val => {
+                        _onChangeFilter({
+                          'mileage[from]': val
+                            ? parseInt(val.replace(/\D/g, ''))
+                            : '',
+                          'mileage[to]': get(
+                            stateFilters,
+                            'mileage[to]',
+                            get(dataFilters, 'data.mileage.max'),
+                          ),
+                        });
+                      }}
+                    />
+                    <TextInput
+                      mode="outlined"
+                      inputMode="numeric"
+                      label={strings.CarsFilterScreen.filters.year.to}
+                      placeholder={strings.CarsFilterScreen.filters.year.to}
+                      style={{width: 120}}
+                      value={(maxMileage
+                        ? numberWithGap(maxMileage)
+                        : ''
+                      ).toString()}
+                      onBlur={e => {
+                        const val = parseInt(
+                          get(
+                            e,
+                            'nativeEvent.text',
+                            get(e, '_targetInst.pendingProps.text', ''),
+                          ).replace(/\D/g, ''),
+                        );
+                        if (
+                          val <= get(dataFilters, 'data.mileage.min') ||
+                          val > get(dataFilters, 'data.mileage.max') ||
+                          !val
+                        ) {
+                          _onChangeFilter({
+                            'mileage[from]': get(
+                              stateFilters,
+                              'mileage[from]',
+                              get(dataFilters, 'data.mileage.min'),
+                            ),
+                            'mileage[to]': get(dataFilters, 'data.mileage.max'),
+                          });
+                        }
+                      }}
+                      onChangeText={val => {
+                        _onChangeFilter({
+                          'mileage[from]': get(
+                            stateFilters,
+                            'mileage[from]',
+                            get(dataFilters, 'data.mileage.min'),
+                          ),
+                          'mileage[to]': val
+                            ? parseInt(val.replace(/\D/g, ''))
+                            : '',
+                        });
+                      }}
+                    />
+                  </HStack>
                   <MultiSlider
                     values={[
                       get(
                         stateFilters,
                         'mileage[from]',
-                        dataFilters?.data?.mileage?.min,
+                        dataFilters?.data?.power?.min,
                       ),
                       get(
                         stateFilters,
                         'mileage[to]',
-                        dataFilters?.data?.mileage?.max,
+                        dataFilters?.data?.power?.max,
                       ),
                     ]}
                     step={10000}
-                    min={dataFilters.data.mileage.min}
-                    max={dataFilters.data.mileage.max}
+                    min={get(dataFilters, 'data.mileage.min', 0)}
+                    max={get(dataFilters, 'data.mileage.max', 1000000)}
                     sliderLength={sliderWidth}
-                    onValuesChange={values =>
+                    onValuesChangeFinish={values =>
                       _onChangeFilter({
                         'mileage[from]': values[0],
                         'mileage[to]': values[1],
@@ -1580,6 +1713,7 @@ const MainFilterScreen = ({
                 </View>
               </ModalViewFilter>
             ) : null}
+            {/* Модалка кол-во сидений */}
             {dataFilters.data.seatsCount?.values ? (
               <ModalViewFilter
                 isModalVisible={showModal === modals.seatsCount}
@@ -1798,8 +1932,112 @@ const MainFilterScreen = ({
                     'power[to]': dataFilters?.data?.power?.max,
                   })
                 }
-                title={strings.CarsFilterScreen.filters.power.title}>
+                avoidKeyboard={true}
+                statusBarTranslucent={false}
+                title={strings.CarsFilterScreen.filters.power.title}
+                selfClosed={false}>
                 <View style={styles.multiSliderViewWrapper}>
+                  <HStack justifyContent={'space-between'}>
+                    <TextInput
+                      mode="outlined"
+                      inputMode="numeric"
+                      label={strings.CarsFilterScreen.filters.year.from}
+                      placeholder={strings.CarsFilterScreen.filters.year.from}
+                      style={{width: 120}}
+                      value={(minPower
+                        ? numberWithGap(minPower)
+                        : ''
+                      ).toString()}
+                      onBlur={e => {
+                        const val = parseInt(
+                          get(
+                            e,
+                            'nativeEvent.text',
+                            get(e, '_targetInst.pendingProps.text', ''),
+                          ).replace(/\D/g, ''),
+                        );
+                        if (val < get(dataFilters, 'data.power.min') || !val) {
+                          _onChangeFilter({
+                            'power[from]': get(dataFilters, 'data.power.min'),
+                            'power[to]': get(
+                              stateFilters,
+                              'power[to]',
+                              get(dataFilters, 'data.power.max'),
+                            ),
+                          });
+                        } else if (val >= get(dataFilters, 'data.power.max')) {
+                          _onChangeFilter({
+                            'power[from]':
+                              get(dataFilters, 'data.power.max') -
+                              get(dataFilters, 'data.power.step'),
+                            'power[to]': get(
+                              stateFilters,
+                              'power[to]',
+                              get(dataFilters, 'data.power.max'),
+                            ),
+                          });
+                        }
+                      }}
+                      onChangeText={val => {
+                        _onChangeFilter({
+                          'power[from]': val
+                            ? parseInt(val.replace(/\D/g, ''))
+                            : '',
+                          'power[to]': get(
+                            stateFilters,
+                            'power[to]',
+                            get(dataFilters, 'data.power.max'),
+                          ),
+                        });
+                      }}
+                    />
+                    <TextInput
+                      mode="outlined"
+                      inputMode="numeric"
+                      label={strings.CarsFilterScreen.filters.year.to}
+                      placeholder={strings.CarsFilterScreen.filters.year.to}
+                      style={{width: 120}}
+                      value={(maxPower
+                        ? numberWithGap(maxPower)
+                        : ''
+                      ).toString()}
+                      onBlur={e => {
+                        const val = parseInt(
+                          get(
+                            e,
+                            'nativeEvent.text',
+                            get(e, '_targetInst.pendingProps.text', ''),
+                          ).replace(/\D/g, ''),
+                        );
+                        if (
+                          val <= get(dataFilters, 'data.power.min') ||
+                          val > get(dataFilters, 'data.power.max') ||
+                          !val
+                        ) {
+                          _onChangeFilter({
+                            'power[from]': get(
+                              stateFilters,
+                              'power[from]',
+                              get(dataFilters, 'data.power.min'),
+                            ),
+                            'power[to]': get(dataFilters, 'data.power.max'),
+                          });
+                        }
+                      }}
+                      onChangeText={val => {
+                        _onChangeFilter({
+                          'power[from]': get(
+                            stateFilters,
+                            'power[from]',
+                            get(dataFilters, 'data.power.min'),
+                          ),
+                          'power[to]': val
+                            ? parseInt(val.replace(/\D/g, ''))
+                            : '',
+                        });
+                      }}
+                    />
+                  </HStack>
                   <MultiSlider
                     values={[
                       get(
@@ -1814,10 +2052,10 @@ const MainFilterScreen = ({
                       ),
                     ]}
                     step={10}
-                    min={dataFilters.data.power.min}
-                    max={dataFilters.data.power.max}
+                    min={get(dataFilters, 'data.power.min', 0)}
+                    max={get(dataFilters, 'data.power.max', 1000)}
                     sliderLength={sliderWidth}
-                    onValuesChange={values =>
+                    onValuesChangeFinish={values =>
                       _onChangeFilter({
                         'power[from]': values[0],
                         'power[to]': values[1],
