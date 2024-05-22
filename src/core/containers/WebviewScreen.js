@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
   mainView: {
     flex: 1,
     paddingBottom: 25,
+    marginBottom: 75,
     backgroundColor: styleConst.color.white,
   },
   webView: {
