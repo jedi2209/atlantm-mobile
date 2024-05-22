@@ -45,10 +45,18 @@ const StackContacts = createStackNavigator();
 const iconSize = 7;
 const iconSizeFocused = 9;
 const isDynamicIsland = DeviceInfo.hasDynamicIsland();
+const isNotch = DeviceInfo.hasNotch();
+let styleSuffix = null;
 
-let logoStyle = 'logo' + Platform.OS + (isDynamicIsland ? 'Island' : '');
-let headerStyle = 'header' + Platform.OS + (isDynamicIsland ? 'Island' : '');
-let styleImage = 'logoStyle' + Platform.OS + (isDynamicIsland ? 'Island' : '');
+if (isNotch) {
+  styleSuffix = 'Notch';
+} else if (isDynamicIsland) {
+  styleSuffix = 'Island';
+}
+
+let logoStyle = 'logo' + Platform.OS + styleSuffix;
+let headerStyle = 'header' + Platform.OS + styleSuffix;
+let styleImage = 'logoStyle' + Platform.OS + styleSuffix;
 
 const styles = StyleSheet.create({
   logoandroid: {
@@ -66,8 +74,14 @@ const styles = StyleSheet.create({
   logoiosIsland: {
     marginTop: 0,
   },
+  logoiosNotch: {
+    marginTop: -10,
+  },
   logoStyleiosIsland: {
     width: '60%',
+  },
+  logoStyleiosNotch: {
+    width: '55%',
   },
   headerandroid: {
     height: 70,
@@ -77,6 +91,9 @@ const styles = StyleSheet.create({
   },
   headeriosIsland: {
     height: 110,
+  },
+  headeriosNotch: {
+    height: 90,
   },
 });
 
