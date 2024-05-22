@@ -7,10 +7,9 @@ import {
   Image,
   BackHandler,
 } from 'react-native';
-import {TransitionPresets} from '@react-navigation/stack';
 import {useFocusEffect} from '@react-navigation/native';
 import TransitionView from '../../core/components/TransitionView';
-import {Alert, Button, ScrollView, View} from 'native-base';
+import {Button, ScrollView, View} from 'native-base';
 import ResponsiveImageView from 'react-native-responsive-image-view';
 
 // redux
@@ -35,8 +34,8 @@ import {strings} from '../../core/lang/const';
 
 import {TransparentBack} from '../../navigation/const';
 import LogoLoader from '../../core/components/LogoLoader';
-import ToastAlert from '../../core/components/ToastAlert';
 import ModalView from '../../core/components/ModalView';
+import stylesHeader from '../../core/components/Header/style';
 
 // image
 const {width: screenWidth} = Dimensions.get('window');
@@ -278,9 +277,30 @@ const InfoPostScreen = ({
         TransparentBack(
           navigation,
           route,
-          {...TransitionPresets.ModalTransition},
+          {
+            headerTitle: '',
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+            presentation: 'modal',
+            headerStyle: {
+              height: 65,
+            },
+          },
           {
             icon: 'close',
+            iconSize: 12,
+            ContainerStyle: {
+              backgroundColor: 'rgba(0, 0, 0, 0.6)',
+              position: 'absolute',
+              borderRadius: 15,
+              marginTop: 10,
+              marginLeft: 10,
+              width: 45,
+              height: 45,
+              zIndex: 100000,
+            },
           },
         ),
       );

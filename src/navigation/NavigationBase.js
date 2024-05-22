@@ -190,8 +190,8 @@ export const Base = ({navigation, route}) => {
                 borderRadius: 15,
                 marginTop: 10,
                 marginLeft: 10,
-                width: 50,
-                height: 50,
+                width: 45,
+                height: 45,
                 zIndex: 10000,
               },
             },
@@ -294,10 +294,10 @@ export const Base = ({navigation, route}) => {
           component={InfoPostScreen}
           options={{
             headerTitle: '',
-            headerTitleStyle: stylesHeader.transparentHeaderTitle,
-            headerStyle: {
-              height: 55,
-            },
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
             presentation: 'modal',
             headerTransparent: true,
             headerLeft: null,
@@ -334,11 +334,26 @@ export const Base = ({navigation, route}) => {
             navigation,
             route,
             {
-              ...TransitionPresets.ModalTransition,
+              headerTitle: '',
+              headerTitleStyle: [
+                stylesHeader.transparentHeaderTitle,
+                {color: '#222B45'},
+              ],
+              presentation: 'card',
             },
             {
               icon: 'close',
               iconSize: 12,
+              ContainerStyle: {
+                backgroundColor: 'rgba(0, 0, 0, 0.6)',
+                position: 'absolute',
+                borderRadius: 15,
+                marginTop: 10,
+                marginLeft: 10,
+                width: 45,
+                height: 45,
+                zIndex: 10000,
+              },
             },
           )}
         />
@@ -357,24 +372,12 @@ export const Base = ({navigation, route}) => {
           name="SettingsScreen"
           component={SettingsScreen}
           options={BigCloseButton(navigation, route, {
-            headerLeft: () => {
-              return ArrowBack(
-                navigation,
-                {
-                  // params: {
-                  //   returnScreen: 'BottomTabNavigation',
-                  // },
-                },
-                {
-                  icon: 'close-outline',
-                  iconSize: 12,
-                  IconStyle: {
-                    width: 40,
-                    color: '#222B45',
-                  },
-                },
-              );
-            },
+            ...TransitionPresets.ModalTransition,
+            headerTitle: '',
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
           })}
         />
         <StackBase.Screen
