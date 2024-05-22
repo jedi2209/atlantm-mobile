@@ -271,7 +271,7 @@ const _onPressDealerItem = async ({
   }
 };
 
-const _EmptyComponent = () => <LogoLoader />;
+const _EmptyComponent = () => <LogoLoader style={{top: -30}} />;
 
 const makeLists = props => {
   const {

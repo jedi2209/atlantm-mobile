@@ -469,7 +469,7 @@ const MainScreen = props => {
   };
 
   if (isLoading || !mainScreenSettings || !mainScreenSettings.length) {
-    return <LogoLoader />;
+    return <LogoLoader style={{top: -60}} />;
   }
 
   return (
