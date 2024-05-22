@@ -107,7 +107,6 @@ import {
   BigCloseButton,
   TransparentBack,
 } from './const';
-import style from '../core/components/Footer/style';
 
 const StackEKO = createStackNavigator();
 const StackEKOAddReview = createStackNavigator();
@@ -173,7 +172,6 @@ export const Base = ({navigation, route}) => {
             navigation,
             route,
             {
-              // ...TransitionPresets.ModalTransition,
               headerTitle: '',
               headerTitleStyle: [
                 stylesHeader.transparentHeaderTitle,
@@ -228,48 +226,9 @@ export const Base = ({navigation, route}) => {
             headerShown: true,
             headerLeft: null,
             headerRight: null,
-            // headerRight: () => {
-            //   return ArrowBack(navigation, route, {
-            //     icon: 'close',
-            //     IconStyle: {
-            //       fontSize: 42,
-            //       width: 40,
-            //       color: '#222B45',
-            //     },
-            //     ContainerStyle: {
-            //       marginRight: 10,
-            //     },
-            //   });
-            // },
             presentation: 'modal',
             headerTransparent: true,
             headerTitle: '',
-            // headerTitle: () => {
-            //   return (
-            //     <View style={{flexDirection: 'row'}}>
-            //       <Text
-            //         style={[stylesHeader.whiteHeaderTitle, {marginRight: 10}]}
-            //         selectable={false}>
-            //         {strings.ChatScreen.title}
-            //       </Text>
-            //       <Text>{route?.params?.serviceMessage}</Text>
-            //       {route?.params?.status?.color ? (
-            //         <View
-            //           w={2}
-            //           h={2}
-            //           mt={2}
-            //           borderRadius={10}
-            //           backgroundColor={route.params.status.color}
-            //         />
-            //       ) : (
-            //         <ActivityIndicator
-            //           color={styleConst.color.blue}
-            //           size={'small'}
-            //         />
-            //       )}
-            //     </View>
-            //   );
-            // },
             headerTitleStyle: [
               stylesHeader.transparentHeaderTitle,
               {color: '#222B45'},
