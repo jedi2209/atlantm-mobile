@@ -6,10 +6,39 @@ import {View} from 'native-base';
 
 // helpers
 import styleConst from '../../../core/style-const';
-import styleFooter from '../../../core/components/Footer/style';
 
 const size = 26;
 const containerSize = 50;
+
+const styleFooter = StyleSheet.create({
+  footer: {
+    height: 50,
+    backgroundColor: styleConst.color.bg,
+    borderTopWidth: 0,
+  },
+  footerFilters: {},
+  button: {
+    height: styleConst.ui.footerHeightAndroid,
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: styleConst.color.lightBlue,
+  },
+  orderPriceContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    textAlignVertical: 'center',
+    backgroundColor: styleConst.color.bg,
+  },
+  orderPriceContainerNotSale: {
+    flexDirection: 'row',
+  },
+  content: {
+    marginBottom: 20,
+  },
+});
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
