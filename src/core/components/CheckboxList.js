@@ -17,6 +17,40 @@ const excludeValFromSelect = list => {
   return tmp;
 };
 
+const showImages = ({type, dataExtra, text}) => {
+  switch (type) {
+    case 'body':
+      return (
+        <View style={styles.bodyTypeBoxWrapper}>
+          <Imager
+            style={styles.bodyTypeBox}
+            source={{
+              uri:
+                // 'https://storage.yandexcloud.net/cdn.atlantm.com/icons/bodyType/svg/' +
+                'https://cdn.atlantm.com/icons/bodyType/svg/' +
+                dataExtra[text.toString()] +
+                '.svg',
+            }}
+          />
+        </View>
+      );
+    case 'colors':
+      return (
+        <View style={styles.colorBoxWrapper}>
+          <View
+            style={[
+              styles.colorBox,
+              {
+                backgroundColor: get(dataExtra[text.toString()], 'codes.hex'),
+              },
+              styles[`colorBox_${dataExtra[text.toString()].keyword}`],
+            ]}
+          />
+        </View>
+      );
+  }
+};
+
 const CheckboxList = ({
   items = [],
   selectedItems = {},
@@ -43,6 +77,7 @@ const CheckboxList = ({
       {items.map(val => {
         const text = val.label;
         const id = Number(val.value);
+        const ImageBlock = () => showImages({type, dataExtra, text});
         return (
           <TouchableHighlight
             onPress={() => {
@@ -52,35 +87,7 @@ const CheckboxList = ({
             activeOpacity={0.7}
             underlayColor={styleConst.color.white}>
             <View style={styles.row}>
-              {type === 'colors' ? (
-                <View style={styles.colorBoxWrapper}>
-                  <View
-                    style={[
-                      styles.colorBox,
-                      {
-                        backgroundColor: get(
-                          dataExtra[text.toString()],
-                          'codes.hex',
-                        ),
-                      },
-                      styles[`colorBox_${dataExtra[text.toString()].keyword}`],
-                    ]}
-                  />
-                </View>
-              ) : null}
-              {type === 'body' ? (
-                <View style={styles.bodyTypeBoxWrapper}>
-                  <Imager
-                    style={styles.bodyTypeBox}
-                    source={{
-                      uri:
-                        'https://cdn.atlantm.com/icons/bodyType/svg/' +
-                        dataExtra[text.toString()] +
-                        '.svg',
-                    }}
-                  />
-                </View>
-              ) : null}
+              <ImageBlock />
               <View style={{flex: 1}}>
                 <HStack justifyContent="space-between">
                   <Text style={styles.text}>{text}</Text>
