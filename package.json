@@ -15,6 +15,8 @@
     "iphone": "yarn react-native run-ios --simulator=\"iPhone 15\"",
     "iphonePro": "yarn react-native run-ios --simulator=\"iPhone 15 Pro\"",
     "iphoneProMax": "yarn react-native run-ios --simulator=\"iPhone 15 Pro Max\"",
+    "iphoneProMax13": "yarn react-native run-ios --simulator=\"iPhone 13 Pro Max\"",
+    "ios13": "yarn clean:ios; yarn iphoneProMax13",
     "ios": "yarn clean:ios; yarn iphoneProMax",
     "ios-build": "yarn clean:ios; bundle exec fastlane ios beta; rm atlantm.app.dSYM.zip atlantm.ipa;",
     "ios-version": "yarn clean:ios; bundle exec fastlane ios version",
