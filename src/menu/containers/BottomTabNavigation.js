@@ -50,13 +50,15 @@ let styleSuffix = null;
 
 if (isNotch) {
   styleSuffix = 'Notch';
-} else if (isDynamicIsland) {
+}
+if (isDynamicIsland) {
   styleSuffix = 'Island';
 }
 
 let logoStyle = 'logo' + Platform.OS + styleSuffix;
 let headerStyle = 'header' + Platform.OS + styleSuffix;
 let styleImage = 'logoStyle' + Platform.OS + styleSuffix;
+let headerRightStyle = 'headerRight' + Platform.OS + styleSuffix;
 
 const styles = StyleSheet.create({
   logoandroid: {
@@ -72,13 +74,13 @@ const styles = StyleSheet.create({
     width: '85%',
   },
   logoiosIsland: {
-    marginTop: 0,
+    marginTop: -10,
   },
   logoiosNotch: {
     marginTop: -10,
   },
   logoStyleiosIsland: {
-    width: '60%',
+    width: '55%',
   },
   logoStyleiosNotch: {
     width: '55%',
@@ -90,10 +92,16 @@ const styles = StyleSheet.create({
     height: 60,
   },
   headeriosIsland: {
-    height: 110,
+    height: 100,
   },
   headeriosNotch: {
-    height: 90,
+    height: 80,
+  },
+  headerRightiosNotch: {
+    top: -5,
+  },
+  headerRightiosIsland: {
+    top: -5,
   },
 });
 
@@ -159,35 +167,40 @@ const ProfileStackView = ({navigation, route}) => (
   </ProfileStack.Navigator>
 );
 
+const headerRight = ({navigation}) => {
+  return (
+    <View style={[stylesHeader.headerRightStyle, styles[headerRightStyle]]}>
+      <Pressable onPress={() => navigation.navigate('NotificationsScreen', {})}>
+        <Icon
+          size={7}
+          as={Ionicons}
+          name="notifications-outline"
+          color={styleConst.color.blueNew}
+          _dark={{
+            color: styleConst.color.white,
+          }}
+          style={stylesHeader.headerRightButton}
+        />
+      </Pressable>
+    </View>
+  );
+};
+
+const logoTitle = () => (
+  <LogoTitle
+    styleImage={styles[styleImage]}
+    containerStyle={styles[logoStyle]}
+  />
+);
+
 const ContactsStackView = ({navigation, route}) => (
   <StackContacts.Navigator initialRouteName="ContactsScreen">
     <StackContacts.Screen
       name="ContactsScreen"
       component={MainScreen}
       options={{
-        headerTitle: () => (
-          <LogoTitle
-            styleImage={styles[styleImage]}
-            containerStyle={styles[logoStyle]}
-          />
-        ),
-        headerRight: () => (
-          <View style={stylesHeader.headerRightStyle}>
-            <Pressable
-              onPress={() => navigation.navigate('NotificationsScreen', {})}>
-              <Icon
-                size={7}
-                as={Ionicons}
-                name="notifications-outline"
-                color={styleConst.color.blueNew}
-                _dark={{
-                  color: styleConst.color.white,
-                }}
-                style={stylesHeader.headerRightButton}
-              />
-            </Pressable>
-          </View>
-        ),
+        headerTitle: logoTitle,
+        headerRight: () => headerRight({navigation}),
         headerBackButtonMenuEnabled: false,
         headerBackVisible: false,
         headerBackTitleVisible: false,
