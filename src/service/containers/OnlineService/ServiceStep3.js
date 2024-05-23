@@ -32,7 +32,7 @@ const ServiceStep3 = props => {
   const {route, region, navigation} = props;
 
   const orderData = get(route, 'params', {});
-  const myTyresInStorage = get(orderData, 'myTyresInStorage', false);
+  const myTyresInStorage = get(orderData, 'myTyresInStorage', false) === 1; // 1 - true, 2 - false
 
   useEffect(() => {
     Analytics.logEvent('screen', 'service/step3');
