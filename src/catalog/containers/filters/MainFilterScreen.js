@@ -1355,7 +1355,10 @@ const MainFilterScreen = ({
                     'mileage[to]': dataFilters?.data?.mileage?.max,
                   })
                 }
-                title={strings.CarsFilterScreen.filters.mileage.title}>
+                avoidKeyboard={true}
+                statusBarTranslucent={false}
+                title={strings.CarsFilterScreen.filters.mileage.title}
+                selfClosed={false}>
                 <View style={styles.multiSliderViewWrapper}>
                   <HStack justifyContent={'space-between'}>
                     <TextInput
