@@ -1,13 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
 import {Platform, Keyboard, Animated, StyleSheet} from 'react-native';
-import {useDisclose, Icon, Text, View, Pressable} from 'native-base';
+import {useDisclose, Icon, View} from 'native-base';
+import RNBounceable from '@freakycoder/react-native-bounceable';
 import orderFunctions from '../../utils/orders';
 import Analytics from '../../utils/amplitude-analytics';
 import DeviceInfo from 'react-native-device-info';
 import {connect} from 'react-redux';
 
-// import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -46,7 +46,7 @@ const iconSize = 7;
 const iconSizeFocused = 9;
 const isDynamicIsland = DeviceInfo.hasDynamicIsland();
 const isNotch = DeviceInfo.hasNotch();
-let styleSuffix = null;
+let styleSuffix = '';
 
 if (isNotch) {
   styleSuffix = 'Notch';
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   logoStyleandroid: {
-    width: '80%',
+    width: '70%',
   },
   logoios: {
     marginTop: 0,
@@ -170,7 +170,8 @@ const ProfileStackView = ({navigation, route}) => (
 const headerRight = ({navigation}) => {
   return (
     <View style={[stylesHeader.headerRightStyle, styles[headerRightStyle]]}>
-      <Pressable onPress={() => navigation.navigate('NotificationsScreen', {})}>
+      <RNBounceable
+        onPress={() => navigation.navigate('NotificationsScreen', {})}>
         <Icon
           size={7}
           as={Ionicons}
@@ -181,7 +182,7 @@ const headerRight = ({navigation}) => {
           }}
           style={stylesHeader.headerRightButton}
         />
-      </Pressable>
+      </RNBounceable>
     </View>
   );
 };
@@ -199,21 +200,7 @@ const ContactsStackView = ({navigation, route}) => (
       name="ContactsScreen"
       component={MainScreen}
       options={{
-        headerTitle: logoTitle,
-        headerRight: () => headerRight({navigation}),
-        headerBackButtonMenuEnabled: false,
-        headerBackVisible: false,
-        headerBackTitleVisible: false,
-        headerLeft: null,
-        headerTitleAlign: 'center',
-        headerStyle: [
-          {
-            backgroundColor: '#f2f2f2',
-            elevation: 0,
-            shadowOpacity: 0,
-          },
-          styles[headerStyle],
-        ],
+        headerShown: false,
       }}
     />
   </StackContacts.Navigator>
@@ -336,7 +323,8 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             },
           }}
           options={{
-            headerShown: false,
+            headerTitle: logoTitle,
+            headerRight: () => headerRight({navigation}),
             headerBackButtonMenuEnabled: false,
             headerBackVisible: false,
             headerBackTitleVisible: false,
@@ -344,6 +332,16 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             tabBarLabelStyle: {
               fontSize: 14,
             },
+            headerLeft: null,
+            headerTitleAlign: 'center',
+            headerStyle: [
+              {
+                backgroundColor: '#f2f2f2',
+                elevation: 0,
+                shadowOpacity: 0,
+              },
+              styles[headerStyle],
+            ],
             tabBarTestID: 'BottomMenu.Home',
             tabBarIcon: ({focused, color}) => (
               <Icon
