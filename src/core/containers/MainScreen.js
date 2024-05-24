@@ -293,6 +293,8 @@ const _processRow = props => {
             childrenWrapperStyle={{
               marginLeft: item.type === 'small' ? 0 : 10,
             }}
+            topAdjustment={!isApple ? -StatusBar.currentHeight : 0}
+            horizontalAdjustment={!isApple ? -3 : 0}
             placement="top"
             key={['tooltip', item.key].join('_')}
             onClose={() => setTooltipVisible()}>
