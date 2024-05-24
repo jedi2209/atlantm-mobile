@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet, StatusBar} from 'react-native';
 import WebView from 'react-native-webview';
 import {APP_REGION} from '../const';
 
@@ -634,22 +634,25 @@ const LogoLoader = ({
   ...otherProps
 }) => {
   return (
-    <WebView
-      {...otherProps}
-      source={{html: codeInject(html[APP_REGION])}}
-      scrollEnabled={false}
-      automaticallyAdjustContentInsets={false}
-      style={[
-        styleLocal.mainStyle,
-        styleLocal[mode],
-        {
-          opacity: !show ? 0 : 1,
-          visibility: !show ? 'hidden' : 'visible',
-        },
-        style,
-      ]}
-      dataDetectorTypes="all"
-    />
+    <>
+      <StatusBar hidden />
+      <WebView
+        {...otherProps}
+        source={{html: codeInject(html[APP_REGION])}}
+        scrollEnabled={false}
+        automaticallyAdjustContentInsets={false}
+        style={[
+          styleLocal.mainStyle,
+          styleLocal[mode],
+          {
+            opacity: !show ? 0 : 1,
+            visibility: !show ? 'hidden' : 'visible',
+          },
+          style,
+        ]}
+        dataDetectorTypes="all"
+      />
+    </>
   );
 };
 
