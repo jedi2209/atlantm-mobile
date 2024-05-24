@@ -847,7 +847,7 @@ export default {
         part: 'Номер, название или перечень необходимых зап.частей',
         serviceTypes: {
           tyreChange: {
-            myTyresInStorage: 'Необходимо ли подготовить шины для вас?',
+            myTyresInStorage: 'Шины хранятся в Атлант-М?',
           },
         },
       },
