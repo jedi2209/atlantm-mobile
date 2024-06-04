@@ -10,6 +10,7 @@ import {store, storePersist} from '../store';
 
 // components
 import SplashScreen from 'react-native-splash-screen';
+import SplashScreenComponent from './SplashScreenComponent';
 
 // components
 import App from './App';
@@ -98,6 +99,7 @@ const Wrapper = () => {
         onBeforeLift={_onBeforeLift}
         loading={<View style={styles.loader} flex={1} />}
         persistor={storePersist}>
+        <SplashScreenComponent />
         <App colorScheme={colorScheme} />
       </PersistGate>
     </Provider>
