@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, View, Text, Appearance} from 'react-native';
+import {StyleSheet, View, Text, Appearance, StatusBar} from 'react-native';
 import * as Sentry from '@sentry/react-native';
 import appsFlyer from 'react-native-appsflyer';
 
@@ -9,7 +9,6 @@ import {PersistGate} from 'redux-persist/es/integration/react';
 import {store, storePersist} from '../store';
 
 // components
-import SplashScreen from 'react-native-splash-screen';
 import SplashScreenComponent from './SplashScreenComponent';
 
 // components
@@ -68,9 +67,7 @@ const _wrapGlobalHandler = async (error, isFatal) => {
   _defaultHandler(error, isFatal);
 };
 
-const _onBeforeLift = () => {
-  SplashScreen.hide();
-};
+const _onBeforeLift = () => {};
 
 const Wrapper = () => {
   // Аналогично componentDidMount и componentDidUpdate:
@@ -99,6 +96,7 @@ const Wrapper = () => {
         onBeforeLift={_onBeforeLift}
         loading={<View style={styles.loader} flex={1} />}
         persistor={storePersist}>
+        <StatusBar animated={true} backgroundColor="#61dafb" hidden={true} />
         <SplashScreenComponent />
         <App colorScheme={colorScheme} />
       </PersistGate>

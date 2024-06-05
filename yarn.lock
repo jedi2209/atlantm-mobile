@@ -8702,11 +8702,6 @@ react-native-siren@0.0.5:
     apisauce "^2.1.1"
     react-native-device-info "^0.9.3"
 
-react-native-splash-screen@^3.2.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/react-native-splash-screen/-/react-native-splash-screen-3.3.0.tgz#3af71ed17afe50fee69590a45aec399d071ead02"
-  integrity sha512-rGjt6HkoSXxMqH4SQUJ1gnPQlPJV8+J47+4yhgTIan4bVvAwJhEeJH7wWt9hXSdH4+VfwTS0GTaflj1Tw83IhA==
-
 react-native-star-rating-widget@^1.7.2:
   version "1.7.3"
   resolved "https://registry.yarnpkg.com/react-native-star-rating-widget/-/react-native-star-rating-widget-1.7.3.tgz#ef60283e26ad951b37d2205618b60f835776aba6"

@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef} from 'react';
 import {SafeAreaView, StyleSheet, Animated} from 'react-native';
-import {View, HStack, Text, Pressable} from 'native-base';
-import {strings} from '../../core/lang/const';
+import {View, HStack, Text} from 'native-base';
+import TransitionView from '../../core/components/TransitionView';
 
 // helpers
 import styleConst from '../../core/style-const';
@@ -9,7 +9,7 @@ import LogoTitle from '../../core/components/LogoTitle';
 import LogoLoader from '../../core/components/LogoLoader';
 import FlagButton from '../../core/components/FlagButton';
 import PushNotifications from '../../core/components/PushNotifications';
-import {year} from '../../utils/date';
+import {strings} from '../../core/lang/const';
 
 // actions
 import {connect} from 'react-redux';
@@ -22,7 +22,7 @@ const mapDispatchToProps = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: styleConst.color.blueNew,
+    backgroundColor: styleConst.color.blue,
     justifyContent: 'center',
   },
   logoContainer: {
@@ -34,8 +34,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginBottom: 32,
   },
-  flagButton: {
+  flagButtonWrapper: {
     width: '40%',
+    marginBottom: '5%',
+  },
+  flagButtonHeight: {
     height: 70,
   },
   flagButtonText: {
@@ -43,8 +46,6 @@ const styles = StyleSheet.create({
     color: styleConst.color.blueNew,
   },
 });
-
-const currYearSubstract = year - 1991;
 
 const IntroScreenNew = ({navigation, selectRegion}) => {
   const [isLoading, setLoading] = useState(false);
@@ -57,8 +58,6 @@ const IntroScreenNew = ({navigation, selectRegion}) => {
     navigation.navigate('BottomTabNavigation', {screen: 'ContactsScreen'});
     setLoading(false);
   };
-
-  const [countLogoClick, setCountLogoClick] = useState(0);
 
   const opacityAnimation = useRef(new Animated.Value(0)).current;
 
@@ -80,12 +79,14 @@ const IntroScreenNew = ({navigation, selectRegion}) => {
     <SafeAreaView style={styles.container}>
       <View style={styles.logoContainer}>
         <Animated.View style={opacityStyle}>
-          <Pressable onPress={() => setCountLogoClick(countLogoClick + 1)}>
-            <LogoTitle theme={'white'} />
-          </Pressable>
+          <LogoTitle theme={'white'} />
         </Animated.View>
       </View>
-      <Animated.View style={[styles.buttonsContainer, opacityStyle]}>
+      <TransitionView
+        style={styles.buttonsContainer}
+        animation={'bounceInLeft'}
+        duration={500}
+        index={1}>
         <Text
           alignSelf={'center'}
           fontSize={24}
@@ -94,43 +95,47 @@ const IntroScreenNew = ({navigation, selectRegion}) => {
           color={styleConst.color.white}>
           {strings.IntroScreen.chooseRegion}
         </Text>
-        <HStack alignContent={'center'} justifyContent={'space-around'}>
-          {countLogoClick === currYearSubstract && false ? (
-            <FlagButton
-              onPress={() => onPressButton('by')}
-              country={'belarusFree'}
-              type="flag"
-            />
-          ) : (
-            <FlagButton
-              onPress={() => onPressButton('by')}
-              country={'by'}
-              type="button"
-              leftIcon={<></>}
-              _pressed={{
-                shadow: null,
-              }}
-              variant={'solid'}
-              colorScheme={'white'}
-              style={styles.flagButton}
-              styleText={styles.flagButtonText}
-            />
-          )}
+      </TransitionView>
+      <HStack alignContent={'center'} justifyContent={'space-around'}>
+        <TransitionView
+          style={[styles.flagButtonWrapper, styles.flagButtonHeight]}
+          animation={'zoomInUp'}
+          duration={300}
+          index={2}>
           <FlagButton
-            onPress={() => onPressButton('ru')}
-            country={'ru'}
+            onPress={() => onPressButton('by')}
+            country={'by'}
             type="button"
-            leftIcon={<></>}
+            leftIcon={null}
             _pressed={{
               shadow: null,
             }}
             variant={'solid'}
             colorScheme={'white'}
-            style={styles.flagButton}
+            style={styles.flagButtonHeight}
             styleText={styles.flagButtonText}
           />
-        </HStack>
-      </Animated.View>
+        </TransitionView>
+        <TransitionView
+          style={[styles.flagButtonWrapper, styles.flagButtonHeight]}
+          animation={'zoomInUp'}
+          duration={300}
+          index={3}>
+          <FlagButton
+            onPress={() => onPressButton('ru')}
+            country={'ru'}
+            type="button"
+            leftIcon={null}
+            _pressed={{
+              shadow: null,
+            }}
+            variant={'solid'}
+            colorScheme={'white'}
+            style={styles.flagButtonHeight}
+            styleText={styles.flagButtonText}
+          />
+        </TransitionView>
+      </HStack>
     </SafeAreaView>
   );
 };
