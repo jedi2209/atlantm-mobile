@@ -47,7 +47,11 @@ const SplashScreenComponent = ({region = null, isAppLoaded = false}) => {
   const isModalVisible = !isAppLoaded && !hasAnimationFinish && regionSelected;
 
   return (
-    <Modal visible={isModalVisible} animationType={'fade'} style={style.modal}>
+    <Modal
+      visible={isModalVisible}
+      animationType={'fade'}
+      style={style.modal}
+      statusBarTranslucent={true}>
       <LogoTitle theme={'white'} styleImage={style.logo} />
       <TransitionView
         style={style.row}

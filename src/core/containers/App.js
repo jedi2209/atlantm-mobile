@@ -12,6 +12,7 @@ import SpInAppUpdates, {IAUUpdateKind} from 'sp-react-native-in-app-updates';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import RNRestart from 'react-native-restart';
 import Analytics from '../../utils/amplitude-analytics';
+import TransitionView from '../components/TransitionView';
 
 // redux
 import {connect} from 'react-redux';
@@ -254,37 +255,45 @@ const App = props => {
     return (
       <PaperProvider theme={paperTheme}>
         <View
-          flex={1}
           style={styles.center}
+          flex={1}
           backgroundColor={styleConst.color.blue}>
-          <LogoTitle
-            theme={'white'}
-            containerStyle={{opacity: isError ? 0 : 1}}
-          />
-          {isUpdateDownloading ? (
-            <View style={{marginTop: 20}}>
-              <CircularProgress
-                value={downloadPercent}
-                inActiveStrokeColor={'#2ecc71'}
-                inActiveStrokeOpacity={0.2}
-                progressValueColor={styleConst.color.white}
-                valueSuffix={'%'}
-              />
-            </View>
-          ) : null}
-          {isError ? (
-            <>
-              <Animated.View style={{opacity: opacityValue}}>
-                <Text style={styles.apiErrorText}>{strings.App.APIError}</Text>
-                <Button
-                  onPress={() => RNRestart.restart()}
-                  buttonColor={styleConst.color.white}
-                  textColor={styleConst.color.blue}>
-                  {strings.Base.repeat}
-                </Button>
-              </Animated.View>
-            </>
-          ) : null}
+          <TransitionView
+            style={styles.center}
+            animation={'fadeIn'}
+            duration={1200}
+            index={1}>
+            <LogoTitle
+              theme={'white'}
+              containerStyle={{opacity: isError ? 0 : 1}}
+            />
+            {isUpdateDownloading ? (
+              <View style={{marginTop: 20}}>
+                <CircularProgress
+                  value={downloadPercent}
+                  inActiveStrokeColor={'#2ecc71'}
+                  inActiveStrokeOpacity={0.2}
+                  progressValueColor={styleConst.color.white}
+                  valueSuffix={'%'}
+                />
+              </View>
+            ) : null}
+            {isError ? (
+              <>
+                <Animated.View style={{opacity: opacityValue}}>
+                  <Text style={styles.apiErrorText}>
+                    {strings.App.APIError}
+                  </Text>
+                  <Button
+                    onPress={() => RNRestart.restart()}
+                    buttonColor={styleConst.color.white}
+                    textColor={styleConst.color.blue}>
+                    {strings.Base.repeat}
+                  </Button>
+                </Animated.View>
+              </>
+            ) : null}
+          </TransitionView>
         </View>
       </PaperProvider>
     );
