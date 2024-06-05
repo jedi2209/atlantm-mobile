@@ -350,8 +350,8 @@ const _renderActions = params => {
       </View>
     );
   } else if (infoList?.length) {
-    if (infoList?.length > 20 && !isApple) {
-      infoListChanged = infoList.slice(0, 20);
+    if (infoList?.length > 12 && !isApple) {
+      infoListChanged = infoList.slice(0, 12);
     }
     return (
       <View
