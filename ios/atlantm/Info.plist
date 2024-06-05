@@ -95,6 +95,7 @@
 		<string>vk</string>
 		<string>vk-share</string>
 		<string>vkauthorize</string>
+		<string>vkauthorize-silent</string>
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>

@@ -3,4 +3,5 @@
     <string name="facebook_app_id">XXXX</string>
     <string name="fb_login_protocol_scheme">fbXXXX</string>
     <string name="facebook_client_token">XXXX</string>
+    <integer name="com_vk_sdk_AppId">XXXX</integer>
 </resources>
