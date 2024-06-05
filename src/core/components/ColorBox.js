@@ -49,7 +49,6 @@ const ColorBox = props => {
         </TouchableHighlight>
       </View>
       <ModalView
-        statusBarTranslucent={true}
         isModalVisible={isModalVisible}
         animationIn="slideInRight"
         animationOut="slideOutLeft"

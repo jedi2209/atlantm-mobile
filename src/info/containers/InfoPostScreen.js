@@ -335,7 +335,6 @@ const InfoPostScreen = ({
   if (isFinished) {
     return (
       <ModalView
-        statusBarTranslucent
         isModalVisible={true}
         animationIn="slideInRight"
         animationOut="slideOutLeft"
