@@ -21,6 +21,7 @@ const ModalView = props => {
         isVisible={props.isModalVisible}
         onSwipeComplete={props.onHide}
         onBackButtonPress={props.onHide}
+        statusBarTranslucent={true}
         swipeDirection={['up', 'down']}
         {...props}>
         <View
