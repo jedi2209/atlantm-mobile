@@ -223,7 +223,7 @@ const App = props => {
     if (Platform.OS === 'ios') {
       //Prompt for push on iOS
       OneSignal.Notifications.requestPermission().then(res => {
-        if (OneSignal.Notifications.hasPermission()) {
+        if (PushNotifications.deviceState()) {
           OneSignal.User.pushSubscription.optIn();
         } else {
           PushNotifications.unsubscribeFromTopic(['actionsRegion', 'actions']);
