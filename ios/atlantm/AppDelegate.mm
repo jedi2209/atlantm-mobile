@@ -12,6 +12,7 @@
 #import "VKSdk.h"
 #endif
 
+#import <React/RCTLinkingManager.h>
 #import <React/RCTBundleURLProvider.h>
 
 @implementation AppDelegate
@@ -47,28 +48,22 @@
 #endif
 }
 
-//iOS 9 workflow
-- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<NSString *,id> *)options {
-   [VKSdk processOpenURL:url fromApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]];
-   return YES;
-}
-
-//iOS 8 and lower
--(BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation
-{
-   [VKSdk processOpenURL:url fromApplication:sourceApplication];
-   return YES;
-}
-
 - (BOOL)application:(UIApplication *)app
             openURL:(NSURL *)url
             options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
-  return [
-    [FBSDKApplicationDelegate sharedInstance]application:app
-    openURL:url
-    options:options
-  ];
+  if ([[FBSDKApplicationDelegate sharedInstance] application:app openURL:url options:options]) {
+    return YES;
+  }
+  
+  if ([VKSdk processOpenURL:url fromApplication:options[UIApplicationOpenURLOptionsSourceApplicationKey]]) {
+    return YES;
+  }
+  
+  if ([RCTLinkingManager application:app openURL:url options:options]) {
+    return YES;
+  }
+    return NO;
 }
 
 @end
