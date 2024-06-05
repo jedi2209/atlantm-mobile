@@ -157,8 +157,9 @@ export default {
     OneSignal.User.addEmail(value);
   },
 
-  deviceState() {
-    return OneSignal.Notifications.hasPermission();
+  async deviceState() {
+    const deviceState = await OneSignal.Notifications.getPermissionAsync();
+    return deviceState;
   },
 
   async checkPermissionIOS() {
