@@ -3,7 +3,8 @@
   "version": "10.2.0",
   "private": true,
   "scripts": {
-    "build": "yarn ios-version; yarn android-version;",
+    "build": "yarn ios-build; yarn android-build;",
+    "build:ci": "yarn ios-version; yarn android-version;",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "preinstall": "yarn config set ignore-engines true",
     "postinstall": "bash ./postinstall.sh",
