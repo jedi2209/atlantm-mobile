@@ -1,0 +1,12 @@
+diff --git a/node_modules/react-native-walkthrough-tooltip/src/tooltip.js b/node_modules/react-native-walkthrough-tooltip/src/tooltip.js
+index 3098692..7b0ca25 100644
+--- a/node_modules/react-native-walkthrough-tooltip/src/tooltip.js
++++ b/node_modules/react-native-walkthrough-tooltip/src/tooltip.js
+@@ -473,6 +473,7 @@ class Tooltip extends Component {
+             transparent
+             visible={showTooltip}
+             onRequestClose={this.props.onClose}
++            statusBarTranslucent={true}
+             supportedOrientations={this.props.supportedOrientations}
+           >
+             {this.renderContentForTooltip()}
