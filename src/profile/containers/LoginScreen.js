@@ -513,9 +513,6 @@ const LoginScreen = props => {
           justifyContent={'space-between'}
           position={'absolute'}
           w={'100%'}>
-          {/* {res.map(el => {
-            return el;
-          })} */}
           <View
             key={'backgroundInputCodeMain'}
             style={{
@@ -581,10 +578,6 @@ const LoginScreen = props => {
     <View testID="LoginScreen.Wrapper" style={{flex: 1}}>
       <ImageBackground
         resizeMode="cover"
-        // source={
-        //   {uri: get(props.dealerSelected, 'img.thumb') + '1000x1000'} ||
-        //   getBackground(currHours)
-        // }
         source={background}
         style={styles.imageBackground}
       />

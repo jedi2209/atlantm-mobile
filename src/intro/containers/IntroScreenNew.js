@@ -34,24 +34,19 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     marginBottom: 32,
   },
+  flagButton: {
+    width: '40%',
+    height: 70,
+  },
+  flagButtonText: {
+    fontSize: 20,
+    color: styleConst.color.blueNew,
+  },
 });
-
-const dealersList = {
-  ru: 'listRussia',
-  by: 'listBelarussia',
-  ua: 'listUkraine',
-};
-
-const mapStateToProps = ({dealer}) => {
-  return {
-    dealer,
-    region: dealer.region,
-  };
-};
 
 const currYearSubstract = year - 1991;
 
-const IntroScreenNew = ({navigation, dealer, selectRegion, region}) => {
+const IntroScreenNew = ({navigation, selectRegion}) => {
   const [isLoading, setLoading] = useState(false);
 
   const onPressButton = async regionSelected => {
@@ -117,14 +112,8 @@ const IntroScreenNew = ({navigation, dealer, selectRegion, region}) => {
               }}
               variant={'solid'}
               colorScheme={'white'}
-              style={{
-                width: '40%',
-                height: 70,
-              }}
-              styleText={{
-                fontSize: 20,
-                color: styleConst.color.blueNew,
-              }}
+              style={styles.flagButton}
+              styleText={styles.flagButtonText}
             />
           )}
           <FlagButton
@@ -137,14 +126,8 @@ const IntroScreenNew = ({navigation, dealer, selectRegion, region}) => {
             }}
             variant={'solid'}
             colorScheme={'white'}
-            style={{
-              width: '40%',
-              height: 70,
-            }}
-            styleText={{
-              fontSize: 20,
-              color: styleConst.color.blueNew,
-            }}
+            style={styles.flagButton}
+            styleText={styles.flagButtonText}
           />
         </HStack>
       </Animated.View>
@@ -152,4 +135,4 @@ const IntroScreenNew = ({navigation, dealer, selectRegion, region}) => {
   );
 };
 // "outline" | "ghost" | "solid" | "subtle" | "link" | "unstyled"
-export default connect(mapStateToProps, mapDispatchToProps)(IntroScreenNew);
+export default connect(null, mapDispatchToProps)(IntroScreenNew);
