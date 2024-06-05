@@ -29,7 +29,6 @@ export default {
   },
 
   async signIn(callbackFn) {
-    VKLogin.initialize(VK_APP_ID);
     try {
       const userData = await this._GetUserDataVK();
       if (!userData) {
