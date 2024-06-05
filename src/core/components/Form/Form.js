@@ -6,7 +6,6 @@ import {
   View,
   ScrollView,
   Platform,
-  StatusBar,
   Pressable,
 } from 'react-native';
 
@@ -1505,9 +1504,6 @@ class Form extends Component {
     const res = (
       <_Wrapper {...this.props}>
         <KeyboardAvoidingView {...this.props.keyboardAvoidingViewProps}>
-          <StatusBar
-            barStyle={this.props.barStyle ? this.props.barStyle : 'default'}
-          />
           <View style={[{paddingBottom: 20}, this.props.contentContainerStyle]}>
             {this.props.fields.groups ? (
               this.props.fields.groups.map((group, num) => {

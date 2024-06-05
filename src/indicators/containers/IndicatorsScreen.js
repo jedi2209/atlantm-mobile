@@ -1,17 +1,6 @@
 import React, {Component} from 'react';
 import {findNodeHandle, Image, Dimensions} from 'react-native';
-import {
-  ScrollView,
-  Container,
-  Stack,
-  Box,
-  Popover,
-  Button,
-  View,
-  Text,
-  IconButton,
-  StatusBar,
-} from 'native-base';
+import {ScrollView, Popover, View, Text, IconButton} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
@@ -90,68 +79,65 @@ class IndicatorsScreen extends Component {
     console.info('== IndicatorsScreen ==');
 
     return (
-      <>
-        <StatusBar hidden={false} />
-        <ScrollView style={{backgroundColor: styleConst.color.white}}>
-          <Text style={styleConst.text.bigHead}>
-            {strings.Menu.main.indicators}
-          </Text>
-          <View
-            style={{
-              flex: 1,
-              flexWrap: 'wrap',
-              flexDirection: 'row',
-              marginLeft: 10,
-              justifyContent: 'space-between',
-            }}>
-            {items.map(indicator => {
-              return (
-                <Popover
-                  key={'popover-indicator-' + indicator.id}
-                  trigger={triggerProps => {
-                    return (
-                      <IconButton
-                        {...triggerProps}
-                        style={{
-                          marginBottom: 10,
-                          backgroundColor: triggerProps['aria-expanded']
-                            ? styleConst.color.systemBlue
-                            : styleConst.color.white,
-                        }}
-                        icon={
-                          <Image
-                            resizeMode="contain"
-                            style={{
-                              width: screenWidth / 5,
-                              height: screenWidth / 5,
-                            }}
-                            source={{
-                              uri: triggerProps['aria-expanded']
-                                ? indicator.img.white
-                                : indicator.img.blue,
-                            }}
-                          />
-                        }
-                      />
-                    );
-                  }}>
-                  <Popover.Content
-                    accessibilityLabel={get(indicator, 'name', 'Индикатор')}>
-                    <Popover.Arrow />
-                    <Popover.CloseButton />
-                    <Popover.Header backgroundColor={styleConst.color.white}>
-                      {indicator.name}
-                    </Popover.Header>
-                    <Popover.Body backgroundColor={styleConst.color.white}>
-                      {indicator.description}
-                    </Popover.Body>
-                  </Popover.Content>
-                </Popover>
-              );
-            })}
-          </View>
-        </ScrollView>
-      </>
+      <ScrollView style={{backgroundColor: styleConst.color.white}}>
+        <Text style={styleConst.text.bigHead}>
+          {strings.Menu.main.indicators}
+        </Text>
+        <View
+          style={{
+            flex: 1,
+            flexWrap: 'wrap',
+            flexDirection: 'row',
+            marginLeft: 10,
+            justifyContent: 'space-between',
+          }}>
+          {items.map(indicator => {
+            return (
+              <Popover
+                key={'popover-indicator-' + indicator.id}
+                trigger={triggerProps => {
+                  return (
+                    <IconButton
+                      {...triggerProps}
+                      style={{
+                        marginBottom: 10,
+                        backgroundColor: triggerProps['aria-expanded']
+                          ? styleConst.color.systemBlue
+                          : styleConst.color.white,
+                      }}
+                      icon={
+                        <Image
+                          resizeMode="contain"
+                          style={{
+                            width: screenWidth / 5,
+                            height: screenWidth / 5,
+                          }}
+                          source={{
+                            uri: triggerProps['aria-expanded']
+                              ? indicator.img.white
+                              : indicator.img.blue,
+                          }}
+                        />
+                      }
+                    />
+                  );
+                }}>
+                <Popover.Content
+                  accessibilityLabel={get(indicator, 'name', 'Индикатор')}>
+                  <Popover.Arrow />
+                  <Popover.CloseButton />
+                  <Popover.Header backgroundColor={styleConst.color.white}>
+                    {indicator.name}
+                  </Popover.Header>
+                  <Popover.Body backgroundColor={styleConst.color.white}>
+                    {indicator.description}
+                  </Popover.Body>
+                </Popover.Content>
+              </Popover>
+            );
+          })}
+        </View>
+      </ScrollView>
     );
   }
 }

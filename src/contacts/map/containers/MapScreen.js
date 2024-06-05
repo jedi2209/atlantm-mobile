@@ -6,7 +6,6 @@ import {
   StyleSheet,
   Dimensions,
   SafeAreaView,
-  StatusBar,
 } from 'react-native';
 
 import {Icon, Button, Text, View} from 'native-base';
@@ -364,7 +363,6 @@ class MapScreen extends Component {
               : styleConst.ui.footerHeightIphone,
           },
         ]}>
-        <StatusBar barStyle="default" />
         <View
           style={styles.mapContainer}
           justifyContent={'flex-end'}

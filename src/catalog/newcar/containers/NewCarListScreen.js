@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, StatusBar} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 
 // redux
 import {connect} from 'react-redux';
@@ -100,7 +100,6 @@ const NewCarListScreen = ({
 
   return (
     <View style={styles.content} testID="NewCarsListSreen.Wrapper">
-      <StatusBar hidden />
       {loading ? (
         <LogoLoader />
       ) : (

@@ -5,7 +5,6 @@ import {
   Platform,
   StyleSheet,
   ActivityIndicator,
-  StatusBar,
   useColorScheme,
 } from 'react-native';
 import {connect} from 'react-redux';
@@ -293,7 +292,7 @@ const _processRow = props => {
             childrenWrapperStyle={{
               marginLeft: item.type === 'small' ? 0 : 10,
             }}
-            topAdjustment={!isApple ? -StatusBar.currentHeight : 0}
+            topAdjustment={0}
             horizontalAdjustment={!isApple ? -3 : 0}
             placement="top"
             key={['tooltip', item.key].join('_')}
@@ -486,7 +485,6 @@ const MainScreen = props => {
           <RefreshControl refreshing={isLoading} onRefresh={_onRefresh} />
         )
       }>
-      <StatusBar hidden />
       <VStack paddingBottom={styleConst.menu.paddingBottom}>
         {mainScreenSettings.map(el => {
           i++;

@@ -1,12 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState} from 'react';
-import {
-  View,
-  Text,
-  TouchableHighlight,
-  StyleSheet,
-  StatusBar,
-} from 'react-native';
+import {View, Text, TouchableHighlight, StyleSheet} from 'react-native';
 
 // helpers
 import styleConst from '../style-const';
@@ -38,7 +32,6 @@ const ColorBox = props => {
   return (
     <>
       <View style={[props?.containerStyle]}>
-        <StatusBar hidden />
         <TouchableHighlight
           onPress={() => setModalVisible(true)}
           style={[props?.touchableStyle]}
@@ -56,7 +49,7 @@ const ColorBox = props => {
         </TouchableHighlight>
       </View>
       <ModalView
-        statusBarTranslucent
+        statusBarTranslucent={true}
         isModalVisible={isModalVisible}
         animationIn="slideInRight"
         animationOut="slideOutLeft"
