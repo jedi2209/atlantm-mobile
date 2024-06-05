@@ -115,20 +115,27 @@ const styles = StyleSheet.create({
     paddingTop: 2,
     paddingBottom: 1,
   },
+  fieldRequiredDefault: {
+    borderLeftColor: styleConst.color.red,
+    borderLeftWidth: 0.5,
+  },
   fieldRequiredFalse: {
-    borderLeftColor: 'red',
+    borderLeftColor: styleConst.color.red,
     borderLeftWidth: 0.5,
   },
   fieldRequiredTrue: {
-    borderLeftColor: 'green',
+    borderLeftColor: styleConst.color.green,
     borderLeftWidth: 0.5,
   },
   labelRequiredFalse: {
-    color: 'red',
+    color: styleConst.color.red,
     textDecorationStyle: 'solid',
   },
   labelRequiredTrue: {
-    color: 'green',
+    color: styleConst.color.green,
+  },
+  labelRequiredDefault: {
+    color: styleConst.color.black,
   },
   divider: {
     borderColor: '#d8d8d8',
@@ -1100,14 +1107,18 @@ class Form extends Component {
             requiredStyle = styles.fieldRequiredFalse;
           }
         } else {
-          if (
-            this.state[name] &&
-            typeof this.state[name] !== 'undefined' &&
-            this.state[name].length
-          ) {
-            requiredStyle = styles.fieldRequiredTrue;
+          if (!this.state[name] || !this.state[name]?.length) {
+            requiredStyle = styles.fieldRequiredDefault;
           } else {
-            requiredStyle = styles.fieldRequiredFalse;
+            if (
+              this.state[name] &&
+              typeof this.state[name] !== 'undefined' &&
+              this.state[name].length
+            ) {
+              requiredStyle = styles.fieldRequiredTrue;
+            } else {
+              requiredStyle = styles.fieldRequiredFalse;
+            }
           }
         }
       }
