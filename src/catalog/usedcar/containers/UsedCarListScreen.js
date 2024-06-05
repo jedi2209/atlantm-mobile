@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, StatusBar, ActivityIndicator} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Icon, Fab} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -101,7 +101,6 @@ const UsedCarListScreen = ({
 
   return (
     <View style={styles.content} testID="UserCarListSreen.Wrapper">
-      <StatusBar hidden />
       {loading ? (
         <LogoLoader />
       ) : (

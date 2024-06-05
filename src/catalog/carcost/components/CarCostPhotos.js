@@ -1,11 +1,5 @@
 import React, {Component} from 'react';
-import {
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  Dimensions,
-  StatusBar,
-} from 'react-native';
+import {StyleSheet, Image, TouchableOpacity, Dimensions} from 'react-native';
 
 // components
 import {HStack, VStack, Icon, View} from 'native-base';
@@ -176,7 +170,6 @@ export default class CarCostPhotos extends Component {
   render() {
     return (
       <View style={styles.container} onLayout={this.onLayout}>
-        <StatusBar hidden />
         {[1, 2, 3, 4, 5, 6].map(photoIndex => {
           return (
             <ActionSheet

@@ -1,13 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState} from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  View,
-  Text,
-  ScrollView,
-  StatusBar,
-} from 'react-native';
+import {SafeAreaView, StyleSheet, View, Text, ScrollView} from 'react-native';
 import {List} from 'react-native-paper';
 import Analytics from '../../../utils/amplitude-analytics';
 
@@ -259,7 +252,6 @@ const CarHistoryScreen = ({
   if (isEmpty(carHistory) || !carHistory.items) {
     return (
       <SafeAreaView style={styles.safearea}>
-        <StatusBar barStyle="dark-content" />
         <Text style={styles.emptyText}>
           {strings.CarHistoryScreen.empty.text}
         </Text>
