@@ -3,7 +3,38 @@ import {
   NOTIFICATIONS__REQUEST,
   NOTIFICATIONS__SUCCESS,
   NOTIFICATIONS__FAIL,
+  NOTIFICATIONS__LOCAL__REQUEST,
+  NOTIFICATIONS__LOCAL__ADD,
+  NOTIFICATIONS__LOCAL__REMOVE,
 } from './actionTypes';
+
+export const actionAddNotification = props => {
+  return async dispatch => {
+    dispatch({
+      type: NOTIFICATIONS__LOCAL__REQUEST,
+      payload: props,
+    });
+
+    return dispatch({
+      type: NOTIFICATIONS__LOCAL__ADD,
+      payload: {data: props},
+    });
+  };
+};
+
+export const actionRemoveNotification = id => {
+  return async dispatch => {
+    dispatch({
+      type: NOTIFICATIONS__LOCAL__REQUEST,
+      payload: id,
+    });
+
+    return dispatch({
+      type: NOTIFICATIONS__LOCAL__REMOVE,
+      payload: id,
+    });
+  };
+};
 
 export const actionGetNotifications = props => {
   return async dispatch => {

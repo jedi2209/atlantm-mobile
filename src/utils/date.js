@@ -54,6 +54,8 @@ export const addDays = daysCol =>
 
 export const getTimestampInSeconds = () => parseInt(moment().unix(), 10);
 
+export const getTimestamp = () => moment().unix();
+
 export const getTimestampFromDate = date =>
   parseInt(moment(date).format('X'), 10);
 

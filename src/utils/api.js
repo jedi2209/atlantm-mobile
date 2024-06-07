@@ -1170,7 +1170,12 @@ export default {
         body ? body : '',
       );
     }
-    if (method === 'delete' || method === 'patch') {
+    if (
+      method === 'delete' ||
+      method === 'patch' ||
+      method === 'put' ||
+      method === 'delete'
+    ) {
       const res = await fetch(url, {
         method: method,
         headers: requestParams?.headers,
