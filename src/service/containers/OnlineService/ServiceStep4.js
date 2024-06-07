@@ -15,15 +15,12 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import EvilIcons from 'react-native-vector-icons/EvilIcons';
 
-import {MainScreenButton} from '../../../core/components/MainScreenButtons';
-
 import Form from '../../../core/components/Form/Form';
 import {
   dayMonthYear,
-  humanDate,
   format,
-  getHumanTime,
   humanDateTime,
+  getTimestamp,
   getDateFromTimestamp,
 } from '../../../utils/date';
 import UserData from '../../../utils/user';
@@ -33,6 +30,7 @@ import Analytics from '../../../utils/amplitude-analytics';
 import {connect} from 'react-redux';
 import {orderService} from '../../actions';
 import {localUserDataUpdate} from '../../../profile/actions';
+import {actionAddNotification} from '../../../settings/actions';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../../actionTypes';
 import {strings} from '../../../core/lang/const';
 
@@ -75,6 +73,7 @@ const mapStateToProps = ({dealer, service, nav}) => {
 
 const mapDispatchToProps = {
   orderService,
+  actionAddNotification,
 };
 
 const CarIcon = props => {
@@ -260,6 +259,21 @@ const ServiceStep4 = props => {
           '\r\n' + order.error.message,
         );
       } else {
+        props.actionAddNotification({
+          id: get(order, 'data.id'),
+          title: 'Вы записаны в ' + listDealers[orderData.DEALER].name,
+          text:
+            'Ждём вас ' +
+            dateTimeText +
+            '.\r\nНомер вашего бронирования: ' +
+            get(order, 'data.id'),
+          type: {
+            id: 2,
+          },
+          date: {
+            timestamp: getTimestamp(),
+          },
+        });
         Analytics.logEvent('order', 'OnlineService');
         Alert.alert(
           strings.Notifications.success.title,
@@ -508,127 +522,6 @@ const ServiceStep4 = props => {
 
   return (
     <ScrollView>
-      {/* <ScrollView
-        mx={1}
-        pb={5}
-        showsHorizontalScrollIndicator={false}
-        bounces={false}
-        horizontal={true}>
-      <HStack space={2} ml={4} my={1}>
-        <MainScreenButton
-          key={['block', 'summary', 'dealer'].join('_')}
-          title={listDealers[orderData.DEALER].name}
-          background={{
-            uri: get(listDealers[orderData.DEALER], 'img.0'),
-          }}
-          size={'2/3'}
-          type={'bottom'}
-        />
-        {get(orderData, 'DATETIME.time') || get(orderData, 'DATETIME') ? (
-          <MainScreenButton
-            key={['block', 'summary', 'date'].join('_')}
-            title={
-              get(orderData, 'DATETIME.time')
-                ? humanDate(
-                    getDateFromTimestamp(get(orderData, 'DATETIME.time')),
-                  )
-                : dayMonthYear(get(orderData, 'DATETIME'))
-            }
-            background={
-              <Icon
-                name="calendar-check-outline"
-                as={MaterialCommunityIcons}
-                size={12}
-                color={styleConst.color.blue}
-                style={{
-                  opacity: 0.8,
-                  alignSelf: 'center',
-                }}
-              />
-            }
-            size={'small'}
-            type={'bottom'}
-          />
-        ) : null}
-      </HStack>
-      <HStack space={2} ml={4} my={1}>
-        <MainScreenButton
-          key={['block', 'summary', 'car'].join('_')}
-          title={[
-            orderData.CARBRAND,
-            orderData.CARMODEL,
-            orderData.CARNUMBER
-              ? '\r\nгос. номер ' + orderData.CARNUMBER
-              : null,
-          ].join(' ')}
-          background={
-            <Icon
-              name="car-outline"
-              as={MaterialCommunityIcons}
-              size={12}
-              color={styleConst.color.blue}
-              style={{
-                opacity: 0.8,
-                alignSelf: 'center',
-              }}
-            />
-          }
-          size={'small'}
-          type={'bottom'}
-        />
-        <MainScreenButton
-          key={['block', 'summary', 'works'].join('_')}
-          title={[
-            strings.ServiceScreen.works[orderData.SERVICE],
-            // strings.ServiceScreen.worksService[orderData.SERVICE],
-          ].join('\r\n')}
-          titleStyle={{
-            lineHeight: 16.5,
-          }}
-          background={getServiceImage(get(orderData, 'SERVICE'))}
-          // <CarIcon
-          //   type={get(orderData, 'SERVICE')}
-          //   size={12}
-          //   color={styleConst.color.blue}
-          //   style={{
-          //     opacity: 0.8,
-          //     alignSelf: 'center',
-          //   }}
-          // />
-          size={get(orderData, 'SERVICESecondFull.total') ? 'small' : '2/3'}
-          type={'bottom'}
-        />
-        {get(orderData, 'SERVICESecondFull.total') ? (
-          <MainScreenButton
-            key={['block', 'summary', 'price'].join('_')}
-            title={[
-              orderData.SERVICESecondFull.total.summ.value,
-              orderData.SERVICESecondFull.total.summ.currency,
-            ].join(' ')}
-            titleStyle={{
-              lineHeight: 20,
-              fontSize: 18,
-              paddingTop: 8,
-            }}
-            background={
-              <Text
-                adjustsFontSizeToFit={true}
-                fontWeight={600}
-                fontSize={18}
-                style={{
-                  marginTop: 20,
-                  alignContent: 'center',
-                  alignSelf: 'center',
-                }}>
-                {getHumanTime(get(orderData, 'SERVICESecondFull.total.time'))}
-              </Text>
-            }
-            size={'small'}
-            type={'bottom'}
-          />
-        ) : null}
-      </HStack>
-      </ScrollView> */}
       <Form
         contentContainerStyle={{
           paddingHorizontal: 14,

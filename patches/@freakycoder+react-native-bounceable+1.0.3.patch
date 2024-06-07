@@ -1,0 +1,31 @@
+diff --git a/node_modules/@freakycoder/react-native-bounceable/build/dist/RNBounceable.d.ts b/node_modules/@freakycoder/react-native-bounceable/build/dist/RNBounceable.d.ts
+index 34cdc79..ff818b5 100644
+--- a/node_modules/@freakycoder/react-native-bounceable/build/dist/RNBounceable.d.ts
++++ b/node_modules/@freakycoder/react-native-bounceable/build/dist/RNBounceable.d.ts
+@@ -3,6 +3,7 @@ import { ViewStyle, StyleProp, PressableProps } from "react-native";
+ declare type CustomStyleProp = StyleProp<ViewStyle> | Array<StyleProp<ViewStyle>>;
+ export interface IRNBounceableProps extends PressableProps {
+     onPress?: () => void;
++    onLongPress?: () => void;
+     bounceEffectIn?: number;
+     bounceEffectOut?: number;
+     bounceVelocityIn?: number;
+diff --git a/node_modules/@freakycoder/react-native-bounceable/build/dist/RNBounceable.js b/node_modules/@freakycoder/react-native-bounceable/build/dist/RNBounceable.js
+index f81b920..c550a33 100644
+--- a/node_modules/@freakycoder/react-native-bounceable/build/dist/RNBounceable.js
++++ b/node_modules/@freakycoder/react-native-bounceable/build/dist/RNBounceable.js
+@@ -18,12 +18,12 @@ export default class RNBounceable extends React.Component {
+         }).start();
+     };
+     render() {
+-        const { bounceEffectIn = 0.93, bounceEffectOut = 1, bounceVelocityIn = 0.1, bounceVelocityOut = 0.4, bouncinessIn = 0, bouncinessOut = 0, children, style, onPress, } = this.props;
++        const { bounceEffectIn = 0.93, bounceEffectOut = 1, bounceVelocityIn = 0.1, bounceVelocityOut = 0.4, bouncinessIn = 0, bouncinessOut = 0, children, style, onPress, onLongPress, } = this.props;
+         return (<AnimatedPressable {...this.props} style={[{ transform: [{ scale: this.state.bounceValue }] }, style]} onPressIn={() => {
+                 this.bounceAnimation(bounceEffectIn, bounceVelocityIn, bouncinessIn);
+             }} onPressOut={() => {
+                 this.bounceAnimation(bounceEffectOut, bounceVelocityOut, bouncinessOut);
+-            }} onPress={onPress}>
++            }} onPress={onPress} onLongPress={onLongPress}>
+         {children}
+       </AnimatedPressable>);
+     }

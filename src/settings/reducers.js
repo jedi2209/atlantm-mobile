@@ -2,15 +2,17 @@ import {combineReducers} from 'redux';
 import {REHYDRATE} from 'redux-persist/es/constants';
 import {get} from 'lodash';
 import {
-  NOTIFICATIONS__REQUEST,
   NOTIFICATIONS__SUCCESS,
   NOTIFICATIONS__FAIL,
+  NOTIFICATIONS__LOCAL__ADD,
+  NOTIFICATIONS__LOCAL__FAIL,
+  NOTIFICATIONS__LOCAL__REMOVE,
 } from './actionTypes';
 
 function notificationsData(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
-      return get(action.payload, 'settings.notifications.data', []);
+      return get(action.payload, 'settings.notifications.remote.data', []);
     case NOTIFICATIONS__SUCCESS:
       return action.payload?.data;
     case NOTIFICATIONS__FAIL:
@@ -20,8 +22,29 @@ function notificationsData(state = [], action) {
   }
 }
 
+function notificationsDataLocal(state = [], action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'settings.notifications.local.data', []);
+    case NOTIFICATIONS__LOCAL__ADD:
+      return [...state, action.payload?.data];
+    case NOTIFICATIONS__LOCAL__REMOVE:
+      const newState = state.filter(val => val?.id !== action.payload);
+      return newState;
+    case NOTIFICATIONS__LOCAL__FAIL:
+      return [];
+    default:
+      return state;
+  }
+}
+
 export default combineReducers({
   notifications: combineReducers({
-    data: notificationsData,
+    remote: combineReducers({
+      data: notificationsData,
+    }),
+    local: combineReducers({
+      data: notificationsDataLocal,
+    }),
   }),
 });

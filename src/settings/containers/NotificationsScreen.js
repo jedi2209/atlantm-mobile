@@ -7,7 +7,7 @@ import * as NavigationService from '../../navigation/NavigationService';
 
 // redux
 import {connect} from 'react-redux';
-import {actionGetNotifications} from '../actions';
+import {actionGetNotifications, actionRemoveNotification} from '../actions';
 
 // components
 import TransitionView from '../../core/components/TransitionView';
@@ -24,13 +24,17 @@ import {getDateFromTimestamp, dayMonthYearTime2} from '../../utils/date';
 const mapStateToProps = ({settings, nav, profile}) => {
   return {
     nav,
-    notifications: get(settings, 'notifications.data', []),
+    notifications: {
+      remote: get(settings, 'notifications.remote.data', []),
+      local: get(settings, 'notifications.local.data', []),
+    },
     login: profile.login,
   };
 };
 
 const mapDispatchToProps = {
   actionGetNotifications,
+  actionRemoveNotification,
 };
 
 const types = {
@@ -63,6 +67,10 @@ const isValidUrl = str => {
 const parseURL = async item => {
   const {url, type} = item;
 
+  if (!url) {
+    return;
+  }
+
   const supported = await Linking.canOpenURL(url);
 
   if (isValidUrl(url) && supported) {
@@ -85,6 +93,7 @@ const parseURL = async item => {
 const NotificationsScreen = props => {
   const {notifications, login: userData, navigation} = props;
   const [isLoading, setLoading] = useState(false);
+  const [notificationsAll, setNotificationsAll] = useState([]);
 
   useEffect(() => {
     Analytics.logEvent('screen', 'notifications');
@@ -92,11 +101,16 @@ const NotificationsScreen = props => {
     props
       .actionGetNotifications({userID: get(userData, 'SAP.ID', null)})
       .then(() => {
+        let notificationsTmp = [];
+        [...notifications.remote, ...notifications.local].forEach(el => {
+          notificationsTmp.push(el);
+        });
+        setNotificationsAll(notificationsTmp);
         setLoading(false);
-        if (get(notifications, 'length')) {
+        if (get(notificationsTmp, 'length')) {
           setTimeout(() => {
             navigation.setParams({
-              notificationsCount: get(notifications, 'length'),
+              notificationsCount: get(notificationsTmp, 'length'),
             });
           }, 500);
         }
@@ -113,7 +127,7 @@ const NotificationsScreen = props => {
     );
   }
 
-  if (!get(notifications, 'length')) {
+  if (!get(notificationsAll, 'length')) {
     return (
       <View
         style={{
@@ -129,14 +143,19 @@ const NotificationsScreen = props => {
   return (
     <ScrollView style={styleConst.safearea.default}>
       <View pb={10}>
-        {notifications.map((item, index) => {
+        {notificationsAll.map((item, index) => {
           return (
             <TransitionView
               animation={styleConst.animation.zoomIn}
               duration={250}
               key={'notification-' + item.id}
               index={index}>
-              <RNBounceable onPress={() => parseURL(item)}>
+              <RNBounceable
+                onPress={() => parseURL(item)}
+                onLongPress={() => {
+                  props.actionRemoveNotification(item.id);
+                  setNotificationsAll([]);
+                }}>
                 <NotificationItem
                   date={dayMonthYearTime2(
                     getDateFromTimestamp(item.date.timestamp),
