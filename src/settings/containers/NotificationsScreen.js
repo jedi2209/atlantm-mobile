@@ -49,6 +49,7 @@ const imageBackgrounds = {
   2: require('../../../assets/notifications/palette2.png'),
   3: require('../../../assets/notifications/palette3.png'),
   4: require('../../../assets/notifications/palette4.png'),
+  5: require('../../../assets/notifications/palette5.png'),
 };
 
 const isValidUrl = str => {

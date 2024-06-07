@@ -268,7 +268,7 @@ const ServiceStep4 = props => {
             '.\r\nНомер вашего бронирования: ' +
             get(order, 'data.id'),
           type: {
-            id: 2,
+            id: 5,
           },
           date: {
             timestamp: getTimestamp(),
