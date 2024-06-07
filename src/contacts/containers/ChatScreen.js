@@ -24,6 +24,7 @@ import md5 from '../../utils/md5';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
 import {JIVO_CHAT} from '../../core/const';
+import DeviceInfo from 'react-native-device-info';
 
 const deviceHeight = Dimensions.get('window').height;
 const isAndroid = Platform.OS === 'android';
@@ -69,6 +70,7 @@ const ChatScreen = ({
   const [userToken, setUserToken] = useState('');
   const [senderID, setSenderID] = useState(null);
   const [cookies, setCookies] = useState('');
+  const [userDevice, setUserDevice] = useState(null);
 
   const userTmp = {
     id: session,
@@ -87,7 +89,9 @@ const ChatScreen = ({
     let userID = get(userTmp, 'id');
     const oneSignalData = async () => {
       if (userID === null || userID === undefined) {
-        let senderIDNew = getUserID(PushNotifications.getUserID());
+        const userDeviceTmp = await PushNotifications.getUserID();
+        let senderIDNew = getUserID(userDeviceTmp);
+        setUserDevice(userDeviceTmp);
         setSenderID(senderIDNew);
         actionChatIDSave(senderIDNew);
         makeUserToken(senderIDNew);
@@ -115,13 +119,13 @@ const ChatScreen = ({
         userID,
         ebdk,
         userToken,
-        userDevice: PushNotifications.getUserID(),
+        userDevice,
         utm_source: 'mobile',
         utm_campaign: 'chat',
         pageName,
       });
     setData({uri: urlJivo});
-  }, [profile, route, userToken]);
+  }, [profile, route, userToken, userDevice]);
 
   const loadCookies = async () => {
     const cookie = await get(store.getState(), 'contacts.chat.cookies');
@@ -166,7 +170,10 @@ const ChatScreen = ({
     return;
   };
 
-  const makeUserToken = userID => {
+  const makeUserToken = async userID => {
+    if (!userID) {
+      userID = await DeviceInfo.syncUniqueId();
+    }
     sign(
       {
         id: userID,
