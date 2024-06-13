@@ -80,7 +80,7 @@ const ServiceStep3 = props => {
               dealer: {
                 id: get(orderData, 'DEALER'),
               },
-              maxTimeAttemps: 999,
+              maxTimeAttemps: 3,
               reqiredTime: get(orderData, 'SERVICESecondFull.total.time', null),
             },
           },
