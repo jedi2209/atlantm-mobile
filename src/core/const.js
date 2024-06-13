@@ -155,7 +155,7 @@ export const STORE_LINK = {
   android: `market://details?id=${GooglePackageName}`,
 };
 
-export const API_MAIN_URL = 'https://api.atlantm.com/v1';
+export const API_MAIN_URL = 'https://api.atlantm.com/v2';
 
 export const SENTRY_DSN = sentryDSN;
 
