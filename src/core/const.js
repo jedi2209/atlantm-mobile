@@ -56,7 +56,7 @@ switch (bundle) {
     appMetricaKey = 'XXXX';
     fbAppID = 'XXXX';
     jivoChat = {
-      chatPage: 'https://api.atlantm.com/v1/jivo/widget/XXXX/',
+      chatPage: 'https://XXXX/v1/jivo/widget/XXXX/',
       chatID: 'XXXX',
       secret: 'XXXX$C&F)J@NcRfUj',
       socket: 'wss://livechat.atlantm.com/v1',
@@ -90,7 +90,7 @@ switch (bundle) {
     amplitudeKey = 'XXXX';
     fbAppID = 'XXXX';
     jivoChat = {
-      chatPage: 'https://api.atlantm.com/v1/jivo/widget/XXXX/',
+      chatPage: 'https://XXXX/v1/jivo/widget/XXXX/',
       chatID: 'XXXX',
       secret: 'XXXX$C&F)J@NcRfUj',
       socket: 'wss://livechat.atlantm.com/v1',
