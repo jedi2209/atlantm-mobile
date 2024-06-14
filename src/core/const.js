@@ -56,7 +56,7 @@ switch (bundle) {
     appMetricaKey = '30b6e21f-4f57-4ec6-8349-125026a080c6';
     fbAppID = '423573815015675';
     jivoChat = {
-      chatPage: 'https://api.atlantm.com/v1/jivo/widget/ZUIy6YbzLa/',
+      chatPage: 'https://api.fastwebapp.net/v1/jivo/widget/ZUIy6YbzLa/',
       chatID: 'ZUIy6YbzLa',
       secret: '(H+MbQeThVmYq3t6w9z$C&F)J@NcRfUj',
       socket: 'wss://livechat.atlantm.com/v1',
@@ -90,7 +90,7 @@ switch (bundle) {
     amplitudeKey = 'e3e297635704d21c9a67617977dc3a61';
     fbAppID = '700128474599615';
     jivoChat = {
-      chatPage: 'https://api.atlantm.com/v1/jivo/widget/ZUIy6YbzLa/',
+      chatPage: 'https://api.fastwebapp.net/v1/jivo/widget/ZUIy6YbzLa/',
       chatID: 'ZUIy6YbzLa',
       secret: '(H+MbQeThVmYq3t6w9z$C&F)J@NcRfUj',
       socket: 'wss://livechat.atlantm.com/v1',
