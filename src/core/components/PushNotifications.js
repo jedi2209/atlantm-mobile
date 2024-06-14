@@ -86,6 +86,7 @@ export default {
     OneSignal.Notifications.addEventListener(
       'foregroundWillDisplay',
       notificationReceivedEvent => {
+        notificationReceivedEvent.preventDefault();
         const appState = AppState.currentState;
         console.info(
           'OneSignal: notification will show in foreground:',
@@ -102,9 +103,9 @@ export default {
           NavigationService.navigationRef.getCurrentRoute().name ===
             'ChatScreen'
         ) {
-          notification = null;
+          return;
         }
-        notificationReceivedEvent.complete(notification);
+        notificationReceivedEvent.getNotification().display();
       },
     );
   },
