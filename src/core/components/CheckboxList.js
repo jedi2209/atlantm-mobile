@@ -18,6 +18,10 @@ const excludeValFromSelect = list => {
 };
 
 const showImages = ({type, dataExtra, text}) => {
+  if (!text || !dataExtra[text.toString()]) {
+    return null;
+  }
+
   switch (type) {
     case 'body':
       return (
@@ -75,8 +79,8 @@ const CheckboxList = ({
   return (
     <View>
       {items.map(val => {
-        const text = val.label;
-        const id = Number(val.value);
+        const text = get(val, 'label', '');
+        const id = Number(get(val, 'value', 0));
         const ImageBlock = () => showImages({type, dataExtra, text});
         return (
           <TouchableHighlight
