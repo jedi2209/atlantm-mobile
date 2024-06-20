@@ -350,6 +350,9 @@ export default {
       colors: {
         title: 'Цвет',
       },
+      grades: {
+        title: 'Грейд',
+      },
     },
   },
   Sort: {

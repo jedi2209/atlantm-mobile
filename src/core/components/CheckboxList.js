@@ -18,7 +18,7 @@ const excludeValFromSelect = list => {
 };
 
 const showImages = ({type, dataExtra, text}) => {
-  if (!text || !dataExtra[text.toString()]) {
+  if (!text || !get(dataExtra, 'text')) {
     return null;
   }
 

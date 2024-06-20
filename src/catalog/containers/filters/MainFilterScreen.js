@@ -77,6 +77,7 @@ const modals = {
   seatsCount: 'seatsCount',
   drive: 'drive',
   colors: 'colors',
+  grade: 'grade',
 };
 
 const initialStateFilters = {
@@ -511,13 +512,6 @@ const MainFilterScreen = ({
               });
               res.payload.data.enginetype = _convertSelect(tmp);
             }
-            if (res.payload.data.drive) {
-              let driveTmp = {};
-              Object.keys(res.payload.data.drive).map(val => {
-                driveTmp[Number(val)] = strings.CarParams.wheels[Number(val)];
-              });
-              res.payload.data.drive = _convertSelect(driveTmp);
-            }
             if (res.payload.data.colors) {
               let colorsTmp = [];
               let colorsNames = {};
@@ -531,6 +525,13 @@ const MainFilterScreen = ({
               });
               res.payload.data.colors = colorsTmp;
               setColors(colorsNames);
+            }
+            if (res.payload.data.grades) {
+              let gradeTmp = {};
+              Object.keys(res.payload.data.grades).map(val => {
+                gradeTmp[Number(val)] = res.payload.data.grades[Number(val)];
+              });
+              res.payload.data.grades = _convertSelect(gradeTmp);
             }
             setDataFilters(res.payload);
           } else {
@@ -646,6 +647,13 @@ const MainFilterScreen = ({
       stateFilters.driveType.map(val => {
         Object.assign(filtersLocal, stateFilters, {
           ['drive[' + val.value + ']']: parseInt(val.value, 10),
+        });
+      });
+    }
+    if (stateFilters.grade) {
+      stateFilters.grade.map(val => {
+        Object.assign(filtersLocal, stateFilters, {
+          ['grade[' + val.value + ']']: parseInt(val.value, 10),
         });
       });
     }
@@ -1164,6 +1172,22 @@ const MainFilterScreen = ({
                 <VStack
                   space="2"
                   divider={<Divider bg="gray.100" thickness="1" />}>
+                  {dataFilters && dataFilters.data.grades ? (
+                    <FilterRow
+                      onPress={() => {
+                        _showHideModal(true, modals.grade);
+                      }}
+                      title={strings.CarsFilterScreen.filters.grades.title}
+                      values={_getSelectedLabels(get(stateFilters, 'grade'))}
+                      icon={{
+                        as: Ionicons,
+                        name: 'trophy-outline',
+                        size: 'lg',
+                      }}
+                      bounceable={true}
+                      type="multipleCheckbox"
+                    />
+                  ) : null}
                   <FilterRow
                     onPress={() => {
                       _onChangeFilter('guarantee', !stateFilters.guarantee);
@@ -2141,6 +2165,30 @@ const MainFilterScreen = ({
                       _onChangeFilter(
                         'colorType',
                         _makeFilterData(stateFilters.colorType, {
+                          value,
+                          label,
+                        }),
+                      )
+                    }
+                  />
+                </View>
+              </ModalViewFilter>
+            ) : null}
+            {/* Модалка Грейды */}
+            {dataFilters.data.grades ? (
+              <ModalViewFilter
+                isModalVisible={showModal === modals.grade}
+                onHide={() => _showHideModal(false)}
+                onReset={() => _onChangeFilter('grade', [])}
+                title={strings.CarsFilterScreen.filters.grades.title}>
+                <View style={styles.selectMultipleWrapper}>
+                  <CheckboxList
+                    items={dataFilters?.data?.grades}
+                    selectedItems={get(stateFilters, 'grade')}
+                    onPressCallback={({value, label}) =>
+                      _onChangeFilter(
+                        'grade',
+                        _makeFilterData(stateFilters.grade, {
                           value,
                           label,
                         }),
