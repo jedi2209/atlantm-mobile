@@ -435,9 +435,20 @@ const CarListItem = ({
   };
 
   const _renderBadges = () => {
+    const grade = get(car, 'grade', null);
     const badge = get(car, 'badge', []);
     return (
       <>
+        {grade && grade?.id ? (
+          <Badge
+            id={car.id.api}
+            key={'gradeItem' + car.id.api + get(grade, 'id')}
+            index={0}
+            bgColor={get(grade, 'background', styleConst.color.greyText2)}
+            name={get(grade, 'name')}
+            textColor={get(grade, 'textColor', styleConst.color.white)}
+          />
+        ) : null}
         {badge.map((item, index) => {
           switch (get(item, 'name', '').toLowerCase()) {
             case 'спец.цена':
@@ -450,8 +461,8 @@ const CarListItem = ({
           return (
             <Badge
               id={car.id.api}
-              key={'badgeItem' + car.id.api + index}
-              index={index}
+              key={'badgeItem' + car.id.api + (index + 1)}
+              index={index + 1}
               bgColor={item.background}
               name={get(item, 'name')}
               textColor={item.textColor}
