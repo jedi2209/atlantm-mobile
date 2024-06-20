@@ -1,10 +1,11 @@
 import React from 'react';
 import {View, StyleSheet, Text, TouchableHighlight} from 'react-native';
-import {Checkbox, HStack} from 'native-base';
+import {Checkbox, HStack, VStack} from 'native-base';
 import Imager from './Imager';
 import {get} from 'lodash';
 
 import styleConst from '../style-const';
+import Badge from './Badge';
 
 const excludeValFromSelect = list => {
   if (!list) {
@@ -17,8 +18,11 @@ const excludeValFromSelect = list => {
   return tmp;
 };
 
-const showImages = ({type, dataExtra, text}) => {
-  if (!text || !get(dataExtra, 'text')) {
+const showImages = props => {
+  const {type, dataExtra, text} = props;
+
+  const textCheck = get(props, 'text', '').toString();
+  if (!textCheck || !dataExtra[textCheck]) {
     return null;
   }
 
@@ -45,14 +49,59 @@ const showImages = ({type, dataExtra, text}) => {
             style={[
               styles.colorBox,
               {
-                backgroundColor: get(dataExtra[text.toString()], 'codes.hex'),
+                backgroundColor: get(dataExtra[textCheck], 'codes.hex'),
               },
-              styles[`colorBox_${dataExtra[text.toString()].keyword}`],
+              styles[`colorBox_${dataExtra[textCheck].keyword}`],
             ]}
           />
         </View>
       );
   }
+};
+
+const Heading = props => {
+  const {text, type, additionalText, dataExtra, id} = props;
+
+  let additionalTextExt;
+  let headingText;
+
+  switch (type) {
+    case 'grades':
+      if (additionalText) {
+        additionalTextExt = ' - ' + additionalText.join('\r\n - ');
+        additionalTextExt = (
+          <Text style={styles.text}>{additionalTextExt}</Text>
+        );
+      }
+      headingText = (
+        <Badge
+          id={'badge-' + id}
+          key={'gradeItem' + id}
+          index={0}
+          badgeContainerStyle={{width: 150}}
+          textStyle={{fontSize: 17, textAlign: 'center'}}
+          bgColor={get(
+            dataExtra,
+            'color.background',
+            styleConst.color.greyText2,
+          )}
+          name={text}
+          textColor={get(dataExtra, 'color.text', styleConst.color.white)}
+        />
+      );
+      break;
+
+    default:
+      headingText = <Text style={styles.heading}>{text}</Text>;
+      break;
+  }
+
+  return (
+    <VStack>
+      {headingText}
+      {additionalTextExt}
+    </VStack>
+  );
 };
 
 const CheckboxList = ({
@@ -66,6 +115,7 @@ const CheckboxList = ({
   let def = excludeValFromSelect(selectedItems);
 
   let itemsArr = {};
+
   items.map(item => {
     itemsArr[item.value] = item.label;
   });
@@ -94,7 +144,13 @@ const CheckboxList = ({
               <ImageBlock />
               <View style={{flex: 1}}>
                 <HStack justifyContent="space-between">
-                  <Text style={styles.text}>{text}</Text>
+                  <Heading
+                    text={text}
+                    id={id}
+                    additionalText={get(dataExtra, `${id}.description`, '')}
+                    dataExtra={get(dataExtra, `${id}`, {})}
+                    type={type}
+                  />
                   <Checkbox
                     aria-label={text}
                     color={checkboxColor}
@@ -127,6 +183,11 @@ const styles = StyleSheet.create({
   },
   wrapper: {
     justifyContent: 'space-between',
+  },
+  heading: {
+    fontSize: 17,
+    fontFamily: styleConst.font.regular,
+    color: styleConst.color.greyText6,
   },
   text: {
     fontSize: 17,

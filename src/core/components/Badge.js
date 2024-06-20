@@ -111,6 +111,7 @@ const Badge = props => {
     textStyle = {},
     descriptionStyle = {},
     description = null,
+    badgeContainerStyle = {},
   } = props;
 
   let onPressCustom;
@@ -127,7 +128,9 @@ const Badge = props => {
         activeOpacity={0.6}
         underlayColor="#DDDDDD"
         onPressOut={onPressCustom}>
-        <BackgroundItem bgColor={bgColor}>
+        <BackgroundItem
+          bgColor={bgColor}
+          badgeContainerStyle={badgeContainerStyle}>
           <Text
             selectable={false}
             style={[styles.badgeName, {color: textColor}, textStyle]}>
@@ -158,7 +161,7 @@ const Badge = props => {
       </ModalView>
     </>
   ) : (
-    <BackgroundItem bgColor={bgColor}>
+    <BackgroundItem bgColor={bgColor} badgeContainerStyle={badgeContainerStyle}>
       <Text
         selectable={false}
         style={[styles.badgeName, {color: textColor}, props.textStyle]}>
