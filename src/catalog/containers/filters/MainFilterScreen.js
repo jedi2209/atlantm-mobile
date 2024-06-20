@@ -279,6 +279,7 @@ const MainFilterScreen = ({
   );
   const [colors, setColors] = useState({});
   const [bodys, setBody] = useState({});
+  const [grades, setGrade] = useState({});
   const [accordionModels, setAccordion] = useState({});
   const [dataFilters, setDataFilters] = useState(null);
   const mainRef = useRef(null);
@@ -528,10 +529,15 @@ const MainFilterScreen = ({
             }
             if (res.payload.data.grades) {
               let gradeTmp = {};
+              let gradeNames = {};
               Object.keys(res.payload.data.grades).map(val => {
-                gradeTmp[Number(val)] = res.payload.data.grades[Number(val)];
+                gradeTmp[Number(val)] =
+                  res.payload.data.grades[Number(val)]['name'];
+
+                gradeNames[Number(val)] = res.payload.data.grades[Number(val)];
               });
               res.payload.data.grades = _convertSelect(gradeTmp);
+              setGrade(gradeNames);
             }
             setDataFilters(res.payload);
           } else {
@@ -2185,6 +2191,8 @@ const MainFilterScreen = ({
                   <CheckboxList
                     items={dataFilters?.data?.grades}
                     selectedItems={get(stateFilters, 'grade')}
+                    type={'grades'}
+                    dataExtra={grades}
                     onPressCallback={({value, label}) =>
                       _onChangeFilter(
                         'grade',
