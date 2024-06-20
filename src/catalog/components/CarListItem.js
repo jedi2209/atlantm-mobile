@@ -437,6 +437,12 @@ const CarListItem = ({
   const _renderBadges = () => {
     const grade = get(car, 'grade', null);
     const badge = get(car, 'badge', []);
+
+    let description;
+
+    if (get(grade, 'description', []).length > 0) {
+      description = ' - ' + get(grade, 'description', []).join('\r\n - ');
+    }
     return (
       <>
         {grade && grade?.id ? (
@@ -444,9 +450,11 @@ const CarListItem = ({
             id={car.id.api}
             key={'gradeItem' + car.id.api + get(grade, 'id')}
             index={0}
-            bgColor={get(grade, 'background', styleConst.color.greyText2)}
+            description={description}
+            descriptionStyle={{lineHeight: 24}}
+            bgColor={get(grade, 'color.background', styleConst.color.greyText2)}
             name={get(grade, 'name')}
-            textColor={get(grade, 'textColor', styleConst.color.white)}
+            textColor={get(grade, 'color.text', styleConst.color.white)}
           />
         ) : null}
         {badge.map((item, index) => {
