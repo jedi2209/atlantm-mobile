@@ -156,8 +156,8 @@ const ServiceStep2 = props => {
     const itemsFull = get(serviceData, 'itemsFull');
     const indexEl = Object.keys(itemsFull).find(
       item =>
-        itemsFull[item].id.sap == get(serviceData, 'serviceSecondID') &&
-        itemsFull[item].additional ==
+        itemsFull[item]?.id?.sap == get(serviceData, 'serviceSecondID') &&
+        itemsFull[item]?.additional ==
           get(serviceData, 'leaveTyresInStorage', false),
     );
     setTimeout(() => {
@@ -210,8 +210,8 @@ const ServiceStep2 = props => {
                     const itemsFull = get(serviceData, 'itemsFull');
                     const indexEl = Object.keys(itemsFull).find(
                       item =>
-                        itemsFull[item].id.sap == serviceSecondID &&
-                        itemsFull[item].additional ==
+                        itemsFull[item]?.id?.sap == serviceSecondID &&
+                        itemsFull[item]?.additional ==
                           get(serviceData, 'leaveTyresInStorage', false),
                     );
                     setServiceData({
@@ -232,7 +232,7 @@ const ServiceStep2 = props => {
         ? {
             name: strings.Form.field.label.serviceTypes[
               get(orderData, 'SERVICE')
-            ].additional,
+            ]?.additional,
             fields: [
               isWheelService
                 ? {
