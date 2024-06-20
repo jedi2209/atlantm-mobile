@@ -1,6 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {get} from 'lodash';
+
+import {Text} from 'native-base';
 
 import Form from '../../../core/components/Form/Form';
 import {addDays, dayMonthYear} from '../../../utils/date';
@@ -11,6 +13,7 @@ import {connect} from 'react-redux';
 import {orderService} from '../../actions';
 import {strings} from '../../../core/lang/const';
 import Analytics from '../../../utils/amplitude-analytics';
+import styleConst from '../../../core/style-const';
 
 const mapStateToProps = ({dealer, service, nav}) => {
   return {
@@ -30,6 +33,8 @@ const minDate = {
 
 const ServiceStep3 = props => {
   const {route, region, navigation} = props;
+
+  const [isLeadLocal, setLead] = useState(get(route, 'params.lead', false));
 
   const orderData = get(route, 'params', {});
   const myTyresInStorage = get(orderData, 'myTyresInStorage', false) === 1; // 1 - true, 2 - false
@@ -82,8 +87,30 @@ const ServiceStep3 = props => {
               },
               maxTimeAttemps: 3,
               reqiredTime: get(orderData, 'SERVICESecondFull.total.time', null),
+              onChange: res => {
+                // console.info('onChange res', res);
+                setLead(
+                  get(res, 'noTimeAlways', get(res, 'lead', false), false),
+                );
+              },
             },
           },
+          isLeadLocal
+            ? {
+                name: 'Text',
+                type: 'component',
+                value: (
+                  <Text
+                    style={{
+                      color: styleConst.color.greyText3,
+                      paddingVertical: 5,
+                      fontStyle: 'italic',
+                    }}>
+                    {strings.ServiceScreenStep3.additionalInfo}
+                  </Text>
+                ),
+              }
+            : null,
         ],
       },
     ],

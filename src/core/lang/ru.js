@@ -727,6 +727,9 @@ export default {
     priceRecommended: 'Рекоменд.работы',
     total: 'Итого',
   },
+  ServiceScreenStep3: {
+    additionalInfo: 'Дата записи является предварительной',
+  },
   OrderPartsScreen: {
     title: 'Заказ зап.частей',
     title2: 'Заказать зап.части',
