@@ -637,60 +637,6 @@ export const connectSocialMedia = ({profile, im}) => {
   };
 };
 
-export const actionLogin = props => {
-  const id = props.id;
-
-  return async dispatch => {
-    dispatch({
-      type: 'LOGIN__REQUEST_OLD_LKK',
-      payload: {...props},
-    });
-
-    function onError(error) {
-      console.error('actionLogin error', error);
-
-      return dispatch({
-        type: 'LOGIN__FAIL_OLD_LKK',
-        payload: {
-          code: error.code,
-          message: error.message,
-        },
-      });
-    }
-
-    try {
-      const authResponse = await API.loginRequest(props);
-      const {error, status, data} = authResponse;
-
-      if (status !== 'success') {
-        console.error('actionLogin error authResponse', authResponse);
-        return onError(error);
-      }
-
-      const {user, token} = data;
-
-      const payload = {
-        ID: id,
-        SAP: {
-          TOKEN: token.id,
-          ID: user.login,
-        },
-        first_name: user.name.name,
-        last_name: user.name.surname,
-        email: user.email,
-        phone: user.phone,
-      };
-
-      return dispatch({
-        type: 'LOGIN__SUCCESS_OLD_LKK',
-        payload,
-      });
-    } catch (e) {
-      return onError(e);
-    }
-  };
-};
-
 async function getUserCars(token, userid) {
   // 1. Получаем автомобили пользователя
   let cars = [];
