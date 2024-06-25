@@ -1,8 +1,6 @@
 import VKLogin from 'react-native-vkontakte-login';
 import API from '../../utils/api';
 
-import {VK_APP_ID} from '../../core/const';
-
 export default {
   async _GetUserDataVK() {
     try {
