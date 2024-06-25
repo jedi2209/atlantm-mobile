@@ -20,6 +20,7 @@ export default {
         auth.access_token;
       const userData = await API.apiGetData(url, {
         method: 'GET',
+        noJWT: true,
       });
       console.info('Login success, get userData', userData);
       return Object.assign(auth, userData.response);
