@@ -105,6 +105,7 @@ const ServiceStep3 = props => {
                       color: styleConst.color.greyText3,
                       paddingVertical: 5,
                       fontStyle: 'italic',
+                      fontSize: 13,
                     }}>
                     {strings.ServiceScreenStep3.additionalInfo}
                   </Text>

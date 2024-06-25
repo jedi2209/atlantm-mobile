@@ -728,7 +728,7 @@ export default {
     total: 'Итого',
   },
   ServiceScreenStep3: {
-    additionalInfo: 'Дата записи является предварительной',
+    additionalInfo: '* Дата записи является предварительной',
   },
   OrderPartsScreen: {
     title: 'Заказ зап.частей',
