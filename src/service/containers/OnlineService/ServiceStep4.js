@@ -152,10 +152,10 @@ const ServiceStep4 = props => {
     let data = {
       dealer: orderData.DEALER,
       time: {
-        from: parseInt(get(dateFromForm, 'time', 0)),
+        from: parseInt(get(dateFromForm, 'time', 0), 10),
         to:
-          parseInt(get(dateFromForm, 'time', 0)) +
-          parseInt(get(orderData, 'SERVICESecondFull.total.time', 0)),
+          parseInt(get(dateFromForm, 'time', 0), 10) +
+          parseInt(get(orderData, 'SERVICESecondFull.total.time', 0), 10),
       },
       f_FirstName: get(dataFromForm, 'NAME', ''),
       f_SecondName: get(dataFromForm, 'SECOND_NAME', ''),

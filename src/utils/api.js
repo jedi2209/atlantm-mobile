@@ -1150,7 +1150,9 @@ export default {
   async apiGetData(url, requestParams = baseRequestParams) {
     const method = requestParams.method.toString().toLowerCase();
     let body = requestParams?.body;
-    requestParams.headers['x-auth'] = await JWTToken();
+    if (!requestParams.noJWT || requestParams?.noJWT === false) {
+      requestParams.headers['x-auth'] = await JWTToken();
+    }
 
     if (body && typeof body === 'object') {
       if (

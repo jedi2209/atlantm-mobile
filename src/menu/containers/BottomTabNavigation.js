@@ -134,15 +134,6 @@ const ProfileStackView = ({navigation, route}) => (
         ],
       })}
     />
-    {/* <ProfileStack.Screen
-      name="ReestablishScreen"
-      component={ReestablishScreen}
-      options={ClassicHeaderBlue(
-        strings.ReestablishScreen.title,
-        navigation,
-        route,
-      )}
-    /> */}
     <ProfileStack.Screen
       name="BonusScreen"
       component={BonusScreen}
