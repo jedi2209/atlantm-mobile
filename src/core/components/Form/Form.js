@@ -838,9 +838,9 @@ class Form extends Component {
       let value = '';
 
       if (id) {
-        value = this.state[name][id].value;
+        value = get(this.state[name][id], 'value', '');
       } else {
-        value = this.state[name];
+        value = get(this.state, 'name');
       }
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
