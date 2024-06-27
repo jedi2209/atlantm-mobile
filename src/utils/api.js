@@ -50,7 +50,10 @@ const baseRequestParams = {
 export default {
   headers,
   fetchMainScreenSettings(region) {
-    return this.request(`/mobile/screen/main/${region}/`, baseRequestParams);
+    const requestParams = _.merge({}, baseRequestParams, {
+      noJWT: true,
+    });
+    return this.request(`/mobile/screen/main/${region}/`, requestParams);
   },
 
   fetchDealers() {
