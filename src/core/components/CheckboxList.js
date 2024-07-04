@@ -22,7 +22,7 @@ const showImages = props => {
   const {type, dataExtra, text} = props;
 
   const textCheck = get(props, 'text', '').toString();
-  if (!textCheck || !dataExtra[textCheck]) {
+  if (!textCheck || !get(dataExtra, 'textCheck')) {
     return null;
   }
 

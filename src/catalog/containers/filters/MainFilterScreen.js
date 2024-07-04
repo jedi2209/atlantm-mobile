@@ -338,16 +338,17 @@ const MainFilterScreen = ({
         }).then(res => {
           const totalCarsCount = get(res, 'payload.total.count', 0);
           setTotalCars(totalCarsCount);
-          if (res.payload.data) {
-            if (res.payload.data.brand) {
+          const payloadData = get(res, 'payload.data');
+          if (payloadData) {
+            if (get(payloadData, 'brand')) {
               let brandsTmp = [];
               let modelsTmp = [];
               let modelsAccordionTmp = [];
               let brandsNames = {};
-              Object.keys(res.payload.data.brand).map(val => {
+              Object.keys(payloadData.brand).map(val => {
                 const brandID = Number(val);
-                const brandName = res.payload.data.brand[val].name.toString();
-                const models = res.payload.data.brand[val].model;
+                const brandName = payloadData.brand[val].name.toString();
+                const models = payloadData.brand[val].model;
                 modelsTmp[brandID] = [];
                 brandsTmp.push({value: brandID, label: brandName});
                 brandsNames[brandName] = brandID;
@@ -377,17 +378,17 @@ const MainFilterScreen = ({
               res.payload.data.brand = brandsTmp;
               res.payload.data.model = modelsTmp;
             }
-            if (res.payload.data.gearbox) {
+            if (get(payloadData, 'gearbox')) {
               let tmp = {};
-              Object.keys(res.payload.data.gearbox).map(val => {
+              Object.keys(payloadData.gearbox).map(val => {
                 tmp[Number(val)] = strings.CarParams.gearbox[Number(val)];
               });
               res.payload.data.gearbox = _convertSelect(tmp);
             }
-            if (res.payload.data.body) {
+            if (get(payloadData, 'body')) {
               let bodyNames = {};
               let tmp = {};
-              Object.keys(res.payload.data.body).map(val => {
+              Object.keys(payloadData.body).map(val => {
                 const number = Number(val);
                 tmp[number] = strings.CarParams.body[number];
                 const nameLocal = get(strings, 'CarParams.body');
@@ -395,38 +396,38 @@ const MainFilterScreen = ({
                   bodyNames[strings.CarParams.body[number]] = number;
                 } else {
                   bodyNames[strings.CarParams.body[number]] = get(
-                    res,
-                    'payload.data.body',
+                    payloadData,
+                    'body',
                   )[val];
                 }
               });
               setBody(bodyNames);
               res.payload.data.body = _convertSelect(tmp);
             }
-            if (res.payload.data.enginetype) {
+            if (get(payloadData, 'enginetype')) {
               let tmp = {};
-              Object.keys(res.payload.data.enginetype).map(val => {
+              Object.keys(payloadData.enginetype).map(val => {
                 tmp[Number(val)] = strings.CarParams.engine[Number(val)];
               });
               res.payload.data.enginetype = _convertSelect(tmp);
             }
-            if (res.payload.data.drive) {
-              let driveTmp = {};
-              Object.keys(res.payload.data.drive).map(val => {
-                driveTmp[Number(val)] = strings.CarParams.wheels[Number(val)];
+            if (get(payloadData, 'drive')) {
+              let tmp = {};
+              Object.keys(payloadData.drive).map(val => {
+                tmp[Number(val)] = strings.CarParams.wheels[Number(val)];
               });
-              res.payload.data.drive = _convertSelect(driveTmp);
+              res.payload.data.drive = _convertSelect(tmp);
             }
-            if (res.payload.data.colors) {
+            if (get(payloadData, 'colors')) {
               let colorsTmp = [];
               let colorsNames = {};
-              Object.keys(res.payload.data.colors).map(val => {
+              Object.keys(payloadData.colors).map(val => {
                 colorsTmp.push({
                   value: val,
                   label: strings.Colors[Number(val)],
                 });
                 colorsNames[strings.Colors[Number(val)]] =
-                  res.payload.data.colors[val];
+                  payloadData.colors[val];
               });
               res.payload.data.colors = colorsTmp;
               setColors(colorsNames);
@@ -445,26 +446,27 @@ const MainFilterScreen = ({
         }).then(res => {
           const totalCarsCount = get(res, 'payload.total.count', 0);
           setTotalCars(totalCarsCount);
-          if (res.payload.data) {
+          const payloadData = get(res, 'payload.data');
+          if (payloadData) {
             if (
-              res.payload.data.city &&
-              Object.keys(res.payload.data.city).length > 1
+              get(payloadData, 'city') &&
+              Object.keys(payloadData.city).length > 1
             ) {
               let tmp = {};
-              Object.keys(res.payload.data.city).map(val => {
-                tmp[Number(val)] = res.payload.data.city[Number(val)];
+              Object.keys(payloadData.city).map(val => {
+                tmp[Number(val)] = payloadData.city[Number(val)];
               });
               res.payload.data.city = _convertSelect(tmp);
             }
-            if (res.payload.data.brand) {
+            if (get(payloadData, 'brand')) {
               let brandsTmp = [];
               let modelsTmp = [];
               let modelsAccordionTmp = [];
               let brandsNames = {};
-              Object.keys(res.payload.data.brand).map(val => {
+              Object.keys(payloadData.brand).map(val => {
                 const brandID = Number(val);
-                const brandName = res.payload.data.brand[val].name.toString();
-                const models = res.payload.data.brand[val].model;
+                const brandName = payloadData.brand[val].name.toString();
+                const models = payloadData.brand[val].model;
                 modelsTmp[brandID] = [];
                 brandsTmp.push({value: brandID, label: brandName});
                 brandsNames[brandName] = brandID;
@@ -489,52 +491,58 @@ const MainFilterScreen = ({
               res.payload.data.brand = brandsTmp;
               res.payload.data.model = modelsTmp;
             }
-            if (res.payload.data.gearbox) {
+            if (get(payloadData, 'gearbox')) {
               let tmp = {};
-              Object.keys(res.payload.data.gearbox).map(val => {
+              Object.keys(payloadData.gearbox).map(val => {
                 tmp[Number(val)] = strings.CarParams.gearbox[Number(val)];
               });
               res.payload.data.gearbox = _convertSelect(tmp);
             }
-            if (res.payload.data.body) {
+            if (get(payloadData, 'body')) {
               let bodyNames = {};
               let tmp = {};
-              Object.keys(res.payload.data.body).map(val => {
+              Object.keys(payloadData.body).map(val => {
                 tmp[Number(val)] = strings.CarParams.body[Number(val)];
                 bodyNames[strings.CarParams.body[Number(val)]] = Number(val);
               });
               setBody(bodyNames);
               res.payload.data.body = _convertSelect(tmp);
             }
-            if (res.payload.data.enginetype) {
+            if (get(payloadData, 'enginetype')) {
               let tmp = {};
-              Object.keys(res.payload.data.enginetype).map(val => {
+              Object.keys(payloadData.enginetype).map(val => {
                 tmp[Number(val)] = strings.CarParams.engine[Number(val)];
               });
               res.payload.data.enginetype = _convertSelect(tmp);
             }
-            if (res.payload.data.colors) {
+            if (get(payloadData, 'drive')) {
+              let tmp = {};
+              Object.keys(payloadData.drive).map(val => {
+                tmp[Number(val)] = strings.CarParams.wheels[Number(val)];
+              });
+              res.payload.data.drive = _convertSelect(tmp);
+            }
+            if (get(payloadData, 'colors')) {
               let colorsTmp = [];
               let colorsNames = {};
-              Object.keys(res.payload.data.colors).map(val => {
+              Object.keys(payloadData.colors).map(val => {
                 colorsTmp.push({
                   value: val,
                   label: strings.Colors[Number(val)],
                 });
                 colorsNames[strings.Colors[Number(val)]] =
-                  res.payload.data.colors[val];
+                  payloadData.colors[val];
               });
               res.payload.data.colors = colorsTmp;
               setColors(colorsNames);
             }
-            if (res.payload.data.grades) {
+            if (get(payloadData, 'grades')) {
               let gradeTmp = {};
               let gradeNames = {};
-              Object.keys(res.payload.data.grades).map(val => {
-                gradeTmp[Number(val)] =
-                  res.payload.data.grades[Number(val)]['name'];
+              Object.keys(payloadData.grades).map(val => {
+                gradeTmp[Number(val)] = payloadData.grades[Number(val)]?.name;
 
-                gradeNames[Number(val)] = res.payload.data.grades[Number(val)];
+                gradeNames[Number(val)] = payloadData.grades[Number(val)];
               });
               res.payload.data.grades = _convertSelect(gradeTmp);
               setGrade(gradeNames);
