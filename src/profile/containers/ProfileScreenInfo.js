@@ -655,7 +655,7 @@ const ProfileScreenInfo = props => {
         {_renderAdditionalPurchase()}
         <Button
           onPress={() => {
-            navigation.navigate('ProfileSettingsScreen');
+            navigation.navigate('ProfileEditScreen');
           }}
           _text={styles.buttonPrimaryText}
           rounded={'lg'}

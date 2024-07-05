@@ -851,6 +851,8 @@ export default {
         birthday: 'Мы обязательно поздравим!',
         service: 'Что будем делать с авто?',
         part: 'Номер, название или перечень необходимых зап.частей',
+        email: 'Укажите ваш email',
+        phone: 'Укажите ваш телефон',
         serviceTypes: {
           tyreChange: {
             myTyresInStorage: 'Шины хранятся в Атлант-М?',

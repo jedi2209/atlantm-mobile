@@ -86,7 +86,7 @@ import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 import SettingsScreen from '../settings/containers/SettingsScreen';
 import NotificationsScreen from '../settings/containers/NotificationsScreen';
 
-import ProfileSettingsScreen from '../profile/containers/ProfileSettingsScreen';
+import ProfileEditScreen from '../profile/containers/ProfileEditScreen';
 import BonusScreenInfo from '../profile/bonus/containers/BonusInfoScreen';
 import AdditionalPurchaseScreen from '../profile/additionalPurchase/containers/AdditionalPurchaseScreen';
 import TOHistory from '../profile/carhistory/containers/CarHistoryScreen';
@@ -572,8 +572,8 @@ export const Base = ({navigation, route}) => {
 
         {/* Профиль */}
         <StackProfile.Screen
-          name="ProfileSettingsScreen"
-          component={ProfileSettingsScreen}
+          name="ProfileEditScreen"
+          component={ProfileEditScreen}
           options={BigCloseButton(navigation, route, {
             presentation: 'modal',
             headerTitle: strings.ProfileSettingsScreen.title,
