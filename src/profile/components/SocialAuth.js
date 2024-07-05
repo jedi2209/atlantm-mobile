@@ -207,8 +207,6 @@ class SocialAuth extends PureComponent {
       return acc;
     }, {});
 
-    console.info('im', im);
-
     return (
       <View
         style={[

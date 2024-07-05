@@ -26,7 +26,6 @@ const styles = StyleSheet.create({
   serviceForm: {
     marginTop: $size,
   },
-  // Скопировано из ProfileSettingsScreen.
   container: {
     flex: 1,
     paddingTop: 20,
