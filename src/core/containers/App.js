@@ -67,6 +67,8 @@ const paperTheme = {
   colors: {
     ...DefaultTheme.colors,
     primary: styleConst.color.blue,
+    // primaryContainer: styleConst.color.white,
+    surfaceVariant: styleConst.color.white,
   },
 };
 
