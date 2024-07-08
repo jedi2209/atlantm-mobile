@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
-import {Pressable, StyleSheet} from 'react-native';
+import {StyleSheet} from 'react-native';
 
 import * as NavigationService from '../../../navigation/NavigationService';
 
-import {View, Box, Heading, Text, HStack} from 'native-base';
+import {View, Box, Text, HStack} from 'native-base';
 import {TextInput, Checkbox} from 'react-native-paper';
 import PhoneInput from 'react-native-phone-input';
 
@@ -65,7 +65,7 @@ const InputProps = {
 };
 
 const EmailField = props => {
-  const {value} = props;
+  const {value, onPressIcon = () => {}, length = 0} = props;
   return (
     <TextInput
       placeholder={strings.Form.field.placeholder.email}
@@ -75,8 +75,8 @@ const EmailField = props => {
       keyboardType="email-address"
       textContentType="emailAddress"
       right={
-        value ? (
-          <TextInput.Icon icon="minus-circle-outline" onPress={() => {}} />
+        value && length > 1 ? (
+          <TextInput.Icon icon="minus-circle-outline" onPress={onPressIcon} />
         ) : null
       }
       {...props}
@@ -85,7 +85,7 @@ const EmailField = props => {
 };
 
 const PhoneField = props => {
-  const {value, num} = props;
+  const {value, onPressIcon = () => {}, length = 0, num} = props;
   return (
     <TextInput
       placeholder={strings.Form.field.placeholder.phone}
@@ -119,8 +119,8 @@ const PhoneField = props => {
         />
       )}
       right={
-        value ? (
-          <TextInput.Icon icon="minus-circle-outline" onPress={() => {}} />
+        value && length > 1 ? (
+          <TextInput.Icon icon="minus-circle-outline" onPress={onPressIcon} />
         ) : null
       }
       {...props}
@@ -128,13 +128,16 @@ const PhoneField = props => {
   );
 };
 
-export const GroupForm = ({title, children}) => (
+export const GroupForm = ({title, button, children}) => (
   <>
-    {title ? (
-      <Text size="s" mb="2" color={styleConst.color.darkBg}>
-        {title}
-      </Text>
-    ) : null}
+    <HStack justifyContent={'space-between'} alignItems={'center'}>
+      {title ? (
+        <Text mb="2" color={styleConst.color.darkBg}>
+          {title}
+        </Text>
+      ) : null}
+      {button ? button : null}
+    </HStack>
     <Box style={styles.groupContainer}>{children}</Box>
   </>
 );
