@@ -1,14 +1,16 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {Text, Alert, ActivityIndicator} from 'react-native';
+import {Alert, ActivityIndicator, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {Box, Button, View, ScrollView, useToast} from 'native-base';
+import {navigate} from '../../navigation/NavigationService';
+import {Button, ScrollView, useToast} from 'native-base';
+import {Controller, useForm, useFieldArray} from 'react-hook-form';
 
-import {getTimestamp, substractYears} from '../../utils/date';
+import {IconButton} from 'react-native-paper';
 
-import {useForm, Controller} from 'react-hook-form';
-import TransitionView from '../../core/components/TransitionView';
+import {substractYears} from '../../utils/date';
+
 import SocialAuth from '../components/SocialAuth';
+import {SubmitButton} from '../../core/components/Form/SubmitCustom';
 import {
   AgreementCheckbox,
   GroupForm,
@@ -25,7 +27,6 @@ import {strings} from '../../core/lang/const';
 import {ERROR_NETWORK} from '../../core/const';
 
 import {get} from 'lodash';
-import {Icon} from 'react-native-paper';
 
 const mapStateToProps = ({profile, dealer}) => {
   return {
@@ -39,6 +40,22 @@ const mapDispatchToProps = {
   actionDeleteProfile,
 };
 
+const styles = StyleSheet.create({
+  iconPlus: {
+    marginRight: 9,
+  },
+  socialAuthContainer: {
+    width: '80%',
+    marginHorizontal: '10%',
+    paddingVertical: 7,
+  },
+  submitButton: {
+    borderRadius: 5,
+    marginTop: -10,
+    marginBottom: 30,
+  },
+});
+
 const ProfileEditScreen = props => {
   const {NAME, LAST_NAME, SECOND_NAME, EMAIL, PHONE, BIRTHDATE} = props.profile;
   const [loading, setLoading] = useState(false);
@@ -47,25 +64,7 @@ const ProfileEditScreen = props => {
   const navigation = useNavigation();
   const toast = useToast();
 
-  let emailData = [];
-  let emailDefaultData = {};
-  let phoneDefaultData = {};
-  let phoneData = [];
   let birthdate = null;
-
-  if (get(EMAIL, 'length')) {
-    EMAIL.map((field, num) => {
-      const fieldID = 'email__' + get(field, 'ID', num);
-      emailDefaultData[fieldID] = get(field, 'VALUE');
-    });
-  }
-
-  if (get(PHONE, 'length')) {
-    PHONE.map((field, num) => {
-      const fieldID = 'phone__' + get(field, 'ID', num);
-      phoneDefaultData[fieldID] = get(field, 'VALUE');
-    });
-  }
 
   const {
     control,
@@ -76,67 +75,50 @@ const ProfileEditScreen = props => {
       NAME: NAME,
       SECOND_NAME: SECOND_NAME,
       LAST_NAME: LAST_NAME,
-      ...emailDefaultData,
-      ...phoneDefaultData,
+      emails: [],
+      phones: [],
     },
+  });
+  const {
+    fields: fieldsEmail,
+    replace: replaceEmail,
+    remove: removeEmail,
+  } = useFieldArray({
+    control,
+    name: 'emails', // unique name for your Field Array
+  });
+
+  const {
+    fields: fieldsPhone,
+    replace: replacePhone,
+    remove: removePhone,
+  } = useFieldArray({
+    control,
+    name: 'phones', // unique name for your Field Array
   });
 
   useEffect(() => {
     Analytics.logEvent('screen', 'profile/edit');
+    if (get(EMAIL, 'length')) {
+      let tmp = [];
+      EMAIL.map((field, num) => {
+        tmp.push({
+          name: get(field, 'VALUE'),
+        });
+      });
+      replaceEmail(tmp);
+    }
+
+    if (get(PHONE, 'length')) {
+      let tmp = [];
+      PHONE.map((field, num) => {
+        tmp.push({
+          name: get(field, 'VALUE'),
+        });
+      });
+      replacePhone(tmp);
+    }
   }, []);
-
-  if (get(EMAIL, 'length')) {
-    EMAIL.map((field, num) => {
-      const fieldID = 'email__' + get(field, 'ID', num);
-      const isLast = num === EMAIL.length - 1;
-      emailData.push(
-        <Controller
-          control={control}
-          name={fieldID}
-          key={fieldID}
-          render={({field: {onChange, onBlur, value}}) => (
-            <InputCustom
-              key={'input' + fieldID}
-              type="email"
-              label={null}
-              style={{marginBottom: isLast ? 0 : 6}}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-        />,
-      );
-    });
-  }
-
-  if (get(PHONE, 'length')) {
-    PHONE.map((field, num) => {
-      const fieldID = 'phone__' + get(field, 'ID', num);
-      const isLast = num === PHONE.length - 1;
-      phoneData.push(
-        <Controller
-          control={control}
-          name={fieldID}
-          key={fieldID}
-          render={({field: {onChange, onBlur, value}}) => (
-            <InputCustom
-              key={'input' + fieldID}
-              type="phone"
-              num={num}
-              label={null}
-              style={{marginBottom: isLast ? 0 : 6}}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              value={value}
-            />
-          )}
-        />,
-      );
-    });
-  } else {
-    phoneData = PHONE;
-  }
 
   if (typeof BIRTHDATE === 'string' && BIRTHDATE.length > 0) {
     birthdate = new Date(BIRTHDATE);
@@ -183,29 +165,25 @@ const ProfileEditScreen = props => {
     setFormSending(true);
     let emailValue = [];
     let phoneValue = [];
-    let propsTmp = {};
 
-    Object.entries(data).forEach(field => {
-      if (field[0].startsWith('email__')) {
-        emailValue.push({
-          ID: field[0].replace('email__', ''),
-          TYPE_ID: 'EMAIL',
-          VALUE: field[1],
-          VALUE_TYPE: 'HOME',
-        });
-        delete data[field[0]];
-      } else if (field[0].startsWith('phone__')) {
-        phoneValue.push({
-          ID: field[0].replace('phone__', ''),
-          TYPE_ID: 'PHONE',
-          VALUE: field[1],
-          VALUE_TYPE: 'MOBILE',
-        });
-        delete data[field[0]];
-      }
+    get(data, 'emails', []).map((field, num) => {
+      emailValue.push({
+        TYPE_ID: 'EMAIL',
+        VALUE: field.name,
+        VALUE_TYPE: 'HOME',
+      });
+    });
+    get(data, 'phones', []).map((field, num) => {
+      phoneValue.push({
+        TYPE_ID: 'PHONE',
+        VALUE: field.name,
+        VALUE_TYPE: 'HOME',
+      });
     });
 
     delete data.agreementCheckbox;
+    delete data.phones;
+    delete data.emails;
 
     let formData = {
       ...data,
@@ -225,8 +203,8 @@ const ProfileEditScreen = props => {
         setTimeout(() => {
           setFormSendingStatus(null);
           navigation.navigate('LoginScreen');
-          // setFormSending(false);
-          // setTimeout(() => navigation.navigate('LoginScreen'), 300);
+          setFormSending(false);
+          setTimeout(() => navigation.navigate('LoginScreen'), 300);
         }, 500);
         return response;
       })
@@ -340,18 +318,94 @@ const ProfileEditScreen = props => {
         />
       </GroupForm>
 
-      <GroupForm title={strings.Form.group.contacts}>{emailData}</GroupForm>
-      <GroupForm title={strings.Form.group.contacts}>{phoneData}</GroupForm>
+      <GroupForm
+        title={strings.Form.group.email}
+        button={
+          <IconButton
+            icon="plus-circle-outline"
+            iconColor={styleConst.color.blue}
+            style={styles.iconPlus}
+            onPress={() =>
+              navigate('PhoneChangeScreen', {
+                mode: 'addNewEmail',
+                type: 'profileUpdate',
+                userSocialProfile: get(props, 'profile'),
+              })
+            }
+          />
+        }>
+        {fieldsEmail.map((field, index) => {
+          const isLast = index === fieldsEmail.length - 1;
+          return (
+            <Controller
+              control={control}
+              key={field.id}
+              name={`emails.${index}.name`}
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputCustom
+                  key={'input' + field.id}
+                  type="email"
+                  label={null}
+                  disabled={true}
+                  style={{marginBottom: isLast ? 0 : 6}}
+                  num={index}
+                  length={get(fieldsEmail, 'length')}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  onPressIcon={() => removeEmail(index)}
+                />
+              )}
+            />
+          );
+        })}
+      </GroupForm>
+
+      <GroupForm
+        title={strings.Form.group.phones}
+        button={
+          <IconButton
+            icon="plus-circle-outline"
+            iconColor={styleConst.color.blue}
+            style={styles.iconPlus}
+            onPress={() =>
+              navigate('PhoneChangeScreen', {
+                mode: 'addNewPhone',
+                type: 'profileUpdate',
+                userSocialProfile: get(props, 'profile'),
+              })
+            }
+          />
+        }>
+        {fieldsPhone.map((field, index) => {
+          const isLast = index === fieldsPhone.length - 1;
+          return (
+            <Controller
+              control={control}
+              key={field.id}
+              name={`phones.${index}.name`}
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputCustom
+                  key={'input' + field.id}
+                  type="phone"
+                  label={null}
+                  disabled={true}
+                  style={{marginBottom: isLast ? 0 : 6}}
+                  length={get(fieldsPhone, 'length')}
+                  num={index}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  onPressIcon={() => removePhone(index)}
+                />
+              )}
+            />
+          );
+        })}
+      </GroupForm>
 
       <GroupForm title={strings.Form.field.label.social}>
-        <SocialAuth
-          region={props.region}
-          style={{
-            width: '80%',
-            marginHorizontal: '10%',
-            paddingVertical: 7,
-          }}
-        />
+        <SocialAuth region={props.region} style={styles.socialAuthContainer} />
       </GroupForm>
 
       <Controller
@@ -373,76 +427,38 @@ const ProfileEditScreen = props => {
         )}
       />
 
-      {!sendingFormStatus ? (
-        <TransitionView animation={'slideInUp'} duration={300} index={1}>
-          <View h={40}>
-            <Button
-              onPress={handleSubmit(_onPressSave)}
-              color="blue.500"
-              size="lg"
-              shadow={2}
-              mt={4}
-              spinnerPlacement="start"
-              isLoading={sendingForm}
-              isLoadingText={strings.Form.button.sending}
-              variant="solid"
-              testID="Form.ButtonSubmit"
-              accessibilityValue={{
-                text: 'false',
-              }}
-              _text={{color: styleConst.color.white, fontSize: 16}}>
-              {strings.ProfileSettingsScreen.save}
-            </Button>
-            {!sendingForm ? (
-              <Button
-                variant="link"
-                style={{borderRadius: 5, marginTop: -10, marginBottom: 30}}
-                _text={{padding: 5, color: styleConst.color.red}}
-                onPress={() => {
-                  Alert.alert(
-                    strings.ProfileSettingsScreen.Notifications.deleteAccount
-                      .title,
-                    strings.ProfileSettingsScreen.Notifications.deleteAccount
-                      .text,
-                    [
-                      {
-                        text: strings.Base.cancel,
-                        style: 'destructive',
-                      },
-                      {
-                        text: strings.Base.ok,
-                        style: 'default',
-                        onPress: () => {
-                          return _onPressDelete();
-                        },
-                      },
-                    ],
-                  );
-                }}>
-                {strings.ProfileSettingsScreen.deleteAccount}
-              </Button>
-            ) : null}
-          </View>
-        </TransitionView>
-      ) : (
-        <TransitionView animation={'slideInLeft'} duration={300} index={1}>
-          <View alignItems={'center'} mt={4} h={40}>
-            <Icon
-              source={
-                sendingFormStatus
-                  ? 'check-circle-outline'
-                  : 'close-circle-outline'
-              }
-              color={
-                sendingFormStatus
-                  ? styleConst.color.green
-                  : styleConst.color.red
-              }
-              size={34}
-            />
-          </View>
-        </TransitionView>
-      )}
+      <SubmitButton
+        onPress={handleSubmit(_onPressSave)}
+        sendingStatus={sendingFormStatus}
+        sending={sendingForm}>
+        {!sendingForm ? (
+          <Button
+            variant="link"
+            style={styles.submitButton}
+            _text={{padding: 5, color: styleConst.color.red}}
+            onPress={() => {
+              Alert.alert(
+                strings.ProfileSettingsScreen.Notifications.deleteAccount.title,
+                strings.ProfileSettingsScreen.Notifications.deleteAccount.text,
+                [
+                  {
+                    text: strings.Base.cancel,
+                    style: 'destructive',
+                  },
+                  {
+                    text: strings.Base.ok,
+                    style: 'default',
+                    onPress: () => {
+                      return _onPressDelete();
+                    },
+                  },
+                ],
+              );
+            }}>
+            {strings.ProfileSettingsScreen.deleteAccount}
+          </Button>
+        ) : null}
+      </SubmitButton>
     </ScrollView>
   );
 };

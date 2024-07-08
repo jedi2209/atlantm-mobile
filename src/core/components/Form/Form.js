@@ -838,9 +838,9 @@ class Form extends Component {
       let value = '';
 
       if (id) {
-        value = get(this.state[name][id], 'value', '');
+        value = this.state[name][id]?.value;
       } else {
-        value = get(this.state, 'name');
+        value = this.state[name];
       }
       this.inputRefs[groupNum + 'Input' + num] = React.createRef();
       this._addToNav(groupNum, num);
@@ -866,6 +866,7 @@ class Form extends Component {
             textContentType={'emailAddress'}
             autoCorrect={false}
             testID={'Form.Email.' + name}
+            autoCapitalize={'none'}
             style={styles.textinput}
             label={label + (data.props && data.props.required ? '*' : '')}
             name={name}

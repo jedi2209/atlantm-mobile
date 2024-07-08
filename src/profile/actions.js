@@ -437,8 +437,6 @@ export const actionSaveProfileByUser = props => {
   const {SAP, isReestablish, user} = props;
   let dataToSend = props;
   if (isReestablish) {
-    dataToSend.UF_CUSTOMER_NUMBER = SAP.ID;
-    dataToSend.UF_CRM_1576136240 = SAP.ID;
     if (user.first_name) {
       dataToSend.NAME = user.first_name;
     }
@@ -448,20 +446,14 @@ export const actionSaveProfileByUser = props => {
     delete dataToSend.isReestablish;
   }
 
-  if (dataToSend.user) {
+  if (get(dataToSend, 'user')) {
     delete dataToSend.user;
   }
 
-  if (SAP.ID) {
+  if (get(SAP, 'ID')) {
     PushNotifications.addTag('sapID', SAP.ID);
     PushNotifications.setExternalUserId(SAP.ID);
   }
-
-  // for (let key in dataToSend) {
-  //   if (!dataToSend[key]) {
-  //     delete dataToSend[key];
-  //   }
-  // }
 
   return dispatch => {
     dispatch({
@@ -471,22 +463,24 @@ export const actionSaveProfileByUser = props => {
 
     return API.updateProfile(dataToSend)
       .then(async data => {
-        dispatch({
+        const dataToSend = {
           type: SAVE_PROFILE__UPDATE,
           payload: {
             ...props,
           },
-        });
-
-        return props;
+        };
+        dispatch(dataToSend);
+        return dataToSend;
       })
       .catch(error => {
-        dispatch({
+        const dataToSend = {
           type: SAVE_PROFILE__FAIL,
           payload: {
             message: error,
           },
-        });
+        };
+        dispatch(dataToSend);
+        return dataToSend;
       });
   };
 };

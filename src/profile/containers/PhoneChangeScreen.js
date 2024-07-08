@@ -22,7 +22,11 @@ import Form from '../../core/components/Form/Form';
 
 // redux
 import {connect} from 'react-redux';
-import {actionSavePofile, actionGetPhoneCode} from '../actions';
+import {
+  actionSavePofile,
+  actionSaveProfileByUser,
+  actionGetPhoneCode,
+} from '../actions';
 
 import {actionSetPushActionSubscribe} from '../../core/actions';
 
@@ -31,6 +35,8 @@ import PushNotifications from '../../core/components/PushNotifications';
 import Analytics from '../../utils/amplitude-analytics';
 
 import PhoneDetect from '../../utils/phoneDetect';
+
+import {get} from 'lodash';
 
 import {strings} from '../../core/lang/const';
 
@@ -68,14 +74,18 @@ const mapStateToProps = ({dealer, profile, nav, core}) => {
 const mapDispatchToProps = {
   actionSetPushActionSubscribe,
   actionSavePofile,
+  actionSaveProfileByUser,
   actionGetPhoneCode,
 };
 
 const PhoneChangeScreen = props => {
   const toast = useToast();
+  const mode = get(props, 'route.params.mode', 'default');
   const [code, setCode] = useState(false);
   const [checkCode, setCheckCode] = useState('');
-  const [phone, setPhone] = useState(props?.phone);
+  const [phone, setPhone] = useState(
+    mode === 'addNewPhone' || mode === 'addNewEmail' ? null : props?.phone,
+  );
   const [codeSize, setCodeSize] = useState(4);
   const [loading, setLoading] = useState(false);
   const [loadingVerify, setLoadingVerify] = useState(false);
@@ -84,20 +94,58 @@ const PhoneChangeScreen = props => {
 
   const paddingHorizontalMargin = 14;
 
-  const FormConfig = {
-    fields: [
-      {
-        name: 'PHONE',
-        type: 'phone',
-        label: strings.Form.field.label.phone,
-        value: phone,
-        props: {
-          required: true,
-          focusNextInput: false,
-        },
-      },
-    ],
-  };
+  let FormConfig = {};
+
+  switch (mode) {
+    case 'addNewPhone':
+      FormConfig = {
+        fields: [
+          {
+            name: 'PHONE',
+            type: 'phone',
+            label: strings.Form.field.label.phone,
+            value: null,
+            props: {
+              required: true,
+              focusNextInput: false,
+            },
+          },
+        ],
+      };
+      break;
+    case 'addNewEmail':
+      FormConfig = {
+        fields: [
+          {
+            name: 'PHONE',
+            type: 'email',
+            label: strings.Form.field.label.email,
+            value: '',
+            props: {
+              required: true,
+              focusNextInput: false,
+            },
+          },
+        ],
+      };
+      break;
+    default:
+      FormConfig = {
+        fields: [
+          {
+            name: 'PHONE',
+            type: 'phone',
+            label: strings.Form.field.label.phone,
+            value: phone,
+            props: {
+              required: true,
+              focusNextInput: false,
+            },
+          },
+        ],
+      };
+      break;
+  }
 
   const handleComplete = event => {
     const code = event.nativeEvent.code;
@@ -186,9 +234,9 @@ const PhoneChangeScreen = props => {
       return false;
     }
     setLoadingVerify(true);
-    let profile = props.route.params.userSocialProfile;
+    let profile = get(props, 'route.params.userSocialProfile');
     profile.phone = phone;
-    const typeUpdate = props.route.params.type;
+    const typeUpdate = get(props, 'route.params.type');
 
     switch (typeUpdate) {
       case 'auth': // авторизация
@@ -286,6 +334,63 @@ const PhoneChangeScreen = props => {
           }
         }
         break;
+      case 'profileUpdate':
+        let contactUser = null;
+        switch (mode) {
+          case 'addNewPhone':
+            if (
+              get(profile, 'phone', null) &&
+              typeof profile.PHONE === 'object' &&
+              get(profile, 'PHONE.length', 0)
+            ) {
+              contactUser = profile.phone;
+              profile.PHONE.push({
+                IS_MAIN: false,
+                TYPE_ID: 'PHONE',
+                VALUE: contactUser,
+                VALUE_TYPE: 'MOBILE',
+              });
+              delete profile.phone;
+            }
+            break;
+          case 'addNewEmail':
+            if (
+              get(profile, 'phone', null) &&
+              typeof profile.PHONE === 'object' &&
+              get(profile, 'EMAIL.length', 0)
+            ) {
+              contactUser = profile.phone;
+              profile.EMAIL.push({
+                IS_MAIN: false,
+                TYPE_ID: 'EMAIL',
+                VALUE: contactUser,
+                VALUE_TYPE: 'HOME',
+              });
+              delete profile.phone;
+            }
+            break;
+        }
+        const actionSaveUserProfile = await props.actionSaveProfileByUser(
+          profile,
+        );
+        if (get(actionSaveUserProfile, 'type', false)) {
+          setLoadingVerify(false);
+          switch (actionSaveUserProfile.type) {
+            case 'SAVE_PROFILE__UPDATE':
+              if (mode === 'addNewPhone') {
+                Analytics.logEvent('screen', 'AddPhone', {
+                  phone: contactUser,
+                });
+              } else if (mode === 'addNewEmail') {
+                Analytics.logEvent('screen', 'AddEmail', {
+                  email: contactUser,
+                });
+              }
+              props.navigation.navigate('LoginScreen');
+              break;
+          }
+        }
+        break;
     }
     return true;
   };
@@ -372,7 +477,11 @@ const PhoneChangeScreen = props => {
             />
           ) : null}
           <Button
-            isLoadingText={strings.PhoneChangeScreen.isLoading}
+            isLoadingText={
+              mode === 'addNewPhone'
+                ? strings.PhoneChangeScreen.isLoadingAddNewPhone
+                : strings.PhoneChangeScreen.isLoading
+            }
             isLoading={loadingVerify}
             onPress={_cancelVerify}
             size="md"
@@ -422,7 +531,9 @@ const PhoneChangeScreen = props => {
                 {strings.PhoneChangeScreen.title}
               </Text>
               <Text style={styles.TitleCommentText}>
-                {strings.PhoneChangeScreen.comment}
+                {strings.PhoneChangeScreen.addNewComment[mode]
+                  ? strings.PhoneChangeScreen.addNewComment[mode]
+                  : strings.PhoneChangeScreen.comment}
               </Text>
               <Form
                 key="phoneChangeForm"
