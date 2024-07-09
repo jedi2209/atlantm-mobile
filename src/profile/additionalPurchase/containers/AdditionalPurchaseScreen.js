@@ -1,4 +1,5 @@
 import React, {useEffect, useState, useReducer} from 'react';
+import {StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 
 import {List, Divider} from 'react-native-paper';
@@ -45,6 +46,28 @@ const mapStateToProps = ({profile}) => {
       token: profile.login.SAP.TOKEN,
     },
   };
+};
+
+const styles = StyleSheet.create({
+  justifyContent: {
+    justifyContent: 'center',
+  },
+  textAlignVertical: {
+    textAlignVertical: 'center',
+  },
+});
+
+const RightColumn = ({price = null, float = false}) => {
+  if (!price) {
+    return;
+  }
+  return (
+    <View style={styles.justifyContent}>
+      <Text style={styles.textAlignVertical}>
+        {showPrice(price.value, price.curr, float)}
+      </Text>
+    </View>
+  );
 };
 
 const AdditionalPurchaseScreen = ({
@@ -135,17 +158,7 @@ const AdditionalPurchaseScreen = ({
                   .filter(key => key !== null)
                   .join('\r\n')}
                 left={props => <List.Icon {...props} icon="car-sports" />}
-                right={props => {
-                  if (price) {
-                    return (
-                      <View style={{justifyContent: 'center'}}>
-                        <Text style={{textAlignVertical: 'center'}}>
-                          {showPrice(price.value, price.curr)}
-                        </Text>
-                      </View>
-                    );
-                  }
-                }}
+                right={<RightColumn price={price} />}
               />
               <Divider />
             </>
@@ -209,17 +222,7 @@ const AdditionalPurchaseScreen = ({
                           left={props => (
                             <List.Icon {...props} icon="cart-outline" />
                           )}
-                          right={props => {
-                            if (price) {
-                              return (
-                                <View style={{justifyContent: 'center'}}>
-                                  <Text style={{textAlignVertical: 'center'}}>
-                                    {showPrice(price.total, price.curr, true)}
-                                  </Text>
-                                </View>
-                              );
-                            }
-                          }}
+                          right={<RightColumn price={price} float={true} />}
                         />
                         <Divider />
                       </>
@@ -232,8 +235,8 @@ const AdditionalPurchaseScreen = ({
         break;
       case 'insurance':
         render = insurance.map(val => {
-          const name = get(val, 'detail[0].name');
-          const date = get(val, 'date');
+          const name = get(val, 'type', 'detail[0].name');
+          const date = get(val, 'date.contract', get(val, 'date.from', 'date'));
           const VIN = get(val, 'car.vin');
           const manager = get(val, 'manager');
           const dealerName = get(val, 'dealer.name');
@@ -245,7 +248,7 @@ const AdditionalPurchaseScreen = ({
           return (
             <>
               <List.Item
-                key={'insurance' + val.doc + date + VIN}
+                key={'insurance' + get(val, 'doc') + date + VIN}
                 title={name}
                 titleNumberOfLines={2}
                 descriptionNumberOfLines={4}
@@ -260,17 +263,7 @@ const AdditionalPurchaseScreen = ({
                 left={props => (
                   <List.Icon {...props} icon="file-document-outline" />
                 )}
-                right={props => {
-                  if (price) {
-                    return (
-                      <View style={{justifyContent: 'center'}}>
-                        <Text style={{textAlignVertical: 'center'}}>
-                          {showPrice(price.total, price.curr, true)}
-                        </Text>
-                      </View>
-                    );
-                  }
-                }}
+                right={<RightColumn price={price} float={true} />}
               />
               <Divider />
             </>
@@ -311,8 +304,6 @@ const AdditionalPurchaseScreen = ({
                   onPress={() => setActiveTab(val)}
                   isPressed={activeTab === val ? true : false}
                   variant={activeTab === val ? 'solid' : 'outline'}
-                  // isLoading={activeTab === val && isLoading ? true : false}
-                  // isLoadingText={strings.AdditionalPurchaseScreen.tabs[val]}
                   _spinner={{color: styleConst.color.white}}
                   _text={{textTransform: 'uppercase'}}>
                   {strings.AdditionalPurchaseScreen.tabs[val]}

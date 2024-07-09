@@ -228,6 +228,16 @@ export default {
     );
   },
 
+  fetchInsuranceNew({token, userid}) {
+    if (!token || !userid) {
+      return false;
+    }
+    return this.request(
+      `/lkk/insurance/data/?userid=${userid}&token=${token}`,
+      baseRequestParams,
+    );
+  },
+
   fetchAdditionalPurchase({token, userid}) {
     if (!token || !userid) {
       return false;
