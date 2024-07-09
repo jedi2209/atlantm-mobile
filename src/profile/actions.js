@@ -672,6 +672,10 @@ async function getUserDiscounts(token, userid) {
 }
 
 async function getUserInsurance(token, userid) {
+  const newData = await getUserInsuranceNew(token, userid);
+  if (newData) {
+    return newData;
+  }
   let insurance = [];
   const insuranceResponse = await API.fetchInsurance({token, userid});
   const insuranceResponseCode = get(insuranceResponse, 'error.code', 404);
@@ -680,6 +684,21 @@ async function getUserInsurance(token, userid) {
   } else {
     console.info(
       'getUserInsurance error get profile discounts',
+      insuranceResponse,
+    );
+  }
+  return insurance;
+}
+
+async function getUserInsuranceNew(token, userid) {
+  let insurance = [];
+  const insuranceResponse = await API.fetchInsuranceNew({token, userid});
+  const insuranceResponseCode = get(insuranceResponse, 'error.code', 404);
+  if (insuranceResponseCode === 200 && insuranceResponse.data) {
+    insurance = insuranceResponse.data;
+  } else {
+    console.info(
+      'getUserInsuranceNew error get profile discounts',
       insuranceResponse,
     );
   }
