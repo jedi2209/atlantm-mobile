@@ -1,7 +1,8 @@
 import * as React from 'react';
-import {CommonActions, StackActions} from '@react-navigation/native';
-import {createNavigationContainerRef} from '@react-navigation/native';
-// import {navigationChange} from './actions';
+import {
+  CommonActions,
+  createNavigationContainerRef,
+} from '@react-navigation/native';
 
 let _navigator;
 const mainScreen = 'BottomTabNavigation';
@@ -14,7 +15,7 @@ const setTopLevelNavigator = navigatorRef => {
 };
 
 const navigate = (name, params) => {
-  if (_navigator && _navigator.isReady()) {
+  if (_navigator?.isReady()) {
     // Perform navigation if the react navigation is ready to handle actions
     _navigator.navigate(name, params);
   } else {
@@ -25,7 +26,7 @@ const navigate = (name, params) => {
 };
 
 const dispatch = params => {
-  if (_navigator && _navigator.isReady()) {
+  if (_navigator?.isReady()) {
     _navigator.dispatch(CommonActions.setParams(params));
   } else {
     setTimeout(() => {
@@ -34,8 +35,8 @@ const dispatch = params => {
   }
 };
 
-const goBack = () => {
-  if (_navigator && _navigator.isReady()) {
+const goBack = params => {
+  if (_navigator?.isReady()) {
     _navigator.dispatch(CommonActions.goBack());
   } else {
     setTimeout(() => {

@@ -666,7 +666,7 @@ class ServiceScreenStep1 extends Component {
                       rounded={'lg'}
                       _text={{padding: 1}}
                       onPress={() => {
-                        this.props.navigation.navigate('About', {
+                        this.props.navigation.navigate('Profile', {
                           screen: 'LoginScreen',
                           activePanel: 'hidden',
                         });

@@ -166,8 +166,8 @@ const PhoneChangeScreen = props => {
       });
       return;
     }
-    let phone = data.PHONE;
-    const phoneCountry = PhoneDetect.country(phone);
+    let phoneTmp = data.PHONE;
+    const phoneCountry = PhoneDetect.country(phoneTmp);
     if (phoneCountry && APP_PHONE_RESTRICTED.includes(phoneCountry.code)) {
       toast.show({
         render: ({id}) => {
@@ -185,8 +185,8 @@ const PhoneChangeScreen = props => {
       return false;
     }
     setLoadingVerify(true);
-    setPhone(phone);
-    return props.actionGetPhoneCode({phone}).then(response => {
+    setPhone(phoneTmp);
+    return props.actionGetPhoneCode({phoneTmp}).then(response => {
       if (response.code >= 300) {
         _cancelVerify();
 

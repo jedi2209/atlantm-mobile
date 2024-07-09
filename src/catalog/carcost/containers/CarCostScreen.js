@@ -484,7 +484,7 @@ const CarCostScreen = ({
                   rounded={'lg'}
                   _text={{padding: 1}}
                   onPress={() => {
-                    navigation.navigate('About', {
+                    navigation.navigate('Profile', {
                       screen: 'LoginScreen',
                       activePanel: 'hidden',
                     });
