@@ -85,7 +85,13 @@ const EmailField = props => {
 };
 
 const PhoneField = props => {
-  const {value, onPressIcon = () => {}, length = 0, num} = props;
+  const {
+    value,
+    onPressIcon = () => {},
+    length = 0,
+    num,
+    disabled = false,
+  } = props;
   return (
     <TextInput
       placeholder={strings.Form.field.placeholder.phone}
@@ -112,8 +118,11 @@ const PhoneField = props => {
             returnKeyType: 'go',
             textContentType: 'telephoneNumber',
             enablesReturnKeyAutomatically: true,
-            editable: true,
-            style: [styles.PhoneTextInputComponent],
+            editable: !disabled,
+            style: [
+              styles.PhoneTextInputComponent,
+              {color: disabled ? styleConst.color.greyText5 : null},
+            ],
           }}
           {...propsRender}
         />
