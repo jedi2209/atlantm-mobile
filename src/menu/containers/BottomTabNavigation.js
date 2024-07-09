@@ -260,18 +260,6 @@ const BottomTabNavigation = ({navigation, route, region}) => {
   };
 
   useEffect(() => {
-    // const keyboardWillShowListener = Keyboard.addListener(
-    //   'keyboardWillShow',
-    //   () => {
-    //     setKeyboardShow(true);
-    //   },
-    // );
-    // const keyboardWillHideListener = Keyboard.addListener(
-    //   'keyboardWillHide',
-    //   () => {
-    //     setKeyboardShow(false);
-    //   },
-    // );
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
@@ -286,8 +274,6 @@ const BottomTabNavigation = ({navigation, route, region}) => {
     );
 
     return () => {
-      // keyboardWillHideListener.remove();
-      // keyboardWillShowListener.remove();
       keyboardDidHideListener.remove();
       keyboardDidShowListener.remove();
     };

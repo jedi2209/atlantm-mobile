@@ -40,6 +40,10 @@ const mapDispatchToProps = {
 };
 
 const styles = StyleSheet.create({
+  scrollViewContainer: {
+    paddingHorizontal: 8,
+    marginBottom: 80,
+  },
   iconPlus: {
     marginRight: 9,
   },
@@ -265,7 +269,7 @@ const ProfileEditScreen = props => {
   }
 
   return (
-    <ScrollView style={{paddingHorizontal: 8}} paddingX={2}>
+    <ScrollView style={styles.scrollViewContainer} paddingX={2}>
       <GroupForm title={strings.Form.group.main}>
         <Controller
           control={control}
