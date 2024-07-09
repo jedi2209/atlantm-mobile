@@ -116,6 +116,13 @@ const NotificationsScreen = props => {
           }, 500);
         }
       });
+    notificationsAll.sort((a, b) =>
+      a.date.timestamp > b.date.timestamp
+        ? 1
+        : b.date.timestamp > a.date.timestamp
+        ? -1
+        : 0,
+    );
   }, []);
 
   if (isLoading) {

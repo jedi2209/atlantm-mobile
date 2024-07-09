@@ -26,12 +26,12 @@ export const actionRemoveNotification = id => {
   return async dispatch => {
     dispatch({
       type: NOTIFICATIONS__LOCAL__REQUEST,
-      payload: id,
+      payload: parseInt(id),
     });
 
     return dispatch({
       type: NOTIFICATIONS__LOCAL__REMOVE,
-      payload: id,
+      payload: parseInt(id),
     });
   };
 };

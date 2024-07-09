@@ -29,8 +29,7 @@ function notificationsDataLocal(state = [], action) {
     case NOTIFICATIONS__LOCAL__ADD:
       return [...state, action.payload?.data];
     case NOTIFICATIONS__LOCAL__REMOVE:
-      const newState = state.filter(val => val?.id !== action.payload);
-      return newState;
+      return state.filter(val => val?.id !== action.payload);
     case NOTIFICATIONS__LOCAL__FAIL:
       return [];
     default:
