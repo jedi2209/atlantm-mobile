@@ -18,6 +18,7 @@ import MainScreen from '../../core/containers/MainScreen';
 
 import AuthContainer from '../../profile/containers/AuthContainer';
 import PhoneChangeScreen from '../../profile/containers/PhoneChangeScreen';
+import ProfileEditScreen from '../../profile/containers/ProfileEditScreen';
 import BonusScreen from '../../profile/bonus/containers/BonusScreen';
 import DiscountsScreen from '../../profile/discounts/containers/DiscountsScreen';
 
@@ -127,6 +128,18 @@ const ProfileStackView = ({navigation, route}) => (
       component={PhoneChangeScreen}
       options={BigCloseButton(navigation, route, {
         tabBarHideOnKeyboard: true,
+        headerTitle: strings.ProfileSettingsScreen.title,
+        headerTitleStyle: [
+          stylesHeader.transparentHeaderTitle,
+          {color: '#222B45'},
+        ],
+      })}
+    />
+    <ProfileStack.Screen
+      name="ProfileEditScreen"
+      component={ProfileEditScreen}
+      options={BigCloseButton(navigation, route, {
+        presentation: 'modal',
         headerTitle: strings.ProfileSettingsScreen.title,
         headerTitleStyle: [
           stylesHeader.transparentHeaderTitle,
@@ -379,7 +392,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
         />
 
         <Tab.Screen
-          name="About"
+          name="Profile"
           component={ProfileStackView}
           listeners={{
             tabPress: e => {

@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {Alert, ActivityIndicator, StyleSheet} from 'react-native';
 import {useNavigation} from '@react-navigation/native';
-import {navigate} from '../../navigation/NavigationService';
 import {Button, ScrollView, useToast} from 'native-base';
 import {Controller, useForm, useFieldArray} from 'react-hook-form';
 
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
 const ProfileEditScreen = props => {
   const {NAME, LAST_NAME, SECOND_NAME, EMAIL, PHONE, BIRTHDATE} = props.profile;
   const [loading, setLoading] = useState(false);
-  const [sendingForm, setFormSending] = useState(false);
+  const [sendingForm, setSendingForm] = useState(false);
   const [sendingFormStatus, setFormSendingStatus] = useState(null);
   const navigation = useNavigation();
   const toast = useToast();
@@ -162,7 +161,7 @@ const ProfileEditScreen = props => {
       return;
     }
 
-    setFormSending(true);
+    setSendingForm(true);
     let emailValue = [];
     let phoneValue = [];
 
@@ -203,7 +202,7 @@ const ProfileEditScreen = props => {
         setTimeout(() => {
           setFormSendingStatus(null);
           navigation.navigate('LoginScreen');
-          setFormSending(false);
+          setSendingForm(false);
           setTimeout(() => navigation.navigate('LoginScreen'), 300);
         }, 500);
         return response;
@@ -220,7 +219,7 @@ const ProfileEditScreen = props => {
         setFormSendingStatus(false);
         setTimeout(() => {
           setFormSendingStatus(null);
-          setFormSending(false);
+          setSendingForm(false);
         }, 1000);
         return false;
       });
@@ -326,10 +325,15 @@ const ProfileEditScreen = props => {
             iconColor={styleConst.color.blue}
             style={styles.iconPlus}
             onPress={() =>
-              navigate('PhoneChangeScreen', {
-                mode: 'addNewEmail',
-                type: 'profileUpdate',
-                userSocialProfile: get(props, 'profile'),
+              navigation.navigate('Profile', {
+                screen: 'PhoneChangeScreen',
+                params: {
+                  refererScreen: 'ProfileEditScreen',
+                  returnScreen: 'ProfileEditScreen',
+                  mode: 'addNewEmail',
+                  type: 'profileUpdate',
+                  userSocialProfile: get(props, 'profile'),
+                },
               })
             }
           />
@@ -369,10 +373,15 @@ const ProfileEditScreen = props => {
             iconColor={styleConst.color.blue}
             style={styles.iconPlus}
             onPress={() =>
-              navigate('PhoneChangeScreen', {
-                mode: 'addNewPhone',
-                type: 'profileUpdate',
-                userSocialProfile: get(props, 'profile'),
+              navigation.navigate('Profile', {
+                screen: 'PhoneChangeScreen',
+                params: {
+                  refererScreen: 'ProfileEditScreen',
+                  returnScreen: 'ProfileEditScreen',
+                  mode: 'addNewPhone',
+                  type: 'profileUpdate',
+                  userSocialProfile: get(props, 'profile'),
+                },
               })
             }
           />
