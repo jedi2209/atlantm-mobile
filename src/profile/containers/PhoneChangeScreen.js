@@ -186,7 +186,7 @@ const PhoneChangeScreen = props => {
     }
     setLoadingVerify(true);
     setPhone(phoneTmp);
-    return props.actionGetPhoneCode({phoneTmp}).then(response => {
+    return props.actionGetPhoneCode({phone: phoneTmp}).then(response => {
       if (response.code >= 300) {
         _cancelVerify();
 
@@ -194,6 +194,9 @@ const PhoneChangeScreen = props => {
 
         if (response.code === 400) {
           message = strings.ProfileScreen.Notifications.error.phone;
+          if (mode === 'addNewEmail') {
+            message = strings.ProfileScreen.Notifications.error.email;
+          }
         }
 
         if (response.code === 406) {
