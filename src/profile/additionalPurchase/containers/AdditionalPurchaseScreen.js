@@ -7,7 +7,7 @@ import {Box, View, Button, Text, ScrollView} from 'native-base';
 
 import API from '../../../utils/api';
 
-import {dayMonthYear} from '../../../utils/date';
+import {dayMonthYear, getTimestamp} from '../../../utils/date';
 import showPrice from '../../../utils/price';
 import {strings} from '../../../core/lang/const';
 import {get} from 'lodash';
@@ -175,7 +175,9 @@ const AdditionalPurchaseScreen = ({
             const docNumber = get(row, 'val.doc');
             const dealerName = get(row, 'val.dealer.name');
             const key =
-              'additionalPurchaseData' + get(row, 'val.doc', date + priceTotal);
+              'additionalPurchaseData' +
+              get(row, 'val.doc', date + priceTotal) +
+              getTimestamp();
             if (row && row.data) {
               return (
                 <List.Accordion
@@ -204,7 +206,8 @@ const AdditionalPurchaseScreen = ({
                         <List.Item
                           key={
                             'additionalPurchaseItem' +
-                            get(valData, 'doc', Date.now())
+                            get(valData, 'doc', getTimestamp()) +
+                            getTimestamp()
                           }
                           titleNumberOfLines={2}
                           descriptionNumberOfLines={3}
@@ -250,7 +253,13 @@ const AdditionalPurchaseScreen = ({
           return (
             <>
               <List.Item
-                key={'insurance' + get(val, 'doc') + date + VIN}
+                key={
+                  'insurance' +
+                  get(val, 'doc', getTimestamp()) +
+                  date +
+                  VIN +
+                  getTimestamp()
+                }
                 title={name}
                 titleNumberOfLines={2}
                 descriptionNumberOfLines={4}

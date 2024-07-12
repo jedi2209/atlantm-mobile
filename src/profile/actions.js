@@ -466,7 +466,7 @@ export const actionSaveProfileByUser = props => {
         const dataToSend = {
           type: SAVE_PROFILE__UPDATE,
           payload: {
-            ...props,
+            ...data?.data,
           },
         };
         dispatch(dataToSend);

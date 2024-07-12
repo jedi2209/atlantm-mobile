@@ -53,7 +53,7 @@ function login(state = '', action) {
     case REHYDRATE:
       return get(action.payload, 'profile.login', '');
     case SAVE_PROFILE__UPDATE:
-      return {...state, ...action.payload};
+      return {...action.payload};
     case SAVE_PROFILE__FAIL:
     case LOGOUT:
       // case APP_STORE_UPDATED:

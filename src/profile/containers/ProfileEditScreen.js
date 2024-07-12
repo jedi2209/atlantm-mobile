@@ -60,14 +60,15 @@ const styles = StyleSheet.create({
 });
 
 const ProfileEditScreen = props => {
-  const {NAME, LAST_NAME, SECOND_NAME, EMAIL, PHONE, BIRTHDATE} = props.profile;
+  const {NAME, LAST_NAME, SECOND_NAME, EMAIL, PHONE, BIRTHDATE, IM} =
+    props.profile;
   const [loading, setLoading] = useState(false);
   const [sendingForm, setSendingForm] = useState(false);
   const [sendingFormStatus, setFormSendingStatus] = useState(null);
   const navigation = useNavigation();
   const toast = useToast();
 
-  const mustUpdateScreen = get(props, 'route.params.updateScreen', false);
+  const mustUpdateScreen = get(props, 'route.params.updateScreen', null);
 
   let birthdate = null;
 
@@ -194,6 +195,7 @@ const ProfileEditScreen = props => {
       ...data,
       EMAIL: emailValue,
       PHONE: phoneValue,
+      IM,
     };
 
     const profileToSend = Object.assign(

@@ -43,6 +43,7 @@ import {strings} from '../../core/lang/const';
 import {verticalScale} from '../../utils/scale';
 import UserData from '../../utils/user';
 import {APP_PHONE_RESTRICTED, ERROR_NETWORK} from '../../core/const';
+import {getTimestamp} from '../../utils/date';
 
 export const isAndroid = Platform.OS === 'android';
 
@@ -390,7 +391,7 @@ const PhoneChangeScreen = props => {
                 });
               }
               props.navigation.navigate('ProfileEditScreen', {
-                updateScreen: true,
+                updateScreen: getTimestamp(),
               });
               break;
           }
