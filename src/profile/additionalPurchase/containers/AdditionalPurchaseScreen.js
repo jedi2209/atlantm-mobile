@@ -158,7 +158,7 @@ const AdditionalPurchaseScreen = ({
                   .filter(key => key !== null)
                   .join('\r\n')}
                 left={props => <List.Icon {...props} icon="car-sports" />}
-                right={<RightColumn price={price} />}
+                right={props => <RightColumn price={price} />}
               />
               <Divider />
             </>
@@ -222,7 +222,9 @@ const AdditionalPurchaseScreen = ({
                           left={props => (
                             <List.Icon {...props} icon="cart-outline" />
                           )}
-                          right={<RightColumn price={price} float={true} />}
+                          right={props => (
+                            <RightColumn price={price} float={true} />
+                          )}
                         />
                         <Divider />
                       </>
@@ -263,7 +265,7 @@ const AdditionalPurchaseScreen = ({
                 left={props => (
                   <List.Icon {...props} icon="file-document-outline" />
                 )}
-                right={<RightColumn price={price} float={true} />}
+                right={props => <RightColumn price={price} float={true} />}
               />
               <Divider />
             </>
