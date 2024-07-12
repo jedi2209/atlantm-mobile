@@ -67,6 +67,8 @@ const ProfileEditScreen = props => {
   const navigation = useNavigation();
   const toast = useToast();
 
+  const mustUpdateScreen = get(props, 'route.params.updateScreen', false);
+
   let birthdate = null;
 
   const {
@@ -121,7 +123,7 @@ const ProfileEditScreen = props => {
       });
       replacePhone(tmp);
     }
-  }, []);
+  }, [mustUpdateScreen, PHONE, EMAIL, replaceEmail, replacePhone]);
 
   if (typeof BIRTHDATE === 'string' && BIRTHDATE.length > 0) {
     birthdate = new Date(BIRTHDATE);

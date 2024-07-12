@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, Platform} from 'react-native';
 
 import * as NavigationService from '../../../navigation/NavigationService';
 
@@ -12,6 +12,8 @@ import {strings} from '../../../core/lang/const';
 import {get} from 'lodash';
 
 import styleConst from '../../style-const';
+
+const isAndroid = Platform.OS === 'android';
 
 let countrySettings = [];
 countrySettings = APP_COUNTRY_SETTINGS;
@@ -193,7 +195,7 @@ export const AgreementCheckbox = props => {
       padding={2}
       paddingLeft={4}
       rounded={4}>
-      <View width={8} height={10} borderRadius={1}>
+      <View width={isAndroid ? 9 : 8} height={10} borderRadius={1}>
         <Checkbox
           aria-label={
             strings.Form.agreement.first +
@@ -207,15 +209,14 @@ export const AgreementCheckbox = props => {
           status={checked ? 'checked' : 'unchecked'}
           isChecked={checked ? true : false}
           defaultIsChecked={false}
-          // color={styleConst.color.blue}
           borderWidth={1}
           borderTopLeftRadius={styleConst.borderRadius - 6}
           borderTopRightRadius={styleConst.borderRadius - 6}
           borderBottomLeftRadius={styleConst.borderRadius - 6}
           borderBottomRightRadius={styleConst.borderRadius - 6}
-          paddingTop={0}
+          paddingTop={isAndroid ? 5 : 0}
           paddingBottom={2}
-          paddingLeft={4}
+          paddingLeft={isAndroid ? 5 : 4}
           borderColor={
             isValid === true
               ? styleConst.color.systemGray

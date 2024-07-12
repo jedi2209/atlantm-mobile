@@ -618,6 +618,7 @@ export default {
     Notifications: {
       error: {
         phone: 'Телефон не должен быть пустым',
+        email: 'Email не может быть пустым',
         phoneProvider:
           'Не опознан мобильный оператор или не правильный формат номера',
         wrongCode: 'Неверный код',
