@@ -389,7 +389,9 @@ const PhoneChangeScreen = props => {
                   email: contactUser,
                 });
               }
-              props.navigation.navigate('LoginScreen');
+              props.navigation.navigate('ProfileEditScreen', {
+                updateScreen: true,
+              });
               break;
           }
         }
