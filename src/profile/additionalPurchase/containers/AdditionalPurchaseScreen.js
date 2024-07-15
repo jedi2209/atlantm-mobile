@@ -57,12 +57,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const RightColumn = ({price = null, float = false}) => {
+const RightColumn = ({price = null, keyVal = null, float = false}) => {
   if (!price) {
     return;
   }
   return (
-    <View style={styles.justifyContent}>
+    <View style={styles.justifyContent} key={keyVal}>
       <Text style={styles.textAlignVertical}>
         {showPrice(price.value, price.curr, float)}
       </Text>
@@ -107,8 +107,6 @@ const AdditionalPurchaseScreen = ({
     if (activeTab === 'additionalPurchase') {
       getPurchase();
     }
-    // return () => {
-    // }
   }, [activeTab]);
 
   const getPurchase = async () => {
@@ -137,13 +135,14 @@ const AdditionalPurchaseScreen = ({
           const dealerName = get(val, 'purchaseData[0].dealer.name');
           const manager = get(val, 'purchaseData[0].manager');
           const price = get(val, 'purchaseData[0].price.total');
+          const key = vin + date + price;
           if (!price) {
             return false;
           }
           return (
-            <>
+            <View key={'viewCars' + key}>
               <List.Item
-                key={'cars' + vin}
+                key={'cars' + key}
                 titleNumberOfLines={2}
                 descriptionNumberOfLines={4}
                 title={[get(val, 'brand'), get(val, 'model')]
@@ -157,11 +156,19 @@ const AdditionalPurchaseScreen = ({
                 ]
                   .filter(key => key !== null)
                   .join('\r\n')}
-                left={props => <List.Icon {...props} icon="car-sports" />}
-                right={props => <RightColumn price={price} />}
+                left={props => (
+                  <List.Icon
+                    {...props}
+                    key={'LeftIconCars' + key}
+                    icon="car-sports"
+                  />
+                )}
+                right={props => (
+                  <RightColumn price={price} keyVal={'RightColumnCars' + key} />
+                )}
               />
-              <Divider />
-            </>
+              <Divider key={'dividerCars' + key} />
+            </View>
           );
         });
         break;
@@ -174,10 +181,7 @@ const AdditionalPurchaseScreen = ({
             const manager = get(row, 'val.manager');
             const docNumber = get(row, 'val.doc');
             const dealerName = get(row, 'val.dealer.name');
-            const key =
-              'additionalPurchaseData' +
-              get(row, 'val.doc', date + priceTotal) +
-              getTimestamp();
+            const key = get(row, 'val.doc', date + priceTotal);
             if (row && row.data) {
               return (
                 <List.Accordion
@@ -197,18 +201,15 @@ const AdditionalPurchaseScreen = ({
                   }
                   onPress={() => expand(key)}
                   onLongPress={() => expand(key)}
-                  key={key}
+                  key={'additionalPurchaseData' + key}
                   id={key}>
                   {row.data.map(valData => {
                     const price = get(valData, 'price.base');
+                    const keyItem = get(valData, 'doc', getTimestamp());
                     return (
-                      <>
+                      <View key={'viewAdditionalPurchaseItem' + keyItem}>
                         <List.Item
-                          key={
-                            'additionalPurchaseItem' +
-                            get(valData, 'doc', getTimestamp()) +
-                            getTimestamp()
-                          }
+                          key={'additionalPurchaseItem' + keyItem}
                           titleNumberOfLines={2}
                           descriptionNumberOfLines={3}
                           title={[
@@ -223,14 +224,22 @@ const AdditionalPurchaseScreen = ({
                           // description={[dayMonthYear(date), dealerName, '', manager].join('\r\n')}
                           // description={[dayMonthYear(date), dealerName, '', manager ? 'менеджер: ' + manager : null].join('\r\n')}
                           left={props => (
-                            <List.Icon {...props} icon="cart-outline" />
+                            <List.Icon
+                              {...props}
+                              key={'LeftIconPurch' + key}
+                              icon="cart-outline"
+                            />
                           )}
                           right={props => (
-                            <RightColumn price={price} float={true} />
+                            <RightColumn
+                              price={price}
+                              keyVal={'RightColumnPurhc' + key}
+                              float={true}
+                            />
                           )}
                         />
-                        <Divider />
-                      </>
+                        <Divider key={'dividerPurchase' + key} />
+                      </View>
                     );
                   })}
                 </List.Accordion>
@@ -240,44 +249,54 @@ const AdditionalPurchaseScreen = ({
         break;
       case 'insurance':
         render = insurance.map(val => {
-          const name = get(val, 'type', 'detail[0].name');
+          const name = get(val, 'name', get(val, 'detail[0].name', null));
           const date = get(val, 'date.contract', get(val, 'date.from', 'date'));
           const VIN = get(val, 'car.vin');
           const manager = get(val, 'manager');
+          const supplier = get(val, 'supplier');
           const dealerName = get(val, 'dealer.name');
           const price = get(
             val,
             'detail[0].price.base',
             get(val, 'price.base'),
           );
+          const key =
+            get(val, 'doc', getTimestamp()) +
+            get(val, 'number', getTimestamp()) +
+            date +
+            VIN;
           return (
-            <>
+            <View key={'viewInsurance' + key}>
               <List.Item
-                key={
-                  'insurance' +
-                  get(val, 'doc', getTimestamp()) +
-                  date +
-                  VIN +
-                  getTimestamp()
-                }
+                key={'insurance' + key}
                 title={name}
-                titleNumberOfLines={2}
+                titleNumberOfLines={name ? 2 : 1}
                 descriptionNumberOfLines={4}
                 description={[
                   dayMonthYear(date),
                   dealerName,
                   VIN ? 'VIN: ' + VIN : null,
-                  manager,
+                  supplier ? supplier : manager,
                 ]
                   .filter(key => key !== null)
                   .join('\r\n')}
                 left={props => (
-                  <List.Icon {...props} icon="file-document-outline" />
+                  <List.Icon
+                    {...props}
+                    key={'LeftIconIns' + key}
+                    icon="file-document-outline"
+                  />
                 )}
-                right={props => <RightColumn price={price} float={true} />}
+                right={props => (
+                  <RightColumn
+                    price={price}
+                    keyVal={'RightColumnIns' + key}
+                    float={true}
+                  />
+                )}
               />
-              <Divider />
-            </>
+              <Divider key={'dividerIns' + key} />
+            </View>
           );
         });
         break;
@@ -312,6 +331,7 @@ const AdditionalPurchaseScreen = ({
             {allDataFilter.map((val, index) => {
               return (
                 <Button
+                  key={'buttonTab' + index}
                   onPress={() => setActiveTab(val)}
                   isPressed={activeTab === val ? true : false}
                   variant={activeTab === val ? 'solid' : 'outline'}
