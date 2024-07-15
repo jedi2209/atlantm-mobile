@@ -104,13 +104,12 @@ const NotificationsScreen = props => {
       [...get(data, 'payload.data'), ...notifications.local].forEach(el => {
         notificationsTmp.push(el);
       });
-      notificationsTmp.sort((a, b) =>
-        a.date.timestamp > b.date.timestamp
-          ? 1
-          : b.date.timestamp > a.date.timestamp
-          ? -1
-          : 0,
-      );
+      notificationsTmp.sort((a, b) => {
+        if (a.date.timestamp > b.date.timestamp) {
+          return -1;
+        }
+        return b.date.timestamp > a.date.timestamp ? 0 : -1;
+      });
       setNotificationsAll(notificationsTmp);
       setTimeout(() => {
         navigation.setParams({
