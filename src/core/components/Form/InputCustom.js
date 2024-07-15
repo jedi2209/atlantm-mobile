@@ -209,7 +209,7 @@ export const AgreementCheckbox = props => {
           status={checked ? 'checked' : 'unchecked'}
           isChecked={checked ? true : false}
           defaultIsChecked={false}
-          borderWidth={1}
+          borderWidth={isAndroid ? 0 : 1}
           borderTopLeftRadius={styleConst.borderRadius - 6}
           borderTopRightRadius={styleConst.borderRadius - 6}
           borderBottomLeftRadius={styleConst.borderRadius - 6}
