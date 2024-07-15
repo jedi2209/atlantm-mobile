@@ -8,15 +8,17 @@ import {
   NOTIFICATIONS__LOCAL__FAIL,
   NOTIFICATIONS__LOCAL__REMOVE,
 } from './actionTypes';
+import {LOGOUT} from '../profile/actionTypes';
 
 function notificationsData(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'settings.notifications.remote.data', []);
     case NOTIFICATIONS__SUCCESS:
-      return action.payload?.data;
+      return get(action.payload, 'data', []);
     case NOTIFICATIONS__FAIL:
-      return {};
+    case LOGOUT:
+      return [];
     default:
       return state;
   }

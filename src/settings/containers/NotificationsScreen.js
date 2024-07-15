@@ -92,37 +92,33 @@ const parseURL = async item => {
 };
 
 const NotificationsScreen = props => {
-  const {notifications, login: userData, navigation} = props;
+  const {notifications, login, navigation, actionGetNotifications} = props;
   const [isLoading, setLoading] = useState(false);
   const [notificationsAll, setNotificationsAll] = useState([]);
 
   useEffect(() => {
     Analytics.logEvent('screen', 'notifications');
     setLoading(true);
-    props
-      .actionGetNotifications({userID: get(userData, 'SAP.ID', null)})
-      .then(() => {
-        let notificationsTmp = [];
-        [...notifications.remote, ...notifications.local].forEach(el => {
-          notificationsTmp.push(el);
-        });
-        setNotificationsAll(notificationsTmp);
-        setLoading(false);
-        if (get(notificationsTmp, 'length')) {
-          setTimeout(() => {
-            navigation.setParams({
-              notificationsCount: get(notificationsTmp, 'length'),
-            });
-          }, 500);
-        }
+    actionGetNotifications({userID: get(login, 'SAP.ID', null)}).then(data => {
+      let notificationsTmp = [];
+      [...get(data, 'payload.data'), ...notifications.local].forEach(el => {
+        notificationsTmp.push(el);
       });
-    notificationsAll.sort((a, b) =>
-      a.date.timestamp > b.date.timestamp
-        ? 1
-        : b.date.timestamp > a.date.timestamp
-        ? -1
-        : 0,
-    );
+      notificationsTmp.sort((a, b) =>
+        a.date.timestamp > b.date.timestamp
+          ? 1
+          : b.date.timestamp > a.date.timestamp
+          ? -1
+          : 0,
+      );
+      setNotificationsAll(notificationsTmp);
+      setTimeout(() => {
+        navigation.setParams({
+          notificationsCount: get(notificationsTmp, 'length', 0),
+        });
+      }, 500);
+      setLoading(false);
+    });
   }, []);
 
   if (isLoading) {
