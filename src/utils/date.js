@@ -40,8 +40,8 @@ export const humanDate = date =>
 export const humanDateTime = date =>
   date ? moment(date).tz('Europe/Minsk').format('DD MMMM в HH:mm') : null;
 
-export const substructMonth = () =>
-  moment().tz('Europe/Minsk').subtract(1, 'months').format('YYYY-MM-DD');
+export const substructMonth = (month = 1) =>
+  moment().tz('Europe/Minsk').subtract(month, 'months').format('YYYY-MM-DD');
 
 export const substractWeek = () =>
   moment().tz('Europe/Minsk').subtract(1, 'week').format('YYYY-MM-DD');

@@ -1121,7 +1121,13 @@ export default {
     );
   },
 
-  async getPeriodForServiceInfo({dealerID, date, service, seconds}) {
+  async getPeriodForServiceInfo({
+    dealerID,
+    date,
+    dateTo = null,
+    service,
+    seconds,
+  }) {
     // Дата в формате [YYYY-MM-DD] или [YYYYMMDD] или [DD.MM.YYYY]
     const url =
       `/service/online/${dealerID}/?` +
@@ -1130,6 +1136,7 @@ export default {
           {
             seconds,
             date,
+            dateTo,
             type: service,
           },
           _.isNil,
