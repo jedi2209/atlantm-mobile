@@ -579,6 +579,9 @@ const ServiceStep1 = props => {
       extData.CARNUMBER = get(car, 'carNumber', pushProps.CARNUMBER);
       extData.CARVIN = get(car, 'carVIN', pushProps.CARVIN);
     }
+    if (['service', 'carWash', 'other'].includes(workType)) {
+      pushProps.SERVICETYPE = null;
+    }
     const dataForNextScreen = {...serviceData, ...pushProps, ...extData};
     navigation.navigate(nextScreen, dataForNextScreen);
   };
