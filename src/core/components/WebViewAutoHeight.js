@@ -207,7 +207,7 @@ const WebViewAutoHeight = ({
       onNavigationStateChange={
         sourceModified?.html ? _handleNavigationChange : _handleHeight
       }
-      dataDetectorTypes="all"
+      dataDetectorTypes={['phoneNumber', 'link', 'address']}
       allowsFullscreenVideo={true}
       allowsInlineMediaPlayback={true}
       // incognito={true}

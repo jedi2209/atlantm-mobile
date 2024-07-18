@@ -72,6 +72,15 @@ const parseURL = async item => {
     return;
   }
 
+  if (url.startsWith('screen:')) {
+    const urlArr = url.split(':');
+    if (urlArr.length >= 2) {
+      if (urlArr[1] === 'NotificationsScreen') {
+        return;
+      }
+      return NavigationService.navigate(urlArr[1]);
+    }
+  }
   const supported = await Linking.canOpenURL(url);
 
   if (isValidUrl(url) && supported) {
