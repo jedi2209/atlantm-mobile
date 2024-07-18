@@ -86,12 +86,12 @@ export const fetchInfoPost = infoID => {
       .then(res => {
         const {data, error} = res;
 
-        if (error) {
+        if (error || typeof(data) === 'undefined') {
           return dispatch({
             type: INFO_POST__FAIL,
             payload: {
-              code: error.code,
-              error: error.message,
+              code: _.get(error, 'code'),
+              error: _.get(error, 'message'),
             },
           });
         }
