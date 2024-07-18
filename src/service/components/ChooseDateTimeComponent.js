@@ -283,18 +283,7 @@ export default class ChooseDateTimeComponent extends Component {
           value={this.state.date || null}
           isActive={this.state.modal || false}
           onPressButton={() => {
-            // if (Platform.OS === 'android') {
-            //   if (
-            //     !this.state.modal &&
-            //     typeof this.state.modal !== 'undefined'
-            //   ) {
-            //     this.setState({modal: true});
-            //   } else {
-            //     this.setState({modal: false});
-            //   }
-            // } else {
             this.setState({modal: true});
-            // }
           }}
           onHideModal={() => {
             //только для iOS
