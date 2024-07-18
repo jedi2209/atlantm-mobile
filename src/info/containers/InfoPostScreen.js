@@ -1,6 +1,5 @@
 import React, {useEffect, useState, useCallback} from 'react';
 import {
-  Text,
   Linking,
   Dimensions,
   StyleSheet,
@@ -9,7 +8,7 @@ import {
 } from 'react-native';
 import {useFocusEffect} from '@react-navigation/native';
 import TransitionView from '../../core/components/TransitionView';
-import {Button, ScrollView, View} from 'native-base';
+import {Button, ScrollView, View, Text} from 'native-base';
 import ResponsiveImageView from 'react-native-responsive-image-view';
 
 // redux
@@ -38,8 +37,8 @@ import ModalView from '../../core/components/ModalView';
 import stylesHeader from '../../core/components/Header/style';
 
 // image
-const {width: screenWidth} = Dimensions.get('window');
-const webViewWidth = screenWidth - styleConst.ui.verticalGap;
+// const {width: screenWidth} = Dimensions.get('window');
+// const webViewWidth = screenWidth - styleConst.ui.verticalGap;
 
 const onMessage = ({nativeEvent}) => {
   const data = nativeEvent.data;
@@ -96,6 +95,7 @@ const InfoPostScreen = ({
   const [isLoading, setLoading] = useState(true);
   const [postData, setPost] = useState(posts[postID]);
   const [isFinished, setFinished] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(true);
 
   useFocusEffect(
     useCallback(() => {
@@ -118,7 +118,10 @@ const InfoPostScreen = ({
     console.info('== InfoPost ==');
     let timeOutAfterLoaded = null;
 
-    if (typeof(posts[postID]) === 'undefined' || !get(posts[postID], 'date.from', false)) {
+    if (
+      typeof posts[postID] === 'undefined' ||
+      !get(posts[postID], 'date.from', false)
+    ) {
       fetchInfoPost(postID).then(res => {
         if (get(res, 'type') === 'INFO_POST__FAIL') {
           setFinished(true);
@@ -128,8 +131,8 @@ const InfoPostScreen = ({
         timeOutAfterLoaded = setTimeout(() => setLoading(false), 500);
       });
     } else {
-        setPost(posts[postID]);
-        timeOutAfterLoaded = setTimeout(() => setLoading(false), 500);
+      setPost(posts[postID]);
+      timeOutAfterLoaded = setTimeout(() => setLoading(false), 500);
     }
     Analytics.logEvent('screen', 'offer/item', {
       id: postID,
@@ -313,7 +316,7 @@ const InfoPostScreen = ({
 
   let text = get(postData, 'text');
   const img = get(postData, 'img');
-  const imageUrl = get(img, '10000x440');
+  const imageUrl = get(img, 'main');
   const date = get(postData, 'date');
   const type = get(postData, 'type');
   let dealers = get(postData, 'dealers');
@@ -326,26 +329,26 @@ const InfoPostScreen = ({
       get(postData, 'imgCropAvailable') === true ? 'cover' : 'contain';
   }
 
-  if (text) {
-    //text = processHtml(text, webViewWidth);
-  }
+  // if (text) {
+  //   text = processHtml(text, webViewWidth);
+  // }
 
   if (isFinished) {
     return (
       <ModalView
-        isModalVisible={true}
-        animationIn="slideInRight"
-        animationOut="slideOutLeft"
-        onHide={() => navigation.goBack()} 
+        isModalVisible={isModalVisible}
+        animationIn="zoomIn"
+        animationInTiming={400}
+        animationOut="zoomOut"
+        onHide={() => {
+          setModalVisible(false);
+          navigation.goBack();
+        }}
         selfClosed={false}>
-        <View
-          style={{
-            justifyContent: 'center',
-            alignContent: 'center',
-            alignSelf: 'center',
-            height: 60,
-          }}>
-           <Text style={{ textAlign: 'center' }}>{strings.InfoPostScreen.button.actionFinished}</Text>
+        <View style={styles.modalView}>
+          <Text textAlign={'center'}>
+            {strings.InfoPostScreen.button.actionFinished}
+          </Text>
         </View>
       </ModalView>
     );
@@ -488,6 +491,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     letterSpacing: styleConst.ui.letterSpacing,
     marginTop: verticalScale(5),
+  },
+  modalView: {
+    justifyContent: 'center',
+    alignContent: 'center',
+    alignSelf: 'center',
+    height: 60,
   },
 });
 
