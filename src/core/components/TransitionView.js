@@ -1,7 +1,13 @@
 import React from 'react';
 import * as Animatable from 'react-native-animatable';
 
-const TransitionView = ({index, duration, delay, wrapperStyle, ...rest}) => {
+const TransitionView = ({
+  index = 0,
+  duration,
+  delay,
+  wrapperStyle,
+  ...rest
+}) => {
   return (
     <Animatable.View
       animation="bounceInRight"

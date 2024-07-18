@@ -1,13 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, {useEffect, useState, useMemo, useCallback} from 'react';
 import {ActivityIndicator} from 'react-native';
-import {Text, View} from 'native-base';
-import LogoLoader from '../../../core/components/LogoLoader';
+import {ScrollView, Text, View} from 'native-base';
+// import LogoLoader from '../../../core/components/LogoLoader';
+import RNBounceable from '@freakycoder/react-native-bounceable';
 import Form from '../../../core/components/Form/Form';
+import TransitionView from '../../../core/components/TransitionView';
 import {
   CalendarProvider,
   Calendar,
-  TimelineList,
   LocaleConfig,
   CalendarUtils,
 } from 'react-native-calendars';
@@ -103,11 +104,13 @@ const ServiceStep3 = props => {
   const [hideLeftArrow, setHideLeftArrow] = useState(true);
   const [hideRightArrow, setHideRightArrow] = useState(false);
   const [loadingDate, setLoadingDate] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const orderData = get(route, 'params', {});
   const myTyresInStorage = get(orderData, 'myTyresInStorage', false) === 1; // 1 - true, 2 - false
 
   const [selectedDay, setSelectedDay] = useState(minDate);
+  const [maxDateDynamic, setMaxDateDynamic] = useState(maxDate);
   const [eventsByDate, setEventsByDate] = useState({});
   const [markedDatesDefault, setMarkedDatesDefault] = useState({});
 
@@ -125,15 +128,13 @@ const ServiceStep3 = props => {
         selected: true,
         disableTouchEvent: true,
         selectedColor: styleConst.color.blue,
-        selectedDotColor: styleConst.color.white,
-        selectedTextColor: styleConst.color.white,
       },
     };
   }, [selectedDay]);
 
   useEffect(() => {
     Analytics.logEvent('screen', 'service/step3');
-
+    setLoading(true);
     const fetchDatesFromAPI = async () => {
       const availablePeriods = await API.getPeriodForServiceInfo({
         date: minDate,
@@ -147,7 +148,12 @@ const ServiceStep3 = props => {
         const datesTmp = get(availablePeriods, 'data');
         let dates = [];
         let markedDatesTmp = {};
+        let dateMaxTmp = null;
+        let dateMinTmp = null;
         for (const [date, timeSlots] of Object.entries(datesTmp)) {
+          if (!dateMinTmp && get(timeSlots, 'length', 0)) {
+            dateMinTmp = date;
+          }
           let timeSlotsTmp = [];
           timeSlots.map(el => {
             timeSlotsTmp.push({
@@ -164,27 +170,43 @@ const ServiceStep3 = props => {
           });
           dates.push(...timeSlotsTmp);
           if (timeSlotsTmp.length) {
+            let dotColor = styleConst.color.green2;
+            if (timeSlotsTmp.length <= 12) {
+              dotColor = styleConst.color.yellow;
+            }
+            if (timeSlotsTmp.length <= 5) {
+              dotColor = styleConst.color.orange2;
+            }
             markedDatesTmp[date] = {
               selected: false,
               marked: true,
-              selectedColor: styleConst.color.greyBlue,
+              dotColor: dotColor,
             };
+            dateMaxTmp = date;
           } else {
             markedDatesTmp[date] = {
               disabled: true,
               disableTouchEvent: true,
+              // dotColor: styleConst.color.red,
             };
           }
+        }
+        if (dateMaxTmp !== maxDate) {
+          setMaxDateDynamic(dateMaxTmp);
+        }
+        if (dateMinTmp !== selectedDay) {
+          setSelectedDay(dateMinTmp);
         }
         setEventsByDate(
           groupBy(dates, e => CalendarUtils.getCalendarDateString(e.start)),
         );
         setMarkedDatesDefault(markedDatesTmp);
       }
+      setLoading(false);
     };
 
     fetchDatesFromAPI();
-  }, []);
+  }, [maxDate, minDate, orderData]);
 
   const _onPressOrder = async pushProps => {
     if (
@@ -197,6 +219,76 @@ const ServiceStep3 = props => {
       ...orderData,
       ...pushProps,
     });
+  };
+
+  const showDateSlots = eventsByDateTmp => {
+    if (typeof eventsByDateTmp === 'undefined') {
+      console.error(
+        'showDateSlots',
+        'typeof eventsByDateTmp === undefined',
+        eventsByDateTmp,
+      );
+      return;
+    }
+    let datesTmp = [];
+    const timeSlotsTmpArr = eventsByDateTmp.reduce(
+      (accumulator, currentValue, currentIndex, array) => {
+        if (currentIndex % 4 === 0) {
+          accumulator.push(array.slice(currentIndex, currentIndex + 4));
+        }
+        return accumulator;
+      },
+      [],
+    );
+    timeSlotsTmpArr.map(el => {
+      datesTmp.push(
+        el.map((dateSlot, indx) => (
+          <TransitionView
+            animation={'zoomIn'}
+            duration={35}
+            index={indx}
+            key={'TransitionTimeSlot' + get(dateSlot, 'srcData.from')}>
+            <RNBounceable
+              onPress={() => {
+                const dateData = get(dateSlot, 'srcData');
+                _onPressOrder({
+                  DATETIME: {
+                    noTimeAlways: false,
+                    date: get(dateData, 'date'),
+                    time: get(dateData, 'from'),
+                  },
+                });
+              }}>
+              <View
+                rounded={'xl'}
+                key={'ViewTimeSlot' + get(dateSlot, 'srcData.from')}
+                background={styleConst.color.blue}
+                padding={3}
+                w={20}
+                marginRight={4}
+                marginBottom={4}
+                alignItems={'center'}>
+                <Text color={styleConst.color.white} fontSize={'md'}>
+                  {time(get(dateSlot, 'start'))}
+                </Text>
+              </View>
+            </RNBounceable>
+          </TransitionView>
+        )),
+      );
+    });
+    return (
+      <ScrollView padding={4}>
+        <View
+          flexDirection={'row'}
+          flexWrap={'wrap'}
+          alignItems={'center'}
+          alignSelf={'center'}
+          justifyContent={'center'}>
+          {datesTmp.map(el => el)}
+        </View>
+      </ScrollView>
+    );
   };
 
   if (get(orderData, 'lead', false)) {
@@ -265,66 +357,48 @@ const ServiceStep3 = props => {
     );
   }
 
-  if (!get(Object.keys(eventsByDate), 'length', 0)) {
-    return <LogoLoader />;
-    // return <ActivityIndicator color={styleConst.color.blue} marginTop={15} />;
+  if (
+    !get(Object.keys(eventsByDate), 'length', 0) ||
+    !get(Object.keys(markedDatesDefault), 'length', 0) ||
+    loading
+  ) {
+    // return <LogoLoader />;
+    return <ActivityIndicator color={styleConst.color.blue} marginTop={15} />;
   }
 
   return (
-    <CalendarProvider date={selectedDay} disabledOpacity={0.6}>
-      <Calendar
-        onDayPress={onDayPress}
-        minDate={minDate}
-        maxDate={maxDate}
-        firstDay={1}
-        allowSelectionOutOfRange={false}
-        hideExtraDays={true}
-        onMonthChange={date => {
-          get(date, 'month') === maxMonth
-            ? setHideRightArrow(true)
-            : setHideRightArrow(false);
+    <TransitionView animation={'fadeInDownBig'} duration={1200} flex={1}>
+      <CalendarProvider date={selectedDay} disabledOpacity={0.6}>
+        <Calendar
+          onDayPress={onDayPress}
+          minDate={minDate}
+          maxDate={maxDateDynamic}
+          firstDay={1}
+          allowSelectionOutOfRange={false}
+          hideExtraDays={true}
+          onMonthChange={date => {
+            get(date, 'month') === maxMonth
+              ? setHideRightArrow(true)
+              : setHideRightArrow(false);
 
-          get(date, 'month') === minMonth
-            ? setHideLeftArrow(true)
-            : setHideLeftArrow(false);
-        }}
-        enableSwipeMonths={true}
-        disableArrowLeft={hideLeftArrow}
-        disableArrowRight={hideRightArrow}
-        markedDates={{...markedDatesDefault, ...markedDate}}
-      />
-      {loadingDate ? (
-        <View style={{marginTop: 20}}>
-          <ActivityIndicator color={styleConst.color.blue} marginTop={15} />
-        </View>
-      ) : (
-        <TimelineList
-          events={eventsByDate}
-          timelineProps={{
-            timelineLeftInset: 12,
-            format24h: true,
-            onEventPress: e => {
-              const pushProps = {DATETIME: get(e, 'srcData')};
-              navigation.navigate('ServiceStep4', {
-                ...orderData,
-                ...pushProps,
-              });
-            },
-            scrollToFirst: true,
-            start: 8,
-            end: 21,
-            unavailableHours: [
-              {start: 0, end: 8},
-              {start: 20, end: 24},
-            ],
-            overlapEventsSpacing: 8,
-            rightEdgeSpacing: 24,
+            get(date, 'month') === minMonth
+              ? setHideLeftArrow(true)
+              : setHideLeftArrow(false);
           }}
-          scrollToFirst
-          initialTime={{hour: 9, minutes: 0}}
+          enableSwipeMonths={true}
+          disableArrowLeft={hideLeftArrow}
+          disableArrowRight={hideRightArrow}
+          markedDates={{...markedDatesDefault, ...markedDate}}
         />
-      )}
-    </CalendarProvider>
+        {loadingDate ? (
+          <View style={{marginTop: 20}}>
+            <ActivityIndicator color={styleConst.color.blue} marginTop={15} />
+          </View>
+        ) : (
+          showDateSlots(eventsByDate[selectedDay])
+        )}
+      </CalendarProvider>
+    </TransitionView>
   );
 };
 
