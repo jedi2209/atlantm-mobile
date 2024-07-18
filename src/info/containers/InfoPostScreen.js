@@ -116,28 +116,26 @@ const InfoPostScreen = ({
 
   useEffect(() => {
     console.info('== InfoPost ==');
-    let isMounted = true;
     let timeOutAfterLoaded = null;
 
-    if (!postData) {
+    if (typeof(posts[postID]) === 'undefined' || !get(posts[postID], 'date.from', false)) {
       fetchInfoPost(postID).then(res => {
-        if (isMounted) {
-          setPost(res);
-          timeOutAfterLoaded = setTimeout(() => setLoading(false), 500);
+        if (get(res, 'type') === 'INFO_POST__FAIL') {
+          setFinished(true);
+          return;
         }
+        setPost(res);
+        timeOutAfterLoaded = setTimeout(() => setLoading(false), 500);
       });
     } else {
-      if (isMounted) {
         setPost(posts[postID]);
         timeOutAfterLoaded = setTimeout(() => setLoading(false), 500);
-      }
     }
     Analytics.logEvent('screen', 'offer/item', {
       id: postID,
     });
 
     return () => {
-      isMounted = false;
       clearTimeout(timeOutAfterLoaded);
     };
   }, []);
@@ -338,17 +336,16 @@ const InfoPostScreen = ({
         isModalVisible={true}
         animationIn="slideInRight"
         animationOut="slideOutLeft"
-        onHide={() => navigation.goBack()}
+        onHide={() => navigation.goBack()} 
         selfClosed={false}>
         <View
           style={{
-            padding: 10,
             justifyContent: 'center',
             alignContent: 'center',
             alignSelf: 'center',
-            height: 50,
+            height: 60,
           }}>
-          <Text>{strings.InfoPostScreen.button.actionFinished}</Text>
+           <Text style={{ textAlign: 'center' }}>{strings.InfoPostScreen.button.actionFinished}</Text>
         </View>
       </ModalView>
     );
