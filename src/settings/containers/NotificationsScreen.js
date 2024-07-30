@@ -162,12 +162,7 @@ const NotificationsScreen = props => {
               duration={250}
               key={'notification-' + item.id}
               index={index}>
-              <RNBounceable
-                onPress={() => parseURL(item)}
-                onLongPress={() => {
-                  props.actionRemoveNotification(item.id);
-                  setNotificationsAll([]);
-                }}>
+              <RNBounceable onPress={() => parseURL(item)}>
                 <NotificationItem
                   date={dayMonthYearTime2(
                     getDateFromTimestamp(item.date.timestamp),
