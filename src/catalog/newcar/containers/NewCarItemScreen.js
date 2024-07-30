@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Linking,
   Platform,
+  Dimensions,
   Alert,
 } from 'react-native';
 import {
@@ -47,7 +48,7 @@ import {strings} from '../../../core/lang/const';
 // styles
 import styles from '../../CarStyles';
 
-const imgResize = '10000x440';
+const {width: screenWidth} = Dimensions.get('window');
 
 const mapStateToProps = ({catalog, dealer, profile, nav}) => {
   return {
@@ -892,6 +893,10 @@ const NewCarItemScreen = ({
           ) : null}
           <PhotoSlider
             height={290}
+            itemStyle={
+              isCarImgReal ? {width: screenWidth, borderRadius: 0} : null
+            }
+            imageContainer={isCarImgReal ? {borderRadius: 0} : null}
             photosFull={photosFull}
             themeFull={'white'}
             photos={photosData}
