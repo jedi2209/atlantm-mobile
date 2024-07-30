@@ -510,7 +510,8 @@ class Form extends Component {
       }
     });
 
-    if (requredLabels.length) {
+  if (requredLabels && requredLabels.length) {
+    if (requredLabels.length > 1) {
       this.setState((prevState) => {
         const newToastId = `toast-${Date.now()}`;
         if (!prevState.activeToastId || !Toast.isActive(prevState.activeToastId)) {
@@ -543,7 +544,7 @@ class Form extends Component {
       });
       return false;
     }
-
+  }
     return true;
   };
 
