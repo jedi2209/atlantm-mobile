@@ -304,6 +304,7 @@ class Form extends Component {
       parentState: props.parentState,
       required: [],
       active: {},
+      activeToastId: null,
     };
     this.inputRefs = [];
     this.inputRefsNav = [];
@@ -508,52 +509,41 @@ class Form extends Component {
         }
       }
     });
-    if (requredLabels && requredLabels.length) {
-      if (requredLabels.length > 1) {
-        Toast.show({
-          render: ({id}) => {
-            return (
-              <ToastAlert
-                id={id}
-                ref={React.createRef(ToastRef)}
-                status="warning"
-                duration={3000}
-                description={
-                  strings.Form.status.fieldsRequired1 +
-                  '\r\n- ' +
-                  requredLabels.join('\r\n- ') +
-                  '\r\n\r\n' +
-                  strings.Form.status.fieldsRequired2
-                }
-                title={strings.Form.status.fieldRequiredMiss}
-              />
-            );
-          },
-        });
-      } else {
-        Toast.show({
-          render: ({id}) => {
-            return (
-              <ToastAlert
-                id={id}
-                ref={React.createRef(ToastRef)}
-                status="warning"
-                duration={3000}
-                description={
-                  strings.Form.status.fieldRequired1 +
-                  ' "' +
-                  requredLabels.join(' ') +
-                  '" ' +
-                  strings.Form.status.fieldRequired2
-                }
-                title={strings.Form.status.fieldRequiredMiss}
-              />
-            );
-          },
-        });
-      }
+
+    if (requredLabels.length) {
+      this.setState((prevState) => {
+        const newToastId = `toast-${Date.now()}`;
+        if (!prevState.activeToastId || !Toast.isActive(prevState.activeToastId)) {
+          Toast.show({
+            id: newToastId,
+            render: ({ id }) => {
+              return (
+                <ToastAlert
+                  id={id}
+                  ref={React.createRef(ToastRef)}
+                  status="warning"
+                  duration={3000}
+                  description={
+                    requredLabels.length > 1
+                      ? strings.Form.status.fieldsRequired1 + '\r\n- ' + requredLabels.join('\r\n- ') + '\r\n\r\n' + strings.Form.status.fieldsRequired2
+                      : strings.Form.status.fieldRequired1 + ' "' + requredLabels.join(' ') + '" ' + strings.Form.status.fieldRequired2
+                  }
+                  title={strings.Form.status.fieldRequiredMiss}
+                />
+              );
+            },
+          });
+
+          return {
+            activeToastId: newToastId,
+          };
+        }
+
+        return prevState;
+      });
       return false;
     }
+
     return true;
   };
 
