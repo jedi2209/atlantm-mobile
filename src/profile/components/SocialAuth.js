@@ -6,7 +6,7 @@ import {Button, Icon} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
-import {connectSocialMedia} from '../actions';
+import {connectSocialMedia, disconnectSocialMedia} from '../actions';
 import styleConst from '../../core/style-const';
 
 // imports for auth
@@ -24,6 +24,7 @@ import {
 } from '@invertase/react-native-apple-authentication';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {FB_APP_ID, AUTH_DATA, APP_REGION, UKRAINE} from '../../core/const';
 
@@ -45,6 +46,7 @@ const mapStateToProps = ({profile}) => {
 };
 const mapDispatchToProps = {
   connectSocialMedia,
+  disconnectSocialMedia,
 };
 
 const styles = StyleSheet.create({
@@ -59,8 +61,14 @@ const styles = StyleSheet.create({
   CheckCircleIcon: {
     position: 'absolute',
     bottom: 0,
-    right: -8,
+    right: -10,
     color: styleConst.color.white,
+  },
+  CheckCloseIcon: {
+    position: 'absolute',
+    top: -10,
+    right: -25,
+    color: styleConst.color.black,
   },
 });
 
@@ -76,7 +84,13 @@ class SocialAuth extends PureComponent {
     this.requestManager = new GraphRequestManager();
   }
 
-  _connectGoogle = async () => {
+  _connectGoogle = async ({connected}) => {
+    if (connected) {
+      return this.props.disconnectSocialMedia({
+        profile: this.props.login,
+        network: 'google',
+      });
+    }
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
@@ -141,7 +155,13 @@ class SocialAuth extends PureComponent {
     }
   };
 
-  _connectVK = async () => {
+  _connectVK = async ({connected}) => {
+    if (connected) {
+      return this.props.disconnectSocialMedia({
+        profile: this.props.login,
+        network: 'vk',
+      });
+    }
     VKLogin.initialize(XXXX);
     try {
       const userData = await this._GetUserDataVK();
@@ -229,8 +249,8 @@ class SocialAuth extends PureComponent {
             },
           ]}>
           <Button
-            onPress={this._connectGoogle}
-            disabled={this.state.isSigninInProgress || Boolean(im.google)}
+            onPress={() => this._connectGoogle({connected: Boolean(im.google)})}
+            // disabled={this.state.isSigninInProgress || Boolean(im.google)}
             leftIcon={
               <Icon
                 name="google"
@@ -243,10 +263,10 @@ class SocialAuth extends PureComponent {
             rightIcon={
               im.google ? (
                 <Icon
-                  name="check-circle"
-                  size={4}
-                  as={FontAwesome5}
-                  style={styles.CheckCircleIcon}
+                  name="close-circle-sharp"
+                  size={5}
+                  as={Ionicons}
+                  style={styles.CheckCloseIcon}
                 />
               ) : null
             }
@@ -298,8 +318,8 @@ class SocialAuth extends PureComponent {
           ) : null}
           {VKenabled ? (
             <Button
-              onPress={this._connectVK}
-              disabled={this.state.isSigninInProgress || Boolean(im.vk)}
+              onPress={() => this._connectVK({connected: Boolean(im.vk)})}
+              // disabled={this.state.isSigninInProgress || Boolean(im.vk)}
               leftIcon={
                 <Icon
                   name="vk"
@@ -311,10 +331,10 @@ class SocialAuth extends PureComponent {
               rightIcon={
                 im.vk ? (
                   <Icon
-                    name="check-circle"
-                    size={4}
-                    as={FontAwesome5}
-                    style={[styles.CheckCircleIcon, {right: -8, bottom: -1}]}
+                    name="close-circle-sharp"
+                    size={5}
+                    as={Ionicons}
+                    style={styles.CheckCloseIcon}
                   />
                 ) : null
               }
@@ -335,7 +355,7 @@ class SocialAuth extends PureComponent {
             <AppleButton
               buttonStyle={AppleButton.Style.BLACK}
               buttonType={AppleButton.Type.SIGN_IN}
-              disabled={this.state.isSigninInProgress || Boolean(im.apple)}
+              // disabled={this.state.isSigninInProgress || Boolean(im.apple)}
               cornerRadius={5}
               style={[
                 styleConst.shadow.default,
@@ -347,14 +367,16 @@ class SocialAuth extends PureComponent {
                   marginTop: 15,
                 },
               ]}
-              onPress={() => this._signInWithApple()}
+              onPress={() =>
+                this._signInWithApple({connected: Boolean(im.apple)})
+              }
             />
             {im.apple ? (
               <Icon
-                name="check-circle"
-                size={4}
-                as={FontAwesome5}
-                style={[styles.CheckCircleIcon, {bottom: 5, right: 5}]}
+                name="close-circle-sharp"
+                size={5}
+                as={Ionicons}
+                style={[styles.CheckCloseIcon, {top: 5, right: -7}]}
               />
             ) : null}
           </View>
