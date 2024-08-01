@@ -125,10 +125,10 @@ const InfoPostScreen = ({
       fetchInfoPost(postID).then(res => {
         if (get(res, 'type') === 'INFO_POST__FAIL') {
           setFinished(true);
-          return;
+        } else {
+          setPost(res);
+          timeOutAfterLoaded = setTimeout(() => setLoading(false), 500);
         }
-        setPost(res);
-        timeOutAfterLoaded = setTimeout(() => setLoading(false), 500);
       });
     } else {
       setPost(posts[postID]);
@@ -147,6 +147,7 @@ const InfoPostScreen = ({
     if (
       getTimestampInSeconds() > getTimestampFromDate(get(postData, 'date.to'))
     ) {
+      alert('useEffect getTimestampInSeconds > getTimestampFromDate');
       // если акция уже закончилась, то возвращаемся с экрана
       setFinished(true);
     }
@@ -334,6 +335,7 @@ const InfoPostScreen = ({
   // }
 
   if (isFinished) {
+    alert('isFinished');
     return (
       <ModalView
         isModalVisible={isModalVisible}
@@ -341,6 +343,7 @@ const InfoPostScreen = ({
         animationInTiming={400}
         animationOut="zoomOut"
         onHide={() => {
+          alert('onClose');
           setModalVisible(false);
           navigation.goBack();
         }}
