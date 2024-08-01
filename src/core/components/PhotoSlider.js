@@ -16,8 +16,10 @@ const PhotoSlider = ({
   photos = [],
   width = screenWidth,
   height = 300,
+  itemStyle = {},
   pagination = false,
   paginationStyle = {},
+  imageContainer = {},
   dotColor = styleConst.color.blue,
   resizeMode = 'contain',
   loop = false,
@@ -65,7 +67,7 @@ const PhotoSlider = ({
       return (
         <Pressable
           onPress={onPress ? onPress : onPressItem}
-          style={[styles.item, {height}]}>
+          style={[styles.item, itemStyle, {height}]}>
           <Imager
             key={'Imager-' + item.url}
             resizeMode={resizeMode}
@@ -73,7 +75,7 @@ const PhotoSlider = ({
             source={{
               uri: item.url,
             }}
-            style={[styles.imageContainer, {height}]}
+            style={[styles.imageContainer, imageContainer, {height}]}
           />
         </Pressable>
       );

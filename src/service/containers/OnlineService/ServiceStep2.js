@@ -98,14 +98,6 @@ const ServiceStep2 = props => {
   }, []);
 
   useEffect(() => {
-    // if (
-    //   !isAdditionalAvailable &&
-    //   (!get(orderData, 'DEALER') ||
-    //     !get(orderData, 'SERVICE') ||
-    //     !get(orderData, 'SERVICETYPE'))
-    // ) {
-    //   return;
-    // }
     if (!serviceData.itemsFull) {
       setServiceData({
         loading: true,

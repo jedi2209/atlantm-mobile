@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, Dimensions, StyleSheet, Platform, Pressable} from 'react-native';
 import {Button, HStack, Icon, VStack} from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -16,12 +16,12 @@ const ImageCarousel = ({
   height = 200,
   resizeMode = 'cover',
   style = {},
+  itemScreen = 'NewCarItemScreen',
   firstItem = 0,
   onPress = () => {},
   onPressCustom,
 }) => {
   const [entries, setEntries] = useState([]);
-  const carouselRef = useRef(null);
 
   useEffect(() => {
     setEntries(data);
@@ -61,7 +61,12 @@ const ImageCarousel = ({
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <Button
                 onPress={item.onPressWantACar}
-                style={[styles.itemOrder, styles.itemOrderWantACar, {height}]}
+                style={[
+                  styles.itemOrder,
+                  styles.itemOrderWantACar.all,
+                  styles.itemOrderWantACar[itemScreen],
+                  {height},
+                ]}
                 _text={styles.iconText}>
                 <Icon
                   size={12}
@@ -151,7 +156,11 @@ const ImageCarousel = ({
               {item.onPressWantACar ? (
                 <Button
                   onPress={item.onPressWantACar}
-                  style={[styles.itemOrder, styles.itemOrderWantACar, {height}]}
+                  style={[
+                    styles.itemOrder,
+                    styles.itemOrderWantACar[itemScreen],
+                    {height},
+                  ]}
                   _text={styles.iconText}>
                   <Icon
                     selectable={false}
@@ -200,7 +209,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   itemOrder: {
-    width: screenWidth / 1.7 / 2,
+    width: screenWidth / 1.7 / 2.05,
     justifyContent: 'center',
     alignContent: 'center',
     alignItems: 'center',
@@ -219,11 +228,18 @@ const styles = StyleSheet.create({
   },
   itemOrderTestDrive: {
     backgroundColor: styleConst.color.orange,
+    marginRight: 4,
   },
   itemOrderWantACar: {
-    backgroundColor: styleConst.color.lightBlue,
-    alignSelf: 'center',
-    textAlign: 'center',
+    all: {
+      backgroundColor: styleConst.color.lightBlue,
+      alignSelf: 'center',
+      textAlign: 'center',
+    },
+    NewCarItemScreen: {},
+    UsedCarItemScreen: {
+      marginRight: 5,
+    },
   },
   imageContainer: {
     marginBottom: Platform.select({ios: 0, android: 1}), // Prevent a random Android rendering issue

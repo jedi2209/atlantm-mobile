@@ -86,7 +86,8 @@ const CarListItem = ({
   const idSAP = get(car, 'id.sap', null);
   const isSale = car.sale === true;
   const isNewCar = itemScreen === 'NewCarItemScreen';
-  let CarImgReal = get(car, 'imgReal.thumb', false);
+  let CarImgs = get(car, 'img.thumb', false);
+  let carImgReal = get(car, 'imgReal.thumb', false);
 
   const _onPress = () => {
     navigation.navigate(itemScreen, {
@@ -130,7 +131,7 @@ const CarListItem = ({
         style={[
           styles.priceContainer,
           {
-            marginTop: CarImgReal ? 0 : 5,
+            marginTop: carImgReal ? 0 : 5,
           },
         ]}>
         {isSale ? (
@@ -138,9 +139,6 @@ const CarListItem = ({
             <Text
               style={[
                 styles.price,
-                {
-                  color: CarImgReal ? styleConst.color.white : '#2A2A43',
-                },
                 styles.priceSpecial,
               ]}>
               {showPrice(CarPrices.sale, region)}
@@ -153,7 +151,6 @@ const CarListItem = ({
               styles.price,
               car.ordered ? styles.ordered : {},
               {
-                color: CarImgReal ? styleConst.color.white : '#2A2A43',
                 marginRight: 10,
               },
               isSale ? styles.priceDefault : null,
@@ -168,13 +165,11 @@ const CarListItem = ({
   };
 
   const _renderImage = ({ordered}) => {
-    let CarImgs = get(car, 'img.thumb', false);
-    let CarImgsReal = get(car, 'imgReal.thumb', false);
     const isSale = car.sale === true;
     let photos = [];
     let carPhotos = CarImgs;
-    if (CarImgsReal) {
-      carPhotos = CarImgsReal;
+    if (carImgReal) {
+      carPhotos = carImgReal;
     }
     let i = 0;
     carPhotos.forEach((element, index) => {
@@ -386,8 +381,9 @@ const CarListItem = ({
     return (
       <View
         style={{
-          height: itemScreen === 'NewCarItemScreen' ? 175 : 170,
-          position: 'relative',
+          height: carImgReal
+            ? styles.imageCarouselViewRealImg[itemScreen]
+            : styles.imageCarouselView[itemScreen],
           marginTop:
             itemScreen === 'NewCarItemScreen' ? (isSale ? 65 : 50) : 75,
           backgroundColor: styleConst.color.white,
@@ -399,37 +395,16 @@ const CarListItem = ({
               paddingVertical: itemScreen === 'NewCarItemScreen' ? 5 : 0,
             },
           ]}
-          resizeMode={resizeMode}
-          height={itemScreen === 'NewCarItemScreen' ? 150 : 170}
+          itemScreen={itemScreen}
+          resizeMode={carImgReal ? 'cover' : resizeMode}
+          height={
+            carImgReal
+              ? styles.imageCarouselRealImg[itemScreen]
+              : styles.imageCarousel[itemScreen]
+          }
           data={photos}
           onPressCustom={!ordered ? _onPress : _onPressOrder}
         />
-        {CarImgsReal ? (
-          <LinearGradient
-            start={{
-              x: 1,
-              y: 0,
-            }}
-            end={{
-              x: 0,
-              y: 0,
-            }}
-            useAngle
-            angle={itemScreen === 'NewCarItemScreen' ? 60 : 170}
-            colors={['rgba(51, 51, 51, .4)', 'rgba(51, 51, 51, 0)']}
-            style={[
-              styles.priceBackground,
-              {
-                height: isSale ? 80 : 60,
-              },
-              itemScreen === 'NewCarItemScreen'
-                ? {
-                    width: '100%',
-                  }
-                : null,
-            ]}
-          />
-        ) : null}
       </View>
     );
   };
@@ -575,7 +550,7 @@ const CarListItem = ({
               ? {
                   marginTop:
                     (Platform.OS !== 'ios' ? -6 : 0) +
-                    (CarImgReal ? (isSale ? -80 : -60) : -20),
+                    (carImgReal ? (isSale ? -80 : -60) : -20),
                 }
               : null,
           ]}></Pressable>
@@ -584,43 +559,29 @@ const CarListItem = ({
           onPress={!ordered ? _onPress : _onPressOrder}
           style={styles.carTechContainer}>
           {mileage ? (
-            <Text
-              selectable={false}
-              style={CarImgReal ? styles.commonReal : styles.common}>
+            <Text selectable={false} style={styles.common}>
               {`${numberWithGap(mileage)} км.`}
             </Text>
           ) : null}
           {engineVolume &&
           get(car, 'engine.id') &&
           get(car, 'engine.id') !== 4 ? (
-            <Text
-              selectable={false}
-              style={CarImgReal ? styles.commonReal : styles.common}>
+            <Text selectable={false} style={styles.common}>
               {`${engineVolume} см³`}
             </Text>
           ) : null}
           {get(car, 'engine.type') ? (
-            <Text
-              selectable={false}
-              style={CarImgReal ? styles.commonReal : styles.common}>
+            <Text selectable={false} style={styles.common}>
               {`${engineName.toLowerCase()}`}
             </Text>
           ) : null}
           {gearboxName ? (
-            <Text
-              selectable={false}
-              style={CarImgReal ? styles.commonReal : styles.common}>
+            <Text selectable={false} style={styles.common}>
               {`${gearboxName.toLowerCase()}`}
             </Text>
           ) : null}
           {idSAP ? (
-            <Text
-              style={[
-                CarImgReal ? styles.commonReal : styles.common,
-                styles.carID,
-              ]}>
-              {`#${idSAP}`}
-            </Text>
+            <Text style={[styles.common, styles.carID]}>{`#${idSAP}`}</Text>
           ) : null}
         </Pressable>
       </View>
@@ -650,6 +611,22 @@ const styles = StyleSheet.create({
     width: screenWidth / 1.7,
     zIndex: 1,
     paddingVertical: 10,
+  },
+  imageCarouselViewRealImg: {
+    NewCarItemScreen: 215,
+    UsedCarItemScreen: 170,
+  },
+  imageCarouselRealImg: {
+    NewCarItemScreen: 150,
+    UsedCarItemScreen: 170,
+  },
+  imageCarouselView: {
+    NewCarItemScreen: 175,
+    UsedCarItemScreen: 170,
+  },
+  imageCarousel: {
+    NewCarItemScreen: 150,
+    UsedCarItemScreen: 170,
   },
   imageReal: {
     height: 300,
@@ -690,25 +667,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: '600',
     zIndex: 10,
-  },
-  priceBackground: {
-    flex: 1,
-    zIndex: 20,
-    position: 'absolute',
-    backgroundColor: 'transparent',
-    opacity: 1,
-    width: '80%',
-    borderBottomLeftRadius: 5,
-    borderBottomRightRadius: 5,
-    bottom: 0,
+    color: '#2A2A43',
   },
   common: {
     fontSize: 14,
     color: styleConst.color.greyText4,
-  },
-  commonReal: {
-    fontSize: 14,
-    color: styleConst.color.white,
   },
   saleContainer: {
     marginTop: 2,
