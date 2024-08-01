@@ -36,14 +36,10 @@ import LogoLoader from '../../core/components/LogoLoader';
 import ModalView from '../../core/components/ModalView';
 import stylesHeader from '../../core/components/Header/style';
 
-// image
-// const {width: screenWidth} = Dimensions.get('window');
-// const webViewWidth = screenWidth - styleConst.ui.verticalGap;
-
 const onMessage = ({nativeEvent}) => {
   const data = nativeEvent.data;
 
-  if (typeof data !== undefined && data !== null) {
+  if (typeof data !== 'undefined' && data !== null) {
     Linking.openURL(data);
   }
 };
@@ -55,7 +51,6 @@ const processDate = date => {
 };
 
 const _onPressCallMe = ({dealers, navigation, postID}) => {
-  // const dealers = get(postData, 'dealers');
   navigation.navigate('CallMeBackScreen', {
     actionID: postID,
     dealerCustom: dealers,
@@ -147,7 +142,6 @@ const InfoPostScreen = ({
     if (
       getTimestampInSeconds() > getTimestampFromDate(get(postData, 'date.to'))
     ) {
-      alert('useEffect getTimestampInSeconds > getTimestampFromDate');
       // если акция уже закончилась, то возвращаемся с экрана
       setFinished(true);
     }
@@ -335,7 +329,6 @@ const InfoPostScreen = ({
   // }
 
   if (isFinished) {
-    alert('isFinished');
     return (
       <ModalView
         isModalVisible={isModalVisible}
@@ -343,7 +336,6 @@ const InfoPostScreen = ({
         animationInTiming={400}
         animationOut="zoomOut"
         onHide={() => {
-          alert('onClose');
           setModalVisible(false);
           navigation.goBack();
         }}

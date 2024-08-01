@@ -408,7 +408,7 @@ export const actionSavePofile = props => {
         const user = response.data.user;
         let type = SAVE_PROFILE__UPDATE;
         if (
-          typeof props.update !== undefined &&
+          typeof props.update !== 'undefined' &&
           props.update === 0 &&
           user &&
           !user.PHONE
@@ -598,6 +598,45 @@ export const connectSocialMedia = ({profile, im}) => {
   } else {
     dataToSend.IM.push(im);
   }
+
+  delete dataToSend.cars;
+  delete dataToSend.bonus;
+  delete dataToSend.discounts;
+  delete dataToSend.insurance;
+  delete dataToSend.additionalPurchase;
+
+  return dispatch => {
+    dispatch({
+      type: SAVE_PROFILE__REQUEST,
+      payload: dataToSend,
+    });
+
+    return API.updateProfile(dataToSend)
+      .then(async response => {
+        return dispatch({
+          type: SAVE_PROFILE__UPDATE,
+          payload: response.data,
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: SAVE_PROFILE__FAIL,
+          payload: {
+            message: error,
+          },
+        });
+      });
+  };
+};
+
+export const disconnectSocialMedia = ({profile, network}) => {
+  const dataToSend = {
+    ...profile,
+  };
+
+  dataToSend.IM = get(dataToSend, 'IM', []).filter(
+    obj => obj.VALUE_TYPE !== network.toUpperCase(),
+  );
 
   delete dataToSend.cars;
   delete dataToSend.bonus;

@@ -1,21 +1,15 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {PureComponent} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 
 import {View, Platform, StyleSheet} from 'react-native';
 import {Button, Icon} from 'native-base';
 
 // redux
 import {connect} from 'react-redux';
-import {connectSocialMedia} from '../actions';
+import {connectSocialMedia, disconnectSocialMedia} from '../actions';
 import styleConst from '../../core/style-const';
 
 // imports for auth
-import {
-  AccessToken,
-  GraphRequestManager,
-  LoginManager,
-  Settings,
-} from 'react-native-fbsdk-next';
 import VKLogin from 'react-native-vkontakte-login';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {
@@ -24,8 +18,12 @@ import {
 } from '@invertase/react-native-apple-authentication';
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {FB_APP_ID, AUTH_DATA, APP_REGION, UKRAINE} from '../../core/const';
+import {get} from 'lodash';
+
+import {AUTH_DATA, APP_REGION, UKRAINE, VK_APP_ID} from '../../core/const';
+import {ActivityIndicator} from 'react-native-paper';
 
 GoogleSignin.configure({
   scopes: ['https://www.googleapis.com/auth/userinfo.email'], // what API you want to access on behalf of the user, default is email and profile
@@ -45,156 +43,80 @@ const mapStateToProps = ({profile}) => {
 };
 const mapDispatchToProps = {
   connectSocialMedia,
+  disconnectSocialMedia,
 };
 
 const styles = StyleSheet.create({
   SocialLoginBt: {
     justifyContent: 'center',
-    borderRadius: 5,
   },
   SocialLoginBtActive: {
-    opacity: 0.7,
-    backgroundColor: '#afafaf',
+    backgroundColor: '#cccccc',
   },
   CheckCircleIcon: {
     position: 'absolute',
     bottom: 0,
-    right: -8,
+    right: -10,
     color: styleConst.color.white,
+  },
+  CheckCloseIcon: {
+    position: 'absolute',
+    top: -10,
+    right: -25,
+    color: styleConst.color.black,
   },
 });
 
-class SocialAuth extends PureComponent {
-  constructor(props) {
-    super(props);
+const _GetUserDataVK = async () => {
+  try {
+    const auth = await VKLogin.login([
+      'friends',
+      'photos',
+      'email',
+      'contacts',
+      'phone',
+    ]);
+    const url =
+      'https://api.vk.com/method/account.getProfileInfo?user_id=' +
+      auth.user_id +
+      '&v=5.103&fields=contacts&access_token=' +
+      auth.access_token;
+    const response = await fetch(url);
+    const userData = await response.json();
+    return Object.assign(auth, userData.response);
+  } catch (err) {
+    console.error('_GetUserDataVK apiGetDataError', err);
+    return false;
+  }
+};
 
-    this.state = {
-      loading: false,
-      isSigninInProgress: false,
-    };
+const SocialAuth = ({
+  connectSocialMedia,
+  disconnectSocialMedia,
+  login,
+  region = APP_REGION,
+  style,
+}) => {
+  const [isSigninInProgress, setIsSigninInProgress] = useState(false);
 
-    this.requestManager = new GraphRequestManager();
+  const isAndroid = Platform.OS === 'android';
+  let VKenabled = true;
+  let ButtonWidth = '25%';
+  let ButtonHeight = 50;
+  let im = useRef([]);
+
+  switch (region.toLowerCase()) {
+    case UKRAINE:
+      VKenabled = false;
+      ButtonWidth = '30%';
+      ButtonHeight = 60;
+      break;
+    default:
+      break;
   }
 
-  _connectGoogle = async () => {
-    try {
-      await GoogleSignin.hasPlayServices();
-      const userInfo = await GoogleSignin.signIn();
-
-      const im = {VALUE: userInfo.user.id, VALUE_TYPE: 'google'};
-      this.props.connectSocialMedia({profile: this.props.login, im});
-    } catch (error) {}
-  };
-
-  getFBToken = () => {
-    AccessToken.getCurrentAccessToken().then(auth => {
-      const im = {VALUE: auth.userID, VALUE_TYPE: 'facebook'};
-      this.props.connectSocialMedia({profile: this.props.login, im});
-      this.setState({isSigninInProgress: false});
-    });
-  };
-
-  _connectFB = () => {
-    this.setState({isSigninInProgress: true});
-    Settings.initializeSDK();
-    Settings.setAppID(FB_APP_ID);
-    LoginManager.logInWithPermissions(['email']).then(
-      function (result) {
-        if (result.isCancelled) {
-          console.warn('_connectFB Login cancelled');
-          this.setState({isSigninInProgress: false});
-        } else {
-          console.info(
-            '_connectFB Login success with permissions: ' +
-              result.grantedPermissions.toString(),
-          );
-          this.getFBToken();
-        }
-      }.bind(this),
-      function (error) {
-        console.error('_connectFB Login fail with error: ' + error);
-        this.setState({isSigninInProgress: false});
-      },
-    );
-  };
-
-  _GetUserDataVK = async () => {
-    try {
-      const auth = await VKLogin.login([
-        'friends',
-        'photos',
-        'email',
-        'contacts',
-        'phone',
-      ]);
-      const url =
-        'https://api.vk.com/method/account.getProfileInfo?user_id=' +
-        auth.user_id +
-        '&v=5.103&fields=contacts&access_token=' +
-        auth.access_token;
-      const response = await fetch(url);
-      const userData = await response.json();
-      return Object.assign(auth, userData.response);
-    } catch (err) {
-      console.error('_GetUserDataVK apiGetDataError', err);
-      this.setState({isSigninInProgress: false});
-    }
-  };
-
-  _connectVK = async () => {
-    VKLogin.initialize(7255802);
-    try {
-      const userData = await this._GetUserDataVK();
-      const im = {VALUE: userData.user_id, VALUE_TYPE: 'vk'};
-      this.props.connectSocialMedia({profile: this.props.login, im});
-    } catch (error) {
-      console.error('_connectVK error', error);
-    }
-    this.setState({isSigninInProgress: false});
-  };
-
-  _signInWithApple = async () => {
-    // performs login request
-    const appleAuthRequestResponse = await appleAuth.performRequest({
-      requestedOperation: appleAuth.Operation.LOGIN,
-      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-    });
-
-    // get current authentication state for user
-    // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
-    const credentialState = await appleAuth.getCredentialStateForUser(
-      appleAuthRequestResponse.user,
-    );
-
-    // use credentialState response to ensure the user is authenticated
-    if (credentialState === appleAuth.State.AUTHORIZED) {
-      try {
-        const im = {VALUE: appleAuthRequestResponse.user, VALUE_TYPE: 'apple'};
-        this.props.connectSocialMedia({profile: this.props.login, im});
-      } catch (error) {
-        console.error('_signInWithApple error', error);
-      }
-      this.setState({isSigninInProgress: false});
-    }
-  };
-
-  _renderLoginButtons = region => {
-    const isAndroid = Platform.OS === 'android';
-    let VKenabled = true;
-    let ButtonWidth = '25%';
-    let ButtonHeight = 50;
-
-    switch (region.toLowerCase()) {
-      case UKRAINE:
-        VKenabled = false;
-        ButtonWidth = '30%';
-        ButtonHeight = 60;
-        break;
-      default:
-        break;
-    }
-
-    const im = (this.props.login.IM || []).reduce((acc, soc) => {
+  useEffect(() => {
+    im.current = get(login, 'IM', []).reduce((acc, soc) => {
       if (!soc.VALUE_TYPE) {
         return acc;
       }
@@ -206,170 +128,268 @@ class SocialAuth extends PureComponent {
 
       return acc;
     }, {});
+  }, [login, login.IM]);
 
-    return (
+  const connectSocialWrapper = async ({profile, im}) => {
+    const res = await connectSocialMedia({
+      profile,
+      im,
+    });
+    if (get(res, 'type') === 'SAVE_PROFILE__UPDATE') {
+      return get(res, 'payload');
+    } else {
+      console.error('connectSocialWrapper error', res);
+      return false;
+    }
+  };
+
+  const _connectGoogle = async ({profile, connected}) => {
+    if (connected) {
+      await disconnectSocialMedia({
+        profile,
+        network: 'google',
+      });
+      return;
+    }
+
+    await GoogleSignin.hasPlayServices();
+    const userInfo = await GoogleSignin.signIn();
+
+    return await connectSocialWrapper({
+      profile,
+      im: {
+        VALUE: userInfo.user.id,
+        VALUE_TYPE: 'google',
+      },
+    });
+  };
+
+  const _connectVK = async ({profile, connected}) => {
+    if (connected) {
+      await disconnectSocialMedia({
+        profile,
+        network: 'vk',
+      });
+      return;
+    }
+    VKLogin.initialize(VK_APP_ID);
+    const userData = await _GetUserDataVK();
+    return await connectSocialWrapper({
+      profile,
+      im: {
+        VALUE: userData.user_id,
+        VALUE_TYPE: 'vk',
+      },
+    });
+  };
+
+  const _signInWithApple = async ({profile, connected}) => {
+    if (connected) {
+      await disconnectSocialMedia({
+        profile,
+        network: 'apple',
+      });
+      return;
+    }
+    // performs login request
+    const appleAuthRequestResponse = await appleAuth.performRequest({
+      requestedOperation: appleAuth.Operation.LOGIN,
+      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+    });
+    // get current authentication state for user
+    // /!\ This method must be tested on a real device. On the iOS simulator it always throws an error.
+    const credentialState = await appleAuth.getCredentialStateForUser(
+      appleAuthRequestResponse.user,
+    );
+    // use credentialState response to ensure the user is authenticated
+    if (credentialState === appleAuth.State.AUTHORIZED) {
+      return await connectSocialWrapper({
+        profile,
+        im: {
+          VALUE: appleAuthRequestResponse.user,
+          VALUE_TYPE: 'apple',
+        },
+      });
+    }
+  };
+
+  return (
+    <View
+      style={[
+        {
+          width: '100%',
+          opacity: 1,
+          height: 'auto',
+        },
+        style,
+      ]}>
       <View
         style={[
           {
-            width: '100%',
-            opacity: this.state.code ? 0 : 1,
-            height: this.state.code
-              ? Platform.select({ios: 'auto', android: 0})
-              : 'auto',
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
           },
-          this.props.style,
         ]}>
-        <View
+        <Button
+          onPress={async () => {
+            setIsSigninInProgress('google');
+            _connectGoogle({
+              profile: login,
+              connected: Boolean(get(im, 'current.google', false)),
+            })
+              .then(res => {
+                setIsSigninInProgress(false);
+              })
+              .catch(err => {
+                console.error('Google auth error', err);
+                setIsSigninInProgress(false);
+              });
+          }}
+          // disabled={isSigninInProgress || Boolean(get(im, 'current.google', false))}
+          isLoading={isSigninInProgress && isSigninInProgress === 'google'}
+          _spinner={{
+            color: styleConst.color.blue,
+          }}
+          borderRadius={5}
+          leftIcon={
+            <Icon
+              name="google"
+              as={FontAwesome5}
+              size={10}
+              color={styleConst.color.white}
+              style={{marginLeft: 0}}
+            />
+          }
+          rightIcon={
+            get(im, 'current.google', false) ? (
+              <Icon
+                name="close-circle-sharp"
+                size={5}
+                as={Ionicons}
+                style={styles.CheckCloseIcon}
+              />
+            ) : null
+          }
           style={[
+            styles.SocialLoginBt,
             {
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
+              width: ButtonWidth,
+              height: ButtonHeight,
+              backgroundColor: '#4286F5',
             },
-          ]}>
+            get(im, 'current.google', false)
+              ? styles.SocialLoginBtActive
+              : null,
+          ]}
+        />
+        {!isAndroid && appleAuth.isSupported ? (
           <Button
-            onPress={this._connectGoogle}
-            disabled={this.state.isSigninInProgress || Boolean(im.google)}
+            onPress={async () => {
+              setIsSigninInProgress('apple');
+              _signInWithApple({
+                profile: login,
+                connected: Boolean(get(im, 'current.apple', false)),
+              })
+                .then(res => {
+                  setIsSigninInProgress(false);
+                })
+                .catch(err => {
+                  console.error('Apple auth error', err);
+                  setIsSigninInProgress(false);
+                });
+            }}
+            isLoading={isSigninInProgress && isSigninInProgress === 'apple'}
+            _spinner={{
+              color: styleConst.color.blue,
+            }}
+            borderRadius={5}
             leftIcon={
               <Icon
-                name="google"
-                as={FontAwesome5}
+                name="apple"
                 size={10}
-                color={styleConst.color.white}
-                style={{marginLeft: 0}}
+                as={FontAwesome5}
+                style={{marginLeft: 0, color: styleConst.color.white}}
               />
             }
             rightIcon={
-              im.google ? (
+              get(im, 'current.apple', false) ? (
                 <Icon
-                  name="check-circle"
-                  size={4}
-                  as={FontAwesome5}
-                  style={styles.CheckCircleIcon}
+                  name="close-circle-sharp"
+                  size={5}
+                  as={Ionicons}
+                  style={styles.CheckCloseIcon}
                 />
               ) : null
             }
             style={[
-              styleConst.shadow.default,
               styles.SocialLoginBt,
               {
                 width: ButtonWidth,
                 height: ButtonHeight,
-                backgroundColor: '#4286F5',
+                backgroundColor: '#000000',
               },
-              im.google ? styles.SocialLoginBtActive : null,
-            ]}></Button>
-          {false ? (
-            <Button
-              onPress={this._connectFB}
-              disabled={this.state.isSigninInProgress || Boolean(im.facebook)}
-              leftIcon={
-                <Icon
-                  name="facebook"
-                  size={10}
-                  as={FontAwesome5}
-                  style={{
-                    marginLeft: 0,
-                    color: styleConst.color.white,
-                  }}
-                />
-              }
-              rightIcon={
-                im.facebook ? (
-                  <Icon
-                    name="check-circle"
-                    size={4}
-                    as={FontAwesome5}
-                    style={[styles.CheckCircleIcon, {right: -12, bottom: -5}]}
-                  />
-                ) : null
-              }
-              style={[
-                styleConst.shadow.default,
-                styles.SocialLoginBt,
-                {
-                  backgroundColor: '#4167B2',
-                  width: VKenabled ? '29%' : ButtonWidth,
-                  height: 60,
-                },
-                im.facebook ? styles.SocialLoginBtActive : null,
-              ]}></Button>
-          ) : null}
-          {VKenabled ? (
-            <Button
-              onPress={this._connectVK}
-              disabled={this.state.isSigninInProgress || Boolean(im.vk)}
-              leftIcon={
-                <Icon
-                  name="vk"
-                  size={10}
-                  as={FontAwesome5}
-                  style={{marginLeft: 0, color: styleConst.color.white}}
-                />
-              }
-              rightIcon={
-                im.vk ? (
-                  <Icon
-                    name="check-circle"
-                    size={4}
-                    as={FontAwesome5}
-                    style={[styles.CheckCircleIcon, {right: -8, bottom: -1}]}
-                  />
-                ) : null
-              }
-              style={[
-                styleConst.shadow.default,
-                styles.SocialLoginBt,
-                {
-                  width: ButtonWidth,
-                  height: ButtonHeight,
-                  backgroundColor: '#4680C2',
-                },
-                im.vk ? styles.SocialLoginBtActive : null,
-              ]}></Button>
-          ) : null}
-        </View>
-        {!isAndroid && appleAuth.isSupported ? (
-          <View>
-            <AppleButton
-              buttonStyle={AppleButton.Style.BLACK}
-              buttonType={AppleButton.Type.SIGN_IN}
-              disabled={this.state.isSigninInProgress || Boolean(im.apple)}
-              cornerRadius={5}
-              style={[
-                styleConst.shadow.default,
-                styles.SocialLoginBt,
-                im.apple ? styles.SocialLoginBtActive : null,
-                {
-                  justifyContent: 'space-between',
-                  height: 45,
-                  marginTop: 15,
-                },
-              ]}
-              onPress={() => this._signInWithApple()}
-            />
-            {im.apple ? (
+              get(im, 'current.apple', false)
+                ? styles.SocialLoginBtActive
+                : null,
+            ]}
+          />
+        ) : null}
+        {VKenabled ? (
+          <Button
+            onPress={async () => {
+              setIsSigninInProgress('vk');
+              _connectVK({
+                profile: login,
+                connected: Boolean(get(im, 'current.vk', false)),
+              })
+                .then(res => {
+                  setIsSigninInProgress(false);
+                })
+                .catch(err => {
+                  console.error('VK auth error', err);
+                  setIsSigninInProgress(false);
+                });
+            }}
+            // disabled={isSigninInProgress || Boolean(get(im, 'current.vk', false))}
+            isLoading={isSigninInProgress && isSigninInProgress === 'vk'}
+            _spinner={{
+              color: styleConst.color.blue,
+            }}
+            borderRadius={5}
+            leftIcon={
               <Icon
-                name="check-circle"
-                size={4}
+                name="vk"
+                size={10}
                 as={FontAwesome5}
-                style={[styles.CheckCircleIcon, {bottom: 5, right: 5}]}
+                style={{marginLeft: 0, color: styleConst.color.white}}
               />
-            ) : null}
-          </View>
+            }
+            rightIcon={
+              get(im, 'current.vk', false) ? (
+                <Icon
+                  name="close-circle-sharp"
+                  size={5}
+                  as={Ionicons}
+                  style={styles.CheckCloseIcon}
+                />
+              ) : null
+            }
+            style={[
+              styles.SocialLoginBt,
+              {
+                width: ButtonWidth,
+                height: ButtonHeight,
+                backgroundColor: '#4680C2',
+              },
+              get(im, 'current.vk', false) ? styles.SocialLoginBtActive : null,
+            ]}
+          />
         ) : null}
       </View>
-    );
-  };
-
-  render() {
-    let {region} = this.props;
-    if (!region) {
-      region = APP_REGION;
-    }
-    return this._renderLoginButtons(region);
-  }
-}
+    </View>
+  );
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SocialAuth);
