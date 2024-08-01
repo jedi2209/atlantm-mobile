@@ -22,7 +22,6 @@ import Form from '../../core/components/Form/Form';
 
 // imports for auth
 import {SocialAuthButton} from '../components/SocialAuthButton';
-import {LoginManager} from 'react-native-fbsdk-next';
 
 import OtpAutoFillViewManager from 'react-native-otp-auto-fill';
 
@@ -429,17 +428,6 @@ const LoginScreen = props => {
               height: ButtonHeight,
             }}
           />
-          {/* <SocialAuthButton
-            type="Facebook"
-            onPress={_checkPhone}
-            isDisabled={isSigninInProgress}
-            style={{
-              width: VKenabled ? '29%' : ButtonWidth,
-              height: 60,
-              marginVertical: 8,
-              paddingHorizontal: 8,
-            }}
-          /> */}
           {VKenabled ? (
             <SocialAuthButton
               type="VK"
@@ -536,7 +524,6 @@ const LoginScreen = props => {
 
   useEffect(() => {
     Analytics.logEvent('screen', 'profile/login');
-    LoginManager.logOut();
     const keyboardDidShowListener = Keyboard.addListener(
       'keyboardDidShow',
       () => {
