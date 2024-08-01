@@ -68,6 +68,8 @@ const isValidUrl = str => {
 const parseURL = async item => {
   const {url, type} = item;
 
+  let supported = false;
+
   if (!url) {
     return;
   }
@@ -81,7 +83,10 @@ const parseURL = async item => {
       return NavigationService.navigate(urlArr[1]);
     }
   }
-  const supported = await Linking.canOpenURL(url);
+
+  if (isNaN(url)) {
+    supported = await Linking.canOpenURL(url);
+  }
 
   if (isValidUrl(url) && supported) {
     return await Linking.openURL(url);
