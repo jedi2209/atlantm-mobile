@@ -613,6 +613,45 @@ export const connectSocialMedia = ({profile, im}) => {
 
     return API.updateProfile(dataToSend)
       .then(async response => {
+        return dispatch({
+          type: SAVE_PROFILE__UPDATE,
+          payload: response.data,
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: SAVE_PROFILE__FAIL,
+          payload: {
+            message: error,
+          },
+        });
+      });
+  };
+};
+
+export const disconnectSocialMedia = ({profile, network}) => {
+  const dataToSend = {
+    ...profile,
+  };
+
+  dataToSend.IM = get(dataToSend, 'IM', []).filter(
+    obj => obj.VALUE_TYPE !== network.toUpperCase(),
+  );
+
+  delete dataToSend.cars;
+  delete dataToSend.bonus;
+  delete dataToSend.discounts;
+  delete dataToSend.insurance;
+  delete dataToSend.additionalPurchase;
+
+  return dispatch => {
+    dispatch({
+      type: SAVE_PROFILE__REQUEST,
+      payload: dataToSend,
+    });
+
+    return API.updateProfile(dataToSend)
+      .then(async response => {
         dispatch({
           type: SAVE_PROFILE__UPDATE,
           payload: response.data,
@@ -629,49 +668,6 @@ export const connectSocialMedia = ({profile, im}) => {
         });
       });
   };
-};
-
-export const disconnectSocialMedia = ({profile, network}) => {
-  // const dataToSend = {
-  //   ...profile,
-  // };
-
-  // if (!dataToSend.IM) {
-  //   dataToSend.IM = [im];
-  // } else {
-  //   dataToSend.IM.push(im);
-  // }
-
-  // delete dataToSend.cars;
-  // delete dataToSend.bonus;
-  // delete dataToSend.discounts;
-  // delete dataToSend.insurance;
-  // delete dataToSend.additionalPurchase;
-
-  // return dispatch => {
-  //   dispatch({
-  //     type: SAVE_PROFILE__REQUEST,
-  //     payload: dataToSend,
-  //   });
-
-  //   return API.updateProfile(dataToSend)
-  //     .then(async response => {
-  //       dispatch({
-  //         type: SAVE_PROFILE__UPDATE,
-  //         payload: response.data,
-  //       });
-
-  //       return response.data;
-  //     })
-  //     .catch(error => {
-  //       dispatch({
-  //         type: SAVE_PROFILE__FAIL,
-  //         payload: {
-  //           message: error,
-  //         },
-  //       });
-  //     });
-  // };
 };
 
 async function getUserCars(token, userid) {
