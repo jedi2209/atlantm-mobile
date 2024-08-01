@@ -10,12 +10,6 @@ import {connectSocialMedia, disconnectSocialMedia} from '../actions';
 import styleConst from '../../core/style-const';
 
 // imports for auth
-import {
-  AccessToken,
-  GraphRequestManager,
-  LoginManager,
-  Settings,
-} from 'react-native-fbsdk-next';
 import VKLogin from 'react-native-vkontakte-login';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 import {
@@ -26,7 +20,9 @@ import {
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {FB_APP_ID, AUTH_DATA, APP_REGION, UKRAINE} from '../../core/const';
+import {get} from 'lodash';
+
+import {AUTH_DATA, APP_REGION, UKRAINE} from '../../core/const';
 
 GoogleSignin.configure({
   scopes: ['https://www.googleapis.com/auth/userinfo.email'], // what API you want to access on behalf of the user, default is email and profile
