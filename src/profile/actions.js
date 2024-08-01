@@ -408,7 +408,7 @@ export const actionSavePofile = props => {
         const user = response.data.user;
         let type = SAVE_PROFILE__UPDATE;
         if (
-          typeof props.update !== undefined &&
+          typeof props.update !== 'undefined' &&
           props.update === 0 &&
           user &&
           !user.PHONE
