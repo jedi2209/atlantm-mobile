@@ -19,21 +19,7 @@ PODS:
   - BVLinearGradient (2.8.3):
     - React-Core
   - DoubleConversion (1.1.6)
-  - FBAEMKit (16.3.1):
-    - FBSDKCoreKit_Basics (= 16.3.1)
   - FBLazyVector (0.74.1)
-  - FBSDKCoreKit (16.3.1):
-    - FBAEMKit (= 16.3.1)
-    - FBSDKCoreKit_Basics (= 16.3.1)
-  - FBSDKCoreKit_Basics (16.3.1)
-  - FBSDKGamingServicesKit (16.3.1):
-    - FBSDKCoreKit (= 16.3.1)
-    - FBSDKCoreKit_Basics (= 16.3.1)
-    - FBSDKShareKit (= 16.3.1)
-  - FBSDKLoginKit (16.3.1):
-    - FBSDKCoreKit (= 16.3.1)
-  - FBSDKShareKit (16.3.1):
-    - FBSDKCoreKit (= 16.3.1)
   - fmt (9.1.0)
   - glog (0.3.5)
   - Google-Maps-iOS-Utils (4.2.2):
@@ -1059,21 +1045,6 @@ PODS:
     - React
   - react-native-date-picker (5.0.2):
     - React-Core
-  - react-native-fbsdk-next (12.2.0):
-    - React-Core
-    - react-native-fbsdk-next/Core (= 12.2.0)
-    - react-native-fbsdk-next/Login (= 12.2.0)
-    - react-native-fbsdk-next/Share (= 12.2.0)
-  - react-native-fbsdk-next/Core (12.2.0):
-    - FBSDKCoreKit (~> 16.3.1)
-    - React-Core
-  - react-native-fbsdk-next/Login (12.2.0):
-    - FBSDKLoginKit (~> 16.3.1)
-    - React-Core
-  - react-native-fbsdk-next/Share (12.2.0):
-    - FBSDKGamingServicesKit (~> 16.3.1)
-    - FBSDKShareKit (~> 16.3.1)
-    - React-Core
   - react-native-google-maps (1.15.1):
     - Google-Maps-iOS-Utils (= 4.2.2)
     - GoogleMaps (= 7.4.0)
@@ -1569,7 +1540,6 @@ DEPENDENCIES:
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - react-native-appsflyer (from `../node_modules/react-native-appsflyer`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
-  - react-native-fbsdk-next (from `../node_modules/react-native-fbsdk-next`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-maps (from `../node_modules/react-native-maps`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
@@ -1634,12 +1604,6 @@ SPEC REPOS:
     - AppAuth
     - AppsFlyerFramework
     - Base64
-    - FBAEMKit
-    - FBSDKCoreKit
-    - FBSDKCoreKit_Basics
-    - FBSDKGamingServicesKit
-    - FBSDKLoginKit
-    - FBSDKShareKit
     - Google-Maps-iOS-Utils
     - GoogleMaps
     - GoogleSignIn
@@ -1725,8 +1689,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-appsflyer"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
-  react-native-fbsdk-next:
-    :path: "../node_modules/react-native-fbsdk-next"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-maps:
@@ -1850,13 +1812,7 @@ SPEC CHECKSUMS:
   boost: d3f49c53809116a5d38da093a8aa78bf551aed09
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
-  FBAEMKit: 6c7b5eb77c96861bb59e040842c6e55bf39512ce
   FBLazyVector: 898d14d17bf19e2435cafd9ea2a1033efe445709
-  FBSDKCoreKit: 5e4dd478947ab1bcc887e8cfadeae0727af1a942
-  FBSDKCoreKit_Basics: cd7b5f5d1e8868c26706917919d058999ca672c3
-  FBSDKGamingServicesKit: fb0dcf086e8ca51f5a0074908edb783dba286af0
-  FBSDKLoginKit: 572cca0bc6c90067ef197187697cb3b584310c52
-  FBSDKShareKit: d9269157b4e9620f0bc1a461c5ead35a65cede9a
   fmt: 4c2741a687cc09f0634a2e2c72a838b99f1ff120
   glog: c5d68082e772fa1c511173d6b30a9de2c05a69a2
   Google-Maps-iOS-Utils: f77eab4c4326d7e6a277f8e23a0232402731913a
@@ -1894,7 +1850,6 @@ SPEC CHECKSUMS:
   React-Mapbuffer: 11029dcd47c5c9e057a4092ab9c2a8d10a496a33
   react-native-appsflyer: 37a0053df435bb76c330c5c15488dca29a3baa9b
   react-native-date-picker: 90687f1dbd374ff0265dca99d949998364c22fa9
-  react-native-fbsdk-next: fcecfa33c37ce63bcda9cd24766ee9d345463230
   react-native-google-maps: 7aae26cd61058ca41f54ed4abb127dbe20ad9184
   react-native-maps: 4c07b21deac3ac3579558956b63e288efb8725bb
   react-native-netinfo: 076df4f9b07f6670acf4ce9a75aac8d34c2e2ccc
