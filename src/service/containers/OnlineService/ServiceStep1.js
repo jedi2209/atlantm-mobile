@@ -348,7 +348,7 @@ const ServiceStep1 = props => {
     }
     setMyCars(carsTmp);
     const item = carsTmp[0];
-    if (typeof item !== undefined) {
+    if (typeof item !== 'undefined') {
       setCar({
         carBrand: get(item, 'carInfo.brand.name', get(item, 'brand')),
         carModel: get(item, 'carInfo.model.name', get(item, 'model')),

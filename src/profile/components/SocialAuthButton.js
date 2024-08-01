@@ -7,7 +7,6 @@ import {
 } from '@invertase/react-native-apple-authentication';
 
 import Apple from '../auth/Apple';
-import Facebook from '../auth/Facebook';
 import Google from '../auth/Google';
 import VK from '../auth/VK';
 
@@ -35,21 +34,6 @@ export const SocialAuthButton = (
           {...propsData}
           style={[styles.SocialLoginBt, styles.buttonApple, style]}
           onPress={() => Apple.signIn(onPress)}
-        />
-      );
-    case 'facebook':
-      return (
-        <IconButton
-          _icon={{
-            as: FontAwesome5,
-            name: 'facebook',
-            size: 10,
-            color: styleConst.color.white,
-          }}
-          shadow={3}
-          {...propsData}
-          style={[styles.SocialLoginBt, styles.colorFacebook, style]}
-          onPress={() => Facebook.signIn(onPress)}
         />
       );
     case 'google':
@@ -97,9 +81,6 @@ const styles = StyleSheet.create({
   },
   colorGoogle: {
     backgroundColor: '#4286F5',
-  },
-  colorFacebook: {
-    backgroundColor: '#4167B2',
   },
   colorVK: {
     backgroundColor: '#4680C2',

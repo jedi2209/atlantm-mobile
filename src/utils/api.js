@@ -266,8 +266,6 @@ export default {
   //   return this.request(`/mobile/vedaem/${region}/`, baseRequestParams);
   // },
 
-  // TODO: проверить, продолжает ли падать на пустом ответе
-  // @see https://github.com/facebook/react-native/commit/122b3791ede095345f44666691aa9ce5aa7f725a
   fetchReviews({
     dealerId,
     dateFrom,
@@ -982,7 +980,7 @@ export default {
 
     if (
       !profile.ID ||
-      typeof profile.ID === undefined ||
+      typeof profile.ID === 'undefined' ||
       profile.ID === '' ||
       profile.ID === null
     ) {
@@ -1014,7 +1012,7 @@ export default {
 
     if (
       !profile.ID ||
-      typeof profile.ID === undefined ||
+      typeof profile.ID === 'undefined' ||
       profile.ID === '' ||
       profile.ID === null
     ) {

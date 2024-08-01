@@ -21,12 +21,7 @@ import PushNotifications from '../../core/components/PushNotifications';
 
 // redux
 import {connect} from 'react-redux';
-import {
-  getProfileSapData,
-  actionLogout,
-  connectSocialMedia,
-  actionToggleCar,
-} from '../actions';
+import {getProfileSapData, actionLogout} from '../actions';
 import {actionSetPushActionSubscribe} from '../../core/actions';
 
 import Analytics from '../../utils/amplitude-analytics';
@@ -156,8 +151,6 @@ const mapDispatchToProps = {
   actionLogout,
   actionSetPushActionSubscribe,
   getProfileSapData,
-  connectSocialMedia,
-  actionToggleCar,
 };
 
 const ProfileScreenInfo = props => {
