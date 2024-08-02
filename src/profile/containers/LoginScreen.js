@@ -396,18 +396,14 @@ const LoginScreen = props => {
 
   const _renderLoginButtons = region => {
     let VKenabled = true;
-    let ButtonWidth = '45%';
+    let ButtonWidth = '30%';
     let ButtonHeight = 60;
-    switch (region.toLowerCase()) {
-      case UKRAINE:
-        VKenabled = false;
-        ButtonWidth = '30%';
-        ButtonHeight = 60;
-        break;
-      default:
-        break;
-    }
+
     const isAndroid = Platform.OS === 'android';
+
+    if (isAndroid) {
+      ButtonWidth = '45%';
+    }
     return (
       <View
         style={{
@@ -428,6 +424,16 @@ const LoginScreen = props => {
               height: ButtonHeight,
             }}
           />
+          {!isAndroid ? (
+            <SocialAuthButton
+              type="Apple"
+              style={{
+                width: ButtonWidth,
+                height: ButtonHeight,
+              }}
+              onPress={_checkPhone}
+            />
+          ) : null}
           {VKenabled ? (
             <SocialAuthButton
               type="VK"
@@ -440,9 +446,6 @@ const LoginScreen = props => {
             />
           ) : null}
         </HStack>
-        {!isAndroid ? (
-          <SocialAuthButton type="Apple" onPress={_checkPhone} />
-        ) : null}
       </View>
     );
   };

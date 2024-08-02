@@ -27,13 +27,17 @@ export const SocialAuthButton = (
         return;
       }
       return (
-        <AppleButton
-          buttonStyle={AppleButton.Style.WHITE_OUTLINE}
-          buttonType={AppleButton.Type.SIGN_IN}
-          cornerRadius={5}
-          {...propsData}
-          style={[styles.SocialLoginBt, styles.buttonApple, style]}
+        <IconButton
           onPress={() => Apple.signIn(onPress)}
+          _icon={{
+            as: FontAwesome5,
+            name: 'apple',
+            size: 12,
+            color: styleConst.color.white,
+            style: {marginLeft: 9, marginBottom: 3},
+          }}
+          {...propsData}
+          style={[styles.SocialLoginBt, styles.colorApple, style]}
         />
       );
     case 'google':
@@ -42,10 +46,10 @@ export const SocialAuthButton = (
           _icon={{
             as: FontAwesome5,
             name: 'google',
-            size: 7,
+            size: 10,
             color: styleConst.color.white,
+            style: {marginLeft: 3},
           }}
-          shadow={3}
           {...propsData}
           style={[styles.SocialLoginBt, styles.colorGoogle, style]}
           onPress={() => Google.signIn(onPress)}
@@ -57,10 +61,9 @@ export const SocialAuthButton = (
           _icon={{
             as: FontAwesome5,
             name: 'vk',
-            size: 8,
+            size: 12,
             color: styleConst.color.white,
           }}
-          shadow={3}
           {...propsData}
           style={[styles.SocialLoginBt, styles.colorVK, style]}
           onPress={() => VK.signIn(onPress)}
@@ -81,6 +84,9 @@ const styles = StyleSheet.create({
   },
   colorGoogle: {
     backgroundColor: '#4286F5',
+  },
+  colorApple: {
+    backgroundColor: '#000000',
   },
   colorVK: {
     backgroundColor: '#4680C2',
