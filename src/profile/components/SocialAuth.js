@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
   CheckCloseIcon: {
     position: 'absolute',
     top: -10,
-    right: -25,
+    right: -15,
     color: styleConst.color.black,
   },
 });
@@ -90,6 +90,21 @@ const _GetUserDataVK = async () => {
   }
 };
 
+const transformIM = (im = []) => {
+  return im.reduce((acc, soc) => {
+    if (!soc.VALUE_TYPE) {
+      return acc;
+    }
+
+    acc[soc.VALUE_TYPE.toLowerCase()] = {
+      id: soc.ID || null,
+      value: soc.VALUE,
+    };
+
+    return acc;
+  }, {});
+};
+
 const SocialAuth = ({
   connectSocialMedia,
   disconnectSocialMedia,
@@ -104,6 +119,7 @@ const SocialAuth = ({
   let ButtonWidth = '25%';
   let ButtonHeight = 50;
   let im = useRef([]);
+  im.current = transformIM(get(login, 'IM', []));
 
   switch (region.toLowerCase()) {
     case UKRAINE:
@@ -114,21 +130,6 @@ const SocialAuth = ({
     default:
       break;
   }
-
-  useEffect(() => {
-    im.current = get(login, 'IM', []).reduce((acc, soc) => {
-      if (!soc.VALUE_TYPE) {
-        return acc;
-      }
-
-      acc[soc.VALUE_TYPE.toLowerCase()] = {
-        id: soc.ID || null,
-        value: soc.VALUE,
-      };
-
-      return acc;
-    }, {});
-  }, [login, login.IM]);
 
   const connectSocialWrapper = async ({profile, im}) => {
     const res = await connectSocialMedia({
@@ -213,6 +214,8 @@ const SocialAuth = ({
     }
   };
 
+  console.info('im', im);
+
   return (
     <View
       style={[
@@ -257,7 +260,7 @@ const SocialAuth = ({
             <Icon
               name="google"
               as={FontAwesome5}
-              size={10}
+              size={8}
               color={styleConst.color.white}
               style={{marginLeft: 0}}
             />
@@ -268,7 +271,7 @@ const SocialAuth = ({
                 name="close-circle-sharp"
                 size={5}
                 as={Ionicons}
-                style={styles.CheckCloseIcon}
+                style={[styles.CheckCloseIcon, {right: -27, top: -14}]}
               />
             ) : null
           }
@@ -310,7 +313,10 @@ const SocialAuth = ({
                 name="apple"
                 size={10}
                 as={FontAwesome5}
-                style={{marginLeft: 0, color: styleConst.color.white}}
+                style={{
+                  marginLeft: get(im, 'current.apple', false) ? 15 : 10,
+                  color: styleConst.color.white,
+                }}
               />
             }
             rightIcon={
@@ -361,9 +367,12 @@ const SocialAuth = ({
             leftIcon={
               <Icon
                 name="vk"
-                size={10}
+                size={12}
                 as={FontAwesome5}
-                style={{marginLeft: 0, color: styleConst.color.white}}
+                style={{
+                  marginTop: 3,
+                  color: styleConst.color.white,
+                }}
               />
             }
             rightIcon={
@@ -372,7 +381,7 @@ const SocialAuth = ({
                   name="close-circle-sharp"
                   size={5}
                   as={Ionicons}
-                  style={styles.CheckCloseIcon}
+                  style={[styles.CheckCloseIcon, {right: -19, top: -5}]}
                 />
               ) : null
             }
