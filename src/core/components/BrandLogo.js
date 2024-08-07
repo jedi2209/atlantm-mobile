@@ -16,12 +16,12 @@ const BrandLogo = props => {
     aspectRatio = 1.5,
     brandsAssets = {
       black: [
-        2, 3, 4, 5, 6, 7, 9, 10, 12, 13, 14, 19, 20, 23, 30, 46, 77, 92, 153,
-        157, 159,
+        2, 3, 4, 5, 6, 7, 9, 10, 12, 13, 14, 19, 20, 23, 30, 46, 67, 77, 92,
+        153, 157, 159, 160, 176,
       ],
       white: [
-        2, 3, 4, 5, 6, 7, 9, 10, 12, 13, 14, 19, 20, 23, 30, 46, 77, 92, 153,
-        157, 159,
+        2, 3, 4, 5, 6, 7, 9, 10, 12, 13, 14, 19, 20, 23, 30, 46, 67, 77, 92,
+        153, 157, 159, 160, 176,
       ],
     },
     testID = 'BrandLogo.Wrapper',
@@ -126,7 +126,13 @@ const brandsSVG = {
     4: (
       <Image
         source={require('../../../assets/brands/black/brand-4.svg')}
-        style={[styles.imageSVG, {height: '90%'}]}
+        style={[styles.imageSVG, {width: '75%'}]}
+      />
+    ),
+    176: (
+      <Image
+        source={require('../../../assets/brands/black/brand-176.svg')}
+        style={[styles.imageSVG, {width: '75%'}]}
       />
     ),
     5: (
@@ -186,7 +192,7 @@ const brandsSVG = {
     20: (
       <Image
         source={require('../../../assets/brands/black/brand-20.svg')}
-        style={styles.imageSVG}
+        style={[styles.imageSVG, {width: '80%'}]}
       />
     ),
     23: (
@@ -205,6 +211,12 @@ const brandsSVG = {
       <Image
         source={require('../../../assets/brands/black/brand-46.svg')}
         style={[styles.imageSVG, {height: '85%'}]}
+      />
+    ),
+    67: (
+      <Image
+        source={require('../../../assets/brands/black/brand-67.svg')}
+        style={[styles.imageSVG, {height: '60%'}]}
       />
     ),
     77: (
@@ -237,6 +249,12 @@ const brandsSVG = {
         style={[styles.imageSVG, {height: '40%'}]}
       />
     ),
+    160: (
+      <Image
+        source={require('../../../assets/brands/black/brand-160.svg')}
+        style={[styles.imageSVG, {height: '90%'}]}
+      />
+    ),
   },
   white: {
     2: (
@@ -254,7 +272,13 @@ const brandsSVG = {
     4: (
       <Image
         source={require('../../../assets/brands/white/brand-4.svg')}
-        style={[styles.imageSVG, {height: '90%'}]}
+        style={[styles.imageSVG, {width: '75%'}]}
+      />
+    ),
+    176: (
+      <Image
+        source={require('../../../assets/brands/white/brand-176.svg')}
+        style={[styles.imageSVG, {width: '75%'}]}
       />
     ),
     5: (
@@ -314,7 +338,7 @@ const brandsSVG = {
     20: (
       <Image
         source={require('../../../assets/brands/white/brand-20.svg')}
-        style={styles.imageSVG}
+        style={[styles.imageSVG, {width: '80%'}]}
       />
     ),
     23: (
@@ -333,6 +357,12 @@ const brandsSVG = {
       <Image
         source={require('../../../assets/brands/white/brand-46.svg')}
         style={[styles.imageSVG, {height: '85%'}]}
+      />
+    ),
+    67: (
+      <Image
+        source={require('../../../assets/brands/white/brand-67.svg')}
+        style={[styles.imageSVG, {height: '60%'}]}
       />
     ),
     77: (
@@ -363,6 +393,12 @@ const brandsSVG = {
       <Image
         source={require('../../../assets/brands/white/brand-159.svg')}
         style={[styles.imageSVG, {height: '40%'}]}
+      />
+    ),
+    160: (
+      <Image
+        source={require('../../../assets/brands/white/brand-160.svg')}
+        style={[styles.imageSVG, {height: '90%'}]}
       />
     ),
   },
