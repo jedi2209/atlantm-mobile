@@ -112,6 +112,7 @@ const Badge = props => {
     descriptionStyle = {},
     description = null,
     badgeContainerStyle = {},
+    name = null,
   } = props;
 
   let onPressCustom;
@@ -134,7 +135,7 @@ const Badge = props => {
           <Text
             selectable={false}
             style={[styles.badgeName, {color: textColor}, textStyle]}>
-            {props.name}
+            {name}
           </Text>
         </BackgroundItem>
       </TouchableHighlight>
@@ -164,8 +165,8 @@ const Badge = props => {
     <BackgroundItem bgColor={bgColor} badgeContainerStyle={badgeContainerStyle}>
       <Text
         selectable={false}
-        style={[styles.badgeName, {color: textColor}, props.textStyle]}>
-        {props.name}
+        style={[styles.badgeName, {color: textColor}, textStyle]}>
+        {name}
       </Text>
     </BackgroundItem>
   );

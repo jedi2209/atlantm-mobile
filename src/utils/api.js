@@ -310,6 +310,17 @@ export default {
     return this.request(`/stock/new/cars/get/car/${carId}/`, baseRequestParams);
   },
 
+  fetchCarCreditPrograms(carId, region = APP_REGION) {
+    return this.request(
+      `/finance/programs/${region}/?car=${carId}`,
+      baseRequestParams,
+    );
+  },
+
+  fetchCarCreditPartners(region = APP_REGION) {
+    return this.request(`/finance/partners/${region}`, baseRequestParams);
+  },
+
   async fetchTDCarDetails(dealer, carID) {
     if (typeof carID === 'object') {
       let cars = [];
