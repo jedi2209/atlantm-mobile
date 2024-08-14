@@ -257,6 +257,7 @@ const ServiceStep3 = props => {
                     date: get(dateData, 'date'),
                     time: get(dateData, 'from'),
                   },
+                  tech_place: get(dateData, 'tech_place'),
                 });
               }}>
               <View

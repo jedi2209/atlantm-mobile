@@ -134,7 +134,7 @@ const ServiceStep4 = props => {
       return;
     }
 
-    let dateFromForm = get(orderData, 'DATETIME', null);
+    let dateTime = get(orderData, 'DATETIME', null);
     let servicePrice = null;
 
     if (get(orderData, 'SERVICESecondFull.total')) {
@@ -152,9 +152,9 @@ const ServiceStep4 = props => {
     let data = {
       dealer: orderData.DEALER,
       time: {
-        from: parseInt(get(dateFromForm, 'time', 0), 10),
+        from: parseInt(get(dateTime, 'time', 0), 10),
         to:
-          parseInt(get(dateFromForm, 'time', 0), 10) +
+          parseInt(get(dateTime, 'time', 0), 10) +
           parseInt(get(orderData, 'SERVICESecondFull.total.time', 0), 10),
       },
       f_FirstName: get(dataFromForm, 'NAME', ''),
@@ -165,7 +165,7 @@ const ServiceStep4 = props => {
       callMePls: get(dataFromForm, 'CALLMEPLS', false),
       leaveTyresInStorage: get(orderData, 'leaveTyresInStorage', false),
       myTyresInStorage,
-      tech_place: get(dateFromForm, 'tech_place', ''),
+      tech_place: get(orderData, 'tech_place', ''),
       service: get(orderData, 'SERVICE', ''),
       serviceName: [
         strings.ServiceScreen.works[get(orderData, 'SERVICE', '')],
@@ -197,7 +197,7 @@ const ServiceStep4 = props => {
         model: get(data, 'car.model', ''),
         carNumber: get(data, 'car.plate', ''),
         vin: get(data, 'car.vin', ''),
-        date: format(dateFromForm?.date ? dateFromForm.date : dateFromForm),
+        date: format(dateTime?.date ? dateTime.date : dateTime),
         service: get(data, 'serviceName', ''),
         firstName: get(data, 'f_FirstName', ''),
         secondName: get(data, 'f_SecondName', ''),
