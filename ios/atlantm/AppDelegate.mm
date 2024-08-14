@@ -1,3 +1,4 @@
+#import <Bugsnag/Bugsnag.h>
 #import "AppDelegate.h"
 #import <GoogleMaps/GoogleMaps.h>
 #import <OneSignalFramework/OneSignalFramework.h>
@@ -18,6 +19,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  [Bugsnag start];
   [GMSServices provideAPIKey:@"XXXX"];
   self.moduleName = @"atlantm";
   // You can add your custom initial props in the dictionary below.

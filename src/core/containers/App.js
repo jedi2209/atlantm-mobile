@@ -5,6 +5,9 @@ import {Animated, StyleSheet, Platform, View, Text} from 'react-native';
 import {NativeBaseProvider} from 'native-base';
 import {DefaultTheme, PaperProvider, Button} from 'react-native-paper';
 
+import Bugsnag from '@bugsnag/react-native';
+import BugsnagPluginReactNavigation from '@bugsnag/plugin-react-navigation';
+
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
 
@@ -110,6 +113,15 @@ const _awaitStoreToUpdate = async props => {
     return false;
   }
 };
+
+Bugsnag.start({
+  plugins: [new BugsnagPluginReactNavigation()],
+});
+
+const {createNavigationContainer} = Bugsnag.getPlugin('reactNavigation');
+
+const BugsnagNavigationContainer =
+  createNavigationContainer(NavigationContainer);
 
 const App = props => {
   const {
@@ -311,9 +323,9 @@ const App = props => {
           },
         }}>
         <PaperProvider theme={paperTheme}>
-          <NavigationContainer ref={NavigationService.navigationRef}>
+          <BugsnagNavigationContainer ref={NavigationService.navigationRef}>
             <Nav.Base />
-          </NavigationContainer>
+          </BugsnagNavigationContainer>
         </PaperProvider>
       </NativeBaseProvider>
     </GestureHandlerRootView>

@@ -13,6 +13,7 @@ let appRegion,
   appsFlyerSettings,
   sentryDSN,
   logrocketID,
+  bugsnagID,
   oneSignalKey,
   amplitudeKey,
   appMetricaKey,
@@ -53,6 +54,7 @@ switch (bundle) {
     };
     sentryDSN = 'https://XXXX@sentry.io/219899';
     logrocketID = 'XXXX/atlant-m';
+    bugsnagID = 'XXXX';
     oneSignalKey = 'XXXX';
     amplitudeKey = 'XXXX';
     appMetricaKey = 'XXXX';
@@ -88,6 +90,8 @@ switch (bundle) {
     };
     sentryDSN =
       'https://XXXX@o76005.ingest.sentry.io/6367469';
+    logrocketID = 'XXXX/atlant-m';
+    bugsnagID = 'XXXX';
     oneSignalKey = 'XXXX';
     amplitudeKey = 'XXXX';
     fbAppID = 'XXXX';
@@ -162,6 +166,8 @@ export const API_MAIN_URL = 'https://XXXX/v1';
 export const SENTRY_DSN = sentryDSN;
 
 export const LOG_ROCKET_ID = logrocketID;
+
+export const BUGSNAG_ID = bugsnagID;
 
 export const APPSFLYER_SETTINGS = appsFlyerSettings;
 

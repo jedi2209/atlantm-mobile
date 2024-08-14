@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react-native';
+import TraceInfo from '../utils/trace-errors';
 import API from '../utils/api';
 
 import {
@@ -38,8 +38,8 @@ export const callMe = props => {
         return dispatch({type: CALL_ME__SUCCESS});
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage('callMe API.callMe error');
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage('callMe API.callMe error');
         return dispatch({
           type: CALL_ME__FAIL,
           payload: {
