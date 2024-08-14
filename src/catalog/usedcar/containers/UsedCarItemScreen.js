@@ -505,8 +505,8 @@ const UsedCarItemScreen = props => {
             mb={32}
             pt={4}
             pb={6}
-            shadow={7}
-            borderRadius={30}
+            shadow={1}
+            borderRadius={10}
             style={[styles.carTopWrapper]}>
             <View>
               <ScrollView
