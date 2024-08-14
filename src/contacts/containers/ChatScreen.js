@@ -9,6 +9,7 @@ import {Button, View} from 'native-base';
 import {connect} from 'react-redux';
 import {sign} from 'react-native-pure-jwt';
 import Orientation from 'react-native-orientation-locker';
+import LogRocket from '@logrocket/react-native';
 
 import PushNotifications from '../../core/components/PushNotifications';
 import {store} from '../../core/store';
@@ -202,6 +203,11 @@ const ChatScreen = ({
   };
 
   if (data) {
+    const webViewID = 'chat_webview';
+
+    if (isAndroid) {
+      LogRocket.registerWebView(webViewID);
+    }
     return (
       <View
         style={[
@@ -215,6 +221,7 @@ const ChatScreen = ({
           enabled={!isAndroid}
           style={[styles.mainView, route.params?.mainScrollViewStyle]}>
           <WebView
+            nativeID={webViewID}
             style={[styles.webView, route.params?.webViewStyle]}
             key={'session_' + session}
             source={data}

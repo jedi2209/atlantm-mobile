@@ -16,14 +16,18 @@ export default class Analytics {
       params = {params};
     }
     const ampInstance = Amplitude.getInstance();
-    const SAPID = get(store.getState(), 'profile.login.SAP.ID');
-    const UserID = get(store.getState(), 'profile.login.id');
-    const UserEmail = get(store.getState(), 'profile.login.EMAIL[0].VALUE');
+    const storeData = store.getState();
+    const UserID = get(
+      storeData,
+      'profile.login.SAP.ID',
+      get(storeData, 'profile.login.id'),
+    );
+    const UserEmail = get(storeData, 'profile.login.EMAIL[0].VALUE');
     ampInstance.init(AMPLITUDE_KEY);
-    if (SAPID || UserID) {
-      ampInstance.setUserId(SAPID ? SAPID : UserID);
+    if (UserID) {
+      ampInstance.setUserId(UserID);
       Sentry.setUser({
-        id: SAPID ? SAPID : UserID,
+        id: UserID,
         email: UserEmail,
       });
     }

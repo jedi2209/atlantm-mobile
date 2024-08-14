@@ -12,6 +12,7 @@ let appRegion,
   appEmail,
   appsFlyerSettings,
   sentryDSN,
+  logrocketID,
   oneSignalKey,
   amplitudeKey,
   appMetricaKey,
@@ -51,6 +52,7 @@ switch (bundle) {
       timeToWaitForATTUserAuthorization: 10, //for iOS 14.5
     };
     sentryDSN = 'https://2e35f2a2455b4a3d97a1687270845d33@sentry.io/219899';
+    logrocketID = '2mgb3h/atlant-m';
     oneSignalKey = '2094a3e1-3c9a-479d-90ae-93adfcd15dab';
     amplitudeKey = '2716d7eebc63593e80e4fd172fc8b6f3';
     appMetricaKey = '30b6e21f-4f57-4ec6-8349-125026a080c6';
@@ -158,6 +160,8 @@ export const STORE_LINK = {
 export const API_MAIN_URL = 'https://api.fastwebapp.net/v1';
 
 export const SENTRY_DSN = sentryDSN;
+
+export const LOG_ROCKET_ID = logrocketID;
 
 export const APPSFLYER_SETTINGS = appsFlyerSettings;
 

@@ -4,6 +4,7 @@ import {Platform, Linking, Alert, BackHandler} from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import RNFetchBlob from 'rn-fetch-blob';
 import {sign as JWTSign} from 'react-native-pure-jwt';
+import LogRocket from '@logrocket/react-native';
 import {
   STORE_LINK,
   API_MAIN_URL,
@@ -967,6 +968,14 @@ export default {
 
     return await this.request('/lkk/auth/validate/', requestParams)
       .then(response => {
+        if (response?.data?.user) {
+          const userData = response?.data?.user;
+          LogRocket.identify(userData.ID.toString(), {
+            name: [userData.NAME, userData.LAST_NAME].join(' '),
+            phone: userData?.PHONE[0]?.VALUE,
+            email: userData?.EMAIL[0]?.VALUE,
+          });
+        }
         return response;
       })
       .catch(err => {
@@ -977,6 +986,14 @@ export default {
   async getProfile(id) {
     return await this.request(`/lkk/user/${id}/`, baseRequestParams)
       .then(response => {
+        if (response?.data) {
+          const userData = response?.data;
+          LogRocket.identify(userData.ID.toString(), {
+            name: [userData?.NAME, userData?.LAST_NAME].join(' '),
+            phone: userData?.PHONE[0]?.VALUE,
+            email: userData?.EMAIL[0]?.VALUE,
+          });
+        }
         return response.data;
       })
       .catch(err => {
