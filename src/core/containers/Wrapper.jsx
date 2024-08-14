@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, View, Text, Appearance, StatusBar} from 'react-native';
 import * as Sentry from '@sentry/react-native';
+import LogRocket from '@logrocket/react-native';
 import appsFlyer from 'react-native-appsflyer';
 
 // redux
@@ -15,7 +16,7 @@ import SplashScreenComponent from './SplashScreenComponent';
 import App from './App';
 import {LogBox} from 'react-native';
 
-import {SENTRY_DSN, APPSFLYER_SETTINGS} from '../const';
+import {SENTRY_DSN, APPSFLYER_SETTINGS, LOG_ROCKET_ID} from '../const';
 import styleConst from '../style-const';
 
 const colorScheme = Appearance.getColorScheme();
@@ -79,6 +80,16 @@ const Wrapper = () => {
     Text.defaultProps.maxFontSizeMultiplier = 0;
     Text.defaultProps.selectable = false;
     Sentry.init(sentryParams);
+    LogRocket.init(LOG_ROCKET_ID, {
+      network: {
+        requestSanitizer: request => {
+          if (request.headers['x-api-key']) {
+            request.headers['x-api-key'] = 'MOBILE_APP';
+          }
+          return request;
+        },
+      },
+    });
     appsFlyer.initSdk(
       appsFlyerSettings,
       result => {

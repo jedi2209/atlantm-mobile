@@ -1,7 +1,16 @@
 import React, {useState, useRef, useEffect} from 'react';
-import {Linking, View, ActivityIndicator, StyleSheet} from 'react-native';
+import {
+  Linking,
+  View,
+  ActivityIndicator,
+  StyleSheet,
+  Platform,
+} from 'react-native';
 import WebView from 'react-native-webview';
+import LogRocket from '@logrocket/react-native';
 import styleConst from '../style-const';
+
+const isAndroid = Platform.OS === 'android';
 
 const BODY_OPEN_TAG_PATTERN = /\<body\>/;
 const BODY_CLOSE_TAG_PATTERN = /\<\/ *body\>/;
@@ -190,8 +199,15 @@ const WebViewAutoHeight = ({
     );
   }
 
+  const webViewID = 'webview_auto_height';
+
+  if (isAndroid) {
+    LogRocket.registerWebView(webViewID);
+  }
+
   return (
     <WebView
+      nativeID={webViewID}
       source={sourceModified}
       scrollEnabled={false}
       style={[

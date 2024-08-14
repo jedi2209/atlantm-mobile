@@ -12,6 +12,7 @@ let appRegion,
   appEmail,
   appsFlyerSettings,
   sentryDSN,
+  logrocketID,
   oneSignalKey,
   amplitudeKey,
   appMetricaKey,
@@ -51,6 +52,7 @@ switch (bundle) {
       timeToWaitForATTUserAuthorization: 10, //for iOS 14.5
     };
     sentryDSN = 'https://XXXX@sentry.io/219899';
+    logrocketID = 'XXXX/atlant-m';
     oneSignalKey = 'XXXX';
     amplitudeKey = 'XXXX';
     appMetricaKey = 'XXXX';
@@ -158,6 +160,8 @@ export const STORE_LINK = {
 export const API_MAIN_URL = 'https://XXXX/v1';
 
 export const SENTRY_DSN = sentryDSN;
+
+export const LOG_ROCKET_ID = logrocketID;
 
 export const APPSFLYER_SETTINGS = appsFlyerSettings;
 

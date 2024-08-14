@@ -2,6 +2,7 @@ import thunk from 'redux-thunk';
 import {persistStore, persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {createLogger} from 'redux-logger';
+import LogRocket from '@logrocket/react-native';
 
 import {configureStore} from '@reduxjs/toolkit';
 
@@ -21,12 +22,16 @@ const persistedReducer = persistReducer(persistConfig, rootReducer);
 if (__DEV__) {
   store = configureStore({
     reducer: persistedReducer,
-    middleware: [thunk, createLogger({collapsed: true, diff: true})],
+    middleware: [
+      thunk,
+      createLogger({collapsed: true, diff: true}),
+      LogRocket.reduxMiddleware(),
+    ],
   });
 } else {
   store = configureStore({
     reducer: persistedReducer,
-    middleware: [thunk],
+    middleware: [thunk, LogRocket.reduxMiddleware()],
   });
 }
 
