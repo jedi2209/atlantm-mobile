@@ -13,6 +13,7 @@ let appRegion,
   appsFlyerSettings,
   sentryDSN,
   logrocketID,
+  bugsnagID,
   oneSignalKey,
   amplitudeKey,
   appMetricaKey,
@@ -53,6 +54,7 @@ switch (bundle) {
     };
     sentryDSN = 'https://2e35f2a2455b4a3d97a1687270845d33@sentry.io/219899';
     logrocketID = '2mgb3h/atlant-m';
+    bugsnagID = 'a620d38bebf26f7d6f769845ee9aae8f';
     oneSignalKey = '2094a3e1-3c9a-479d-90ae-93adfcd15dab';
     amplitudeKey = '2716d7eebc63593e80e4fd172fc8b6f3';
     appMetricaKey = '30b6e21f-4f57-4ec6-8349-125026a080c6';
@@ -88,6 +90,8 @@ switch (bundle) {
     };
     sentryDSN =
       'https://3bf79e8300e2427ca03f48301da3a7d9@o76005.ingest.sentry.io/6367469';
+    logrocketID = '2mgb3h/atlant-m';
+    bugsnagID = 'a620d38bebf26f7d6f769845ee9aae8f';
     oneSignalKey = '23d97877-865c-41a5-ba26-2a569779716a';
     amplitudeKey = 'e3e297635704d21c9a67617977dc3a61';
     fbAppID = '700128474599615';
@@ -162,6 +166,8 @@ export const API_MAIN_URL = 'https://api.fastwebapp.net/v1';
 export const SENTRY_DSN = sentryDSN;
 
 export const LOG_ROCKET_ID = logrocketID;
+
+export const BUGSNAG_ID = bugsnagID;
 
 export const APPSFLYER_SETTINGS = appsFlyerSettings;
 

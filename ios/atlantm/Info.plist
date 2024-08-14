@@ -101,7 +101,6 @@
 	<true/>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-		<!-- Do not change NSAllowsArbitraryLoads to true, or you will risk app rejection! -->
 		<key>NSAllowsArbitraryLoads</key>
 		<false/>
 		<key>NSAllowsLocalNetworking</key>
@@ -178,5 +177,10 @@
 	<false/>
 	<key>VK_APP_ID</key>
 	<integer>7255802</integer>
+	<key>bugsnag</key>
+	<dict>
+		<key>apiKey</key>
+		<string>a620d38bebf26f7d6f769845ee9aae8f</string>
+	</dict>
 </dict>
 </plist>

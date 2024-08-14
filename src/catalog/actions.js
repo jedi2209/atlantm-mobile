@@ -1,4 +1,4 @@
-import * as Sentry from '@sentry/react-native';
+import TraceInfo from '../utils/trace-errors';
 import API from '../utils/api';
 
 import {get} from 'lodash';
@@ -102,8 +102,8 @@ export const actionFetchNewCarFilterData = props => {
         });
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage(
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage(
           'actionFetchNewCarFilterData API.fetchNewCarFilterData error',
         );
         return dispatch({
@@ -157,8 +157,8 @@ export const actionFetchUsedCarFilterData = props => {
         });
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage(
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage(
           'actionFetchUsedCarFilterData API.fetchUsedCarFilterData error',
         );
         return dispatch({
@@ -289,8 +289,8 @@ export const actionFetchNewCarByFilter = props => {
         });
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage('actionFetchNewCarByFilter API.fetchStock error');
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage('actionFetchNewCarByFilter API.fetchStock error');
         return dispatch({
           type: NEW_CAR_BY_FILTER__FAIL,
           payload: {
@@ -408,8 +408,8 @@ export const actionFetchUsedCarByFilter = props => {
         });
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage(
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage(
           'actionFetchUsedCarByFilter API.fetchStock error',
         );
         return dispatch({
@@ -452,8 +452,8 @@ export const actionFetchDealer = dealerBaseData => {
         });
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage('actionFetchDealer API.fetchDealer error');
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage('actionFetchDealer API.fetchDealer error');
         return dispatch({
           type: CATALOG_DEALER__FAIL,
           payload: {
@@ -497,8 +497,8 @@ export const actionOrderTestDrive = props => {
         return dispatch({type: TESTDRIVE_ORDER__SUCCESS});
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage('actionOrderTestDrive API.orderTestDrive error');
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage('actionOrderTestDrive API.orderTestDrive error');
         return dispatch({
           type: TESTDRIVE_ORDER__FAIL,
           payload: {
@@ -534,8 +534,8 @@ export const actionOrderCar = props => {
         return dispatch({type: CATALOG_ORDER__SUCCESS});
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage('actionOrderCar API.orderCar error');
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage('actionOrderCar API.orderCar error');
         return dispatch({
           type: CATALOG_ORDER__FAIL,
           payload: {
@@ -571,8 +571,8 @@ export const actionOrderCreditCar = props => {
         return dispatch({type: CREDIT_ORDER__SUCCESS});
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage('actionOrderCreditCar API.orderCreditCar error');
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage('actionOrderCreditCar API.orderCreditCar error');
         return dispatch({
           type: TESTDRIVE_LEAD__FAIL,
           payload: {
@@ -607,8 +607,8 @@ export const actionOrderMyPrice = props => {
         return dispatch({type: MYPRICE_ORDER__SUCCESS});
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage('actionOrderMyPrice API.orderMyPrice error');
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage('actionOrderMyPrice API.orderMyPrice error');
         return dispatch({
           type: TESTDRIVE_LEAD__FAIL,
           payload: {
@@ -643,8 +643,8 @@ export const actionOrderTestDriveLead = props => {
         return dispatch({type: TESTDRIVE_LEAD__SUCCESS});
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage(
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage(
           'actionOrderTestDriveLead API.orderTestDriveLead error',
         );
         return dispatch({
@@ -696,8 +696,8 @@ export const actionFetchUsedCarDetails = carId => {
         });
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage(
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage(
           'actionFetchUsedCarDetails API.fetchUsedCarDetails error',
         );
         return dispatch({
@@ -788,8 +788,8 @@ export const actionFetchNewCarDetails = carId => {
         });
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage(
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage(
           'actionFetchNewCarDetails API.fetchNewCarDetails error',
         );
         return dispatch({
@@ -834,8 +834,8 @@ export const actionFetchCarCreditPrograms = carID => {
         });
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage(
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage(
           'actionFetchCarCreditPrograms API.fetchCarCreditPrograms error',
         );
         return dispatch({
@@ -871,8 +871,8 @@ export const actionFetchTestDriveCarDetails = (dealerID, carID) => {
         });
       })
       .catch(error => {
-        Sentry.captureException(error);
-        Sentry.captureMessage(
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage(
           'actionFetchTestDriveCarDetails API.fetchTDCarDetails error',
         );
         return dispatch({
@@ -940,15 +940,15 @@ export const actionCarCostOrder = props => {
             'actionCarCostOrder parseError',
             JSON.stringify(parseError),
           );
-          Sentry.captureException(parseError);
-          Sentry.captureMessage('actionCarCostOrder parseError');
+          TraceInfo.captureException(parseError);
+          TraceInfo.captureMessage('actionCarCostOrder parseError');
           return dispatch({type: CAR_COST__FAIL});
         }
       })
       .catch(error => {
         console.error('actionCarCostOrder error', JSON.stringify(error));
-        Sentry.captureException(error);
-        Sentry.captureMessage('actionCarCostOrder API.carCostOrder error');
+        TraceInfo.captureException(error);
+        TraceInfo.captureMessage('actionCarCostOrder API.carCostOrder error');
         return dispatch({
           type: CAR_COST__FAIL,
           payload: {

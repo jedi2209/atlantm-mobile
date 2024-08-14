@@ -70,6 +70,7 @@
               <action android:name="com.onesignal.NotificationExtenderService"/>
           </intent-filter>
       </service>
+      <meta-data android:name="com.bugsnag.android.API_KEY" android:value="a620d38bebf26f7d6f769845ee9aae8f" />
     </application>
     <queries> <package android:name="com.facebook.katana" /> </queries> 
 </manifest>
