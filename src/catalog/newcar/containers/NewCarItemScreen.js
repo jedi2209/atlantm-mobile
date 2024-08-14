@@ -8,6 +8,7 @@ import {
   Platform,
   Dimensions,
   Alert,
+  ImageBackground,
 } from 'react-native';
 import {
   Icon,
@@ -18,8 +19,10 @@ import {
   HStack,
   ScrollView,
   Pressable,
+  Image,
 } from 'native-base';
 import Accordion from 'react-native-collapsible/Accordion';
+import RNBounceable from '@freakycoder/react-native-bounceable';
 import * as NavigationService from '../../../navigation/NavigationService';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -296,6 +299,68 @@ const _renderComplectationItem = (title, data) => {
         );
       })}
     </View>
+  );
+};
+
+const _renderCarCreditBanner = ({navigation, carDetails}) => {
+  return (
+    <RNBounceable
+      onPress={() => {
+        navigation.navigate('CreditCalcScreen', {
+          carID: carDetails.id.api,
+          carData: carDetails,
+        });
+      }}>
+      <View mx="2%" mt="1" width="96%">
+        <ImageBackground
+          source={require('../../../../assets/credit-banner.jpg')}
+          resizeMode="cover"
+          imageStyle={{borderRadius: 5, opacity: 0.35}}
+          style={{
+            width: '100%',
+            height: 160,
+            flex: 1,
+            // justifyContent: 'center',
+            backgroundColor: styleConst.color.black,
+            borderRadius: 5,
+          }}>
+          <View px="6" py="6">
+            <Text
+              style={{
+                fontSize: 18,
+                fontWeight: 'bold',
+                fontFamily: styleConst.font.medium,
+                color: styleConst.color.white,
+                width: '60%',
+                marginBottom: 35,
+              }}>
+              Выгодный кредит
+            </Text>
+            <Text
+              style={{
+                fontSize: 15,
+                fontFamily: styleConst.font.medium,
+                color: styleConst.color.white,
+                width: '70%',
+              }}>
+              Вы можете воспользоваться кредитом на выгодных условиях от наших
+              партнеров
+            </Text>
+            <Icon
+              as={MaterialCommunityIcons}
+              name="sack-percent"
+              color={styleConst.color.white}
+              size="6xl"
+              style={{
+                position: 'absolute',
+                right: 20,
+                top: 30,
+              }}
+            />
+          </View>
+        </ImageBackground>
+      </View>
+    </RNBounceable>
   );
 };
 
@@ -908,11 +973,11 @@ const NewCarItemScreen = ({
           />
         </View>
         <View
-          mb={'1/5'}
+          mb={2}
           pt={4}
           pb={6}
-          shadow={7}
-          borderRadius={30}
+          shadow={1}
+          borderRadius={10}
           style={[styles.carTopWrapper, {marginTop: 0}]}>
           <View>
             <View style={styles.modelBrandView}>
@@ -1026,7 +1091,8 @@ const NewCarItemScreen = ({
             onChange={setSectionActive}
           />
         </View>
-        <View height={90} />
+        {_renderCarCreditBanner({navigation, carDetails})}
+        <View height={140} />
       </ScrollView>
       <VStack
         position="absolute"

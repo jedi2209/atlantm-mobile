@@ -93,6 +93,7 @@
     "react-native-codegen": "0.71.5",
     "react-native-collapsible": "^1.6.0",
     "react-native-communications": "^2.2.1",
+    "react-native-compare-slider": "git+https://github.com/jedi2209/react-native-compare-slider.git",
     "react-native-date-picker": "^5.0.0",
     "react-native-device-info": "^11.1.0",
     "react-native-fast-image": "^8.6.3",

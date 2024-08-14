@@ -374,5 +374,5 @@ export default StyleSheet.create({
     paddingRight: 2,
     fontSize: 15,
     color: styleConst.color.darkBg,
-  }
+  },
 });

@@ -39,6 +39,7 @@ import ReviewAddRatingStepScreen from '../eko/reviews/containers/ReviewAddRating
 import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
 import FullScreenGallery from '../core/components/FullScreenGallery';
+import CreditCalcScreen from '../catalog/containers/CreditCalcScreen';
 
 // Filters
 import MainFilterScreen from '../catalog/containers/filters/MainFilterScreen';
@@ -895,6 +896,21 @@ const CarsStock = ({navigation, route}) => {
         <SearchStack.Screen
           name="NewCarItemScreen"
           component={NewCarItemScreen}
+          options={TransparentBack(
+            navigation,
+            route,
+            {
+              ...TransitionPresets.ModalTransition,
+            },
+            {
+              icon: 'close',
+              iconSize: 12,
+            },
+          )}
+        />
+        <SearchStack.Screen
+          name="CreditCalcScreen"
+          component={CreditCalcScreen}
           options={TransparentBack(
             navigation,
             route,
