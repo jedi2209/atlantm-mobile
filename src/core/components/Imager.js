@@ -64,6 +64,8 @@ const Imager = props => {
     );
   }
 
+  console.info('extension', extension, path);
+
   return (
     <View testID={testID}>
       {extension === 'svg' ? (
@@ -81,11 +83,6 @@ const Imager = props => {
           renderToHardwareTextureAndroid={isLoading ? true : false}>
           <View style={{opacity: isLoading ? 0.4 : 1}}>
             <FastImage
-              source={{
-                uri: path,
-                priority: FastImage.priority[priority],
-                cache: FastImage.cacheControl.web,
-              }}
               resizeMode={FastImage.resizeMode[resizeMode]}
               onLoadStart={() => {
                 console.log('\tImager => start load image\t' + path);
@@ -102,6 +99,11 @@ const Imager = props => {
                 setLoading(false);
               }}
               {...props}
+              source={{
+                uri: path,
+                priority: FastImage.priority[priority],
+                cache: FastImage.cacheControl.web,
+              }}
             />
           </View>
         </View>

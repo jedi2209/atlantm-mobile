@@ -27,6 +27,9 @@ import {
   NEW_CAR_DETAILS__REQUEST,
   NEW_CAR_DETAILS__SUCCESS,
   NEW_CAR_DETAILS__FAIL,
+  CAR_CREDIT_PROGRAMS__REQUEST,
+  CAR_CREDIT_PROGRAMS__SUCCESS,
+  CAR_CREDIT_PROGRAMS__FAIL,
   TD_CAR_DETAILS__REQUEST,
   TD_CAR_DETAILS__SUCCESS,
   TD_CAR_DETAILS__FAIL,
@@ -791,6 +794,52 @@ export const actionFetchNewCarDetails = carId => {
         );
         return dispatch({
           type: NEW_CAR_DETAILS__FAIL,
+          payload: {
+            error: error.message,
+          },
+        });
+      });
+  };
+};
+
+export const actionFetchCarCreditPrograms = carID => {
+  return dispatch => {
+    dispatch({
+      type: CAR_CREDIT_PROGRAMS__REQUEST,
+      payload: carID,
+    });
+
+    return API.fetchCarCreditPrograms(carID)
+      .then(response => {
+        if (response.error) {
+          return dispatch({
+            type: CAR_CREDIT_PROGRAMS__FAIL,
+            payload: {
+              error: response.error.message,
+            },
+          });
+        }
+
+        return API.fetchCarCreditPartners().then(responsePartners => {
+          let partners = {};
+          if (!responsePartners.error && responsePartners?.data) {
+            responsePartners.data.map(el => {
+              partners[Number(el.id)] = el;
+            });
+          }
+          return dispatch({
+            type: CAR_CREDIT_PROGRAMS__SUCCESS,
+            payload: {data: response.data, partners},
+          });
+        });
+      })
+      .catch(error => {
+        Sentry.captureException(error);
+        Sentry.captureMessage(
+          'actionFetchCarCreditPrograms API.fetchCarCreditPrograms error',
+        );
+        return dispatch({
+          type: CAR_CREDIT_PROGRAMS__FAIL,
           payload: {
             error: error.message,
           },
