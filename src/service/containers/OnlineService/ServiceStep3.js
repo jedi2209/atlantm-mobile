@@ -94,6 +94,9 @@ LocaleConfig.defaultLocale = 'ru';
 const ServiceStep3 = props => {
   const {route, region, navigation} = props;
 
+  const orderData = get(route, 'params', {});
+  const myTyresInStorage = get(orderData, 'myTyresInStorage', false) === 1; // 1 - true, 2 - false
+
   const minDate = addDays(
     myTyresInStorage ? minDateParam.inStorage : minDateParam.default,
   );
@@ -105,9 +108,6 @@ const ServiceStep3 = props => {
   const [hideRightArrow, setHideRightArrow] = useState(false);
   const [loadingDate, setLoadingDate] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const orderData = get(route, 'params', {});
-  const myTyresInStorage = get(orderData, 'myTyresInStorage', false) === 1; // 1 - true, 2 - false
 
   const [selectedDay, setSelectedDay] = useState(minDate);
   const [maxDateDynamic, setMaxDateDynamic] = useState(maxDate);
@@ -257,6 +257,7 @@ const ServiceStep3 = props => {
                     date: get(dateData, 'date'),
                     time: get(dateData, 'from'),
                   },
+                  tech_place: get(dateData, 'tech_place'),
                 });
               }}>
               <View
