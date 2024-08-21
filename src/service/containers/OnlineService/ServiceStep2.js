@@ -357,7 +357,19 @@ const ServiceStep2 = props => {
       });
       return;
     }
-    pushProps.SERVICESecondFull = serviceData.itemFullSelected;
+    if (
+      get(pushProps, 'SERVICESecond') &&
+      !get(serviceData, 'itemFullSelected')
+    ) {
+      get(serviceData, 'itemsFull').map((el, indx) => {
+        if (get(el, 'id.sap') !== get(serviceData, 'serviceSecondID')) {
+          return;
+        }
+        pushProps.SERVICESecondFull = serviceData.itemsFull[indx];
+      });
+    } else {
+      pushProps.SERVICESecondFull = serviceData.itemFullSelected;
+    }
     delete serviceData.itemFullSelected;
     navigation.navigate('ServiceStep3', {
       ...orderData,
