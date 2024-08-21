@@ -109,6 +109,8 @@ const ServiceStep3 = props => {
   const [loadingDate, setLoadingDate] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const [isLead, setIsLead] = useState(get(orderData, 'lead', false));
+
   const [selectedDay, setSelectedDay] = useState(minDate);
   const [maxDateDynamic, setMaxDateDynamic] = useState(maxDate);
   const [eventsByDate, setEventsByDate] = useState({});
@@ -201,6 +203,8 @@ const ServiceStep3 = props => {
           groupBy(dates, e => CalendarUtils.getCalendarDateString(e.start)),
         );
         setMarkedDatesDefault(markedDatesTmp);
+      } else {
+        setIsLead(true);
       }
       setLoading(false);
     };
@@ -292,7 +296,7 @@ const ServiceStep3 = props => {
     );
   };
 
-  if (get(orderData, 'lead', false)) {
+  if (isLead) {
     return (
       <Form
         contentContainerStyle={{
