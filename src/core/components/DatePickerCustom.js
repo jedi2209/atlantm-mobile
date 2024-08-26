@@ -15,8 +15,9 @@ const DatePickerWrapper = props => {
     label,
     mode = 'date',
     value,
+    minimumDate,
   } = props;
-  const defaultDate = new Date();
+  const defaultDate = minimumDate ? new Date(minimumDate) : new Date();
   return (
     <DatePicker
       modal
