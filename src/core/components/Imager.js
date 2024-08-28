@@ -42,15 +42,17 @@ const Imager = props => {
   const [isLoading, setLoading] = useState(false);
 
   let path = get(props, 'source.uri', null);
-  if (path) {
-    path = path.toString();
-  }
   let extension = null;
-  if (path) {
-    extension = path.split('.').pop();
-  }
-  if (!extension && props?.source?.uri) {
-    return null;
+
+  if (typeof props.source !== 'number') {
+    // if source is not require('../../../*.jpg') image
+    if (path) {
+      path = path.toString();
+      extension = path.split('.').pop();
+    }
+    if (!extension && props?.source?.uri) {
+      return null;
+    }
   }
 
   if (isLoading) {
@@ -63,8 +65,6 @@ const Imager = props => {
       />
     );
   }
-
-  console.info('extension', extension, path);
 
   return (
     <View testID={testID}>
@@ -98,12 +98,12 @@ const Imager = props => {
                 onLoadEnd();
                 setLoading(false);
               }}
-              {...props}
               source={{
                 uri: path,
                 priority: FastImage.priority[priority],
                 cache: FastImage.cacheControl.web,
               }}
+              {...props}
             />
           </View>
         </View>

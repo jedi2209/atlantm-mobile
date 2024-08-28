@@ -191,7 +191,6 @@ const CreditCalcScreen = ({
       if (get(res, 'type')) {
         switch (res.type) {
           case 'CAR_CREDIT_PROGRAMS__SUCCESS':
-            console.info('res.payload', res.payload);
             setCreditPrograms(res.payload);
             break;
           default:
