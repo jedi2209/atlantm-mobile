@@ -388,7 +388,7 @@ const _renderActions = params => {
               />
             );
           }}
-          height={420}
+          height={440}
         />
       </View>
     );
