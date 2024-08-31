@@ -831,6 +831,10 @@ export default {
         birthday: 'Когда у вас день рождения?',
         social: 'Привяжи соц.сети',
         part: 'Что будем заказывать?',
+        finance: {
+          prepayment: 'Аванс',
+          period: 'Срок погашения',
+        },
         serviceTypes: {
           tyreChange: {
             title: 'Шиномонтаж',
