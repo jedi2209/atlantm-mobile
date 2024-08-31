@@ -22,7 +22,7 @@ import BrandLogo from '../../core/components/BrandLogo';
 import {get} from 'lodash';
 import {connect} from 'react-redux';
 import numberWithGap from '../../utils/number-with-gap';
-import showPrice from '../../utils/price';
+import {showPrice} from '../../utils/price';
 import UserData from '../../utils/user';
 import getStatusWorktime from '../../utils/worktime-status';
 import styleConst from '../../core/style-const';

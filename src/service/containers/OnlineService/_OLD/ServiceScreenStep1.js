@@ -22,7 +22,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {CarCard} from '../../../../profile/components/CarCard';
 import Form from '../../../../core/components/Form/Form';
 import UserData from '../../../../utils/user';
-import showPrice from '../../../../utils/price';
+import {showPrice} from '../../../../utils/price';
 
 // redux
 import {connect} from 'react-redux';

@@ -17,7 +17,7 @@ import LogoLoader from '../../../core/components/LogoLoader';
 import Analytics from '../../../utils/amplitude-analytics';
 import {get} from 'lodash';
 import styleConst from '../../../core/style-const';
-import showPrice from '../../../utils/price';
+import {showPrice} from '../../../utils/price';
 import {ERROR_NETWORK} from '../../../core/const';
 import {strings} from '../../../core/lang/const';
 

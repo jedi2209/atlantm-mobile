@@ -18,7 +18,7 @@ import {localUserDataUpdate} from '../../profile/actions';
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
 import {get} from 'lodash';
-import showPrice from '../../utils/price';
+import {showPrice} from '../../utils/price';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import styleConst from '../../core/style-const';

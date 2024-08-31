@@ -8,7 +8,7 @@ import {Box, View, Button, Text, ScrollView} from 'native-base';
 import API from '../../../utils/api';
 
 import {dayMonthYear, getTimestamp} from '../../../utils/date';
-import showPrice from '../../../utils/price';
+import {showPrice} from '../../../utils/price';
 import {strings} from '../../../core/lang/const';
 import {get} from 'lodash';
 
