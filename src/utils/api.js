@@ -311,9 +311,15 @@ export default {
     return this.request(`/stock/new/cars/get/car/${carId}/`, baseRequestParams);
   },
 
-  fetchCarCreditPrograms(carId, region = APP_REGION) {
+  fetchCarCreditPrograms(params, region = APP_REGION) {
+    let paramsString = [];
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        paramsString.push(`${key}=${params[key]}`);
+      }
+    }
     return this.request(
-      `/finance/programs/${region}/?car=${carId}`,
+      `/finance/programs/${region}/?${paramsString.join('&')}`,
       baseRequestParams,
     );
   },

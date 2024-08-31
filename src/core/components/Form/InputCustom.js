@@ -154,7 +154,13 @@ export const GroupForm = ({title, button, children}) => (
 );
 
 export const InputCustom = props => {
-  const {type = 'input', isValid = true, placeholder, ...other} = props;
+  const {
+    type = 'input',
+    isValid = true,
+    affix = false,
+    placeholder,
+    ...other
+  } = props;
   switch (type.toLowerCase()) {
     case 'email':
       return (
@@ -176,6 +182,7 @@ export const InputCustom = props => {
           <TextInput
             error={isValid !== true}
             label={placeholder}
+            right={affix ? <TextInput.Affix text={affix} /> : null}
             {...InputProps}
             {...other}
           />

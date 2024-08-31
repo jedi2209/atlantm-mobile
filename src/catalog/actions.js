@@ -802,14 +802,14 @@ export const actionFetchNewCarDetails = carId => {
   };
 };
 
-export const actionFetchCarCreditPrograms = carID => {
+export const actionFetchCarCreditPrograms = params => {
   return dispatch => {
     dispatch({
       type: CAR_CREDIT_PROGRAMS__REQUEST,
-      payload: carID,
+      payload: params,
     });
 
-    return API.fetchCarCreditPrograms(carID)
+    return API.fetchCarCreditPrograms(params)
       .then(response => {
         if (response.error) {
           return dispatch({
