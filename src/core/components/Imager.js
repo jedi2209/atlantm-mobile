@@ -79,8 +79,8 @@ const Imager = props => {
         </View>
       ) : (
         <View
-          shouldRasterizeIOS={isLoading ? true : false}
-          renderToHardwareTextureAndroid={isLoading ? true : false}>
+          shouldRasterizeIOS={isLoading}
+          renderToHardwareTextureAndroid={isLoading}>
           <View style={{opacity: isLoading ? 0.4 : 1}}>
             <FastImage
               resizeMode={FastImage.resizeMode[resizeMode]}

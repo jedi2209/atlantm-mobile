@@ -35,7 +35,7 @@ import {get} from 'lodash';
 import Analytics from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 import numberWithGap from '../../../utils/number-with-gap';
-import showPrice from '../../../utils/price';
+import {showPrice} from '../../../utils/price';
 import {strings} from '../../../core/lang/const';
 import getStatusWorktime from '../../../utils/worktime-status';
 

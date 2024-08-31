@@ -44,7 +44,7 @@ import {get} from 'lodash';
 import UserData from '../../../utils/user';
 import Analytics from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
-import showPrice from '../../../utils/price';
+import {showPrice} from '../../../utils/price';
 import md5 from '../../../utils/md5';
 import {strings} from '../../../core/lang/const';
 
@@ -303,7 +303,6 @@ const _renderComplectationItem = (title, data) => {
 };
 
 const _renderCarCreditBanner = ({navigation, carDetails}) => {
-  return null;
   return (
     <RNBounceable
       onPress={() => {

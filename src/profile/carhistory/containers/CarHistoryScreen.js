@@ -17,9 +17,9 @@ import LogoLoader from '../../../core/components/LogoLoader';
 
 // helpers
 import {get, isEmpty} from 'lodash';
-import {dayMonthYear, dayMonth} from '../../../utils/date';
+import {dayMonth} from '../../../utils/date';
 import styleConst from '../../../core/style-const';
-import showPrice from '../../../utils/price';
+import {showPrice} from '../../../utils/price';
 import numberWithGap from '../../../utils/number-with-gap';
 import {ERROR_NETWORK} from '../../../core/const';
 import {strings} from '../../../core/lang/const';

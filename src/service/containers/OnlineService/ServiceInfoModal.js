@@ -1,13 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, SafeAreaView} from 'react-native';
-import {View, Button, HStack, ScrollView, VStack} from 'native-base';
+import {StyleSheet, Text} from 'react-native';
+import {View, Button, HStack, ScrollView} from 'native-base';
 import {TabView, TabBar, SceneMap} from 'react-native-tab-view';
 
-import showPrice from '../../../utils/price';
+import {showPrice} from '../../../utils/price';
 import styleConst from '../../../core/style-const';
 import isIPhoneX from '../../../utils/is_iphone_x';
 import {strings} from '../../../core/lang/const';
-import style from '../../../core/components/Lists/style';
 
 const ServiceInfoModal = ({onClose, data, route, navigation, type}) => {
   if (!data || typeof data === 'undefined') {
