@@ -1,3 +1,5 @@
+import CreditCalcScreen from "../../catalog/containers/CreditCalcScreen";
+
 export default {
   App: {
     APIError: 'Ошибка при загрузке данных.\r\nПопробуйте позже.',
@@ -657,6 +659,9 @@ export default {
   },
   BonusInfoScreen: {
     title: 'Бонусная программа',
+  },
+  CreditCalcScreen: {
+    title: 'Финансовые программы',
   },
   AdditionalPurchaseScreen: {
     title: 'Мои покупки',

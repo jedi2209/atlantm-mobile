@@ -40,6 +40,7 @@ import NewCarListScreen from '../catalog/newcar/containers/NewCarListScreen';
 import NewCarItemScreen from '../catalog/newcar/containers/NewCarItemScreen';
 import FullScreenGallery from '../core/components/FullScreenGallery';
 import CreditCalcScreen from '../catalog/containers/CreditCalcScreen';
+import CreditPaymentsDetailScreen from '../catalog/containers/CreditPaymentsDetailScreen';
 
 // Filters
 import MainFilterScreen from '../catalog/containers/filters/MainFilterScreen';
@@ -911,6 +912,30 @@ const CarsStock = ({navigation, route}) => {
         <SearchStack.Screen
           name="CreditCalcScreen"
           component={CreditCalcScreen}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ScaleFromCenterAndroid,
+            headerTitle: strings.CreditCalcScreen.title,
+            headerRight: () => <></>,
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+          // options={TransparentBack(
+          //   navigation,
+          //   route,
+          //   {
+          //     ...TransitionPresets.ModalTransition,
+          //   },
+          //   {
+          //     icon: 'close',
+          //     iconSize: 12,
+          //   },
+          // )}
+        />
+        <SearchStack.Screen
+          name="CreditPaymentsDetailScreen"
+          component={CreditPaymentsDetailScreen}
           options={TransparentBack(
             navigation,
             route,
