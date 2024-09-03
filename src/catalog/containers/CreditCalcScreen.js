@@ -16,20 +16,21 @@ import Slider from '@react-native-community/slider';
 
 import Imager from '../../core/components/Imager';
 
-import {get, parseInt, isNaN, toString} from 'lodash';
+import {get, parseInt, isNaN, toString, ceil, floor} from 'lodash';
 import {connect} from 'react-redux';
 import {strings} from '../../core/lang/const';
 
-import {actionFetchCarCreditPrograms} from '../actions';
+import {actionFetchCarCreditPrograms, fetchProgramsCalcBatch} from '../actions';
 import styleConst from '../../core/style-const';
 import Badge from '../../core/components/Badge';
 import TransitionView from '../../core/components/TransitionView';
 import {BadgeCorner} from '../../core/components/BadgeRibbon';
 import {InputCustom} from '../../core/components/Form/InputCustom';
 import {showPrice, getAllDataPrice} from '../../utils/price';
+import { Button } from 'react-native-paper';
 
 const settings = {
-  timeoutQuery: 500,
+  timeoutQuery: 1000,
   percentPaymentDefault: 0.5,
   calc: {
     prepaid: 999999,
@@ -67,7 +68,7 @@ const currencySymbols = {
 };
 
 const onCheckLimit = ({value, min, max}) => {
-  const parsedQty = parseInt(value);
+  const parsedQty = parseInt(toString(value).replace(/\s+/g, ''));
   if (isNaN(parsedQty)) {
     return min;
   } else if (parsedQty > max) {
@@ -77,8 +78,37 @@ const onCheckLimit = ({value, min, max}) => {
   }
 };
 
-const CreditCardItem = ({item, index, separators, creditPrograms}) => {
-  const partner = creditPrograms.partners[Number(item?.owner?.id)];
+const CreditCardItem = ({item, index, separators, creditPrograms, nav}) => {
+  const itemCalc = get(item, 'calc', []);
+  const itemData = get(item, 'data', {});
+
+  const partner = creditPrograms?.partners[Number(get(itemData, 'owner.id'))];
+  const settingsFilters = get(creditPrograms, 'settings', {});
+
+  const numericMonths = itemCalc.filter(item => typeof item.month === 'number');
+  const totalValues = numericMonths.map(item => item.summ.total).slice(1);
+  const filteredValues = totalValues.filter(value => value !== 0);
+
+  const paymentData = {
+    min: Math.min(...filteredValues),
+    max: Math.max(...filteredValues),
+    text: {
+      monthly: '',
+      period: '',
+    },
+  };
+
+  if (paymentData.min === paymentData.max) {
+    paymentData.text.monthly = showPrice(floor(paymentData.min));
+  } else {
+    paymentData.text.monthly = 'от ' + get(getAllDataPrice(ceil(paymentData.min)), 'value') + ' до ' + showPrice(floor(paymentData.max));
+  }
+
+  if (get(settingsFilters, 'watchCurrentPeriod')) {
+    paymentData.text.period = [settingsFilters.watchCurrentPeriod, 'мес.'].join(' ');
+  } else {
+    paymentData.text.period = get(itemData, 'period.light') ? get(itemData, 'period.light') + ' мес. / ' : null + get(itemData, 'period.max') + ' мес.';
+  }
 
   return (
     <TransitionView
@@ -95,9 +125,9 @@ const CreditCardItem = ({item, index, separators, creditPrograms}) => {
           p={2}
           minH={150}>
           <BadgeCorner
-            text={[get(item, 'currency.name')].join(' ')}
+            text={[get(itemData, 'currency.name')].join(' ')}
             style={{
-              backgroundColor: currencyColors[get(item, 'currency.id')],
+              backgroundColor: currencyColors[get(itemData, 'currency.id')],
               fontSize: 18,
               padding: 3,
             }}
@@ -118,41 +148,41 @@ const CreditCardItem = ({item, index, separators, creditPrograms}) => {
             </Heading> */}
             <HStack>
               <Badge
-                id={item.id + 'badgeType' + get(item, 'type.id')}
+                id={itemData.id + 'badgeType' + get(itemData, 'type.id')}
                 index={0}
-                name={get(item, 'type.name')}
+                name={get(itemData, 'type.name')}
                 bgColor={
-                  get(item, 'type.id') === 1
+                  get(itemData, 'type.id') === 1
                     ? styleConst.color.blue
                     : styleConst.color.red
                 }
                 textColor={styleConst.color.bg}
               />
-              {!get(item, 'kasko.required') ? (
+              {!get(itemData, 'kasko.required') ? (
                 <Badge
-                  id={item.id + 'badgeKasko'}
+                  id={itemData.id + 'badgeKasko'}
                   index={2}
                   name={'Без КАСКО'}
                   bgColor={styleConst.color.purple}
                   textColor={styleConst.color.white}
                 />
               ) : null}
-              {get(item, 'collateralType.name') ? (
+              {get(itemData, 'collateralType.name') ? (
                 <Badge
-                  id={item.id + 'badgeCollateral' + item.collateralType.id}
+                  id={itemData.id + 'badgeCollateral' + itemData.collateralType.id}
                   index={3}
-                  name={get(item, 'collateralType.name')}
+                  name={get(itemData, 'collateralType.name')}
                   bgColor={styleConst.color.darkBg}
                   textColor={styleConst.color.white}
                 />
               ) : null}
-              {get(item, 'paymentSchedule.id') ? (
+              {get(itemData, 'paymentSchedule.id') ? (
                 <Badge
-                  id={item.id + 'badgeSchedule' + item.paymentSchedule.id}
+                  id={itemData.id + 'badgeSchedule' + itemData.paymentSchedule.id}
                   index={1}
-                  name={item.paymentSchedule.name}
+                  name={itemData.paymentSchedule.name}
                   bgColor={
-                    item.paymentSchedule.id === 1
+                    itemData.paymentSchedule.id === 1
                       ? styleConst.color.orange
                       : styleConst.color.green
                   }
@@ -160,20 +190,42 @@ const CreditCardItem = ({item, index, separators, creditPrograms}) => {
                 />
               ) : null}
             </HStack>
-            <VStack space={1} mt={3}>
-              <Text fontWeight="400">
-                Срок:{' '}
-                {get(item, 'period.light')
-                  ? get(item, 'period.light') + ' мес. / '
-                  : null}
-                {get(item, 'period.max') + ' мес.'}
-              </Text>
-              {get(item, 'earlyRepaymentType.name') ? (
-                <Text fontWeight="400">
-                  Досрочное погашение: {get(item, 'earlyRepaymentType.name')}
+            <HStack space={3} justifyContent={'space-between'} mt={3}>
+              <VStack space={1} w={'1/2'}>
+                <Text fontWeight="200">
+                  срок
                 </Text>
-              ) : null}
-            </VStack>
+                <Text fontWeight="800">
+                  {get(paymentData, 'text.period')}
+                </Text>
+              </VStack>
+              <VStack space={1} w={'1/2'}>
+                <Text fontWeight="200">
+                  платеж
+                </Text>
+                <Text fontWeight="800">
+                  {get(paymentData, 'text.monthly')}
+                </Text>
+              </VStack>
+              {get(itemData, 'earlyRepaymentType.name') && false ? (
+              <VStack space={1} w={'1/3'}>
+                  <Text fontWeight="400">
+                    досрочное погашение
+                  </Text>
+                  <Text fontWeight="400">
+                    {get(itemData, 'earlyRepaymentType.name')}
+                  </Text>
+              </VStack>
+            ) : null}
+            </HStack>
+            <HStack justifyContent={'space-between'}>
+              <Button icon="calendar-range-outline" mode="outlined" rippleColor={styleConst.color.blue} iconColor={styleConst.color.blue} onPress={() => nav.navigate('CreditPaymentsDetailScreen', {creditPayments: itemCalc})}>
+                график платежей
+              </Button>
+              <Button mode="outlined" rippleColor={styleConst.color.blue} iconColor={styleConst.color.blue} onPress={() => console.log('Pressed')}>
+                отправить заявку
+              </Button>
+            </HStack>
           </Stack>
         </Box>
       </Box>
@@ -186,14 +238,15 @@ const HeaderComponent = ({
   calcData,
   carID,
   setCreditPrograms,
-  actionFetchPrograms,
+  fetchPrograms,
+  actionFetchProgramData,
 }) => {
   const onSubmitTimeout = useRef(null);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
     if (isLoading) {
-      setCreditPrograms({data: [], partners: {}});
+      setCreditPrograms({data: [], partners: {}, settings: {}});
     }
   }, [isLoading, setCreditPrograms]);
 
@@ -203,10 +256,6 @@ const HeaderComponent = ({
 
   const {
     control,
-    getValues,
-    watch,
-    handleSubmit,
-    setValue,
     formState: {errors, isValidating, isValid},
   } = useForm({
     mode: 'onBlur',
@@ -225,40 +274,51 @@ const HeaderComponent = ({
   });
 
   useEffect(() => {
+    console.info("isValid && !isValidating", isValid, !isValidating);
     if (isValid && !isValidating) {
       clearTimeout(onSubmitTimeout.current);
       onSubmitTimeout.current = setTimeout(() => {
-        console.log(
-          '\t\tonSubmit => \t\t',
-          getValues(),
-          watchCurrentPeriod,
-          watchCurrentPrePayment,
-        );
         setLoading(true);
-        actionFetchPrograms({
+        fetchPrograms({
           prepaid: watchCurrentPrePayment,
           months: watchCurrentPeriod,
           car: carID,
+          summ: carPrice,
         }).then(res => {
-          if (get(res, 'type')) {
-            console.info('res.type', res.type);
-            switch (res.type) {
-              case 'CAR_CREDIT_PROGRAMS__SUCCESS':
-                setCreditPrograms(res.payload);
-                break;
-              case 'CAR_CREDIT_PROGRAMS__FAIL':
-                setCreditPrograms({data: []});
-                break;
-              default:
-                break;
-            }
-          }
+          setCreditPrograms({
+            data: res.data,
+            partners: res.partners,
+            settings: {
+              watchCurrentPeriod,
+              watchCurrentPrePayment,
+            },
+          });
           setLoading(false);
         });
       }, settings.timeoutQuery);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchCurrentPeriod, watchCurrentPrePayment, isValid, isValidating]);
+
+  useEffect(() => {
+    fetchPrograms({
+      prepaid: watchCurrentPrePayment,
+      months: watchCurrentPeriod,
+      car: carID,
+      summ: carPrice,
+    }).then(res => {
+      setCreditPrograms({
+        data: res.data,
+        partners: res.partners,
+        settings: {
+          watchCurrentPeriod,
+          watchCurrentPrePayment,
+        },
+      });
+      setLoading(false);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -299,20 +359,33 @@ const HeaderComponent = ({
           ].join(' '),
         }}
         name="prePayment"
-        render={({field: {onChange, onBlur, value}}) => (
+        render={({field: {onChange, onBlur, value}}) => {
+          const tmpVal = getAllDataPrice(parseInt(toString(value || watchCurrentPrePayment).replace(/\s+/g, '')));
+          return (
           <View>
             <InputCustom
               placeholder={strings.Form.field.label.finance.prepayment}
               onBlur={onBlur}
-              onChangeText={onChange}
+              onChangeText={val => {
+                if (!val) {
+                  return onChange(parseInt(toString(val).replace(/\s+/g, '')));
+                }
+                return onChange(
+                  onCheckLimit({
+                    value: parseInt(toString(val).replace(/\s+/g, '')),
+                    min: parseInt(carPrice * 0.1),
+                    max: parseInt(carPrice * 0.9),
+                  }),
+                );
+              }}
               textContentType={'none'}
-              keyboardType={'number-pad'}
+              keyboardType={'decimal-pad'}
               autoComplete={'off'}
               enablesReturnKeyAutomatically={'true'}
               blurOnSubmit={true}
               enterKeyHint={'done'}
-              affix={getAllDataPrice(toString(watchCurrentPrePayment))?.symbol}
-              value={getAllDataPrice(toString(watchCurrentPrePayment))?.value}
+              affix={tmpVal?.symbol}
+              value={tmpVal?.value}
               isValid={get(errors, 'prePayment', true)}
             />
             <Slider
@@ -321,13 +394,26 @@ const HeaderComponent = ({
               maximumValue={parseInt(carPrice * 0.9)}
               minimumTrackTintColor={styleConst.color.blue}
               maximumTrackTintColor="#FFFFFF"
-              onSlidingComplete={onChange}
+              onSlidingComplete={onBlur}
+              onValueChange={val => {
+                if (!val) {
+                  return onChange(parseInt(toString(val).replace(/\s+/g, '')));
+                }
+                return onChange(
+                  onCheckLimit({
+                    value: parseInt(toString(val).replace(/\s+/g, '')),
+                    min: parseInt(carPrice * 0.1),
+                    max: parseInt(carPrice * 0.9),
+                  }),
+                );
+              }}
               value={parseInt(watchCurrentPrePayment)}
               isValid={get(errors, 'prePayment', true)}
               step={100}
             />
           </View>
         )}
+        }
       />
       <Controller
         control={control}
@@ -371,7 +457,7 @@ const HeaderComponent = ({
                 // editable={false}
                 // value={toString(value)}
                 value={toString(watchCurrentPeriod)}
-                // isValid={get(errors, 'period', true)}
+                isValid={get(errors, 'period', true)}
                 // style={{width: 400}}
               />
               <Slider
@@ -380,7 +466,19 @@ const HeaderComponent = ({
                 maximumValue={calcData.period.max}
                 minimumTrackTintColor={styleConst.color.blue}
                 maximumTrackTintColor="#FFFFFF"
-                onSlidingComplete={onChange}
+                onSlidingComplete={onBlur}
+                onValueChange={value => {
+                  if (!value) {
+                    return onChange(value);
+                  }
+                  return onChange(
+                    onCheckLimit({
+                      value: parseInt(value),
+                      min: 1,
+                      max: calcData.period.max,
+                    }),
+                  );
+                }}
                 value={parseInt(watchCurrentPeriod)}
                 isValid={get(errors, 'period', true)}
                 step={1}
@@ -393,7 +491,7 @@ const HeaderComponent = ({
   );
 };
 
-const CreditCardsItems = ({isLoading, creditPrograms, listHeaderComponent}) => {
+const CreditCardsItems = ({isLoading, creditPrograms, listHeaderComponent, nav}) => {
   return (
     <FlatList
       ListEmptyComponent={
@@ -421,6 +519,7 @@ const CreditCardsItems = ({isLoading, creditPrograms, listHeaderComponent}) => {
           index={index}
           separators={separators}
           creditPrograms={creditPrograms}
+          nav={nav}
         />
       )}
       ListHeaderComponent={listHeaderComponent}
@@ -431,9 +530,9 @@ const CreditCardsItems = ({isLoading, creditPrograms, listHeaderComponent}) => {
 };
 
 const CreditCalcScreen = ({
-  navigation,
   actionFetchCarCreditPrograms,
   route,
+  navigation,
 }) => {
   const carData = get(route, 'params.carData');
   const carID = get(route, 'params.carID');
@@ -441,6 +540,10 @@ const CreditCalcScreen = ({
   const [creditPrograms, setCreditPrograms] = useState({
     data: [],
     partners: {},
+    settings: {
+      watchCurrentPeriod: settings.calc.period.max,
+      watchCurrentPrePayment: parseInt(carData.price.app.sale),
+    },
   });
 
   const [calcData, setCalcData] = useState({...settings.calc});
@@ -450,7 +553,7 @@ const CreditCalcScreen = ({
       if (get(res, 'type')) {
         switch (res.type) {
           case 'CAR_CREDIT_PROGRAMS__SUCCESS':
-            setCreditPrograms(res.payload);
+            // setCreditPrograms(res.payload);
             let calcDataTmp = calcData;
             get(res.payload, 'data', []).map(item => {
               if (
@@ -473,7 +576,6 @@ const CreditCalcScreen = ({
             if (calcDataTmp.period.min === 1200) {
               calcDataTmp.period.min = 1;
             }
-            // setValue('period', calcDataTmp.period.max);
             setCalcData(calcDataTmp);
             break;
           default:
@@ -482,7 +584,7 @@ const CreditCalcScreen = ({
       }
     });
     return () => {
-      setCreditPrograms({data: [], partners: {}});
+      setCreditPrograms({data: [], partners: {}, settings: {}});
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [actionFetchCarCreditPrograms, carID]);
@@ -493,14 +595,14 @@ const CreditCalcScreen = ({
         carData={carData}
         carID={carID}
         creditPrograms={creditPrograms}
-        actionFetchCarCreditPrograms={actionFetchCarCreditPrograms}
+        nav={navigation}
         listHeaderComponent={
           <HeaderComponent
             carData={carData}
             calcData={calcData}
             carID={carID}
             setCreditPrograms={setCreditPrograms}
-            actionFetchPrograms={actionFetchCarCreditPrograms}
+            fetchPrograms={fetchProgramsCalcBatch}
           />
         }
       />

@@ -30,6 +30,9 @@ import {
   CAR_CREDIT_PROGRAMS__REQUEST,
   CAR_CREDIT_PROGRAMS__SUCCESS,
   CAR_CREDIT_PROGRAMS__FAIL,
+  CREDIT_PROGRAM_DATA__REQUEST,
+  CREDIT_PROGRAM_DATA__SUCCESS,
+  CREDIT_PROGRAM_DATA__FAIL,
   TD_CAR_DETAILS__REQUEST,
   TD_CAR_DETAILS__SUCCESS,
   TD_CAR_DETAILS__FAIL,
@@ -802,50 +805,127 @@ export const actionFetchNewCarDetails = carId => {
   };
 };
 
-export const actionFetchCarCreditPrograms = params => {
+const getCarCreditPrograms = async params => {
+  return API.fetchCarCreditPrograms(params)
+  .then(response => {
+    if (response.error) {
+      return response;
+    }
+    return API.fetchCarCreditPartners().then(responsePartners => {
+      let partners = {};
+      if (!responsePartners.error && responsePartners?.data) {
+        responsePartners.data.map(el => {
+          partners[Number(el.id)] = el;
+        });
+      }
+      return {
+        data: response.data,
+        partners,
+      };
+    });
+  })
+  .catch(error => {
+    TraceInfo.captureException(error);
+    TraceInfo.captureMessage(
+      'actionFetchCarCreditPrograms API.fetchCarCreditPrograms error',
+    );
+    return error;
+  });
+};
+
+export const actionFetchCreditProgramCalculate = params => {
   return dispatch => {
+    dispatch({
+      type: CREDIT_PROGRAM_DATA__REQUEST,
+      payload: params,
+    });
+
+    const programID = params?.programID;
+    delete params?.programID;
+
+    return API.fetchCreditProgramCalculate(programID, params)
+    .then(response => {
+      if (response.error) {
+        return dispatch({
+          type: CREDIT_PROGRAM_DATA__FAIL,
+          payload: {
+            error: response.error.message,
+          },
+        });
+      }
+      return dispatch({
+        type: CREDIT_PROGRAM_DATA__SUCCESS,
+        payload: {data: response.data},
+      });
+    })
+    .catch(error => {
+      TraceInfo.captureException(error);
+      TraceInfo.captureMessage(
+        'actionFetchCreditProgramCalculate API.fetchCreditProgramCalculate error',
+      );
+      return dispatch({
+        type: CREDIT_PROGRAM_DATA__FAIL,
+        payload: {
+          error: error.message,
+        },
+      });
+    });
+  };
+};
+
+export const actionFetchCarCreditPrograms = params => {
+  return async dispatch => {
     dispatch({
       type: CAR_CREDIT_PROGRAMS__REQUEST,
       payload: params,
     });
-
-    return API.fetchCarCreditPrograms(params)
-      .then(response => {
-        if (response.error) {
-          return dispatch({
-            type: CAR_CREDIT_PROGRAMS__FAIL,
-            payload: {
-              error: response.error.message,
-            },
-          });
-        }
-
-        return API.fetchCarCreditPartners().then(responsePartners => {
-          let partners = {};
-          if (!responsePartners.error && responsePartners?.data) {
-            responsePartners.data.map(el => {
-              partners[Number(el.id)] = el;
-            });
-          }
-          return dispatch({
-            type: CAR_CREDIT_PROGRAMS__SUCCESS,
-            payload: {data: response.data, partners},
-          });
-        });
-      })
-      .catch(error => {
-        TraceInfo.captureException(error);
-        TraceInfo.captureMessage(
-          'actionFetchCarCreditPrograms API.fetchCarCreditPrograms error',
-        );
-        return dispatch({
-          type: CAR_CREDIT_PROGRAMS__FAIL,
-          payload: {
-            error: error.message,
-          },
-        });
+    const res = await getCarCreditPrograms(params);
+    if (res?.error) {
+      return dispatch({
+        type: CAR_CREDIT_PROGRAMS__FAIL,
+        payload: {
+          error: res.error.message,
+        },
       });
+    }
+    return dispatch({
+      type: CAR_CREDIT_PROGRAMS__SUCCESS,
+      payload: res,
+    });
   };
+};
+
+export const fetchProgramsCalcBatch = async props => {
+  const {car, prepaid, months, summ} = props;
+  const res = await getCarCreditPrograms({ car, prepaid, months });
+  if (get(res, 'data.length')) {
+    let programsCalcData = {};
+    let programsCalcDataPromises = [];
+    let programsCalcDataPromisesIDs = [];
+    get(res, 'data', []).map(async (item) => {
+      const itemID = get(item, 'id');
+      programsCalcData[itemID] = {data: item, calc: []};
+      programsCalcDataPromisesIDs.push(itemID);
+      programsCalcDataPromises.push(
+        API.fetchCreditProgramCalculate(itemID, {months, summ, prePayment: prepaid})
+      );
+    });
+    const programsData = [];
+    return Promise.allSettled(programsCalcDataPromises).then(results => {
+      results.forEach((result, indx) => {
+        const itemTmp = {
+          id: programsCalcDataPromisesIDs[indx],
+          data: get(result, 'value.data'),
+        };
+        programsCalcData[itemTmp.id].calc = itemTmp.data;
+        programsData.push(programsCalcData[itemTmp.id]);
+      });
+      return {
+        data: programsData,
+        partners: get(res, 'partners', []),
+      };
+    });
+  }
 };
 
 export const actionFetchTestDriveCarDetails = (dealerID, carID) => {

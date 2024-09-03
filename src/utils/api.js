@@ -311,6 +311,21 @@ export default {
     return this.request(`/stock/new/cars/get/car/${carId}/`, baseRequestParams);
   },
 
+  fetchCreditProgramCalculate(programID, params, region = APP_REGION) {
+    let paramsString = [
+      `programID=${programID}`,
+    ];
+    for (const key in params) {
+      if (params.hasOwnProperty(key)) {
+        paramsString.push(`${key}=${params[key]}`);
+      }
+    }
+    return this.request(
+      `/finance/calc/${region}/?${paramsString.join('&')}`,
+      baseRequestParams,
+    );
+  },
+
   fetchCarCreditPrograms(params, region = APP_REGION) {
     let paramsString = [];
     for (const key in params) {
