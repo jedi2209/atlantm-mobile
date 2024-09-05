@@ -1,6 +1,7 @@
 /**
  * @format
  */
+import 'react-native-url-polyfill/auto';
 import BugsnagPerformance from '@bugsnag/react-native-performance';
 import {AppRegistry} from 'react-native';
 import {name as appName} from './app.json';
