@@ -989,13 +989,19 @@ export default {
 
     return await this.request('/lkk/auth/validate/', requestParams)
       .then(response => {
-        if (response?.data?.user) {
-          const userData = response?.data?.user;
-          LogRocket.identify(userData.ID.toString(), {
-            name: [userData.NAME, userData.LAST_NAME].join(' '),
-            phone: userData?.PHONE[0]?.VALUE,
-            email: userData?.EMAIL[0]?.VALUE,
-          });
+        if (_.get(response, 'data.user')) {
+          const userData = _.get(response, 'data.user', {});
+          const userID = _.get(userData, 'ID', '');
+          if (userID) {
+            LogRocket.identify(userID.toString(), _.omitBy(
+              {
+                name: [_.get(userData, 'NAME', ''), _.get(userData, 'LAST_NAME', '')].join(' '),
+                phone: _.get(userData, 'PHONE.0.VALUE', null),
+                email: _.get(userData, 'EMAIL.0.VALUE', null),
+              },
+              _.isNil,
+            ));
+          }
         }
         return response;
       })
@@ -1007,15 +1013,20 @@ export default {
   async getProfile(id) {
     return await this.request(`/lkk/user/${id}/`, baseRequestParams)
       .then(response => {
-        if (response?.data) {
-          const userData = response?.data;
-          LogRocket.identify(userData.ID.toString(), {
-            name: [userData?.NAME, userData?.LAST_NAME].join(' '),
-            phone: userData?.PHONE[0]?.VALUE,
-            email: userData?.EMAIL[0]?.VALUE,
-          });
+        if (_.get(response, 'data')) {
+          const userData = _.get(response, 'data', {});
+          const userID = _.get(userData, 'ID', '');
+          LogRocket.identify(userID.toString(), _.omitBy(
+            {
+              name: [_.get(userData, 'NAME', ''), _.get(userData, 'LAST_NAME', '')].join(' '),
+              phone: _.get(userData, 'PHONE.0.VALUE', null),
+              email: _.get(userData, 'EMAIL.0.VALUE', null),
+            },
+            _.isNil,
+          ));
+          return userData;
         }
-        return response.data;
+        return _.get(response, 'data');
       })
       .catch(err => {
         console.error('getProfile error', err);
