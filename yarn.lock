@@ -1458,10 +1458,10 @@
     axios "^1.6.2"
     js-yaml "^4.1.0"
 
-"@bugsnag/core-performance@^2.8.0":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@bugsnag/core-performance/-/core-performance-2.8.0.tgz#a32cd678ce4ed402aca675af238bebe3524779f9"
-  integrity sha512-al18YfULQN8aPJnpuOWPt6Rg0OE0seKSiCNcvec8oOEVAJtOUKfrTJUD4IHvyJdbDcGzy+3CRRYFCEOIZE63tA==
+"@bugsnag/core-performance@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/core-performance/-/core-performance-2.9.0.tgz#041f79aac38dbaa11ad1aeb938aa015336e80c02"
+  integrity sha512-3tjobXvcKhGnD5aJ6tW/LIoTDCwjGH7bd3fCEtMxZyWw4s4pZ415ENMhKV/GmZ8YFpD4tVocuPJDeRQ9YKl+6g==
   dependencies:
     "@bugsnag/cuid" "^3.1.1"
 
@@ -1481,12 +1481,12 @@
   resolved "https://registry.yarnpkg.com/@bugsnag/cuid/-/cuid-3.1.1.tgz#dbd5d76559f6b7a66306fceacf503888883da514"
   integrity sha512-d2z4b0rEo3chI07FNN1Xds8v25CNeekecU6FC/2Fs9MxY2EipkZTThVcV2YinMn8dvRUlViKOyC50evoUxg8tw==
 
-"@bugsnag/delivery-fetch-performance@^2.8.0":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@bugsnag/delivery-fetch-performance/-/delivery-fetch-performance-2.8.0.tgz#9c2043ad09fb152afa70878f7b3340620560d2dc"
-  integrity sha512-vHm5w/w6qRGWJtLHS+8DrZwlfl2MDz1zy/FkjTD5empjAZLo1yDQerqH9prUkUeKnXBfxTJLyA9nQvkjXs7HFw==
+"@bugsnag/delivery-fetch-performance@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/delivery-fetch-performance/-/delivery-fetch-performance-2.9.0.tgz#269d4f9353d876bf67f335d3f8abc3ca2225b55e"
+  integrity sha512-uMXvLB5JTmGDZQxnlWFWRnhHewDP7WBvE/zzXQTbUc2yZPaPWCrDpQaybqCtuzu17Eht00dRPWbtwkpUe4jDaA==
   dependencies:
-    "@bugsnag/core-performance" "^2.8.0"
+    "@bugsnag/core-performance" "^2.9.0"
 
 "@bugsnag/delivery-react-native@^8.0.0":
   version "8.0.0"
@@ -1544,14 +1544,14 @@
   integrity sha512-hzLRt0sw6PSups+yd/XKJPMOv8yp8x5yaOzITii7PjXND++0tStGnQQEWTbS5DCW1685mGqP/G4gye8s9LP5og==
 
 "@bugsnag/react-native-performance@^2.7.1":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@bugsnag/react-native-performance/-/react-native-performance-2.8.0.tgz#1366e067ffd7aaeae5035154332c4b943ff3597a"
-  integrity sha512-k23psieiSDjOOUltM9CLD/IZqMofuCFwR2/+mR941qBus1rUra4fUgt6/h5gNIxdmRXb7NLSMbalkcSq6JeypA==
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/react-native-performance/-/react-native-performance-2.9.0.tgz#dec758c3c3c604722f28fffc75d3350f1fba38a2"
+  integrity sha512-/CDOPtijSSepuI/AWbH1DgoEndXBTd2NjyDeIewtG2BVJQI9y4QeAnOn9Ko/OolrvIj42W9kNdLlMcnU5AL14A==
   dependencies:
-    "@bugsnag/core-performance" "^2.8.0"
+    "@bugsnag/core-performance" "^2.9.0"
     "@bugsnag/cuid" "^3.1.1"
-    "@bugsnag/delivery-fetch-performance" "^2.8.0"
-    "@bugsnag/request-tracker-performance" "^2.8.0"
+    "@bugsnag/delivery-fetch-performance" "^2.9.0"
+    "@bugsnag/request-tracker-performance" "^2.9.0"
 
 "@bugsnag/react-native@^8.0.0":
   version "8.0.0"
@@ -1571,12 +1571,12 @@
     "@bugsnag/plugin-react-native-unhandled-rejection" "^8.0.0"
     iserror "^0.0.2"
 
-"@bugsnag/request-tracker-performance@^2.8.0":
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/@bugsnag/request-tracker-performance/-/request-tracker-performance-2.8.0.tgz#4bd3136926e3ecba9770f1b450953e5f581f3844"
-  integrity sha512-RBevGSMK7UNVC6bRO3FEj3qt1g3KoQZwTKvStYT5LK7jx+OwEGzO6HFuZPqRTc6L5yy8P5+HT+Y11eacimMmFw==
+"@bugsnag/request-tracker-performance@^2.9.0":
+  version "2.9.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/request-tracker-performance/-/request-tracker-performance-2.9.0.tgz#0dba3ace42cd28ef0951e38ae6382afcc0841599"
+  integrity sha512-BjBAXZ0ZD4+Ex6uHjxucxz2ZS1ECEzo01A9R/i1Nk4ZTvnlmFyqAdAYBTrES+SE7qBxFYskUJlf3ZAXJ6qQimQ==
   dependencies:
-    "@bugsnag/core-performance" "^2.8.0"
+    "@bugsnag/core-performance" "^2.9.0"
 
 "@bugsnag/safe-json-stringify@^6.0.0":
   version "6.0.0"
@@ -4257,9 +4257,9 @@ available-typed-arrays@^1.0.7:
     possible-typed-array-names "^1.0.0"
 
 aws-sdk@^2.1313.0:
-  version "2.1687.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1687.0.tgz#dd1d7e78b252842ea292a2d28d22c720b97a824b"
-  integrity sha512-Pk7RbIxJ8yDmFJRKzaapiUsAvz5cTPKCz7soomU+lASx1jvO29Z9KAPB6KJR22m7rDDMO/HNNN9OJRzfdvh7xQ==
+  version "2.1690.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1690.0.tgz#cd03bc0f9a0887b3dfa841537d0f104cfd318ae6"
+  integrity sha512-R8iaPaJzqmkw2vXVIDLrVsc9YDEdsqVjPBBbnoaxb4CgtmoDuSAPH9G3E2ttpYMX4pdwXNapzUvQUu3YNuhKvw==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -4520,7 +4520,7 @@ buffer@4.9.2:
     ieee754 "^1.1.4"
     isarray "^1.0.0"
 
-buffer@^5.5.0:
+buffer@^5.4.3, buffer@^5.5.0:
   version "5.7.1"
   resolved "https://registry.yarnpkg.com/buffer/-/buffer-5.7.1.tgz#ba62e7c13133053582197160851a8f648e99eed0"
   integrity sha512-EHcyIPBQ4BSGlvjB16k5KgAJ27CIsHY/2JBmCRReo48y9rQ3MaUzWX3KVlBa4U7MyX02HdVj0K7C3WaB3ju7FQ==
@@ -5199,10 +5199,15 @@ detect-newline@^3.0.0:
   resolved "https://registry.yarnpkg.com/detect-newline/-/detect-newline-3.1.0.tgz#576f5dfc63ae1a192ff192d8ad3af6308991b651"
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
+detox-copilot@^0.0.0:
+  version "0.0.0"
+  resolved "https://registry.yarnpkg.com/detox-copilot/-/detox-copilot-0.0.0.tgz#646b1df5b992b547dd8373618d325f8ac2e709a6"
+  integrity sha512-BasCw/JXlplL1UZfe19xJYT0i0JU4tdGPWutsmybGy6166Jvj2ryikbgoE1ls44F+41p9Y0Yei0cdBC7KawXeQ==
+
 detox@^20.11.1:
-  version "20.25.6"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-20.25.6.tgz#7fd59555caecd4eaf8a2cf1807f8bdee043355e0"
-  integrity sha512-UouUZ9Xa7WHzVIkv7QgAbG7aym0S7hQboiJJVw2ZfVUhdn4P3mfM6YED/g+fpRxVxiZDFCIziuIbOajToU8yUg==
+  version "20.26.1"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-20.26.1.tgz#956878ad18f902fa0f1c41e846ee85212b7a7774"
+  integrity sha512-wGaqNpxTyFJzIcgIhmTeevsmjRIgvMNbi0TagmQPpE+RdiA59QQUkbS0o3FMCieZHxAr5XaIDwyh9ps0m1RAiw==
   dependencies:
     ajv "^8.6.3"
     bunyan "^1.8.12"
@@ -5210,6 +5215,7 @@ detox@^20.11.1:
     caf "^15.0.1"
     chalk "^4.0.0"
     child-process-promise "^2.2.0"
+    detox-copilot "^0.0.0"
     execa "^5.1.1"
     find-up "^5.0.0"
     fs-extra "^11.0.0"
@@ -8767,7 +8773,7 @@ punycode@1.3.2:
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-1.3.2.tgz#9653a036fb7c1ee42342f2325cceefea3926c48d"
   integrity sha512-RofWgt/7fL5wP1Y7fxE7/EmTLzQVnB0ycyibJ0OOHIlJqTNzglYFxVwETOcIoJqJmpDXJ9xImDv+Fq34F/d4Dw==
 
-punycode@^2.1.0:
+punycode@^2.1.0, punycode@^2.1.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.3.1.tgz#027422e2faec0b25e1549c3e1bd8309b9133b6e5"
   integrity sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==
@@ -9007,9 +9013,9 @@ react-native-gallery-swiper@^1.26.0:
     react-native-page-list "^1.1.4"
 
 react-native-gesture-handler@^2.15.0:
-  version "2.18.1"
-  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.18.1.tgz#ec9206f34cd2f34a66c0430b2c416d31ee6dff17"
-  integrity sha512-WF2fxQ5kTaxHghlkBM4YxO86SyGWVwrSNgJ1E8z/ZtL2xD5B3bg5agvuVFfOzvceC114yq71s6E9vKPz94ZxRw==
+  version "2.19.0"
+  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.19.0.tgz#16deaefcefe77d6b4b7fa48a82ef52be61ddbb07"
+  integrity sha512-Cc6DnSnn5hhgiuJOtlOJmXkbBBOZkW9UnJJG+DrWPq2jJuNvM4g5qq2plsywhxQj9xT7FyXZwVVblaXabfGZvQ==
   dependencies:
     "@egjs/hammerjs" "^2.0.17"
     hoist-non-react-statics "^3.3.0"
@@ -9074,9 +9080,9 @@ react-native-localization@^2.1.6:
     react-localization "^1.0.17"
 
 react-native-map-link@^3.4.0:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/react-native-map-link/-/react-native-map-link-3.5.0.tgz#a047de649db08f3436115cc68fd1890605c1b124"
-  integrity sha512-5bY0YSfLUFnIqkwEzFZ+cvrOKwfSJYwHYxlGteGlpkJ57/CgQl8nSYexexC5ldVj29bgg335ji368h1cJ4sr0Q==
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/react-native-map-link/-/react-native-map-link-3.6.1.tgz#1c2f892435206c6dc70f66d972c5fcca7a93da5f"
+  integrity sha512-vEV1sbsm2+4sR7920enb0RSYDlWHV0piVS7nROs6Dj9FLr8T53uqlDGQpA1OyAjI/6dlOo3fYoHYAFGR3YOxIw==
 
 react-native-maps@^1.7.1:
   version "1.18.0"
@@ -9298,6 +9304,13 @@ react-native-tab-view@^3.3.4:
   integrity sha512-nE5WqjbeEPsWQx4mtz81QGVvgHRhujTNIIZiMCx3Bj6CBFDafbk7XZp9ocmtzXUQaZ4bhtVS43R4FIiR4LboJw==
   dependencies:
     use-latest-callback "^0.1.5"
+
+react-native-url-polyfill@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-url-polyfill/-/react-native-url-polyfill-2.0.0.tgz#db714520a2985cff1d50ab2e66279b9f91ffd589"
+  integrity sha512-My330Do7/DvKnEvwQc0WdcBnFPploYKp9CYlefDXzIdEaA+PAhDYllkvGeEroEzvc4Kzzj2O4yVdz8v6fjRvhA==
+  dependencies:
+    whatwg-url-without-unicode "8.0.0-3"
 
 react-native-vector-icons@^10.0.0:
   version "10.1.0"
@@ -10801,10 +10814,24 @@ webidl-conversions@^3.0.0:
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-3.0.1.tgz#24534275e2a7bc6be7bc86611cc16ae0a5654871"
   integrity sha512-2JAn3z8AR6rjK8Sm8orRC0h/bcl/DqL7tRPdGZ4I1CjdF+EaMLmYxBHyXuKL849eucPFhvBoxMsflfOb8kxaeQ==
 
+webidl-conversions@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-5.0.0.tgz#ae59c8a00b121543a2acc65c0434f57b0fc11aff"
+  integrity sha512-VlZwKPCkYKxQgeSbH5EyngOmRp7Ww7I9rQLERETtf5ofd9pGeswWiOtogpEO850jziPRarreGxn5QIiTqpb2wA==
+
 whatwg-fetch@^3.0.0:
   version "3.6.20"
   resolved "https://registry.yarnpkg.com/whatwg-fetch/-/whatwg-fetch-3.6.20.tgz#580ce6d791facec91d37c72890995a0b48d31c70"
   integrity sha512-EqhiFU6daOA8kpjOWTL0olhVOF3i7OrFzSYiGsEMB8GcXS+RrzauAERX65xMeNWVqxA6HXH2m69Z9LaKKdisfg==
+
+whatwg-url-without-unicode@8.0.0-3:
+  version "8.0.0-3"
+  resolved "https://registry.yarnpkg.com/whatwg-url-without-unicode/-/whatwg-url-without-unicode-8.0.0-3.tgz#ab6df4bf6caaa6c85a59f6e82c026151d4bb376b"
+  integrity sha512-HoKuzZrUlgpz35YO27XgD28uh/WJH4B0+3ttFqRo//lmq+9T/mIOJ6kqmINI9HpUpz1imRC/nR/lxKpJiv0uig==
+  dependencies:
+    buffer "^5.4.3"
+    punycode "^2.1.1"
+    webidl-conversions "^5.0.0"
 
 whatwg-url@^5.0.0:
   version "5.0.0"

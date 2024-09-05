@@ -18,7 +18,7 @@ PODS:
   - boost (1.84.0)
   - BugsnagReactNative (8.0.0):
     - React-Core
-  - BugsnagReactNativePerformance (2.8.0):
+  - BugsnagReactNativePerformance (2.9.0):
     - React-Core
   - BVLinearGradient (2.8.3):
     - React-Core
@@ -1728,7 +1728,7 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNGestureHandler (2.18.1):
+  - RNGestureHandler (2.19.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2256,7 +2256,7 @@ SPEC CHECKSUMS:
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost: 4cb898d0bf20404aab1850c656dcea009429d6c1
   BugsnagReactNative: c712dfc4b0b1cce9f195d5476c0ea05c2cbb7b23
-  BugsnagReactNativePerformance: c604252a2e71790b6d75af1b41ae81d0d6e3ec25
+  BugsnagReactNativePerformance: 4f5bd918362297e41a3f32beebe3a98b004af445
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   DoubleConversion: 76ab83afb40bddeeee456813d9c04f67f78771b5
   FBLazyVector: 38bb611218305c3bc61803e287b8a81c6f63b619
@@ -2354,7 +2354,7 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 40ffda97d071a98a10fdca4fa97e3977102ccd14
   RNDeviceInfo: b899ce37a403a4dea52b7cb85e16e49c04a5b88e
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
-  RNGestureHandler: 939f21fabf5d45a725c0bf175eb819dd25cf2e70
+  RNGestureHandler: 3b6fa2bfa341c413d3d08444b838515b58e48ee7
   RNGoogleSignin: 24d3b3261f78b0fae0aa013f8ab6f8d25e369b0c
   RNImageCropPicker: 771e2ca319d2cf92e04ebf334ece892ee9a6728f
   RNReanimated: b0912c8ba12f6c03db07c851c4de71c3eed6c83c
