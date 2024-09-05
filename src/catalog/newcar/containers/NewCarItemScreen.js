@@ -303,6 +303,7 @@ const _renderComplectationItem = (title, data) => {
 };
 
 const _renderCarCreditBanner = ({navigation, carDetails}) => {
+  return;
   return (
     <RNBounceable
       onPress={() => {
