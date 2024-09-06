@@ -1712,7 +1712,7 @@ PODS:
     - React-Core
   - RNAppleAuthentication (2.3.0):
     - React-Core
-  - RNCAsyncStorage (1.23.1):
+  - RNCAsyncStorage (2.0.0):
     - React-Core
   - RNCClipboard (1.14.1):
     - React-Core
@@ -2347,7 +2347,7 @@ SPEC CHECKSUMS:
   ReactNativeLocalization: fb171138cdc80d5d0d4f20243d2fc82c2b3cc48f
   rn-fetch-blob: d469adb2e1d17f9d02ceb2b7bdd35ae5bd5db66b
   RNAppleAuthentication: e99eaf3c4c01ad8ecb6125dd6f0cfd98871685b5
-  RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
+  RNCAsyncStorage: d35c79ffba52c1013013e16b1fc295aec2feabb6
   RNCClipboard: 0a720adef5ec193aa0e3de24c3977222c7e52a37
   RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906
   RNCPicker: 0173dedc74776227ec6dcc61bb85cd9f07bbb2ac
