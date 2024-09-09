@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 
 // components
-import {View, StyleSheet} from 'react-native';
+import {View, StyleSheet, Image} from 'react-native';
 // import FastImage from 'react-native-fast-image';
 // import { FasterImageView, clearCache } from '@candlefinance/faster-image';
 import TurboImage from 'react-native-turbo-image';
@@ -36,12 +36,9 @@ const Imager = ({
   source = {},
   onLoadError = e => console.error('Imager error image loading', e),
   setImageDimensions = () => {},
-  onLoadStart = () => {
-    return true;
-  },
-  onLoadEnd = () => {
-    return true;
-  }, ...otherProps}) => {
+  onLoadStart = () => { return true;},
+  onLoadEnd = () => {return true;},
+  ...otherProps}) => {
 
   // const [isLoading, setLoading] = useState(false);
   const [imageSize, setImageSize] = useState({width: 0, height: 0});
@@ -49,6 +46,7 @@ const Imager = ({
   let path = get(source, 'uri', get(source, 'url', null));
   let extension = null;
   let mergedStyle = style;
+  let sourceNew = source;
 
   if (typeof source !== 'number') {
     // if source is not require('../../../*.jpg') image
@@ -56,6 +54,7 @@ const Imager = ({
     if (path) {
       path = path.toString();
       extension = path.split('.').pop();
+      sourceNew = {uri: path};
     }
     console.info('Imager extension', extension);
     if (!extension && (source?.uri || source?.url)) {
@@ -91,38 +90,33 @@ const Imager = ({
   delete mergedStyle.resizeMode;
   // clearCache();
 
-  return (
-    <View testID={testID}>
-      <TurboImage
-      source={{
-        uri: path,
-      }}
-      resizeMode={resizeMode}
-      style={mergedStyle}
-      onSuccess={event => {
-        console.info('onSuccess', get(event, 'nativeEvent'));
-        // setImageSize({
-        //   width: get(event, 'nativeEvent.width'),
-        //   height: get(event, 'nativeEvent.height'),
-        // });
-        setImageDimensions({
-          width: get(event, 'nativeEvent.width'),
-          height: get(event, 'nativeEvent.height'),
-        });
-      }}
-      onCompletion={el => {
-        console.info('\tImager => end load image\t' + path, el);
-        // setImageDimensions({...imageSize});
-        onLoadEnd();
-      }}
-      onFailure={event => {
-        console.error('\tImager => error load image\t' + path);
-        onLoadError(event);
-      }}
-      {...otherProps}
-      />
-    </View>
-  );
+  if (typeof source !== 'number') {
+    return (
+      <View testID={testID}>
+        <TurboImage
+        source={sourceNew}
+        resizeMode={resizeMode}
+        style={mergedStyle}
+        onSuccess={event => {
+          console.info('onSuccess', get(event, 'nativeEvent'));
+          setImageDimensions({
+            width: get(event, 'nativeEvent.width'),
+            height: get(event, 'nativeEvent.height'),
+          });
+        }}
+        onCompletion={el => {
+          onLoadEnd();
+        }}
+        onFailure={event => {
+          onLoadError(event);
+        }}
+        {...otherProps}
+        />
+      </View>
+    );
+  } else {
+    return (<Image testID={testID} source={sourceNew} style={mergedStyle} resizeMode={resizeMode} {...otherProps} />);
+  }
 };
 
 export default Imager;
