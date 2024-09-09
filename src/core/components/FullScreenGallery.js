@@ -9,6 +9,7 @@ import styleConst from '../style-const';
 import {strings} from '../lang/const';
 import {View, Text} from 'native-base';
 import LogoLoader from './LogoLoader';
+// import Imager from './Imager';
 
 const FullScreenGallery = ({
   images = [],
@@ -68,6 +69,11 @@ const FullScreenGallery = ({
       <Gallery
         data={imagesClean}
         initialIndex={imageIndex}
+        // renderItem={({index, item, setImageDimensions}) => {
+        //   return (
+        //     <Imager source={{uri: item}} setImageDimensions={setImageDimensions} />
+        //   );
+        // }}
         loop={true}
         onIndexChange={newIndex => {
           setIndex(newIndex);
