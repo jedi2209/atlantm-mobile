@@ -1028,7 +1028,6 @@ class Form extends Component {
             {data.props && data.props.required ? '*' : null}
           </Text>
           <RNPickerSelect
-            key={'rnYearPicker' + num + name}
             ref={this.inputRefs[groupNum + 'Input' + num]}
             touchableWrapperProps={{testID: 'Form.YearSelectInput.' + name}}
             pickerProps={{testID: 'Form.YearPickerInput.' + name}}
@@ -1047,6 +1046,7 @@ class Form extends Component {
               },
             }}
             {...data.props}
+            key={'rnYearPicker' + num + name}
             items={items}
           />
         </View>

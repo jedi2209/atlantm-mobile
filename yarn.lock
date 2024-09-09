@@ -2649,9 +2649,9 @@
     serve-static "^1.13.1"
 
 "@react-native-community/cli-debugger-ui@^14.0.1":
-  version "14.0.1"
-  resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-14.0.1.tgz#fe3693ee3763f3782c203181a1aceec03b151057"
-  integrity sha512-8eQ1U21Uwwm71jmIi9iaiou2VxqJQTm9k7Ch5Nj1ZEErO+nKFc9qExPTGtzsE80mHncLq8yNkQfV5waJvvhclg==
+  version "14.1.0"
+  resolved "https://registry.yarnpkg.com/@react-native-community/cli-debugger-ui/-/cli-debugger-ui-14.1.0.tgz#0008039ad2c386730c415d9dfc6884d68fda2c93"
+  integrity sha512-+YbeCL0wLcBcqDwraJFGsqzcXu9S+bwTVrfImne/4mT6itfe3Oa93yrOVJgNbstrt5pJHuwpU76ZXfXoiuncsg==
   dependencies:
     serve-static "^1.13.1"
 
@@ -4257,9 +4257,9 @@ available-typed-arrays@^1.0.7:
     possible-typed-array-names "^1.0.0"
 
 aws-sdk@^2.1313.0:
-  version "2.1690.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1690.0.tgz#cd03bc0f9a0887b3dfa841537d0f104cfd318ae6"
-  integrity sha512-R8iaPaJzqmkw2vXVIDLrVsc9YDEdsqVjPBBbnoaxb4CgtmoDuSAPH9G3E2ttpYMX4pdwXNapzUvQUu3YNuhKvw==
+  version "2.1691.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1691.0.tgz#9d6ccdcbae03c806fc62667b76eb3e33e5294dcc"
+  integrity sha512-/F2YC+DlsY3UBM2Bdnh5RLHOPNibS/+IcjUuhP8XuctyrN+MlL+fWDAiela32LTDk7hMy4rx8MTgvbJ+0blO5g==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -5205,9 +5205,9 @@ detox-copilot@^0.0.0:
   integrity sha512-BasCw/JXlplL1UZfe19xJYT0i0JU4tdGPWutsmybGy6166Jvj2ryikbgoE1ls44F+41p9Y0Yei0cdBC7KawXeQ==
 
 detox@^20.11.1:
-  version "20.26.1"
-  resolved "https://registry.yarnpkg.com/detox/-/detox-20.26.1.tgz#956878ad18f902fa0f1c41e846ee85212b7a7774"
-  integrity sha512-wGaqNpxTyFJzIcgIhmTeevsmjRIgvMNbi0TagmQPpE+RdiA59QQUkbS0o3FMCieZHxAr5XaIDwyh9ps0m1RAiw==
+  version "20.26.2"
+  resolved "https://registry.yarnpkg.com/detox/-/detox-20.26.2.tgz#0535e99dd91482943be001df6c501f228bd9dd58"
+  integrity sha512-pJU8WHD7GuoGlCuDzZxCD784mQfOO/ihRxe2/EebnesniWnV6FOwbC+32J1kGivhAdyvvPawfMQ7PoD4FwkxfA==
   dependencies:
     ajv "^8.6.3"
     bunyan "^1.8.12"
@@ -8992,11 +8992,6 @@ react-native-easy-view-transformer@^1.2.1:
     react-native-easy-guesture-responder "^1.1.2"
     react-native-scrolling "^1.0.2"
 
-react-native-fast-image@^8.6.3:
-  version "8.6.3"
-  resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.6.3.tgz#6edc3f9190092a909d636d93eecbcc54a8822255"
-  integrity sha512-Sdw4ESidXCXOmQ9EcYguNY2swyoWmx53kym2zRsvi+VeFCHEdkO+WG1DK+6W81juot40bbfLNhkc63QnWtesNg==
-
 react-native-file-access@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/react-native-file-access/-/react-native-file-access-3.1.0.tgz#0e7371bc82a0899e6ad99560a5503c35801dcf4c"
@@ -9264,9 +9259,9 @@ react-native-siren@0.0.5:
     react-native-device-info "^0.9.3"
 
 react-native-star-rating-widget@^1.7.2:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/react-native-star-rating-widget/-/react-native-star-rating-widget-1.9.0.tgz#04077e3e402851d40b00a976202132816528d17e"
-  integrity sha512-AhyUjnYPBSTnlYQFetrItEg0p8zvJ+EzqIuef0OyRAmlIqG3UA9wuGJSG5eBrj6D2Jq0A8s3KNyxKZ3ZXjjY1g==
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/react-native-star-rating-widget/-/react-native-star-rating-widget-1.9.1.tgz#1a3fd0fc04c3a0ae01661311ab5d785f25af9a2e"
+  integrity sha512-7q2gFcSYPSTgc0D0iNevYMiw6zEYOBdG5YVrFooABeZBS7je3xJPTJ/KbYZAOVak12sFKZSTIeBjBWK+/CAnfQ==
 
 react-native-svg-asset-plugin@^0.5.0:
   version "0.5.0"
@@ -9305,6 +9300,11 @@ react-native-tab-view@^3.3.4:
   dependencies:
     use-latest-callback "^0.1.5"
 
+react-native-turbo-image@^1.17.1:
+  version "1.17.2"
+  resolved "https://registry.yarnpkg.com/react-native-turbo-image/-/react-native-turbo-image-1.17.2.tgz#05a44fff6d8c6131b3ff99dd7c96197c8b0dd76b"
+  integrity sha512-3J0LPNOYPhlf9wIGRB9OlEu9VLtRoxaBJCgoSh71sI+G/77otN8A12C/Bv9hOPzINw/VqwD/O6AByfPjHumgkQ==
+
 react-native-url-polyfill@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-native-url-polyfill/-/react-native-url-polyfill-2.0.0.tgz#db714520a2985cff1d50ab2e66279b9f91ffd589"
@@ -9334,9 +9334,9 @@ react-native-walkthrough-tooltip@^1.5.0:
     react-fast-compare "^2.0.4"
 
 react-native-webview@^13.3.1:
-  version "13.12.1"
-  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-13.12.1.tgz#6a6724ea95cd623ebd0a311488fede9a4721eece"
-  integrity sha512-S/14tuAFFPMiWUYX8Fh3aChGA2iemOs9y80byqAzHdHeOVKXc0Lzn43GnFRSQlcMXG5HOK4C1wO/Mb23s6H8VA==
+  version "13.12.2"
+  resolved "https://registry.yarnpkg.com/react-native-webview/-/react-native-webview-13.12.2.tgz#b379b28c725632efabb42a2cf8387bd03cf34f33"
+  integrity sha512-OpRcEhf1IEushREax6rrKTeqGrHZ9OmryhZLBLQQU4PwjqVsq55iC8OdYSD61/F628f9rURn9THyxEZjrknpQQ==
   dependencies:
     escape-string-regexp "^4.0.0"
     invariant "2.2.4"

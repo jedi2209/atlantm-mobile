@@ -1,7 +1,7 @@
 apply plugin: "com.android.application"
 apply plugin: "org.jetbrains.kotlin.android"
-apply plugin: 'com.google.gms.google-services'
 apply plugin: "com.facebook.react"
+// apply plugin: 'com.google.gms.google-services'
 // apply plugin: 'com.google.firebase.crashlytics'
 // apply plugin: 'com.google.firebase.appdistribution'
 // apply plugin: 'com.google.firebase.firebase-perf'
@@ -161,15 +161,13 @@ dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
 
-    implementation project(':react-native-pure-jwt')
-
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
-
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
     } else {
         implementation jscFlavor
     }
+    implementation project(':react-native-pure-jwt')
+    // implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.0.0")
     // implementation platform('com.google.firebase:firebase-bom:29.1.0')
     // implementation 'com.google.firebase:firebase-perf'
 }
