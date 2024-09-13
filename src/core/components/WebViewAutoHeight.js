@@ -25,12 +25,14 @@ const INJECTED_JAVASCRIPT = `
   document.body.appendChild(wrapper);
   var i = 0;
   function updateHeight() {
+    if (wrapper.clientHeight) {
       document.title = wrapper.clientHeight;
       window.location.hash = ++i;
+    }
   }
   updateHeight();
   window.addEventListener("load", function() {
-      setTimeout(updateHeight, 100);
+      setTimeout(updateHeight, 200);
   });
   window.addEventListener("resize", updateHeight);
   }());
@@ -129,13 +131,10 @@ const WebViewAutoHeight = ({
   onNavigationStateChange,
   source,
   style,
-  minHeight = 400,
+  minHeight = 1000,
   fetchURL = false,
   ...otherProps
 }) => {
-  if (!minHeight) {
-    minHeight = 400;
-  }
   const [contentHeight, setContentHeight] = useState(minHeight);
   const [isLoading, setLoading] = useState(true);
   const [sourceModified, setSource] = useState(null);
@@ -162,10 +161,9 @@ const WebViewAutoHeight = ({
 
   const _handleHeight = navState => {
     if (navState.title) {
-      const realContentHeight = parseInt(navState.title, 10) || 0; // turn NaN to 0
-      setContentHeight(realContentHeight);
+      setContentHeight(parseInt(navState.title, 10) || 0);
     } else {
-      setContentHeight(1000);
+      setContentHeight(minHeight);
     }
   };
 
@@ -213,7 +211,7 @@ const WebViewAutoHeight = ({
       style={[
         style,
         {
-          backgroundColor: styleConst.color.bg,
+          backgroundColor: styleConst.color.white,
           height: Math.max(contentHeight, minHeight) + 30,
         },
       ]}

@@ -8,37 +8,53 @@ import * as NavigationService from '../../navigation/NavigationService';
 import moment from 'moment';
 import styleConst from '../style-const';
 import {strings} from '../lang/const';
+import {get} from 'lodash';
+
+const Wrapper = ({scrollEnabled = false, ...otherProps}) => {
+  if (scrollEnabled) {
+    return <ScrollView {...otherProps} />;
+  }
+  return <View {...otherProps} />;
+};
 
 const WebviewScreen = ({
   route,
+  routeParams = route?.params,
   SubmitButton = {
     text: strings.ModalView.close,
   },
 }) => {
   const [data, setData] = useState(null);
+  const scrollEnabled = get(routeParams, 'linkParams.scrollEnabled', false);
 
   useEffect(() => {
     console.info('== WebviewScreen ==');
-    if (route.params?.html) {
-      setData({html: route.params.html});
+    let tmp = {};
+    if (get(routeParams, 'html')) {
+      tmp = {
+        html: get(routeParams, 'html'),
+      };
     }
-    if (route.params?.uri) {
-      setData({uri: route.params.uri});
+    if (get(routeParams, 'uri')) {
+      tmp = {
+        uri: get(routeParams, 'uri'),
+      };
     }
-  }, [route?.params?.html, route?.params?.uri]);
+    setData(tmp);
+  }, [routeParams]);
 
   if (data) {
     return (
       <View flex={1} backgroundColor={styleConst.color.white}>
-        <ScrollView
-          style={[styles.mainView, route.params?.mainScrollViewStyle]}>
+        <Wrapper
+          style={[!scrollEnabled ? {marginBottom: 85} : {}, styles.mainView, get(routeParams, 'mainScrollViewStyle', {})]}>
           <WebViewAutoHeight
-            style={[styles.webView, route.params?.webViewStyle]}
+            style={[styles.webView, get(routeParams, 'webViewStyle')]}
             key={moment().unix()}
             source={data}
-            {...route.params?.linkParams}
+            {...get(routeParams, 'linkParams')}
           />
-        </ScrollView>
+        </Wrapper>
         <Button
           style={styles.submitButton}
           onPress={() => NavigationService.goBack()}>
@@ -60,21 +76,19 @@ const WebviewScreen = ({
 
 const styles = StyleSheet.create({
   submitButton: {
-    bottom: 35,
+    bottom: 30,
     position: 'absolute',
-    width: '90%',
-    left: '5%',
+    width: '86%',
+    left: '7%',
   },
   mainView: {
     flex: 1,
-    paddingBottom: 25,
-    marginBottom: 75,
     backgroundColor: styleConst.color.white,
   },
   webView: {
     backgroundColor: styleConst.color.white,
-    paddingBottom: 25,
-    marginBottom: 75,
+    paddingBottom: 15,
+    marginBottom: 85,
   },
 });
 
