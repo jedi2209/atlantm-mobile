@@ -54,7 +54,7 @@ export default {
     const requestParams = _.merge({}, baseRequestParams, {
       noJWT: true,
     });
-    return this.request(`/mobile/screen/main/${region}/`, requestParams);
+    return this.request(`https://api-backend.atlantm.com/mobile/screen/main/${region}/`, requestParams);
   },
 
   fetchDealers() {
@@ -1214,7 +1214,7 @@ export default {
   },
 
   async request(path, requestParams = baseRequestParams) {
-    const url = `${API_MAIN_URL}${path}`;
+    const url = path.includes('https://') ? path : `${API_MAIN_URL}${path}`;
 
     // Если включен debug режим, добавляем в каждый запрос заголовок `Debug`
     if (window.atlantmDebug) {

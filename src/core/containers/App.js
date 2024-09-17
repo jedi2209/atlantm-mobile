@@ -186,23 +186,24 @@ const App = props => {
   const checkAppForUpdate = async region => {
     try {
       inAppUpdates.checkNeedsUpdate().then(async result => {
-        if (result.shouldUpdate) {
-          let updateOptions = Platform.select({
-            ios: {
-              title: strings.Notifications.UpdatePopup.title,
-              message: strings.Notifications.UpdatePopup.text,
-              buttonUpgradeText: strings.Notifications.UpdatePopup.update,
-              buttonCancelText: strings.Notifications.UpdatePopup.later,
-              bundleId: DeviceInfo.getBundleId(),
-            },
-            android: {
-              updateType: IAUUpdateKind.FLEXIBLE,
-            },
-          });
-          if (Platform.OS === 'android') {
-            inAppUpdates.addStatusUpdateListener(onStatusUpdate);
-            inAppUpdates.startUpdate(updateOptions);
-          }
+        if (!get(result, 'shouldUpdate', false)) {
+          return;
+        }
+        let updateOptions = Platform.select({
+          ios: {
+            title: strings.Notifications.UpdatePopup.title,
+            message: strings.Notifications.UpdatePopup.text,
+            buttonUpgradeText: strings.Notifications.UpdatePopup.update,
+            buttonCancelText: strings.Notifications.UpdatePopup.later,
+            bundleId: DeviceInfo.getBundleId(),
+          },
+          android: {
+            updateType: get(result, 'other.isFlexibleUpdateAllowed', false) ? IAUUpdateKind.FLEXIBLE : IAUUpdateKind.IMMEDIATE,
+          },
+        });
+        if (Platform.OS === 'android') {
+          inAppUpdates.addStatusUpdateListener(onStatusUpdate);
+          inAppUpdates.startUpdate(updateOptions);
         }
       });
     } catch (error) {
