@@ -25,7 +25,7 @@ import Analytics from '../../utils/amplitude-analytics';
 import {strings} from '../../core/lang/const';
 import {ERROR_NETWORK} from '../../core/const';
 
-import {get} from 'lodash';
+import {get, isNil} from 'lodash';
 
 const mapStateToProps = ({profile, dealer}) => {
   return {
@@ -291,7 +291,7 @@ const ProfileEditScreen = props => {
               onChangeText={onChange}
               textContentType={'name'}
               value={value}
-              isValid={get(errors, 'NAME', true)}
+              isValid={isNil(get(errors, 'NAME'))}
             />
           )}
         />
@@ -439,7 +439,7 @@ const ProfileEditScreen = props => {
             onBlur={onBlur}
             onChange={onChange}
             value={value}
-            isValid={get(errors, 'agreementCheckbox', true)}
+            isValid={isNil(get(errors, 'agreementCheckbox'))}
           />
         )}
       />

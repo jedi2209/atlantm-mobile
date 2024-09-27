@@ -382,7 +382,6 @@ export const fetchBrands = () => {
 
     return API.fetchBrands()
       .then(response => {
-        console.info('API.fetchBrands() response \t\t\t============>\t\t', response);
         const {data: brandsSource, error} = response;
 
         if (error) {

@@ -5,10 +5,10 @@
  *         например ['яблоко', 'яблока', 'яблок']
  * @return String
  */
-const declOfNum2 = (number, titles) => {
+const declOfNum = (number, titles) => {
   const cases = [2, 0, 1, 1, 1, 2];
 
-  return titles[
+  return number + ' ' + titles[
     number % 100 > 4 && number % 100 < 20
       ? 2
       : cases[number % 10 < 5 ? number % 10 : 5]
@@ -16,7 +16,7 @@ const declOfNum2 = (number, titles) => {
 };
 
 // declOfNum(value, ['товар', 'товара', 'товаров']));
-const declOfNum = (value, words) => {
+const declOfNumOLD = (value, words) => {
   value = Math.abs(value) % 100;
   var num = value % 10;
   if (value > 10 && value < 20) {
@@ -31,4 +31,4 @@ const declOfNum = (value, words) => {
   return words[2];
 };
 
-export {declOfNum, declOfNum2};
+export {declOfNum, declOfNumOLD};
