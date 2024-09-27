@@ -208,7 +208,7 @@ const OrderCreditScreen = ({actionOrderCreditCar, localUserDataUpdate, navigatio
   };
 
   return (
-    <ScrollView paddingX={4} mb={4}>
+    <ScrollView paddingX={4}>
       <KeyboardAvoidingView behavior={'padding'} enabled={!isAndroid}>
         <GroupForm title={strings.Form.group.main}>
           <Controller

@@ -23,6 +23,8 @@ import styleConst from '../../core/style-const';
 import {InputCustom} from '../../core/components/Form/InputCustom';
 import {getAllDataPrice} from '../../utils/price';
 
+const isAndroid = Platform.OS === 'android';
+
 const settings = {
   timeoutQuery: 1000,
   percentPaymentDefault: 0.5,
@@ -213,7 +215,7 @@ const HeaderComponent = ({
               isValid={isNil(get(errors, 'prePayment'))}
             />
             <Slider
-              style={{height: 60, marginTop: -26}}
+              style={{height: 60, marginTop: isAndroid ? -34 : -26}}
               minimumValue={parseInt(carPrice * 0.1)}
               maximumValue={parseInt(carPrice * 0.9)}
               minimumTrackTintColor={styleConst.color.blue}
@@ -285,7 +287,7 @@ const HeaderComponent = ({
                 // style={{width: 400}}
               />
               <Slider
-                style={{height: 60, marginTop: -26}}
+                style={{height: 60, marginTop: isAndroid ? -34 : -26}}
                 minimumValue={calcData.period.min}
                 maximumValue={calcData.period.max}
                 minimumTrackTintColor={styleConst.color.blue}
@@ -324,18 +326,16 @@ const CreditCardsItems = ({isNewCar, isLoading, carData, creditPrograms, listHea
           style={styleConst.spinner}
         />
       }
-      ItemSeparatorComponent={
-        Platform.OS !== 'android' &&
-        (({highlighted}) => (
+      ItemSeparatorComponent={({highlighted}) => (
           <View
             style={[
               {
-                height: 3,
+                height: isAndroid ? 5: 3,
               },
               highlighted && {marginLeft: 0},
             ]}
           />
-        ))
+        )
       }
       renderItem={({item, index, separators}) => (
         <CreditCardItem
