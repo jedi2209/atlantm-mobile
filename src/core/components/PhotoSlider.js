@@ -33,7 +33,6 @@ const PhotoSlider = ({
   const [activeSlide, setActiveSlide] = useState(0);
 
   const [entries, setEntries] = useState([]);
-  const carouselRef = useRef(null);
 
   const navigation = useNavigation();
 
@@ -85,7 +84,6 @@ const PhotoSlider = ({
   return (
     <View style={[styles.container, styleWrapper]}>
       <Carousel
-        ref={carouselRef}
         width={width}
         height={height}
         loop={loop}

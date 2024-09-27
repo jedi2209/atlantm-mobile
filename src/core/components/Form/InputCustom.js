@@ -7,7 +7,7 @@ import {View, Box, Text, HStack} from 'native-base';
 import {TextInput, Checkbox} from 'react-native-paper';
 import PhoneInput from 'react-native-phone-input';
 
-import {APP_COUNTRY_SETTINGS, APP_COUNTRY_LIST} from '../../../core/const';
+import {APP_COUNTRY_SETTINGS, APP_COUNTRY_LIST, APP_REGION} from '../../../core/const';
 import {strings} from '../../../core/lang/const';
 import {get} from 'lodash';
 
@@ -88,13 +88,28 @@ const EmailField = props => {
 
 const PhoneField = props => {
   const {
-    value,
+    value = null,
     onPressIcon = () => {},
     onChangeText = () => {},
     length = 0,
     num,
     disabled = false,
   } = props;
+  let valueTmp = value;
+  if (!valueTmp) {
+    switch (APP_REGION) {
+      case 'by':
+        valueTmp = '+375';
+        break;
+
+      case 'ru':
+        valueTmp = '+7';
+        break;
+
+      default:
+        break;
+    }
+  }
   return (
     <TextInput
       placeholder={strings.Form.field.placeholder.phone}
@@ -110,7 +125,7 @@ const PhoneField = props => {
           autoFormat={true}
           cancelText={strings.Base.cancel}
           confirmText={strings.Base.choose}
-          initialValue={value}
+          initialValue={valueTmp}
           onChangePhoneNumber={onChangeText}
           textProps={{
             testID: 'Form.Phone.' + num,
