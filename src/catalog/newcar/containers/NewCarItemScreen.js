@@ -309,6 +309,7 @@ const _renderCarCreditBanner = ({navigation, carDetails}) => {
         navigation.navigate('CreditCalcScreen', {
           carID: carDetails.id.api,
           carData: carDetails,
+          isNewCar: true,
         });
       }}>
       <View mx="2%" mt="1" width="96%">

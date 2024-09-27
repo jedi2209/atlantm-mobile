@@ -90,6 +90,7 @@ const PhoneField = props => {
   const {
     value,
     onPressIcon = () => {},
+    onChangeText = () => {},
     length = 0,
     num,
     disabled = false,
@@ -98,8 +99,8 @@ const PhoneField = props => {
     <TextInput
       placeholder={strings.Form.field.placeholder.phone}
       label={strings.Form.field.label.phone}
-      autoComplete="email"
-      inputMode="email"
+      autoComplete="tel"
+      inputMode="tel"
       keyboardType="phone-pad"
       textContentType="telephoneNumber"
       render={propsRender => (
@@ -110,6 +111,7 @@ const PhoneField = props => {
           cancelText={strings.Base.cancel}
           confirmText={strings.Base.choose}
           initialValue={value}
+          onChangePhoneNumber={onChangeText}
           textProps={{
             testID: 'Form.Phone.' + num,
             key: 'fieldInternal' + num,
@@ -117,7 +119,7 @@ const PhoneField = props => {
             keyboardType: 'phone-pad',
             autoCompleteType: 'tel',
             selectionColor: '#afafaf',
-            returnKeyType: 'go',
+            returnKeyType: 'done',
             textContentType: 'telephoneNumber',
             enablesReturnKeyAutomatically: true,
             editable: !disabled,
@@ -165,14 +167,30 @@ export const InputCustom = props => {
     case 'email':
       return (
         <View style={styles.container}>
-          <EmailField {...InputProps} {...other} />
+          <EmailField error={isValid !== true} {...InputProps} {...other} />
         </View>
       );
 
     case 'phone':
       return (
         <View style={styles.container}>
-          <PhoneField {...InputProps} {...other} />
+          <PhoneField error={isValid !== true} {...InputProps} {...other} />
+        </View>
+      );
+
+    case 'textarea':
+      return (
+        <View style={styles.container}>
+          <TextInput
+            autoCorrect={false}
+            error={isValid !== true}
+            label={placeholder}
+            multiline={true}
+            enablesReturnKeyAutomatically={true}
+            numberOfLines={4}
+            {...InputProps}
+            {...other}
+          />
         </View>
       );
 
