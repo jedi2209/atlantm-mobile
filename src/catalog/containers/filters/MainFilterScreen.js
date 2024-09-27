@@ -213,9 +213,7 @@ const _getSelectedModels = (selectedModels, models) => {
   return (
     <View style={styles.fieldCaptionValues}>
       <Text style={styles.fieldValueOne}>
-        {labels.length +
-          ' ' +
-          declOfNum(
+        {declOfNum(
             labels && labels.length,
             strings.CarsFilterScreen.chooseBrandModel.titles,
           )}

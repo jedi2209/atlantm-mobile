@@ -120,6 +120,7 @@ const UsedCarItemScreen = props => {
   const onPressCredit = () => {
     navigation.navigate('OrderCreditScreen', {
       car: {
+        id: get(carDetails, 'id.api'),
         brand: get(carDetails, 'brand.name', ''),
         model: get(carDetails, 'model', ''),
         complectation: get(carDetails, 'complectation.name'),
@@ -129,7 +130,6 @@ const UsedCarItemScreen = props => {
       },
       region,
       dealerId: get(carDetails, 'dealer.id'),
-      carId: carDetails.id.api,
       isNewCar: false,
       isPriceShow: isPriceShow,
     });

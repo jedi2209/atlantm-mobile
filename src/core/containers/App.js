@@ -68,6 +68,7 @@ const mapDispatchToProps = {
 
 const paperTheme = {
   ...DefaultTheme,
+  roundness: 1,
   colors: {
     ...DefaultTheme.colors,
     primary: styleConst.color.blue,

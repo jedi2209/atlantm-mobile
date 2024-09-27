@@ -50,13 +50,13 @@ const Imager = ({
 
   if (typeof source !== 'number') {
     // if source is not require('../../../*.jpg') image
-    console.info('Imager path', path);
+    // console.info('Imager path', path);
     if (path) {
       path = path.toString();
       extension = path.split('.').pop();
       sourceNew = {uri: path};
     }
-    console.info('Imager extension', extension);
+    // console.info('Imager extension', extension);
     if (!extension && (source?.uri || source?.url)) {
       return null;
     }
@@ -98,7 +98,7 @@ const Imager = ({
         resizeMode={resizeMode}
         style={mergedStyle}
         onSuccess={event => {
-          console.info('onSuccess', get(event, 'nativeEvent'));
+          // console.info('onSuccess', get(event, 'nativeEvent'));
           setImageDimensions({
             width: get(event, 'nativeEvent.width'),
             height: get(event, 'nativeEvent.height'),
