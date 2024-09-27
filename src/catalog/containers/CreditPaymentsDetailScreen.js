@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
-import { Text, View, ScrollView, VStack, HStack, Heading } from "native-base";
+import { Text, View, ScrollView, VStack, HStack, Heading, Divider} from "native-base";
 import moment from 'moment';
 
 import {get} from 'lodash';
@@ -46,12 +46,12 @@ const CreditPaymentsDetailScreen = ({ route, creditPayments }) => {
             }
             return (
               <>
-                {yearTmp ? (<Text key={'yearPaymentText' + year} fontWeight={800} my={2}>{yearTmp}</Text>) : null}
+                {yearTmp ? (<><Heading size="md" mt={4} key={'yearPaymentText' + year} bold>{yearTmp}</Heading><Divider thickness={0.7} mb={2} bg={styleConst.color.blue} /></>) : null}
                 <HStack space={1} alignContent={'flex-start'} justifyContent={'space-between'} key={'monthPaymentHStack' + year + monthName}>
-                  <Text key={'monthPaymentName' + year + monthName}>
+                  <Text key={'monthPaymentName' + year + monthName} color={styleConst.color.greyText4}>
                     {month.format('MMMM')}
                   </Text>
-                  <Text key={'monthPaymentValue' + year + monthName}>
+                  <Text key={'monthPaymentValue' + year + monthName} color={styleConst.color.greyText}>
                     {showPrice(item.summ.total)}
                   </Text>
                 </HStack>

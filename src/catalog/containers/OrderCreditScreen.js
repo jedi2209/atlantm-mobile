@@ -1,15 +1,17 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {Component} from 'react';
+import React, {useState} from 'react';
+import {Alert, Platform} from 'react-native';
+import {ScrollView, View} from 'native-base';
+import Slider from '@react-native-community/slider';
+import {Controller, useForm, useWatch} from 'react-hook-form';
+import {SubmitButton} from '../../core/components/Form/SubmitCustom';
 import {
-  StyleSheet,
-  View,
-  Alert,
-  Text,
-  Dimensions,
-  Platform,
-} from 'react-native';
-import Form from '../../core/components/Form/Form';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
+  AgreementCheckbox,
+  GroupForm,
+  InputCustom,
+} from '../../core/components/Form/InputCustom';
+import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
+import { CreditCardItem } from '../../core/components/CreditCardItem';
 // redux
 import {connect} from 'react-redux';
 import {actionOrderCreditCar} from '../actions';
@@ -17,8 +19,9 @@ import {localUserDataUpdate} from '../../profile/actions';
 
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
-import {get} from 'lodash';
-import {showPrice} from '../../utils/price';
+import {get, isNil, trim, toString} from 'lodash';
+import {showPrice, getAllDataPrice} from '../../utils/price';
+import {declOfNum} from '../../utils/decl-of-num';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import styleConst from '../../core/style-const';
@@ -27,50 +30,11 @@ import {ERROR_NETWORK} from '../../core/const';
 
 import {strings} from '../../core/lang/const';
 
-const $size = 40;
-const styles = StyleSheet.create({
-  list: {
-    paddingBottom: $size,
-  },
-  serviceForm: {
-    marginTop: $size,
-  },
-  container: {
-    flex: 1,
-    paddingTop: 20,
-    paddingHorizontal: 14,
-    backgroundColor: '#f2f2f2',
-  },
-  header: {
-    marginBottom: 36,
-  },
-  heading: {
-    fontSize: 30,
-    fontWeight: 'bold',
-  },
-  field: {
-    marginBottom: 18,
-  },
-  group: {
-    marginBottom: 36,
-  },
-  textinput: {
-    height: Platform.OS === 'ios' ? 40 : 'auto',
-    borderColor: '#d8d8d8',
-    borderBottomWidth: 1,
-    color: '#222b45',
-    fontSize: 18,
-  },
-  button: {
-    backgroundColor: styleConst.color.lightBlue,
-    justifyContent: 'center',
-  },
-  buttonText: {
-    color: styleConst.color.white,
-    textTransform: 'uppercase',
-    fontSize: 16,
-  },
-});
+const isAndroid = Platform.OS === 'android';
+
+const settings = {
+  percentPaymentDefault: 0.5,
+};
 
 const mapStateToProps = ({dealer, catalog, profile}) => {
   return {
@@ -94,87 +58,128 @@ const mapDispatchToProps = {
   localUserDataUpdate,
 };
 
-class OrderCreditScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.isNewCar = get(props.route, 'params.isNewCar');
-    this.isPriceShow = get(props.route, 'params.isPriceShow');
-    this.orderedCar = get(props.route, 'params.car.ordered');
-    let model = '';
-    if (this.isNewCar) {
-      model = get(props.route, 'params.car.model');
-    } else {
-      model = get(props.route, 'params.car.model.name');
-    }
-    this.carName = [
-      get(props.route, 'params.car.brand'),
-      model,
-      get(props.route, 'params.car.complectation'),
-      !this.orderedCar ? get(props.route, 'params.car.year') : null,
-      this.orderedCar ? 'или аналог' : null,
-    ]
-      .filter(Boolean)
-      .join(' ');
+const onCheckLimit = ({value, min, max}) => {
+  const parsedQty = parseInt(toString(value).replace(/\s+/g, ''));
+  if (isNaN(parsedQty)) {
+    return min;
+  } else if (parsedQty > max) {
+    return max;
+  } else {
+    return value;
+  }
+};
 
-    this.carPrice = Number(get(props.route, 'params.car.price'));
-    this.region = get(props.route, 'params.region');
+const OrderCreditScreen = ({actionOrderCreditCar, localUserDataUpdate, navigation, route, ...props}) => {
+  const [sendingForm, setSendingForm] = useState(false);
+  const [sendingFormStatus, setFormSendingStatus] = useState(null);
+  const {isNewCar, dealerId, car, region, creditProduct, creditPrograms} = route.params;
 
-    this.state = {
-      date: '',
-      comment: '',
-      summ: this.carPrice,
-    };
-
-    const deviceWidth = Dimensions.get('window').width;
-    this.sliderWidth = (deviceWidth / 100) * 80;
-    this.priceStep = Math.ceil(this.carPrice / 1000) * 100;
-
-    this.optionsPrice = [];
-    let i = 0;
-    while (i <= this.carPrice) {
-      this.optionsPrice.push(i);
-      i = i + this.priceStep;
-    }
-    this.optionsPrice.push(this.carPrice);
+  let summ = Number(get(route, 'params.car.price'));
+  let months = 0;
+  let prePayment = 0;
+  if (get(creditProduct, 'calc')) {
+    prePayment = get(creditProduct, 'calc.0.summ.payment');
+    summ = get(creditProduct, 'calc.0.summ.leave') - get(creditProduct, 'calc.0.summ.payment');
+    months = get(creditProduct, 'calc.length') - 2;
   }
 
-  onPressOrder = async data => {
+  const isPriceShow = get(route, 'params.showPrice', false);
+
+  const modelName = get(car, 'model.name', get(car, 'model'));
+  const carName = [
+    get(car, 'brand'),
+    modelName,
+    get(car, 'complectation'),
+    !get(car, 'ordered') ? get(car, 'year') : null,
+    get(car, 'ordered') ? 'или аналог' : null,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const {
+    control,
+    handleSubmit,
+    formState: {errors, isValidating, isValid},
+  } = useForm({
+    defaultValues: {
+      NAME: get(props, 'firstName'),
+      SECOND_NAME: get(props, 'secondName'),
+      LAST_NAME: get(props, 'lastName'),
+      EMAIL: get(props, 'email'),
+      PHONE: get(props, 'phone'),
+      CAR: carName,
+      SUMM: parseInt(creditProduct ? summ : summ * settings.percentPaymentDefault),
+    },
+    mode: 'onBlur',
+  });
+
+  const watchSumm = useWatch({
+    control,
+    name: 'SUMM',
+    defaultValue: parseInt(creditProduct ? summ : summ * settings.percentPaymentDefault),
+  });
+
+  const priceStep = Math.ceil(summ / 1000) * 100;
+
+  const onPressOrder = async data => {
+
+    let comment = get(data, 'COMMENT', '');
+
+    if (prePayment || summ || months || creditProduct) {
+      comment += '\r\n';
+    }
+
+    if (creditProduct) {
+      comment += '\r\n' + [
+        '#' + get(creditProduct, 'data.id'),
+        get(creditProduct, 'data.type.name', ''),
+        '(' + get(creditProduct, 'data.paymentSchedule.name').toLowerCase() + ')',
+        '-',
+        '"' + get(creditProduct, 'data.name') + '"',
+        'от',
+        get(creditProduct, 'data.owner.name'),
+      ].join(' ');
+    }
+
+    if (prePayment) {
+      comment += '\r\nСумма аванса: ' + showPrice(prePayment);
+    }
+
+    if (summ) {
+      comment += '\r\nСумма кредита: ' + showPrice(summ);
+    }
+
+    if (months) {
+      comment += '\r\nСрок кредита: ' + declOfNum(months, ['месяц', 'месяца', 'месяцев']);
+    }
+
     const isInternetExist = await isInternet();
-    const nav = this.props.navigation;
 
     if (!isInternetExist) {
       setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
       return;
     }
 
-    const dealerId = get(this.props.route, 'params.dealerId');
-    const carId = get(this.props.route, 'params.carId');
-    const isNewCar = get(this.props.route, 'params.isNewCar');
-    const action = await this.props.actionOrderCreditCar({
+    const action = await actionOrderCreditCar({
       firstName: get(data, 'NAME'),
       secondName: get(data, 'SECOND_NAME'),
       lastName: get(data, 'LAST_NAME'),
       email: get(data, 'EMAIL'),
       phone: get(data, 'PHONE'),
-      summ:
-        this.state.summ ||
-        get(data, 'SUMM') ||
-        get(this.props.route, 'params.car.price'),
+      summ: get(data, 'SUMM', get(car, 'price')),
       dealerId,
-      carId,
-      comment: data.COMMENT || '',
+      carId: get(car, 'id'),
+      comment: trim(comment),
     });
     if (action && action.type) {
       switch (action.type) {
         case CREDIT_ORDER__SUCCESS:
-          const car = get(this.props.route, 'params.car');
-          const {brand, model} = car;
           const path = isNewCar ? 'newcar' : 'usedcar';
           Analytics.logEvent('order', `catalog/${path}`, {
-            brand_name: brand,
-            model_name: get(model, 'name'),
+            brand_name: get(car, 'brand'),
+            model_name: modelName,
           });
-          this.props.localUserDataUpdate({
+          localUserDataUpdate({
             NAME: get(data, 'NAME'),
             SECOND_NAME: get(data, 'SECOND_NAME'),
             LAST_NAME: get(data, 'LAST_NAME'),
@@ -187,9 +192,7 @@ class OrderCreditScreen extends Component {
             [
               {
                 text: 'ОК',
-                onPress: () => {
-                  nav.goBack();
-                },
+                onPress: () => navigation.goBack(),
               },
             ],
           );
@@ -204,161 +207,242 @@ class OrderCreditScreen extends Component {
     }
   };
 
-  render() {
-    const FormConfig = {
-      fields: {
-        groups: [
-          {
-            name: strings.Form.group.car,
-            fields: [
-              {
-                name: 'CARNAME',
-                type: 'input',
-                label: this.isNewCar
-                  ? strings.Form.field.label.carNameComplectation
-                  : strings.Form.field.label.carNameYear,
-                value: this.carName,
-                props: {
-                  editable: false,
-                },
+  return (
+    <ScrollView paddingX={4} mb={4}>
+      <KeyboardAvoidingView behavior={'padding'} enabled={!isAndroid}>
+        <GroupForm title={strings.Form.group.main}>
+          <Controller
+            control={control}
+            rules={{
+              required: [
+                strings.Form.status.fieldRequired1,
+                strings.Form.status.fieldRequired2,
+              ].join(' '),
+            }}
+            name="CAR"
+            render={({field: {onChange, onBlur, value}}) => (
+              <InputCustom
+                placeholder={isNewCar
+                ? strings.Form.field.label.carNameComplectation
+                : strings.Form.field.label.carNameYear}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                textContentType={'name'}
+                value={value}
+                style={{backgroundColor: styleConst.color.bg}}
+                readOnly={true}
+                isValid={true}
+              />
+            )}
+          />
+          {!creditProduct && isPriceShow ? (
+            <Controller
+              control={control}
+              rules={{
+                required: [
+                  strings.Form.status.fieldRequired1,
+                  strings.Form.status.fieldRequired2,
+                ].join(' '),
+              }}
+              name="SUMM"
+              render={({field: {onChange, onBlur, value}}) => {
+                const tmpVal = getAllDataPrice(parseInt(toString(value).replace(/\s+/g, '')));
+                return (
+                <View>
+                  <InputCustom
+                    placeholder={strings.Form.field.label.creditSumm}
+                    onBlur={onBlur}
+                    onChangeText={val => {
+                      if (!val) {
+                        return onChange(parseInt(toString(val).replace(/\s+/g, '')));
+                      }
+                      return onChange(
+                        onCheckLimit({
+                          value: parseInt(toString(val).replace(/\s+/g, '')),
+                          min: parseInt(summ * 0.1),
+                          max: parseInt(summ * 0.9),
+                        }),
+                      );
+                    }}
+                    textContentType={'none'}
+                    keyboardType={'decimal-pad'}
+                    autoComplete={'off'}
+                    enablesReturnKeyAutomatically={'true'}
+                    blurOnSubmit={true}
+                    enterKeyHint={'done'}
+                    affix={tmpVal?.symbol}
+                    value={tmpVal?.value}
+                    isValid={isNil(get(errors, 'SUMM'))}
+                  />
+                  <Slider
+                    style={{height: 60, marginTop: -26}}
+                    minimumValue={parseInt(summ * 0.1)}
+                    maximumValue={parseInt(summ * 0.9)}
+                    minimumTrackTintColor={styleConst.color.blue}
+                    maximumTrackTintColor="#FFFFFF"
+                    onSlidingComplete={onBlur}
+                    onValueChange={val => {
+                      if (!val) {
+                        return onChange(parseInt(toString(val).replace(/\s+/g, '')));
+                      }
+                      return onChange(
+                        onCheckLimit({
+                          value: parseInt(toString(val).replace(/\s+/g, '')),
+                          min: parseInt(summ * 0.1),
+                          max: parseInt(summ * 0.9),
+                        }),
+                      );
+                    }}
+                    value={watchSumm}
+                    isValid={isNil(get(errors, 'SUMM'))}
+                    step={priceStep}
+                  />
+                </View>
+              )}}
+            />
+          ) : null}
+          {creditProduct ? (
+            <CreditCardItem
+            item={creditProduct}
+            hidePaymentsButton={true}
+            index={1}
+            creditPrograms={creditPrograms}
+          />
+          ) : null}
+        </GroupForm>
+        <GroupForm title={strings.Form.group.contacts}>
+          <Controller
+            control={control}
+            rules={{
+              minLength: {
+                value: 3,
+                message: [
+                  strings.Form.status.fieldRequired1,
+                  strings.Form.status.fieldRequired2,
+                ].join(' '),
               },
-              this.isPriceShow
-                ? {
-                    name: 'SUMM',
-                    type: 'component',
-                    label: strings.Form.field.creditSumm,
-                    value: (
-                      <View>
-                        <MultiSlider
-                          values={[this.carPrice]}
-                          step={this.priceStep}
-                          min={0}
-                          max={this.carPrice}
-                          sliderLength={this.sliderWidth}
-                          optionsArray={this.optionsPrice}
-                          onValuesChange={e => {
-                            this.setState({
-                              summ: e[0],
-                            });
-                          }}
-                          trackStyle={{
-                            backgroundColor: '#d5d5e0',
-                          }}
-                          selectedStyle={{
-                            backgroundColor: styleConst.color.lightBlue,
-                          }}
-                          customMarker={() => (
-                            <View
-                              style={[
-                                styleConst.shadow.default,
-                                {
-                                  height: 17,
-                                  width: 17,
-                                  borderRadius: 8.5,
-                                  backgroundColor: styleConst.color.lightBlue,
-                                },
-                              ]}
-                            />
-                          )}
-                        />
-                        <View
-                          style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                          }}>
-                          <Text style={{color: '#74747A', fontSize: 14}}>
-                            {showPrice(0, this.region)}
-                          </Text>
-                          <Text style={{color: '#74747A', fontSize: 14}}>
-                            {showPrice(this.state.summ, this.region)}
-                          </Text>
-                        </View>
-                      </View>
-                    ),
-                  }
-                : {},
-            ],
-          },
-          {
-            name: strings.Form.group.contacts,
-            fields: [
-              {
-                name: 'NAME',
-                type: 'input',
-                label: strings.Form.field.label.name,
-                value: this.props.firstName,
-                props: {
-                  required: true,
-                  textContentType: 'name',
-                },
+            }}
+            name="NAME"
+            render={({field: {onChange, onBlur, value}}) => (
+              <InputCustom
+                placeholder={strings.Form.field.label.name}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                textContentType={'name'}
+                value={value}
+                isValid={isNil(get(errors, 'NAME'))}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="SECOND_NAME"
+            render={({field: {onChange, onBlur, value}}) => (
+              <InputCustom
+                placeholder={strings.Form.field.label.secondName}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                textContentType={'middleName'}
+                value={value}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="LAST_NAME"
+            render={({field: {onChange, onBlur, value}}) => (
+              <InputCustom
+                placeholder={strings.Form.field.label.lastName}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                textContentType={'familyName'}
+                value={value}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            rules={{
+              minLength: {
+                value: 12,
+                message: [
+                  strings.Form.status.fieldRequired1,
+                  strings.Form.status.fieldRequired2,
+                ].join(' '),
               },
-              {
-                name: 'SECOND_NAME',
-                type: 'input',
-                label: strings.Form.field.label.secondName,
-                value: this.props.secondName,
-                props: {
-                  textContentType: 'middleName',
-                },
-              },
-              {
-                name: 'LAST_NAME',
-                type: 'input',
-                label: strings.Form.field.label.lastName,
-                value: this.props.lastName,
-                props: {
-                  textContentType: 'familyName',
-                },
-              },
-              {
-                name: 'PHONE',
-                type: 'phone',
-                label: strings.Form.field.label.phone,
-                value: this.props.phone,
-                props: {
-                  required: true,
-                },
-              },
-              {
-                name: 'EMAIL',
-                type: 'email',
-                label: strings.Form.field.label.email,
-                value: this.props.email,
-              },
-            ],
-          },
-          {
-            name: strings.Form.group.additional,
-            fields: [
-              {
-                name: 'COMMENT',
-                type: 'textarea',
-                label: strings.Form.field.label.comment,
-                value: this.props.comment,
-                props: {
-                  placeholder: strings.Form.field.placeholder.comment,
-                },
-              },
-            ],
-          },
-        ],
-      },
-    };
-    return (
-      <Form
-        contentContainerStyle={{
-          paddingHorizontal: 14,
-          marginTop: 20,
-        }}
-        key="OrderCreditForm"
-        fields={FormConfig.fields}
-        barStyle={'light-content'}
-        SubmitButton={{text: strings.Form.button.send}}
-        onSubmit={this.onPressOrder}
-      />
-    );
-  }
-}
+            }}
+            name="PHONE"
+            render={({field: {onChange, onBlur, value}}) => (
+              <InputCustom
+                type="phone"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                isValid={isNil(get(errors, 'PHONE'))}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="EMAIL"
+            render={({field: {onChange, onBlur, value}}) => (
+              <InputCustom
+                type="email"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+              />
+            )}
+          />
+        </GroupForm>
+        <GroupForm title={strings.Form.group.additional}>
+          <Controller
+              control={control}
+              key="additional"
+              name="COMMENT"
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputCustom
+                  placeholder={strings.Form.field.label.comment}
+                  key="inputComments"
+                  type="textarea"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+          />
+        </GroupForm>
+        <Controller
+          control={control}
+          rules={{
+            required: [
+              strings.Form.status.fieldRequired1,
+              strings.Form.status.fieldRequired2,
+            ].join(' '),
+          }}
+          name="agreementCheckbox"
+          render={({field: {onChange, onBlur, value}}) => (
+            <AgreementCheckbox
+              onBlur={onBlur}
+              onChange={onChange}
+              value={value}
+              isValid={isNil(get(errors, 'agreementCheckbox'))}
+            />
+          )}
+        />
+        <SubmitButton
+          onPress={handleSubmit(onPressOrder)}
+          sendingStatus={sendingFormStatus}
+          sending={sendingForm}>
+        </SubmitButton>
+      </KeyboardAvoidingView>
+    </ScrollView>
+  );
+
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(OrderCreditScreen);
