@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   TouchableOpacity,
   Text,
@@ -93,6 +93,7 @@ const OptionPlate = ({
   titleStyle,
   textStyle,
   testID,
+  region,
 }) => {
   return (
     <ActiveComponentPlate testID={testID} onPress={onPress}>
@@ -302,7 +303,10 @@ const _renderComplectationItem = (title, data) => {
   );
 };
 
-const _renderCarCreditBanner = ({navigation, carDetails}) => {
+const _renderCarCreditBanner = ({navigation, carDetails, region}) => {
+  if (region !== 'by') {
+    return;
+  }
   return (
     <RNBounceable
       onPress={() => {
@@ -1092,7 +1096,7 @@ const NewCarItemScreen = ({
             onChange={setSectionActive}
           />
         </View>
-        {_renderCarCreditBanner({navigation, carDetails})}
+        {_renderCarCreditBanner({navigation, carDetails, region})}
         <View height={140} />
       </ScrollView>
       <VStack
