@@ -6,6 +6,8 @@ import {
   Heading,
   VStack,
   FlatList,
+  Box,
+  HStack,
 } from 'native-base';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import { CreditCardItem } from '../../core/components/CreditCardItem';
@@ -22,6 +24,7 @@ import {actionFetchCarCreditPrograms, fetchProgramsCalcBatch} from '../actions';
 import styleConst from '../../core/style-const';
 import {InputCustom} from '../../core/components/Form/InputCustom';
 import {getAllDataPrice} from '../../utils/price';
+import { Switch } from 'react-native-paper';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -60,6 +63,16 @@ const onCheckLimit = ({value, min, max}) => {
   }
 };
 
+const getItemsTypes = items => {
+  let creditTypes = [];
+  items.map(item => {
+    creditTypes.push(get(item, 'data.type'));
+  });
+  return creditTypes.filter((item, index, self) =>
+    index === self.findIndex((t) => t.id === item.id)
+  );
+};
+
 const HeaderComponent = ({
   carData,
   calcData,
@@ -70,6 +83,7 @@ const HeaderComponent = ({
 }) => {
   const onSubmitTimeout = useRef(null);
   const [isLoading, setLoading] = useState(true);
+  const [creditProgramsTypes, setCreditProgramsTypes] = useState([]);
 
   useEffect(() => {
     if (isLoading) {
@@ -111,6 +125,7 @@ const HeaderComponent = ({
           car: carID,
           summ: carPrice,
         }).then(res => {
+          setCreditProgramsTypes(getItemsTypes(get(res, 'data', [])));
           setCreditPrograms({
             data: res.data,
             partners: res.partners,
@@ -133,6 +148,7 @@ const HeaderComponent = ({
       car: carID,
       summ: carPrice,
     }).then(res => {
+      setCreditProgramsTypes(getItemsTypes(get(res, 'data', [])));
       setCreditPrograms({
         data: res.data,
         partners: res.partners,
@@ -313,6 +329,15 @@ const HeaderComponent = ({
           );
         }}
       />
+      {/* <Box h={10}>
+        {creditProgramsTypes && get(creditProgramsTypes, 'length') ? (
+          <HStack space={2}>
+            <Text>{creditProgramsTypes[0].name}</Text>
+            <Switch value={false} color={styleConst.color.blue} />
+            <Text>{creditProgramsTypes[1].name}</Text>
+          </HStack>
+        ) : null}
+      </Box> */}
     </>
   );
 };

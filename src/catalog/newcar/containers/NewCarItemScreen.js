@@ -304,7 +304,7 @@ const _renderComplectationItem = (title, data) => {
 };
 
 const _renderCarCreditBanner = ({navigation, carDetails, region}) => {
-  if (region !== 'by') {
+  if (region !== 'by' || !get(carDetails, 'price.app.standart', get(carDetails, 'price.app'))) {
     return;
   }
   return (
