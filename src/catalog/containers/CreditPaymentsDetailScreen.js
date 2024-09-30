@@ -11,8 +11,10 @@ const CreditPaymentsDetailScreen = ({ route, creditPayments }) => {
   let years = [];
 
   if (!creditPayments) {
-  creditPayments = get(route, 'params.creditPayments', {});
+    creditPayments = get(route, 'params.creditPayments', {});
   }
+
+  creditPayments.shift();
 
   return (
     <View style={{padding: 10}}>
@@ -25,6 +27,9 @@ const CreditPaymentsDetailScreen = ({ route, creditPayments }) => {
         <VStack space={1} pb={12}>
           {creditPayments.map(item => {
             let yearTmp = null;
+            if (item.month === 'redemption') {
+              return;
+            }
             const month = moment().add(item.month, 'M');
             const year = month.format('YYYY');
             const monthName = month.format('MMMM');
@@ -43,6 +48,9 @@ const CreditPaymentsDetailScreen = ({ route, creditPayments }) => {
                   </Text>
                 </HStack>
               );
+            }
+            if (!get(item, 'summ.total')) {
+              return;
             }
             return (
               <>

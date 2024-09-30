@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Heading,
   Text,
   Stack,
   VStack,
@@ -98,9 +99,9 @@ export const CreditCardItem = ({item, onPressOrder, index, separators, hidePayme
           </Box>
         ) : null}
         <Stack space={1}>
-          {/* <Heading size="sm" fontFamily={styleConst.font.light} w={'90%'}>
-            {item.name}
-          </Heading> */}
+          <Heading size="sm" fontFamily={styleConst.font.light} w={'90%'}>
+            {get(item, 'data.name')}
+          </Heading>
           <HStack>
             <Badge
               id={itemData.id + 'badgeType' + get(itemData, 'type.id')}
@@ -131,7 +132,7 @@ export const CreditCardItem = ({item, onPressOrder, index, separators, hidePayme
                 textColor={styleConst.color.white}
               />
             ) : null}
-            {get(itemData, 'paymentSchedule.id') ? (
+            {get(itemData, 'paymentSchedule.id') && false ? (
               <Badge
                 id={itemData.id + 'badgeSchedule' + itemData.paymentSchedule.id}
                 index={1}
@@ -176,7 +177,7 @@ export const CreditCardItem = ({item, onPressOrder, index, separators, hidePayme
           {!hidePaymentsButton || onPressOrder ? (
             <HStack justifyContent={'space-between'}>
               {!hidePaymentsButton ? (
-                <Button icon="calendar-range-outline" mode="text" iconColor={styleConst.color.blue} onPress={() => navigation.navigate('CreditPaymentsDetailScreen', {creditPayments: itemCalc})}>
+                <Button icon="calendar-range-outline" mode="text" compact={true} iconColor={styleConst.color.blue} onPress={() => navigation.navigate('CreditPaymentsDetailScreen', {creditPayments: itemCalc})}>
                   график платежей
                 </Button>
               ) : null}
