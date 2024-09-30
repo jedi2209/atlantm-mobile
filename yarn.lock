@@ -1458,10 +1458,10 @@
     axios "^1.7.4"
     js-yaml "^4.1.0"
 
-"@bugsnag/core-performance@^2.9.1":
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/@bugsnag/core-performance/-/core-performance-2.9.1.tgz#0d1a51fef4d0646d0fbadfec90fbb1afdc5e80d9"
-  integrity sha512-AkhjhvZijxV1eaIIF4dUs1o3j2PwLqpOe/t2d3pRATb6z3EkS/lgB2NFsmFOTCXL6DXPVfdh68xm6P3GSOtjNw==
+"@bugsnag/core-performance@^2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/core-performance/-/core-performance-2.10.0.tgz#4440e766bc04b8a927d441514d891245ef810fd5"
+  integrity sha512-PLRfWExNh+RURbABfeLOiprO95jjiCPHXHjxWE+ewmebBMY9FAYlLH8gxA94+RAdh3VRNKp7uRJDhFWIas8AoA==
   dependencies:
     "@bugsnag/cuid" "^3.1.1"
 
@@ -1481,12 +1481,12 @@
   resolved "https://registry.yarnpkg.com/@bugsnag/cuid/-/cuid-3.1.1.tgz#dbd5d76559f6b7a66306fceacf503888883da514"
   integrity sha512-d2z4b0rEo3chI07FNN1Xds8v25CNeekecU6FC/2Fs9MxY2EipkZTThVcV2YinMn8dvRUlViKOyC50evoUxg8tw==
 
-"@bugsnag/delivery-fetch-performance@^2.9.1":
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/@bugsnag/delivery-fetch-performance/-/delivery-fetch-performance-2.9.1.tgz#b97aff29605507f005891cb3e2b7971d78120fa0"
-  integrity sha512-51MKpDKd/S3ZLfd6y1iJ2uTm2vBqewVwKuc2d9wgdMRd6dEd/m0IpyDNwJjQeHHsPI5XMVoRPhUsXJfAkWdWFQ==
+"@bugsnag/delivery-fetch-performance@^2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/delivery-fetch-performance/-/delivery-fetch-performance-2.10.0.tgz#530be920827b07f70e88d676760ff72fcf32214b"
+  integrity sha512-qnZpIHeMuKZjZYY4rz6ecU+TlaGdsQDGOXHCkX5lYwpyFRXBwPlyi3BW6uwYFYe0HUtSbylEBcpuhgpJ61sNng==
   dependencies:
-    "@bugsnag/core-performance" "^2.9.1"
+    "@bugsnag/core-performance" "^2.10.0"
 
 "@bugsnag/delivery-react-native@^8.0.0":
   version "8.0.0"
@@ -1544,14 +1544,14 @@
   integrity sha512-hzLRt0sw6PSups+yd/XKJPMOv8yp8x5yaOzITii7PjXND++0tStGnQQEWTbS5DCW1685mGqP/G4gye8s9LP5og==
 
 "@bugsnag/react-native-performance@^2.7.1":
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/@bugsnag/react-native-performance/-/react-native-performance-2.9.1.tgz#6131a6ccd183dea58f735480459963e4246f585c"
-  integrity sha512-0x2Sg7KNGnzJqVEY+TceJJ+HmrmcT3iofOerAliPgRv/FsZjcmhAUkJzUXSI682Uu7gBFFD5NVbADyr819BGPw==
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/react-native-performance/-/react-native-performance-2.10.0.tgz#5e9b39c6dcbf9dd5a000ff003da9f22a638a2140"
+  integrity sha512-/omeQVkGE7OWy1Nd8oNECpUvJ3W3v3lLaO4XlWtA1J6xyXLQh3L0tMsgT0NRD4XW1wNnVUMDjwNEXm1lCOJHEw==
   dependencies:
-    "@bugsnag/core-performance" "^2.9.1"
+    "@bugsnag/core-performance" "^2.10.0"
     "@bugsnag/cuid" "^3.1.1"
-    "@bugsnag/delivery-fetch-performance" "^2.9.1"
-    "@bugsnag/request-tracker-performance" "^2.9.1"
+    "@bugsnag/delivery-fetch-performance" "^2.10.0"
+    "@bugsnag/request-tracker-performance" "^2.10.0"
 
 "@bugsnag/react-native@^8.0.0":
   version "8.0.0"
@@ -1571,12 +1571,12 @@
     "@bugsnag/plugin-react-native-unhandled-rejection" "^8.0.0"
     iserror "^0.0.2"
 
-"@bugsnag/request-tracker-performance@^2.9.1":
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/@bugsnag/request-tracker-performance/-/request-tracker-performance-2.9.1.tgz#170be57e13df6a7d116b955ed91a865772ce1c69"
-  integrity sha512-X5Jdra0IRxmkSxYy/nyQJKyYrzjuMWBg8Bc/BnGfVgopSC5kck76udTXKFNF/08yYeCZRGTDes7QWyH8J4CtpQ==
+"@bugsnag/request-tracker-performance@^2.10.0":
+  version "2.10.0"
+  resolved "https://registry.yarnpkg.com/@bugsnag/request-tracker-performance/-/request-tracker-performance-2.10.0.tgz#d5f3f5dc61e3f44bc3163033db2a160a1b504a5e"
+  integrity sha512-8yAcs7e0kyHtzD9ekmhVhQq2Z2sWhDKYDfOFlSy7qQnWHKH/34hOwWPgjUck5Mt1g3/7Pp/dWdhPep1Bz1tJFw==
   dependencies:
-    "@bugsnag/core-performance" "^2.9.1"
+    "@bugsnag/core-performance" "^2.10.0"
 
 "@bugsnag/safe-json-stringify@^6.0.0":
   version "6.0.0"
@@ -2164,9 +2164,9 @@
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
 "@logrocket/react-native@^1.35.1":
-  version "1.39.2"
-  resolved "https://registry.yarnpkg.com/@logrocket/react-native/-/react-native-1.39.2.tgz#e450ec8bc2dc11facc9cd400c01d27edd9ac143a"
-  integrity sha512-yZpRiPXkdAc3oHZmi+FQhW3Xm6Ncp+Fp2CUsmmlocOT5iWlIlgXcGBGeeSoSqMyvC2LSD9GrttA9206tnxgoXQ==
+  version "1.40.0"
+  resolved "https://registry.yarnpkg.com/@logrocket/react-native/-/react-native-1.40.0.tgz#a98c5659f1255310fe8122d8b1e8fd7f3514f7eb"
+  integrity sha512-hrFWJJk+FuvyAzIj8svxyvfe/AZ/N+QVRDxH65Uj+NXCOYzaF9UiXUYBWgR4NpjGSj/GUnCVmblGOazcoCkl0Q==
 
 "@nicolo-ribaudo/eslint-scope-5-internals@5.1.1-v1":
   version "5.1.1-v1"
@@ -3539,9 +3539,9 @@
     localforage "^1.8.1"
 
 "@sentry/react-native@^5.0.0":
-  version "5.32.0"
-  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-5.32.0.tgz#14c46a65f7359f5e74a9cef7edb9d7bf9a0a449d"
-  integrity sha512-Rh5EEYuWUyPaTaL8b/tl3okGiWb3LSvfYiS/WkvTYH+pFYr2RNtrZSCxhP5TpWSqkoy8VVXeYhSmlBvjfD/uDg==
+  version "5.33.1"
+  resolved "https://registry.yarnpkg.com/@sentry/react-native/-/react-native-5.33.1.tgz#5427bb71205443c7fe0f5ea001bbe2ff724a686e"
+  integrity sha512-k463M0wC+5FNJrKvzsE6uq7cjMKOrzT+hNm79sFjxqbw6vXgMHOjOcYsji7jFr5Nqr0jEOHm2niwsVlYEXGVAg==
   dependencies:
     "@sentry/babel-plugin-component-annotate" "2.20.1"
     "@sentry/browser" "7.119.0"
@@ -8928,11 +8928,9 @@ react-native-appsflyer@^6.12.2:
   integrity sha512-K1CDq8YSRnOWsw5eB9YpZiD1xUSN4XmNuA3uI2P425Zw573m6tf7kKfYU09TGbxnrbnWRYj+AX5t5/2WGSf4Jw==
 
 react-native-awesome-gallery@^0.4.2:
-  version "0.4.2"
-  resolved "https://registry.yarnpkg.com/react-native-awesome-gallery/-/react-native-awesome-gallery-0.4.2.tgz#fbf3e5e890b5e8bdecf169efec994c30ce1de82d"
-  integrity sha512-r7wU5a1P4bZjqDAqICUeGBXumBJj1E78wT9x177syyfmy4sv49z0l9df/WDD/NZeanXPBR9GqfHpp7o9Dibkiw==
-  dependencies:
-    react-native-redash "^16.0.8"
+  version "0.4.3"
+  resolved "https://registry.yarnpkg.com/react-native-awesome-gallery/-/react-native-awesome-gallery-0.4.3.tgz#ea15f27a8558ce0c433fb928c55ae13638ca8187"
+  integrity sha512-Q1dONPP5i8S/fSqxZKnSs3SMaGNp+89e97i6pzkHMcylRXttsN8m3BaVco9WxZEKhvBFRFw+Ay0Ft0u9Q6h2qA==
 
 react-native-big-list@^1.6.1:
   version "1.6.1"
@@ -9035,9 +9033,9 @@ react-native-gallery-swiper@^1.26.0:
     react-native-page-list "^1.1.4"
 
 react-native-gesture-handler@^2.15.0:
-  version "2.19.0"
-  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.19.0.tgz#16deaefcefe77d6b4b7fa48a82ef52be61ddbb07"
-  integrity sha512-Cc6DnSnn5hhgiuJOtlOJmXkbBBOZkW9UnJJG+DrWPq2jJuNvM4g5qq2plsywhxQj9xT7FyXZwVVblaXabfGZvQ==
+  version "2.20.0"
+  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.20.0.tgz#2d9ec4e9bd22619ebe36269dda3ecb1173928276"
+  integrity sha512-rFKqgHRfxQ7uSAivk8vxCiW4SB3G0U7jnv7kZD4Y90K5kp6YrU8Q3tWhxe3Rx55BIvSd3mBe9ZWbWVJ0FsSHPA==
   dependencies:
     "@egjs/hammerjs" "^2.0.17"
     hoist-non-react-statics "^3.3.0"
@@ -9233,15 +9231,6 @@ react-native-redash@*:
     normalize-svg-path "^1.0.1"
     parse-svg-path "^0.1.2"
 
-react-native-redash@^16.0.8:
-  version "16.3.0"
-  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-16.3.0.tgz#a9112ff1b0e0b506a2e2ae50967597e73b69d343"
-  integrity sha512-dhmeYbQ/usGzxZSGZmzmRuIFF2LrtJUKqgseKgf9Jdj0JQ7VM20m/LqTg60+wjxeiyAh2D/vKsQ2U7rMkuoplQ==
-  dependencies:
-    abs-svg-path "^0.1.1"
-    normalize-svg-path "^1.0.1"
-    parse-svg-path "^0.1.2"
-
 react-native-responsive-image-view@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/react-native-responsive-image-view/-/react-native-responsive-image-view-2.2.0.tgz#99283492081ba372fd7eb780ddcd855cbb157123"
@@ -9328,9 +9317,9 @@ react-native-tab-view@^3.3.4:
     use-latest-callback "^0.1.5"
 
 react-native-turbo-image@^1.17.1:
-  version "1.19.0"
-  resolved "https://registry.yarnpkg.com/react-native-turbo-image/-/react-native-turbo-image-1.19.0.tgz#cb2a728a166dc2ae5c7fe53b114e3a5321e11c48"
-  integrity sha512-xN4J2UaVAE3sMO2r4t0Tqatmtk2y5k5BkvW31NRm0XW5VX1toiLMlvQE3RQVE6/k4E3q+8R+gl2j2egjeSprUA==
+  version "1.19.1"
+  resolved "https://registry.yarnpkg.com/react-native-turbo-image/-/react-native-turbo-image-1.19.1.tgz#0ba3f836f810d53c980958a14c5586709924ee65"
+  integrity sha512-s9OMJ2JBD9aWyLt08KMtcttr9IO8z0w0AhKmj+UXZGqPfiyhm0TOb4MvVyqMGeIan2buqjOO+EPJuT9hi0OAsg==
 
 react-native-url-polyfill@^2.0.0:
   version "2.0.0"
