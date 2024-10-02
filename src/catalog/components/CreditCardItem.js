@@ -8,14 +8,14 @@ import {
   Box,
 } from 'native-base';
 
-import Imager from '../components/Imager';
+import Imager from '../../core/components/Imager';
 
 import {get, ceil, floor} from 'lodash';
 
-import styleConst from '../style-const';
-import Badge from '../components/Badge';
-import TransitionView from '../components/TransitionView';
-import {BadgeCorner} from '../components/BadgeRibbon';
+import styleConst from '../../core/style-const';
+import Badge from '../../core/components/Badge';
+import TransitionView from '../../core/components/TransitionView';
+import {BadgeCorner} from '../../core/components/BadgeRibbon';
 import {showPrice, getAllDataPrice} from '../../utils/price';
 import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
@@ -58,7 +58,7 @@ export const CreditCardItem = ({item, onPressOrder, index, separators, hidePayme
   if (paymentData.min === paymentData.max) {
     paymentData.text.monthly = showPrice(floor(paymentData.min));
   } else {
-    paymentData.text.monthly = 'от ' + get(getAllDataPrice(ceil(paymentData.min)), 'value') + ' до ' + showPrice(floor(paymentData.max));
+    paymentData.text.monthly = 'от ' + get(getAllDataPrice(floor(paymentData.min)), 'value') + ' до ' + showPrice(floor(paymentData.max));
   }
 
   if (get(settingsFilters, 'watchCurrentPeriod')) {
@@ -100,7 +100,7 @@ export const CreditCardItem = ({item, onPressOrder, index, separators, hidePayme
         ) : null}
         <Stack space={1}>
           <Heading size="sm" fontFamily={styleConst.font.light} w={'90%'}>
-            {get(item, 'data.name')}
+            {get(itemData, 'name')}
           </Heading>
           <HStack>
             <Badge
@@ -114,7 +114,7 @@ export const CreditCardItem = ({item, onPressOrder, index, separators, hidePayme
               }
               textColor={styleConst.color.bg}
             />
-            {!get(itemData, 'kasko.required') ? (
+            {!get(itemData, 'kasko.required') && false ? (
               <Badge
                 id={itemData.id + 'badgeKasko'}
                 index={2}
@@ -123,7 +123,7 @@ export const CreditCardItem = ({item, onPressOrder, index, separators, hidePayme
                 textColor={styleConst.color.white}
               />
             ) : null}
-            {get(itemData, 'collateralType.name') ? (
+            {get(itemData, 'collateralType.name') && false ? (
               <Badge
                 id={itemData.id + 'badgeCollateral' + itemData.collateralType.id}
                 index={3}
@@ -174,6 +174,11 @@ export const CreditCardItem = ({item, onPressOrder, index, separators, hidePayme
             </VStack>
           ) : null}
           </HStack>
+          {get(itemData, 'additionalText') ? (
+            <Text fontWeight="400">
+              {get(itemData, 'additionalText')}
+            </Text>
+          ) : null}
           {!hidePaymentsButton || onPressOrder ? (
             <HStack justifyContent={'space-between'}>
               {!hidePaymentsButton ? (

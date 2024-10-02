@@ -40,12 +40,6 @@ const styles = StyleSheet.create({
   container: {
     marginBottom: 3,
   },
-  PhoneInputWrapper: {
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: 15,
-    paddingVertical: 3,
-  },
   PhoneTextInputComponent: {
     height: 45,
     paddingHorizontal: 14,
@@ -118,8 +112,10 @@ const PhoneField = props => {
       inputMode="tel"
       keyboardType="phone-pad"
       textContentType="telephoneNumber"
+      style={{fontSize: 18}}
       render={propsRender => (
         <PhoneInput
+          {...propsRender}
           countriesList={countriesList}
           offset={20}
           autoFormat={true}
@@ -143,7 +139,6 @@ const PhoneField = props => {
               {color: disabled ? styleConst.color.greyText5 : null},
             ],
           }}
-          {...propsRender}
         />
       )}
       right={

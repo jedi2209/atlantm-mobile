@@ -41,6 +41,7 @@ import getStatusWorktime from '../../../utils/worktime-status';
 
 // styles
 import styles from '../../CarStyles';
+import CreditBanner from '../../components/CreditBanner';
 
 const mapStateToProps = ({catalog, dealer, nav}) => {
   return {
@@ -502,7 +503,7 @@ const UsedCarItemScreen = props => {
           </View>
           <View
             mt={4}
-            mb={32}
+            mb={2}
             pt={4}
             pb={6}
             shadow={1}
@@ -923,9 +924,19 @@ const UsedCarItemScreen = props => {
               }}
               onChange={setSectionActive}
             />
-            {renderCarCostBlock()}
           </View>
         </View>
+        {renderCarCostBlock()}
+        <CreditBanner
+          onPress={() => {
+              navigation.navigate('CreditCalcScreen', {
+              carID: carDetails.id.api,
+              carData: carDetails,
+              isNewCar: false,
+            });
+          }}
+          carDetails={carDetails} />
+        <View height={140} />
       </ScrollView>
       <VStack
         position="absolute"

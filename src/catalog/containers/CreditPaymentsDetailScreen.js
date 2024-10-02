@@ -25,7 +25,7 @@ const CreditPaymentsDetailScreen = ({ route, creditPayments }) => {
       </HStack>
       <ScrollView mb={8}>
         <VStack space={1} pb={12}>
-          {creditPayments.map(item => {
+          {creditPayments.map((item, index) => {
             let yearTmp = null;
             if (item.month === 'redemption') {
               return;
@@ -53,7 +53,7 @@ const CreditPaymentsDetailScreen = ({ route, creditPayments }) => {
               return;
             }
             return (
-              <>
+              <View key={'row' + index}>
                 {yearTmp ? (<><Heading size="md" mt={4} key={'yearPaymentText' + year} bold>{yearTmp}</Heading><Divider thickness={0.7} mb={2} bg={styleConst.color.blue} /></>) : null}
                 <HStack space={1} alignContent={'flex-start'} justifyContent={'space-between'} key={'monthPaymentHStack' + year + monthName}>
                   <Text key={'monthPaymentName' + year + monthName} color={styleConst.color.greyText4}>
@@ -63,7 +63,7 @@ const CreditPaymentsDetailScreen = ({ route, creditPayments }) => {
                     {showPrice(item.summ.total)}
                   </Text>
                 </HStack>
-              </>
+              </View>
             );
           })}
         </VStack>
