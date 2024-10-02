@@ -11,7 +11,7 @@ import {
   InputCustom,
 } from '../../core/components/Form/InputCustom';
 import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
-import { CreditCardItem } from '../../core/components/CreditCardItem';
+import { CreditCardItem } from '../components/CreditCardItem';
 // redux
 import {connect} from 'react-redux';
 import {actionOrderCreditCar} from '../actions';

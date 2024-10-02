@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
-import {Platform, Dimensions, ActivityIndicator} from 'react-native';
+import {Platform, Dimensions, ActivityIndicator, StyleSheet} from 'react-native';
 import {
   Text,
   View,
@@ -10,7 +10,7 @@ import {
   HStack,
 } from 'native-base';
 import {Controller, useForm, useWatch} from 'react-hook-form';
-import { CreditCardItem } from '../../core/components/CreditCardItem';
+import { CreditCardItem } from '../components/CreditCardItem';
 
 import Slider from '@react-native-community/slider';
 
@@ -24,7 +24,6 @@ import {actionFetchCarCreditPrograms, fetchProgramsCalcBatch} from '../actions';
 import styleConst from '../../core/style-const';
 import {InputCustom} from '../../core/components/Form/InputCustom';
 import {getAllDataPrice} from '../../utils/price';
-import { Switch } from 'react-native-paper';
 
 const isAndroid = Platform.OS === 'android';
 
@@ -54,7 +53,7 @@ const {width: screenWidth} = Dimensions.get('window');
 
 const onCheckLimit = ({value, min, max}) => {
   const parsedQty = parseInt(toString(value).replace(/\s+/g, ''));
-  if (isNaN(parsedQty)) {
+  if (isNaN(parsedQty) || parsedQty < min) {
     return min;
   } else if (parsedQty > max) {
     return max;
@@ -77,12 +76,14 @@ const HeaderComponent = ({
   carData,
   calcData,
   carID,
+  isNewCar,
   setCreditPrograms,
   fetchPrograms,
   actionFetchProgramData,
+  setLoading,
+  isLoading,
 }) => {
   const onSubmitTimeout = useRef(null);
-  const [isLoading, setLoading] = useState(true);
   const [creditProgramsTypes, setCreditProgramsTypes] = useState([]);
 
   useEffect(() => {
@@ -125,15 +126,17 @@ const HeaderComponent = ({
           car: carID,
           summ: carPrice,
         }).then(res => {
-          setCreditProgramsTypes(getItemsTypes(get(res, 'data', [])));
-          setCreditPrograms({
-            data: res.data,
-            partners: res.partners,
-            settings: {
-              watchCurrentPeriod,
-              watchCurrentPrePayment,
-            },
-          });
+          if (get(res, 'data', []).length) {
+            setCreditProgramsTypes(getItemsTypes(get(res, 'data', [])));
+            setCreditPrograms({
+              data: get(res, 'data', []),
+              partners: get(res, 'partners'),
+              settings: {
+                watchCurrentPeriod,
+                watchCurrentPrePayment,
+              },
+            });
+          }
           setLoading(false);
         });
       }, settings.timeoutQuery);
@@ -142,25 +145,41 @@ const HeaderComponent = ({
   }, [watchCurrentPeriod, watchCurrentPrePayment, isValid, isValidating]);
 
   useEffect(() => {
+    setLoading(true);
     fetchPrograms({
       prepaid: watchCurrentPrePayment,
       months: watchCurrentPeriod,
       car: carID,
       summ: carPrice,
     }).then(res => {
-      setCreditProgramsTypes(getItemsTypes(get(res, 'data', [])));
-      setCreditPrograms({
-        data: res.data,
-        partners: res.partners,
-        settings: {
-          watchCurrentPeriod,
-          watchCurrentPrePayment,
-        },
-      });
+      if (get(res, 'data', []).length) {
+        setCreditPrograms({
+          data: get(res, 'data', []),
+          partners: get(res, 'partners'),
+          settings: {
+            watchCurrentPeriod,
+            watchCurrentPrePayment,
+          },
+        });
+        setCreditProgramsTypes(getItemsTypes(get(res, 'data', [])));
+      }
       setLoading(false);
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const styles = new StyleSheet.create({
+    carImage: {
+      new: {
+        width: screenWidth * 0.9,
+        height: 200,
+      },
+      used: {
+        width: screenWidth,
+        height: 300,
+      },
+    },
+  });
 
   return (
     <>
@@ -186,8 +205,8 @@ const HeaderComponent = ({
         </Text>
         <View alignItems={'center'} w={'100%'}>
           <Imager
-            source={{uri: get(carData, 'foto.thumb.0') + '1000x1000'}}
-            style={{width: screenWidth * 0.9, height: 200}}
+            source={{uri: get(carData, 'foto.thumb.0', get(carData, 'img.thumb.0')) + '1000x1000'}}
+            style={styles.carImage[isNewCar ? 'new' : 'used']}
             resizeMode={'contain'}
           />
         </View>
@@ -208,13 +227,14 @@ const HeaderComponent = ({
             <InputCustom
               placeholder={strings.Form.field.label.finance.prepayment}
               onBlur={onBlur}
-              onChangeText={val => {
-                if (!val) {
-                  return onChange(parseInt(toString(val).replace(/\s+/g, '')));
+              onChangeText={onChange}
+              onEndEditing={() => {
+                if (!get(tmpVal, 'value')) {
+                  return onChange(parseInt(toString(parseInt(carPrice * 0.1)).replace(/\s+/g, '')));
                 }
                 return onChange(
                   onCheckLimit({
-                    value: parseInt(toString(val).replace(/\s+/g, '')),
+                    value: parseInt(toString(get(tmpVal, 'value')).replace(/\s+/g, '')),
                     min: parseInt(carPrice * 0.1),
                     max: parseInt(carPrice * 0.9),
                   }),
@@ -273,7 +293,6 @@ const HeaderComponent = ({
             <View>
               <InputCustom
                 placeholder={strings.Form.field.label.finance.period}
-                // onBlur={onBlur}
                 onEndEditing={onBlur}
                 onChangeText={value => {
                   if (!value) {
@@ -296,11 +315,8 @@ const HeaderComponent = ({
                 enterKeyHint={'done'}
                 maxLength={3}
                 affix={'мес.'}
-                // editable={false}
-                // value={toString(value)}
                 value={toString(watchCurrentPeriod)}
                 isValid={isNil(get(errors, 'period'))}
-                // style={{width: 400}}
               />
               <Slider
                 style={{height: 60, marginTop: isAndroid ? -34 : -26}}
@@ -346,16 +362,22 @@ const CreditCardsItems = ({isNewCar, isLoading, carData, creditPrograms, listHea
   return (
     <FlatList
       ListEmptyComponent={
-        <ActivityIndicator
-          color={styleConst.color.blue}
-          style={styleConst.spinner}
-        />
+        isLoading ? (
+          <ActivityIndicator
+            color={styleConst.color.blue}
+            style={styleConst.spinner}
+          />
+        ) : (
+          <View justifyContent={'center'} alignContent={'center'} justifyItems={'center'} alignItems={'center'}>
+            <Text fontFamily={styleConst.font.regular}>Ничего не найдено.{'\n'}Попробуйте изменить аванс или срок погашения.</Text>
+          </View>
+        )
       }
       ItemSeparatorComponent={({highlighted}) => (
           <View
             style={[
               {
-                height: isAndroid ? 5: 3,
+                height: isAndroid ? 5 : 3,
               },
               highlighted && {marginLeft: 0},
             ]}
@@ -398,6 +420,7 @@ const CreditCalcScreen = ({
   route,
   navigation,
 }) => {
+  const [isLoading, setLoading] = useState(true);
   const carData = get(route, 'params.carData');
   const carID = get(route, 'params.carID');
   const isNewCar = get(route, 'params.isNewCar');
@@ -459,6 +482,7 @@ const CreditCalcScreen = ({
       <CreditCardsItems
         carData={carData}
         carID={carID}
+        isLoading={isLoading}
         creditPrograms={creditPrograms}
         nav={navigation}
         isNewCar={isNewCar}
@@ -466,7 +490,10 @@ const CreditCalcScreen = ({
           <HeaderComponent
             carData={carData}
             calcData={calcData}
+            isNewCar={isNewCar}
             carID={carID}
+            isLoading={isLoading}
+            setLoading={setLoading}
             setCreditPrograms={setCreditPrograms}
             fetchPrograms={fetchProgramsCalcBatch}
           />
