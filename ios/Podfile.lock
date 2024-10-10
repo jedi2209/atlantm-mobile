@@ -67,9 +67,9 @@ PODS:
   - hermes-engine/Pre-built (0.75.2)
   - JWT (3.0.0-beta.12):
     - Base64 (~> 1.1.2)
-  - LogRocket (1.40.0)
-  - logrocket-react-native (1.40.0):
-    - LogRocket (= 1.40.0)
+  - LogRocket (1.42.1)
+  - logrocket-react-native (1.42.1):
+    - LogRocket (= 1.42.1)
     - React
   - OneSignalXCFramework (5.1.6):
     - OneSignalXCFramework/OneSignalComplete (= 5.1.6)
@@ -1411,7 +1411,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-turbo-image (1.19.1):
+  - react-native-turbo-image (1.20.0):
     - APNGKit
     - DoubleConversion
     - Gifu
@@ -1438,7 +1438,7 @@ PODS:
   - react-native-vkontakte-login (1.0.1):
     - React
     - VK-ios-sdk
-  - react-native-webview (13.12.2):
+  - react-native-webview (13.12.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1764,16 +1764,16 @@ PODS:
   - RNGoogleSignin (11.0.1):
     - GoogleSignIn (~> 7.0.0)
     - React-Core
-  - RNImageCropPicker (0.41.2):
+  - RNImageCropPicker (0.41.3):
     - React-Core
     - React-RCTImage
-    - RNImageCropPicker/QBImagePickerController (= 0.41.2)
+    - RNImageCropPicker/QBImagePickerController (= 0.41.3)
     - TOCropViewController (~> 2.7.4)
-  - RNImageCropPicker/QBImagePickerController (0.41.2):
+  - RNImageCropPicker/QBImagePickerController (0.41.3):
     - React-Core
     - React-RCTImage
     - TOCropViewController (~> 2.7.4)
-  - RNReanimated (3.15.3):
+  - RNReanimated (3.15.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1793,10 +1793,10 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNReanimated/reanimated (= 3.15.3)
-    - RNReanimated/worklets (= 3.15.3)
+    - RNReanimated/reanimated (= 3.15.4)
+    - RNReanimated/worklets (= 3.15.4)
     - Yoga
-  - RNReanimated/reanimated (3.15.3):
+  - RNReanimated/reanimated (3.15.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1817,7 +1817,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNReanimated/worklets (3.15.3):
+  - RNReanimated/worklets (3.15.4):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1860,7 +1860,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSentry (5.33.1):
+  - RNSentry (5.33.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1885,7 +1885,7 @@ PODS:
     - Yoga
   - RNSha256 (1.4.10):
     - React-Core
-  - RNSVG (15.6.0):
+  - RNSVG (15.7.1):
     - React-Core
   - RNVectorIcons (10.2.0):
     - DoubleConversion
@@ -2280,8 +2280,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   hermes-engine: 3b6e0717ca847e2fc90a201e59db36caf04dee88
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
-  LogRocket: 818d8667f122626e657537ce929eb522a5bf7f69
-  logrocket-react-native: 46cf750a7168cdabf49f63c3d5cfd6fa20ca408e
+  LogRocket: 936b6bf8d4c686f70a6fc32f7a93db9e1d6db3ce
+  logrocket-react-native: 89c90f68748ca98847afe677490b75d54721a469
   OneSignalXCFramework: f6533cc1f7a5ddded80ee5fe183901a99ad46f4f
   RCT-Folly: 4464f4d875961fce86008d45f4ecf6cef6de0740
   RCTDeprecation: 34cbf122b623037ea9facad2e92e53434c5c7422
@@ -2325,9 +2325,9 @@ SPEC CHECKSUMS:
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
   react-native-safe-area-context: 851c62c48dce80ccaa5637b6aa5991a1bc36eca9
   react-native-slider: e610b253698a56fb51c9303035d74c71651eb26b
-  react-native-turbo-image: 4f8184b9e548ae5bbae6244812e44efc4e8a04f9
+  react-native-turbo-image: 6ee021d6e6249bbe2adf4ff54f243275618d2edf
   react-native-vkontakte-login: d5f2e9624b531f7aa3f8c178b2f273715a8b142e
-  react-native-webview: 7aaf4bb5b2ec08901c821aceb4b55908ad012b04
+  react-native-webview: 926d2665cf3196e39c4449a72d136d0a53b9df8a
   React-nativeconfig: 57781b79e11d5af7573e6f77cbf1143b71802a6d
   React-NativeModulesApple: 7ff2e2cfb2e5fa5bdedcecf28ce37e696c6ef1e1
   React-perflogger: 8a360ccf603de6ddbe9ff8f54383146d26e6c936
@@ -2366,12 +2366,12 @@ SPEC CHECKSUMS:
   RNDeviceInfo: b899ce37a403a4dea52b7cb85e16e49c04a5b88e
   RNGestureHandler: 6dfe7692a191ee224748964127114edf057a1475
   RNGoogleSignin: 24d3b3261f78b0fae0aa013f8ab6f8d25e369b0c
-  RNImageCropPicker: 771e2ca319d2cf92e04ebf334ece892ee9a6728f
-  RNReanimated: c543567b3482ea54dec3216811d2360e581d35d0
+  RNImageCropPicker: 97f68f9b8ee0f5fca501b302dba19d2b35687352
+  RNReanimated: 6e79f3e3b37a88cddfb38525e9652aabd7c4c750
   RNScreens: 19719a9c326e925498ac3b2d35c4e50fe87afc06
-  RNSentry: 20fff14a1beee1313d8c3631c54d3e6cced73410
+  RNSentry: e061a36f0669c5853a75097bc4be6db96bc71328
   RNSha256: e1bc64e9e50b293d5282bb4caa1b2043931f1c9d
-  RNSVG: 5da7a24f31968ec74f0b091e3440080f347e279b
+  RNSVG: 4590aa95758149fa27c5c83e54a6a466349a1688
   RNVectorIcons: 6382277afab3c54658e9d555ee0faa7a37827136
   Sentry: f8374b5415bc38dfb5645941b3ae31230fbeae57
   SocketRocket: abac6f5de4d4d62d24e11868d7a2f427e0ef940d
