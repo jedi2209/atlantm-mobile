@@ -1,10 +1,8 @@
-import thunk from 'redux-thunk';
-import {persistStore, persistReducer} from 'redux-persist';
+import { configureStore } from '@reduxjs/toolkit';
+import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {createLogger} from 'redux-logger';
+import { createLogger } from 'redux-logger';
 import LogRocket from '@logrocket/react-native';
-
-import {configureStore} from '@reduxjs/toolkit';
 
 import rootReducer from './reducers';
 
@@ -15,28 +13,30 @@ const persistConfig = {
   keyPrefix: 'atlantm',
 };
 
-let store;
-
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-if (__DEV__) {
-  store = configureStore({
-    reducer: persistedReducer,
-    middleware: [
-      thunk,
-      createLogger({collapsed: true, diff: true}),
-      LogRocket.reduxMiddleware(),
-    ],
-  });
-} else {
-  store = configureStore({
-    reducer: persistedReducer,
-    middleware: [thunk, LogRocket.reduxMiddleware()],
-  });
-}
+const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [
+          'persist/PERSIST',
+          'persist/REHYDRATE',
+          'persist/PAUSE',
+          'persist/FLUSH',
+          'persist/PURGE',
+          'persist/REGISTER',
+        ],
+      },
+    })
+      .concat(__DEV__ ? createLogger({ collapsed: true, diff: true }) : [])
+      .concat(LogRocket.reduxMiddleware()),
+  // ... other configurations
+});
 
-const storePersist = persistStore(store, () => {
+const storePersist = persistStore(store, null, () => {
   console.info('Store initial status', store.getState());
 });
 
-export {store, storePersist};
+export { store, storePersist };
