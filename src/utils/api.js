@@ -54,7 +54,7 @@ export default {
     const requestParams = _.merge({}, baseRequestParams, {
       noJWT: true,
     });
-    return this.request(`https://api-backend.atlantm.com/mobile/screen/main/${region}/`, requestParams);
+    return this.request(`/mobile/screen/main/${region}/`, requestParams);
   },
 
   fetchDealers() {
