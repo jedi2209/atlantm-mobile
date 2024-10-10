@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 // components
 import {View, StyleSheet, Image} from 'react-native';
@@ -40,26 +40,32 @@ const Imager = ({
   onLoadEnd = () => {return true;},
   ...otherProps}) => {
 
-  // const [isLoading, setLoading] = useState(false);
-  const [imageSize, setImageSize] = useState({width: 0, height: 0});
+  const [imageUrl, setImageUrl] = useState(source);
+  const [errorCount, setErrorCount] = useState(0);
+
+  useEffect(() => {
+    setImageUrl({uri: path});
+  }, [path, source]);
 
   let path = get(source, 'uri', get(source, 'url', null));
   let extension = null;
-  let mergedStyle = style;
-  let sourceNew = source;
+  let mergedStyle = {};
+  if (style && Array.isArray(style)) {
+    mergedStyle = Object.assign({}, ...style);
+  } else {
+    mergedStyle = Object.assign({}, style);
+  }
 
-  if (typeof source !== 'number') {
-    // if source is not require('../../../*.jpg') image
-    // console.info('Imager path', path);
-    if (path) {
-      path = path.toString();
-      extension = path.split('.').pop();
-      sourceNew = {uri: path};
-    }
-    // console.info('Imager extension', extension);
-    if (!extension && (source?.uri || source?.url)) {
-      return null;
-    }
+  if (get(mergedStyle, 'width') === undefined) {delete mergedStyle.width;}
+  if (get(mergedStyle, 'height') === undefined) {delete mergedStyle.height;}
+
+  if (path) {
+    path = path.toString();
+    extension = path.split('.').pop();
+  }
+
+  if (!extension && (source?.uri || source?.url) && typeof source !== 'number') {
+    return null;
   }
 
   if (extension === 'svg') {
@@ -75,96 +81,50 @@ const Imager = ({
     </View>;
   }
 
-  if (style.length) {
-    mergedStyle = Object.assign({}, ...style);
-  }
-
-  if (get(mergedStyle, 'width') === undefined) {
-    delete mergedStyle.width;
-  }
-
-  if (get(mergedStyle, 'height') === undefined) {
-    delete mergedStyle.height;
+  if (typeof source === 'number') {
+    return <Image testID={testID} source={imageUrl} style={mergedStyle} resizeMode={resizeMode} {...otherProps} />;
   }
 
   delete mergedStyle.resizeMode;
   // clearCache();
 
-  if (typeof source !== 'number') {
-    return (
-      <View testID={testID}>
-        <TurboImage
-        source={sourceNew}
-        resizeMode={resizeMode}
-        style={mergedStyle}
-        onSuccess={event => {
-          // console.info('onSuccess', get(event, 'nativeEvent'));
-          setImageDimensions({
-            width: get(event, 'nativeEvent.width'),
-            height: get(event, 'nativeEvent.height'),
-          });
-        }}
-        onCompletion={el => {
-          onLoadEnd();
-        }}
-        onFailure={event => {
-          onLoadError(event);
-        }}
-        {...otherProps}
-        />
-      </View>
-    );
-  } else {
-    return (<Image testID={testID} source={sourceNew} style={mergedStyle} resizeMode={resizeMode} {...otherProps} />);
-  }
+  return (
+    <View testID={testID}>
+      <TurboImage
+      source={imageUrl}
+      resizeMode={resizeMode}
+      style={mergedStyle}
+      onSuccess={event => {
+        setImageDimensions({
+          width: get(event, 'nativeEvent.width'),
+          height: get(event, 'nativeEvent.height'),
+        });
+      }}
+      onCompletion={el => {
+        onLoadEnd();
+      }}
+      onFailure={event => {
+        onLoadError(event);
+        if (errorCount < 2) {
+          const url = get(imageUrl, 'uri', imageUrl);
+          if (url) {
+            if (url.includes('?') || url.includes('&')) {
+              setImageUrl({uri: url + '&retry=1'});
+              return;
+            }
+            if (!url.endsWith('/')) {
+              setImageUrl({uri: url + '/'});
+            } else {
+              setImageUrl({uri: url.slice(0, -1)});
+            }
+          }
+          setErrorCount(errorCount + 1);
+        }
+      }}
+      {...otherProps}
+      />
+    </View>
+  );
 };
 
 export default Imager;
-
-{/* <FasterImageView
-  style={mergedStyle}
-  showActivityIndicator={true}
-  onSuccess={(event) => {
-    console.log('onSuccess', get(event, 'nativeEvent'));
-  }}
-  onError={(event) => {
-    console.log('\tImager => error load image\t' + path);
-      onLoadError(event);
-      // setLoading(false);
-  }}
-  source={{
-    url: path,
-    transitionDuration: 0.3,
-    progressiveLoadingEnabled: true,
-    cachePolicy: 'memory',
-    showActivityIndicator: true,
-    resizeMode,
-  }}
-  {...otherProps}
-/> */}
-
-{/* <View shouldRasterizeIOS={isLoading} renderToHardwareTextureAndroid={isLoading}>
-  <View style={{opacity: isLoading ? 0.4 : 1}}>
-    <FastImage
-      resizeMode={FastImage.resizeMode[resizeMode]}
-      onLoadStart={() => {
-        console.log('\tImager => start load image\t' + path);
-        onLoadStart();
-      }}
-      onError={e => {
-        console.log('\tImager => error load image\t' + path);
-        onLoadError(e);
-        setLoading(false);
-      }}
-      onLoadEnd={() => {
-        console.log('\tImager => end load image\t' + path);
-        onLoadEnd();
-        setLoading(false);
-      }}
-      source={{
-        uri: path,
-        priority: FastImage.priority[priority],
-        cache: FastImage.cacheControl.web,
-      }}
-      {...props}
-    /> </View> </View> */}

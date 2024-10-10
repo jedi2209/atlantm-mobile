@@ -8,7 +8,6 @@ import {
   Platform,
   Dimensions,
   Alert,
-  ImageBackground,
 } from 'react-native';
 import {
   Icon,
@@ -19,10 +18,8 @@ import {
   HStack,
   ScrollView,
   Pressable,
-  Image,
 } from 'native-base';
 import Accordion from 'react-native-collapsible/Accordion';
-import RNBounceable from '@freakycoder/react-native-bounceable';
 import * as NavigationService from '../../../navigation/NavigationService';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
