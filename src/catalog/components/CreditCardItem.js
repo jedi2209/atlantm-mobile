@@ -10,7 +10,7 @@ import {
 
 import Imager from '../../core/components/Imager';
 
-import {get, ceil, floor} from 'lodash';
+import {get, floor} from 'lodash';
 
 import styleConst from '../../core/style-const';
 import Badge from '../../core/components/Badge';
@@ -19,6 +19,7 @@ import {BadgeCorner} from '../../core/components/BadgeRibbon';
 import {showPrice, getAllDataPrice} from '../../utils/price';
 import { Button } from 'react-native-paper';
 import { useNavigation } from '@react-navigation/native';
+import { StyleSheet } from 'react-native';
 
 const currencyColors = {
   1: styleConst.color.green,
@@ -33,6 +34,12 @@ const currencySymbols = {
   3: '€',
   4: '₽',
 };
+
+const styles = new StyleSheet.create({
+  paymentsLabelStyle: {
+    fontSize: 12,
+  },
+});
 
 export const CreditCardItem = ({item, onPressOrder, index, separators, hidePaymentsButton = false, creditPrograms}) => {
   const navigation = useNavigation();
@@ -180,9 +187,15 @@ export const CreditCardItem = ({item, onPressOrder, index, separators, hidePayme
             </Text>
           ) : null}
           {!hidePaymentsButton || onPressOrder ? (
-            <HStack justifyContent={'space-between'}>
+            <HStack justifyContent={'space-between'} alignItems={'center'}>
               {!hidePaymentsButton ? (
-                <Button icon="calendar-range-outline" mode="text" compact={true} iconColor={styleConst.color.blue} onPress={() => navigation.navigate('CreditPaymentsDetailScreen', {creditPayments: itemCalc})}>
+                <Button
+                  labelStyle={styles.paymentsLabelStyle}
+                  icon="calendar-range-outline"
+                  mode="text"
+                  compact={true}
+                  iconColor={styleConst.color.blue}
+                  onPress={() => navigation.navigate('CreditPaymentsDetailScreen', {creditPayments: itemCalc})}>
                   график платежей
                 </Button>
               ) : null}

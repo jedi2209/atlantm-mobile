@@ -8,7 +8,10 @@ const showPrice = (
   returnAllData = false,
 ) => {
   if (!price) {
-    return false;
+    if (!returnAllData) {
+      return false;
+    }
+    price = 0;
   }
 
   let options = {
