@@ -1,11 +1,10 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {
-  Text,
   ImageBackground,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
 import {
+  Text,
   Icon,
   View,
 } from 'native-base';
@@ -18,9 +17,7 @@ import {get} from 'lodash';
 import styleConst from '../../core/style-const';
 import { APP_REGION } from '../../core/const';
 
-
 const CreditBanner = ({carDetails, onPress = () => {}, region = APP_REGION}) => {
-  const navigation = useNavigation();
   if (region !== 'by' || !get(carDetails, 'price.app.standart', get(carDetails, 'price.app'))) {
     return;
   }
@@ -40,7 +37,7 @@ const CreditBanner = ({carDetails, onPress = () => {}, region = APP_REGION}) => 
             backgroundColor: styleConst.color.black,
             borderRadius: 5,
           }}>
-          <View px="6" py="6">
+          <View px={4} py={6}>
             <Text
               style={{
                 fontSize: 18,
@@ -54,12 +51,11 @@ const CreditBanner = ({carDetails, onPress = () => {}, region = APP_REGION}) => 
             </Text>
             <Text
               style={{
-                fontSize: 15,
                 fontFamily: styleConst.font.medium,
                 color: styleConst.color.white,
-                width: '70%',
+                width: '75%',
               }}>
-              Вы можете воспользоваться кредитом на выгодных условиях от наших
+              Воспользуйтесь кредитом на выгодных условиях от наших
               партнеров
             </Text>
             <Icon

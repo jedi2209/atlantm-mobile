@@ -6,8 +6,6 @@ import {
   Heading,
   VStack,
   FlatList,
-  Box,
-  HStack,
 } from 'native-base';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import { CreditCardItem } from '../components/CreditCardItem';
@@ -26,6 +24,25 @@ import {InputCustom} from '../../core/components/Form/InputCustom';
 import {getAllDataPrice} from '../../utils/price';
 
 const isAndroid = Platform.OS === 'android';
+const {width: screenWidth} = Dimensions.get('window');
+
+const styles = new StyleSheet.create({
+  carImage: {
+    new: {
+      width: screenWidth * 0.9,
+      height: 200,
+    },
+    used: {
+      width: screenWidth,
+      height: 300,
+    },
+  },
+  sliderWrapper: {
+    height: 18,
+    marginTop: isAndroid ? -8 : -16,
+    paddingBottom: 10,
+  }
+});
 
 const settings = {
   timeoutQuery: 1000,
@@ -48,8 +65,6 @@ const mapStateToProps = ({dealer}) => {
 const mapDispatchToProps = {
   actionFetchCarCreditPrograms,
 };
-
-const {width: screenWidth} = Dimensions.get('window');
 
 const onCheckLimit = ({value, min, max}) => {
   const parsedQty = parseInt(toString(value).replace(/\s+/g, ''));
@@ -168,24 +183,10 @@ const HeaderComponent = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const styles = new StyleSheet.create({
-    carImage: {
-      new: {
-        width: screenWidth * 0.9,
-        height: 200,
-      },
-      used: {
-        width: screenWidth,
-        height: 300,
-      },
-    },
-  });
-
   return (
     <>
-      <VStack mt={1}>
+      <VStack mt={1} alignItems={'center'}>
         <Heading
-          ml={12}
           ellipsizeMode={'tail'}
           numberOfLines={1}
           lineHeight={'lg'}>
@@ -195,7 +196,7 @@ const HeaderComponent = ({
             get(carData, 'complectation.name'),
           ].join(' ')}
         </Heading>
-        <Text ml={12}>
+        <Text>
           {[
             get(carData, 'engine.volume.full') + ' cm³',
             get(carData, 'gearbox.name'),
@@ -251,11 +252,13 @@ const HeaderComponent = ({
               isValid={isNil(get(errors, 'prePayment'))}
             />
             <Slider
-              style={{height: 60, marginTop: isAndroid ? -34 : -26}}
+              style={styles.sliderWrapper}
               minimumValue={parseInt(carPrice * 0.1)}
               maximumValue={parseInt(carPrice * 0.9)}
+              lowerLimit={parseInt(carPrice * 0.1)}
+              upperLimit={parseInt(carPrice * 0.9)}
               minimumTrackTintColor={styleConst.color.blue}
-              maximumTrackTintColor="#FFFFFF"
+              maximumTrackTintColor={styleConst.color.bg}
               onSlidingComplete={onBlur}
               onValueChange={val => {
                 if (!val) {
@@ -319,11 +322,13 @@ const HeaderComponent = ({
                 isValid={isNil(get(errors, 'period'))}
               />
               <Slider
-                style={{height: 60, marginTop: isAndroid ? -34 : -26}}
+                style={styles.sliderWrapper}
                 minimumValue={calcData.period.min}
                 maximumValue={calcData.period.max}
+                lowerLimit={calcData.period.min}
+                upperLimit={calcData.period.max}
                 minimumTrackTintColor={styleConst.color.blue}
-                maximumTrackTintColor="#FFFFFF"
+                maximumTrackTintColor={styleConst.color.bg}
                 onSlidingComplete={onBlur}
                 onValueChange={value => {
                   if (!value) {
