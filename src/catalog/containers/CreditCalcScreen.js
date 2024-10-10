@@ -14,7 +14,7 @@ import Slider from '@react-native-community/slider';
 
 import Imager from '../../core/components/Imager';
 
-import {get, parseInt, isNaN, isNil, toString} from 'lodash';
+import {get, parseInt, isNaN, isNil, compact, toString} from 'lodash';
 import {connect} from 'react-redux';
 import {strings} from '../../core/lang/const';
 
@@ -197,12 +197,12 @@ const HeaderComponent = ({
           ].join(' ')}
         </Heading>
         <Text>
-          {[
-            get(carData, 'engine.volume.full') + ' cm³',
-            get(carData, 'gearbox.name'),
-            get(carData, 'color.name.simple'),
-            get(carData, 'year'),
-          ].join(', ')}
+          {compact([
+            !isNil(get(carData, 'engine.volume.full')) ? get(carData, 'engine.volume.full') + ' cm³' : null,
+            get(carData, 'gearbox.name', '').toLowerCase(),
+            get(carData, 'color.name.simple', '').toLowerCase(),
+            !isNil(get(carData, 'year')) ? get(carData, 'year') + 'г.' : null,
+          ]).join(', ')}
         </Text>
         <View alignItems={'center'} w={'100%'}>
           <Imager
