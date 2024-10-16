@@ -553,8 +553,8 @@ export default {
       f_Phone: phone,
       f_Email: email,
       f_Text: comment,
-      f_TradeIn: tradeIn ? tradeIn : false,
-      f_Credit: credit ? credit : false,
+      f_TradeIn: tradeIn ? true : false,
+      f_Credit: credit ? true : false,
       f_Source: SourceID,
     };
 
