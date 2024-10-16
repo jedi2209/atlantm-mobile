@@ -11,6 +11,7 @@ export const SubmitButton = ({
   onPress = () => {},
   sending = false,
   sendingStatus = null,
+  title = strings.ProfileSettingsScreen.save,
   children,
 }) => {
   if (sendingStatus) {
@@ -49,7 +50,7 @@ export const SubmitButton = ({
             text: 'false',
           }}
           _text={{color: styleConst.color.white, fontSize: 16}}>
-          {strings.ProfileSettingsScreen.save}
+          {title}
         </Button>
         {children}
       </View>

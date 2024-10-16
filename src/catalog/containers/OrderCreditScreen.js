@@ -14,7 +14,7 @@ import {KeyboardAvoidingView} from '../../core/components/KeyboardAvoidingView';
 import { CreditCardItem } from '../components/CreditCardItem';
 // redux
 import {connect} from 'react-redux';
-import {actionOrderCreditCar} from '../actions';
+import {actionOrderCreditCar, actionOrderCar} from '../actions';
 import {localUserDataUpdate} from '../../profile/actions';
 
 // helpers
@@ -25,7 +25,7 @@ import {declOfNum} from '../../utils/decl-of-num';
 import UserData from '../../utils/user';
 import isInternet from '../../utils/internet';
 import styleConst from '../../core/style-const';
-import {CREDIT_ORDER__SUCCESS, CREDIT_ORDER__FAIL} from '../actionTypes';
+import {CATALOG_ORDER__SUCCESS, CATALOG_ORDER__FAIL, CREDIT_ORDER__SUCCESS, CREDIT_ORDER__FAIL} from '../actionTypes';
 import {ERROR_NETWORK} from '../../core/const';
 
 import {strings} from '../../core/lang/const';
@@ -55,6 +55,7 @@ const mapStateToProps = ({dealer, catalog, profile}) => {
 
 const mapDispatchToProps = {
   actionOrderCreditCar,
+  actionOrderCar,
   localUserDataUpdate,
 };
 
@@ -69,7 +70,7 @@ const onCheckLimit = ({value, min, max}) => {
   }
 };
 
-const OrderCreditScreen = ({actionOrderCreditCar, localUserDataUpdate, navigation, route, ...props}) => {
+const OrderCreditScreen = ({actionOrderCreditCar, actionOrderCar, localUserDataUpdate, navigation, route, ...props}) => {
   const [sendingForm, setSendingForm] = useState(false);
   const [sendingFormStatus, setFormSendingStatus] = useState(null);
   const {isNewCar, dealerId, car, region, creditProduct, creditPrograms} = route.params;
@@ -123,6 +124,8 @@ const OrderCreditScreen = ({actionOrderCreditCar, localUserDataUpdate, navigatio
 
   const onPressOrder = async data => {
 
+    setSendingForm(true);
+
     let comment = get(data, 'COMMENT', '');
 
     if (prePayment || summ || months || creditProduct) {
@@ -160,7 +163,7 @@ const OrderCreditScreen = ({actionOrderCreditCar, localUserDataUpdate, navigatio
       return;
     }
 
-    const action = await actionOrderCreditCar({
+    const dataToSend = {
       firstName: get(data, 'NAME'),
       secondName: get(data, 'SECOND_NAME'),
       lastName: get(data, 'LAST_NAME'),
@@ -170,38 +173,40 @@ const OrderCreditScreen = ({actionOrderCreditCar, localUserDataUpdate, navigatio
       dealerId,
       carId: get(car, 'id'),
       comment: trim(comment),
-    });
+      credit: true,
+      isNewCar,
+    };
+
+    let action = null;
+
+    if (isNewCar) {
+      action = await actionOrderCar(dataToSend);
+    } else {
+      action = await actionOrderCreditCar(dataToSend);
+    }
     if (action && action.type) {
       switch (action.type) {
         case CREDIT_ORDER__SUCCESS:
+        case CATALOG_ORDER__SUCCESS:
+          setFormSendingStatus(true);
           const path = isNewCar ? 'newcar' : 'usedcar';
           Analytics.logEvent('order', `catalog/${path}`, {
             brand_name: get(car, 'brand'),
             model_name: modelName,
           });
-          localUserDataUpdate({
-            NAME: get(data, 'NAME'),
-            SECOND_NAME: get(data, 'SECOND_NAME'),
-            LAST_NAME: get(data, 'LAST_NAME'),
-            PHONE: get(data, 'PHONE'),
-            EMAIL: get(data, 'EMAIL'),
-          });
-          Alert.alert(
-            strings.Notifications.success.title,
-            strings.Notifications.success.textOrder,
-            [
-              {
-                text: 'ОК',
-                onPress: () => navigation.goBack(),
-              },
-            ],
-          );
+          setTimeout(() => {
+            setFormSendingStatus(null);
+            setSendingForm(false);
+            setTimeout(() => navigation.goBack(), 300);
+          }, 500);
           break;
         case CREDIT_ORDER__FAIL:
-          Alert.alert(
-            strings.Notifications.error.title,
-            strings.Notifications.error.text,
-          );
+        case CATALOG_ORDER__FAIL:
+          setFormSendingStatus(false);
+          setTimeout(() => {
+            setFormSendingStatus(null);
+            setSendingForm(false);
+          }, 1000);
           break;
       }
     }
@@ -435,6 +440,7 @@ const OrderCreditScreen = ({actionOrderCreditCar, localUserDataUpdate, navigatio
           )}
         />
         <SubmitButton
+          title={strings.Form.button.send}
           onPress={handleSubmit(onPressOrder)}
           sendingStatus={sendingFormStatus}
           sending={sendingForm}>
