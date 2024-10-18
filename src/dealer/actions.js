@@ -1,4 +1,5 @@
 import {
+  DEALERS_ALL_UPDATED,
   DEALERS_REGION__SELECT,
   DEALERS__REQUEST,
   DEALERS__SUCCESS,
@@ -18,7 +19,6 @@ import {
 
 import {APP_LANG_SET} from '../core/lang/actionTypes';
 import PushNotifications from '../core/components/PushNotifications';
-import {fetchInfoList} from '../info/actions/';
 import {strings} from '../core/lang/const';
 
 import API from '../utils/api';
@@ -30,6 +30,15 @@ import moment from 'moment';
 import 'moment/locale/ru';
 import 'moment/locale/uk';
 import styleConst from '../core/style-const';
+
+export const actionDealersUpdated = lastUpdateDate => {
+  return dispatch => {
+    return dispatch({
+      type: DEALERS_ALL_UPDATED,
+      payload: lastUpdateDate,
+    });
+  };
+};
 
 export const selectRegion = region => {
   return dispatch => {

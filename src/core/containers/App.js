@@ -27,6 +27,7 @@ import {
   actionStoreUpdated,
   actionSettingsLoaded,
 } from '../actions';
+import {fetchDealers, actionDealersUpdated} from '../../dealer/actions';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 import {APP_LANG} from '../const';
@@ -52,6 +53,7 @@ const mapStateToProps = ({core, dealer, modal}) => {
   return {
     menuOpenedCount: core.menuOpenedCount,
     isStoreUpdated: core.isStoreUpdated,
+    dealersLastUpdateDate: dealer.meta.lastUpdateDate,
     modal,
     currentLanguage: core.language.selected,
     dealerSelected: dealer.selected,
@@ -64,6 +66,8 @@ const mapDispatchToProps = {
   actionMenuOpenedCount,
   actionStoreUpdated,
   actionSettingsLoaded,
+  fetchDealers,
+  actionDealersUpdated,
 };
 
 const paperTheme = {
@@ -79,10 +83,30 @@ const paperTheme = {
 
 const mainScreen = 'BottomTabNavigation';
 const storeVersion = '2023-08-02';
+const currDate = moment().format('YYYY-MM-DD');
+
+const _awaitDealersToUpdate = async props => {
+  const {fetchDealers, actionDealersUpdated, dealersLastUpdateDate} = props;
+
+  console.info('dealersLastUpdateDate', dealersLastUpdateDate);
+
+  if (dealersLastUpdateDate === currDate) {
+    return true;
+  }
+  try {
+    await fetchDealers(false);
+    await actionDealersUpdated(currDate);
+    return true;
+  } catch (error) {
+    console.error('_awaitDealersToUpdate error', error);
+    return false;
+  }
+};
 
 const _awaitStoreToUpdate = async props => {
-  const {actionSettingsLoaded, actionMenuOpenedCount, actionStoreUpdated} =
+  const {actionSettingsLoaded, actionMenuOpenedCount, actionStoreUpdated, isStoreUpdated} =
     props;
+
   const storeData = store.getState();
 
   const currentRegion = get(
@@ -91,6 +115,7 @@ const _awaitStoreToUpdate = async props => {
     get(props, 'region', false),
   );
   const isStoreUpdatedCurrent = get(storeData, 'core.isStoreUpdated', false);
+  console.info('isStoreUpdatedCurrent', isStoreUpdated);
 
   const currentVersion = DeviceInfo.getVersion();
   const {settings} = await API.fetchVersion(currentVersion || null);
@@ -226,13 +251,27 @@ const App = props => {
           moment().format('YYYY-MM-DD HH:mm:ss'),
           res,
         );
-        if (!res) {
-          setError(true);
-        } else {
-          setError(false);
-          setLoading(false);
-        }
-        checkAppForUpdate(region);
+        // if (!res) {
+        //   setError(true);
+        // } else {
+        //   setError(false);
+        //   setLoading(false);
+        // }
+        // checkAppForUpdate(region);
+        _awaitDealersToUpdate(props).then(resDealers => {
+          console.info(
+            '_awaitDealersToUpdate\t\tfinish',
+            moment().format('YYYY-MM-DD HH:mm:ss'),
+            resDealers,
+          );
+          if (!resDealers) {
+            setError(true);
+          } else {
+            setError(false);
+            setLoading(false);
+          }
+          checkAppForUpdate(region);
+        });
       })
       .catch(err => {
         console.error('_awaitStoreToUpdate error', err);

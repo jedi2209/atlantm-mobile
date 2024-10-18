@@ -2,6 +2,7 @@ import {combineReducers} from 'redux';
 import {REHYDRATE} from 'redux-persist/es/constants';
 import {get, findIndex} from 'lodash';
 import {
+  DEALERS_ALL_UPDATED,
   DEALERS_REGION__SELECT,
   DEALERS_BY_CITIES__SET,
   DEALER__REQUEST,
@@ -162,6 +163,17 @@ function listDealers(state = {}, action) {
   }
 }
 
+function lastUpdateDate(state = null, action) {
+  switch (action.type) {
+    case REHYDRATE:
+      return get(action.payload, 'dealer.meta.lastUpdateDate', null);
+    case DEALERS_ALL_UPDATED:
+      return action.payload;
+    default:
+      return state;
+  }
+}
+
 function isFetchDealersList(state = false, action) {
   switch (action.type) {
     case DEALERS__REQUEST:
@@ -282,5 +294,6 @@ export default combineReducers({
   meta: combineReducers({
     isFetchDealersList,
     isFetchDealer,
+    lastUpdateDate,
   }),
 });
