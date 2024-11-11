@@ -621,59 +621,75 @@ const MainFilterScreen = ({
       });
     }
     if (brandModel[stockType].brand) {
+      let tmp = [];
       Object.keys(brandModel[stockType].brand).map(key => {
-        Object.assign(filtersLocal, stateFilters, {
-          ['brand[' + key + ']']: parseInt(key, 10),
-        });
+        tmp.push(parseInt(key, 10));
+      });
+      Object.assign(filtersLocal, stateFilters, {
+        brand: tmp.join(','),
       });
     }
     if (brandModel[stockType].model) {
+      let tmp = [];
       Object.keys(brandModel[stockType].model).map(key => {
-        Object.assign(filtersLocal, stateFilters, {
-          ['model[' + key + ']']: key,
-        });
+        tmp.push(parseInt(key, 10));
+      });
+      Object.assign(filtersLocal, stateFilters, {
+        model: tmp.join(','),
       });
     }
     if (stateFilters.gearboxType) {
+      let tmp = [];
       stateFilters.gearboxType.map(val => {
-        Object.assign(filtersLocal, stateFilters, {
-          ['gearbox[' + val.value + ']']: parseInt(val.value, 10),
-        });
+        tmp.push(parseInt(val.value, 10));
+      });
+      Object.assign(filtersLocal, stateFilters, {
+        gearbox: tmp.join(','),
       });
     }
     if (stateFilters.bodyType) {
+      let tmp = [];
       stateFilters.bodyType.map(val => {
-        Object.assign(filtersLocal, stateFilters, {
-          ['body[' + val.value + ']']: parseInt(val.value, 10),
-        });
+        tmp.push(parseInt(val.value, 10));
+      });
+      Object.assign(filtersLocal, stateFilters, {
+        body: tmp.join(','),
       });
     }
     if (stateFilters.enginetypeType) {
+      let tmp = [];
       stateFilters.enginetypeType.map(val => {
-        Object.assign(filtersLocal, stateFilters, {
-          ['enginetype[' + val.value + ']']: parseInt(val.value, 10),
-        });
+        tmp.push(parseInt(val.value, 10));
+      });
+      Object.assign(filtersLocal, stateFilters, {
+        enginetype: tmp.join(','),
       });
     }
     if (stateFilters.driveType) {
+      let tmp = [];
       stateFilters.driveType.map(val => {
-        Object.assign(filtersLocal, stateFilters, {
-          ['drive[' + val.value + ']']: parseInt(val.value, 10),
-        });
+        tmp.push(parseInt(val.value, 10));
+      });
+      Object.assign(filtersLocal, stateFilters, {
+        drive: tmp.join(','),
       });
     }
     if (stateFilters.grade) {
+      let tmp = [];
       stateFilters.grade.map(val => {
-        Object.assign(filtersLocal, stateFilters, {
-          ['grade[' + val.value + ']']: parseInt(val.value, 10),
-        });
+        tmp.push(parseInt(val.value, 10));
+      });
+      Object.assign(filtersLocal, stateFilters, {
+        grade: tmp.join(','),
       });
     }
     if (stateFilters.colorType) {
+      let tmp = [];
       stateFilters.colorType.map(val => {
-        Object.assign(filtersLocal, stateFilters, {
-          ['colors[' + val.value + ']']: parseInt(val.value, 10),
-        });
+        tmp.push(parseInt(val.value, 10));
+      });
+      Object.assign(filtersLocal, stateFilters, {
+        colors: tmp.join(','),
       });
     }
     if (stateFilters.ordered) {
@@ -708,37 +724,37 @@ const MainFilterScreen = ({
 
   const minPrice = get(
     stateFilters,
-    'price[from]',
+    'price_from',
     get(dataFilters, 'prices.min'),
   );
 
   const maxPrice = get(
     stateFilters,
-    'price[to]',
+    'price_to',
     get(dataFilters, 'prices.max'),
   );
 
   const minPower = get(
     stateFilters,
-    'power[from]',
+    'power_from',
     get(dataFilters, 'data.power.min'),
   );
 
   const maxPower = get(
     stateFilters,
-    'power[to]',
+    'power_to',
     get(dataFilters, 'data.power.max'),
   );
 
   const minMileage = get(
     stateFilters,
-    'mileage[from]',
+    'mileage_from',
     get(dataFilters, 'data.mileage.min'),
   );
 
   const maxMileage = get(
     stateFilters,
-    'mileage[to]',
+    'mileage_to',
     get(dataFilters, 'data.mileage.max'),
   );
 
@@ -852,7 +868,7 @@ const MainFilterScreen = ({
                           ' ' +
                           get(
                             stateFilters,
-                            'year[from]',
+                            'year_from',
                             dataFilters?.data?.year?.min,
                           ),
                         to:
@@ -860,7 +876,7 @@ const MainFilterScreen = ({
                           ' ' +
                           get(
                             stateFilters,
-                            'year[to]',
+                            'year_to',
                             dataFilters?.data?.year?.max,
                           ),
                       }}
@@ -882,7 +898,7 @@ const MainFilterScreen = ({
                           numberWithGap(
                             get(
                               stateFilters,
-                              'mileage[from]',
+                              'mileage_from',
                               dataFilters.data.mileage.min,
                             ),
                           ),
@@ -892,7 +908,7 @@ const MainFilterScreen = ({
                           numberWithGap(
                             get(
                               stateFilters,
-                              'mileage[to]',
+                              'mileage_to',
                               dataFilters.data.mileage.max,
                             ),
                           ),
@@ -928,7 +944,7 @@ const MainFilterScreen = ({
                         numberWithGap(
                           get(
                             stateFilters,
-                            'price[from]',
+                            'price_from',
                             dataFilters?.prices?.min || 0,
                           ),
                         ),
@@ -938,7 +954,7 @@ const MainFilterScreen = ({
                         numberWithGap(
                           get(
                             stateFilters,
-                            'price[to]',
+                            'price_to',
                             dataFilters?.prices?.max || 0,
                           ),
                         ),
@@ -1050,7 +1066,7 @@ const MainFilterScreen = ({
                         ' ' +
                         get(
                           stateFilters,
-                          'engineVolumeShort[from]',
+                          'engineVolumeShort_from',
                           dataFilters.data.engineVolume.short.min.toFixed(1),
                         ),
                       to:
@@ -1058,7 +1074,7 @@ const MainFilterScreen = ({
                         ' ' +
                         get(
                           stateFilters,
-                          'engineVolumeShort[to]',
+                          'engineVolumeShort_to',
                           dataFilters.data.engineVolume.short.max.toFixed(1),
                         ),
                     }}
@@ -1083,7 +1099,7 @@ const MainFilterScreen = ({
                         ' ' +
                         get(
                           stateFilters,
-                          'power[from]',
+                          'power_from',
                           dataFilters.data.power.min,
                         ),
                       to:
@@ -1091,7 +1107,7 @@ const MainFilterScreen = ({
                         ' ' +
                         get(
                           stateFilters,
-                          'power[to]',
+                          'power_to',
                           dataFilters.data.power.max,
                         ),
                     }}
@@ -1134,7 +1150,7 @@ const MainFilterScreen = ({
                         ' ' +
                         get(
                           stateFilters,
-                          'seatsCount[from]',
+                          'seatsCount_from',
                           dataFilters.data.seatsCount.min,
                         ),
                       to:
@@ -1142,7 +1158,7 @@ const MainFilterScreen = ({
                         ' ' +
                         get(
                           stateFilters,
-                          'seatsCount[to]',
+                          'seatsCount_to',
                           dataFilters.data.seatsCount.max,
                         ),
                     }}
@@ -1310,8 +1326,8 @@ const MainFilterScreen = ({
                 onHide={() => _showHideModal(false)}
                 onReset={() =>
                   _onChangeFilter({
-                    'year[from]': dataFilters?.data?.year?.min,
-                    'year[to]': dataFilters?.data?.year?.max,
+                    'year_from': dataFilters?.data?.year?.min,
+                    'year_to': dataFilters?.data?.year?.max,
                   })
                 }
                 title={strings.CarsFilterScreen.filters.year.title}
@@ -1330,14 +1346,14 @@ const MainFilterScreen = ({
                       pickerProps={{testID: 'Form.YearPickerInput.YearFrom'}}
                       doneText={strings.Base.choose}
                       onValueChange={itemValue => {
-                        _onChangeFilter('year[from]', itemValue);
+                        _onChangeFilter('year_from', itemValue);
                       }}
                       style={{
                         ...pickerSelectStyles,
                       }}
                       value={get(
                         stateFilters,
-                        'year[from]',
+                        'year_from',
                         dataFilters?.data?.year?.min,
                       )}
                       minDate={minDate}
@@ -1359,14 +1375,14 @@ const MainFilterScreen = ({
                       pickerProps={{testID: 'Form.YearPickerInput.YearTo'}}
                       doneText={strings.Base.choose}
                       onValueChange={itemValue => {
-                        _onChangeFilter('year[to]', itemValue);
+                        _onChangeFilter('year_to', itemValue);
                       }}
                       style={{
                         ...pickerSelectStyles,
                       }}
                       value={get(
                         stateFilters,
-                        'year[to]',
+                        'year_to',
                         dataFilters?.data?.year?.max,
                       )}
                       minDate={minDate}
@@ -1385,8 +1401,8 @@ const MainFilterScreen = ({
                 onHide={() => _showHideModal(false)}
                 onReset={() =>
                   _onChangeFilter({
-                    'mileage[from]': dataFilters?.data?.mileage?.min,
-                    'mileage[to]': dataFilters?.data?.mileage?.max,
+                    'mileage_from': dataFilters?.data?.mileage?.min,
+                    'mileage_to': dataFilters?.data?.mileage?.max,
                   })
                 }
                 avoidKeyboard={true}
@@ -1418,13 +1434,13 @@ const MainFilterScreen = ({
                           !val
                         ) {
                           _onChangeFilter({
-                            'mileage[from]': get(
+                            'mileage_from': get(
                               dataFilters,
                               'data.mileage.min',
                             ),
-                            'mileage[to]': get(
+                            'mileage_to': get(
                               stateFilters,
-                              'mileage[to]',
+                              'mileage_to',
                               get(dataFilters, 'data.mileage.max'),
                             ),
                           });
@@ -1432,12 +1448,12 @@ const MainFilterScreen = ({
                           val >= get(dataFilters, 'data.mileage.max')
                         ) {
                           _onChangeFilter({
-                            'mileage[from]':
+                            'mileage_from':
                               get(dataFilters, 'data.mileage.max') -
                               get(dataFilters, 'data.mileage.step'),
-                            'mileage[to]': get(
+                            'mileage_to': get(
                               stateFilters,
-                              'mileage[to]',
+                              'mileage_to',
                               get(dataFilters, 'data.mileage.max'),
                             ),
                           });
@@ -1445,12 +1461,12 @@ const MainFilterScreen = ({
                       }}
                       onChangeText={val => {
                         _onChangeFilter({
-                          'mileage[from]': val
+                          'mileage_from': val
                             ? parseInt(val.replace(/\D/g, ''))
                             : '',
-                          'mileage[to]': get(
+                          'mileage_to': get(
                             stateFilters,
-                            'mileage[to]',
+                            'mileage_to',
                             get(dataFilters, 'data.mileage.max'),
                           ),
                         });
@@ -1480,23 +1496,23 @@ const MainFilterScreen = ({
                           !val
                         ) {
                           _onChangeFilter({
-                            'mileage[from]': get(
+                            'mileage_from': get(
                               stateFilters,
-                              'mileage[from]',
+                              'mileage_from',
                               get(dataFilters, 'data.mileage.min'),
                             ),
-                            'mileage[to]': get(dataFilters, 'data.mileage.max'),
+                            'mileage_to': get(dataFilters, 'data.mileage.max'),
                           });
                         }
                       }}
                       onChangeText={val => {
                         _onChangeFilter({
-                          'mileage[from]': get(
+                          'mileage_from': get(
                             stateFilters,
-                            'mileage[from]',
+                            'mileage_from',
                             get(dataFilters, 'data.mileage.min'),
                           ),
-                          'mileage[to]': val
+                          'mileage_to': val
                             ? parseInt(val.replace(/\D/g, ''))
                             : '',
                         });
@@ -1507,12 +1523,12 @@ const MainFilterScreen = ({
                     values={[
                       get(
                         stateFilters,
-                        'mileage[from]',
+                        'mileage_from',
                         dataFilters?.data?.power?.min,
                       ),
                       get(
                         stateFilters,
-                        'mileage[to]',
+                        'mileage_to',
                         dataFilters?.data?.power?.max,
                       ),
                     ]}
@@ -1522,8 +1538,8 @@ const MainFilterScreen = ({
                     sliderLength={sliderWidth}
                     onValuesChangeFinish={values =>
                       _onChangeFilter({
-                        'mileage[from]': values[0],
-                        'mileage[to]': values[1],
+                        'mileage_from': values[0],
+                        'mileage_to': values[1],
                       })
                     }
                     trackStyle={styles.multiSliderTrackStyle}
@@ -1544,7 +1560,7 @@ const MainFilterScreen = ({
                       {numberWithGap(
                         get(
                           stateFilters,
-                          'mileage[from]',
+                          'mileage_from',
                           dataFilters?.data?.mileage?.min,
                         ),
                       )}
@@ -1553,7 +1569,7 @@ const MainFilterScreen = ({
                       {numberWithGap(
                         get(
                           stateFilters,
-                          'mileage[to]',
+                          'mileage_to',
                           dataFilters?.data?.mileage?.max,
                         ),
                       )}
@@ -1569,8 +1585,8 @@ const MainFilterScreen = ({
                 onHide={() => _showHideModal(false)}
                 onReset={() =>
                   _onChangeFilter({
-                    'price[from]': get(dataFilters, 'prices.min'),
-                    'price[to]': get(dataFilters, 'prices.max'),
+                    'price_from': get(dataFilters, 'prices.min'),
+                    'price_to': get(dataFilters, 'prices.max'),
                   })
                 }
                 avoidKeyboard={true}
@@ -1599,21 +1615,21 @@ const MainFilterScreen = ({
                         );
                         if (val < get(dataFilters, 'prices.min') || !val) {
                           _onChangeFilter({
-                            'price[from]': get(dataFilters, 'prices.min'),
-                            'price[to]': get(
+                            'price_from': get(dataFilters, 'prices.min'),
+                            'price_to': get(
                               stateFilters,
-                              'price[to]',
+                              'price_to',
                               get(dataFilters, 'prices.max'),
                             ),
                           });
                         } else if (val >= get(dataFilters, 'prices.max')) {
                           _onChangeFilter({
-                            'price[from]':
+                            'price_from':
                               get(dataFilters, 'prices.max') -
                               get(dataFilters, 'prices.step'),
-                            'price[to]': get(
+                            'price_to': get(
                               stateFilters,
-                              'price[to]',
+                              'price_to',
                               get(dataFilters, 'prices.max'),
                             ),
                           });
@@ -1621,12 +1637,12 @@ const MainFilterScreen = ({
                       }}
                       onChangeText={val => {
                         _onChangeFilter({
-                          'price[from]': val
+                          'price_from': val
                             ? parseInt(val.replace(/\D/g, ''))
                             : '',
-                          'price[to]': get(
+                          'price_to': get(
                             stateFilters,
-                            'price[to]',
+                            'price_to',
                             get(dataFilters, 'prices.max'),
                           ),
                         });
@@ -1656,23 +1672,23 @@ const MainFilterScreen = ({
                           !val
                         ) {
                           _onChangeFilter({
-                            'price[from]': get(
+                            'price_from': get(
                               stateFilters,
-                              'price[from]',
+                              'price_from',
                               get(dataFilters, 'prices.min'),
                             ),
-                            'price[to]': get(dataFilters, 'prices.max'),
+                            'price_to': get(dataFilters, 'prices.max'),
                           });
                         }
                       }}
                       onChangeText={val => {
                         _onChangeFilter({
-                          'price[from]': get(
+                          'price_from': get(
                             stateFilters,
-                            'price[from]',
+                            'price_from',
                             get(dataFilters, 'prices.min'),
                           ),
-                          'price[to]': val
+                          'price_to': val
                             ? parseInt(val.replace(/\D/g, ''))
                             : '',
                         });
@@ -1683,12 +1699,12 @@ const MainFilterScreen = ({
                     values={[
                       get(
                         stateFilters,
-                        'price[from]',
+                        'price_from',
                         get(dataFilters, 'prices.min', 0),
                       ),
                       get(
                         stateFilters,
-                        'price[to]',
+                        'price_to',
                         get(dataFilters, 'prices.max'),
                       ),
                     ]}
@@ -1698,8 +1714,8 @@ const MainFilterScreen = ({
                     sliderLength={sliderWidth}
                     onValuesChangeFinish={values =>
                       _onChangeFilter({
-                        'price[from]': values[0],
-                        'price[to]': values[1],
+                        'price_from': values[0],
+                        'price_to': values[1],
                       })
                     }
                     trackStyle={styles.multiSliderTrackStyle}
@@ -1757,8 +1773,8 @@ const MainFilterScreen = ({
                 onHide={() => _showHideModal(false)}
                 onReset={() =>
                   _onChangeFilter({
-                    'seatsCount[from]': dataFilters?.data?.seatsCount?.min,
-                    'seatsCount[to]': dataFilters?.data?.seatsCount?.max,
+                    'seatsCount_from': dataFilters?.data?.seatsCount?.min,
+                    'seatsCount_to': dataFilters?.data?.seatsCount?.max,
                   })
                 }
                 title={strings.CarsFilterScreen.filters.seatsCount.title}>
@@ -1768,14 +1784,14 @@ const MainFilterScreen = ({
                       parseInt(
                         get(
                           stateFilters,
-                          'seatsCount[from]',
+                          'seatsCount_from',
                           dataFilters?.data?.seatsCount?.min,
                         ),
                       ),
                       parseInt(
                         get(
                           stateFilters,
-                          'seatsCount[to]',
+                          'seatsCount_to',
                           dataFilters?.data?.seatsCount?.max,
                         ),
                       ),
@@ -1786,8 +1802,8 @@ const MainFilterScreen = ({
                     sliderLength={sliderWidth}
                     onValuesChange={values =>
                       _onChangeFilter({
-                        'seatsCount[from]': parseInt(values[0]),
-                        'seatsCount[to]': parseInt(values[1]),
+                        'seatsCount_from': parseInt(values[0]),
+                        'seatsCount_to': parseInt(values[1]),
                       })
                     }
                     trackStyle={styles.multiSliderTrackStyle}
@@ -1808,7 +1824,7 @@ const MainFilterScreen = ({
                       {parseFloat(
                         get(
                           stateFilters,
-                          'seatsCount[from]',
+                          'seatsCount_from',
                           dataFilters?.data.seatsCount?.min,
                         ),
                       ).toFixed(0)}
@@ -1817,7 +1833,7 @@ const MainFilterScreen = ({
                       {parseFloat(
                         get(
                           stateFilters,
-                          'seatsCount[to]',
+                          'seatsCount_to',
                           dataFilters?.data.seatsCount?.max,
                         ),
                       ).toFixed(0)}
@@ -1883,9 +1899,9 @@ const MainFilterScreen = ({
                 onHide={() => _showHideModal(false)}
                 onReset={() =>
                   _onChangeFilter({
-                    'engineVolumeShort[from]':
+                    'engineVolumeShort_from':
                       dataFilters?.data?.engineVolume?.short?.min,
-                    'engineVolumeShort[to]':
+                    'engineVolumeShort_to':
                       dataFilters?.data?.engineVolume?.short?.max,
                   })
                 }
@@ -1896,14 +1912,14 @@ const MainFilterScreen = ({
                       parseFloat(
                         get(
                           stateFilters,
-                          'engineVolumeShort[from]',
+                          'engineVolumeShort_from',
                           dataFilters?.data?.engineVolume?.short?.min,
                         ),
                       ).toFixed(1),
                       parseFloat(
                         get(
                           stateFilters,
-                          'engineVolumeShort[to]',
+                          'engineVolumeShort_to',
                           dataFilters?.data?.engineVolume?.short?.max,
                         ),
                       ).toFixed(1),
@@ -1914,10 +1930,10 @@ const MainFilterScreen = ({
                     sliderLength={sliderWidth}
                     onValuesChange={values =>
                       _onChangeFilter({
-                        'engineVolumeShort[from]': parseFloat(
+                        'engineVolumeShort_from': parseFloat(
                           values[0],
                         ).toFixed(1),
-                        'engineVolumeShort[to]': parseFloat(values[1]).toFixed(
+                        'engineVolumeShort_to': parseFloat(values[1]).toFixed(
                           1,
                         ),
                       })
@@ -1940,7 +1956,7 @@ const MainFilterScreen = ({
                       {parseFloat(
                         get(
                           stateFilters,
-                          'engineVolumeShort[from]',
+                          'engineVolumeShort_from',
                           dataFilters?.data.engineVolume?.short?.min,
                         ),
                       ).toFixed(1)}
@@ -1949,7 +1965,7 @@ const MainFilterScreen = ({
                       {parseFloat(
                         get(
                           stateFilters,
-                          'engineVolumeShort[to]',
+                          'engineVolumeShort_to',
                           dataFilters?.data.engineVolume?.short?.max,
                         ),
                       ).toFixed(1)}
@@ -1965,8 +1981,8 @@ const MainFilterScreen = ({
                 onHide={() => _showHideModal(false)}
                 onReset={() =>
                   _onChangeFilter({
-                    'power[from]': dataFilters?.data?.power?.min,
-                    'power[to]': dataFilters?.data?.power?.max,
+                    'power_from': dataFilters?.data?.power?.min,
+                    'power_to': dataFilters?.data?.power?.max,
                   })
                 }
                 avoidKeyboard={true}
@@ -1995,21 +2011,21 @@ const MainFilterScreen = ({
                         );
                         if (val < get(dataFilters, 'data.power.min') || !val) {
                           _onChangeFilter({
-                            'power[from]': get(dataFilters, 'data.power.min'),
-                            'power[to]': get(
+                            'power_from': get(dataFilters, 'data.power.min'),
+                            'power_to': get(
                               stateFilters,
-                              'power[to]',
+                              'power_to',
                               get(dataFilters, 'data.power.max'),
                             ),
                           });
                         } else if (val >= get(dataFilters, 'data.power.max')) {
                           _onChangeFilter({
-                            'power[from]':
+                            'power_from':
                               get(dataFilters, 'data.power.max') -
                               get(dataFilters, 'data.power.step'),
-                            'power[to]': get(
+                            'power_to': get(
                               stateFilters,
-                              'power[to]',
+                              'power_to',
                               get(dataFilters, 'data.power.max'),
                             ),
                           });
@@ -2017,12 +2033,12 @@ const MainFilterScreen = ({
                       }}
                       onChangeText={val => {
                         _onChangeFilter({
-                          'power[from]': val
+                          'power_from': val
                             ? parseInt(val.replace(/\D/g, ''))
                             : '',
-                          'power[to]': get(
+                          'power_to': get(
                             stateFilters,
-                            'power[to]',
+                            'power_to',
                             get(dataFilters, 'data.power.max'),
                           ),
                         });
@@ -2052,23 +2068,23 @@ const MainFilterScreen = ({
                           !val
                         ) {
                           _onChangeFilter({
-                            'power[from]': get(
+                            'power_from': get(
                               stateFilters,
-                              'power[from]',
+                              'power_from',
                               get(dataFilters, 'data.power.min'),
                             ),
-                            'power[to]': get(dataFilters, 'data.power.max'),
+                            'power_to': get(dataFilters, 'data.power.max'),
                           });
                         }
                       }}
                       onChangeText={val => {
                         _onChangeFilter({
-                          'power[from]': get(
+                          'power_from': get(
                             stateFilters,
-                            'power[from]',
+                            'power_from',
                             get(dataFilters, 'data.power.min'),
                           ),
-                          'power[to]': val
+                          'power_to': val
                             ? parseInt(val.replace(/\D/g, ''))
                             : '',
                         });
@@ -2079,12 +2095,12 @@ const MainFilterScreen = ({
                     values={[
                       get(
                         stateFilters,
-                        'power[from]',
+                        'power_from',
                         dataFilters?.data?.power?.min,
                       ),
                       get(
                         stateFilters,
-                        'power[to]',
+                        'power_to',
                         dataFilters?.data?.power?.max,
                       ),
                     ]}
@@ -2094,8 +2110,8 @@ const MainFilterScreen = ({
                     sliderLength={sliderWidth}
                     onValuesChangeFinish={values =>
                       _onChangeFilter({
-                        'power[from]': values[0],
-                        'power[to]': values[1],
+                        'power_from': values[0],
+                        'power_to': values[1],
                       })
                     }
                     trackStyle={styles.multiSliderTrackStyle}
@@ -2115,14 +2131,14 @@ const MainFilterScreen = ({
                     <Text style={styles.multiSliderCaptionText}>
                       {get(
                         stateFilters,
-                        'power[from]',
+                        'power_from',
                         dataFilters?.data.power?.min,
                       )}
                     </Text>
                     <Text style={styles.multiSliderCaptionText}>
                       {get(
                         stateFilters,
-                        'power[to]',
+                        'power_to',
                         dataFilters?.data.power?.max,
                       )}
                     </Text>
