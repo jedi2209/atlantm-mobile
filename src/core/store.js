@@ -30,6 +30,7 @@ const store = configureStore({
         ],
       },
     })
+      .concat(__DEV__ ? require('redux-immutable-state-invariant').default() : [])
       .concat(__DEV__ ? createLogger({ collapsed: true, diff: true }) : [])
       .concat(LogRocket.reduxMiddleware()),
   // ... other configurations
