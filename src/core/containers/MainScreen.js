@@ -23,7 +23,6 @@ import {fetchInfoList} from '../../info/actions';
 import {fetchDealers, fetchBrands} from '../../dealer/actions';
 import {
   actionMenuOpenedCount,
-  actionAppRated,
   actionAppLoaded,
   actionFetchMainScreenSettings,
   actionWalktroughVisible,
@@ -52,7 +51,6 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
     region: dealer.region,
     listDealers: dealer.listDealers,
 
-    isAppRated: core.isAppRated,
     isAppLoaded: core.isAppLoaded,
     isWalkthroughShownAlready: core.isWalkthroughShown,
     menuOpenedCount: core.menuOpenedCount,
@@ -62,7 +60,6 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
 
 const mapDispatchToProps = {
   fetchInfoList,
-  actionAppRated,
   actionMenuOpenedCount,
   actionFetchMainScreenSettings,
   actionAppLoaded,
@@ -215,11 +212,6 @@ const _processRow = props => {
       if (!item.title.text) {
         item.title.text = strings.Menu.main.autocenters;
       }
-      item.titleStyle = {
-        fontSize: 9,
-        bottom: 0,
-      };
-      item.type = 'dealersButton';
       titleBackgroundStyle = {
         borderBottomRightRadius: styleConst.borderRadius,
         borderBottomLeftRadius: styleConst.borderRadius,
@@ -415,10 +407,6 @@ const MainScreen = props => {
 
   const scrollRef = useRef();
 
-  const _onAppRateSuccess = () => {
-    !props.isAppRated && props.actionAppRated();
-  };
-
   let i = 0;
 
   useEffect(() => {
@@ -438,6 +426,7 @@ const MainScreen = props => {
       fetchInfoData({region, fetchInfoList});
       fetchBrands(); // обновляем бренды при первом открытии экрана
       props.actionFetchMainScreenSettings(region).then(res => {
+        props.actionMenuOpenedCount();
         props.actionAppLoaded(true);
         if (res.payload.length && !props.isWalkthroughShownAlready) {
           let walkthroughDataObj = {};
@@ -466,6 +455,7 @@ const MainScreen = props => {
   const _onRefresh = async () => {
     setLoading(true);
     await props.actionFetchMainScreenSettings(region);
+    props.actionMenuOpenedCount();
     setLoading(false);
   };
 

@@ -28,7 +28,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Plate from '../../core/components/Plate';
-import RateThisApp from '../../core/components/RateThisApp';
 import Imager from '../../core/components/Imager';
 
 import ToastAlert from '../../core/components/ToastAlert';
@@ -41,7 +40,6 @@ import {callMe} from '../../contacts/actions';
 
 import {INFO_LIST__FAIL} from '../../info/actionTypes';
 import {fetchInfoList} from '../../info/actions';
-import {actionMenuOpenedCount, actionAppRated} from '../../core/actions';
 
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
@@ -135,17 +133,12 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
     addresses: dealer.selected.addresses || [],
     socialNetworks: dealer.selected.socialNetworks || [],
     sites: dealer.selected.sites || [],
-
-    isAppRated: core.isAppRated,
-    menuOpenedCount: core.menuOpenedCount,
   };
 };
 
 const mapDispatchToProps = {
   callMe,
   fetchInfoList,
-  actionAppRated,
-  actionMenuOpenedCount,
 };
 
 const _renderInfoList = params => {
@@ -234,10 +227,6 @@ const DealerInfoScreen = ({
   infoList,
   fetchInfoList,
   isFetchInfoList,
-  isAppRated,
-  menuOpenedCount,
-  actionMenuOpenedCount,
-  actionAppRated,
 }) => {
   // const [showRatePopup, setShowRatePopup] = useState(false);
   const [chatAvailable, setChatAvailable] = useState(false);
@@ -725,24 +714,8 @@ const DealerInfoScreen = ({
     });
   };
 
-  const _onAppRateSuccess = () => {
-    !isAppRated && actionAppRated();
-  };
-
   useEffect(() => {
     Analytics.logEvent('screen', 'contacts');
-
-    if (!isAppRated) {
-      if (menuOpenedCount >= 10) {
-        setTimeout(() => {
-          Analytics.logEvent('screen', 'ratePopup', {source: 'contacts'});
-          actionMenuOpenedCount(0);
-          return RateThisApp({onSuccess: _onAppRateSuccess});
-        }, 1000);
-      } else {
-        actionMenuOpenedCount();
-      }
-    }
 
     fetchInfoData();
 

@@ -16,6 +16,7 @@ import SpInAppUpdates, {IAUUpdateKind} from 'sp-react-native-in-app-updates';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import RNRestart from 'react-native-restart';
 import Analytics from '../../utils/amplitude-analytics';
+import RateThisApp from '../components/RateThisApp';
 import TransitionView from '../components/TransitionView';
 
 // redux
@@ -23,6 +24,7 @@ import {connect} from 'react-redux';
 import {store} from '../store';
 import {
   actionSetPushActionSubscribe,
+  actionAppRated,
   actionMenuOpenedCount,
   actionStoreUpdated,
   actionSettingsLoaded,
@@ -53,6 +55,7 @@ const mapStateToProps = ({core, dealer, modal}) => {
   return {
     menuOpenedCount: core.menuOpenedCount,
     isStoreUpdated: core.isStoreUpdated,
+    isAppRated: core.isAppRated,
     dealersLastUpdateDate: dealer.meta.lastUpdateDate,
     modal,
     currentLanguage: core.language.selected,
@@ -64,6 +67,7 @@ const mapStateToProps = ({core, dealer, modal}) => {
 const mapDispatchToProps = {
   actionSetPushActionSubscribe,
   actionMenuOpenedCount,
+  actionAppRated,
   actionStoreUpdated,
   actionSettingsLoaded,
   fetchDealers,
@@ -162,12 +166,15 @@ const App = props => {
     menuOpenedCount,
     isStoreUpdated,
     region,
+    isAppRated,
   } = props;
 
   const [isLoading, setLoading] = useState(true);
   const [isError, setError] = useState(false);
   const [isUpdateDownloading, setUpdateDownload] = useState(false);
   const [downloadPercent, setDownloadPercent] = useState(0);
+
+  let rateAppTimeOut = null;
 
   const opacityValue = new Animated.Value(0);
 
@@ -236,6 +243,13 @@ const App = props => {
       console.error(error);
     }
   };
+  //props.actionAppRated(false);
+
+  const _onAppRateSuccess = () => {
+    props.actionMenuOpenedCount(0);
+    props.actionAppRated(false);
+    //return !props.isAppRated && props.actionAppRated(true);
+  };
 
   useEffect(() => {
     NavigationService.setTopLevelNavigator(NavigationService.navigationRef);
@@ -297,6 +311,16 @@ const App = props => {
 
     if (get(auth, 'login') === 'zteam') {
       window.atlantmDebug = true;
+    }
+
+    if (!isAppRated) {
+      console.info('isAppRated', isAppRated);
+      if (menuOpenedCount >= 2) {
+        rateAppTimeOut = setTimeout(() => {
+          Analytics.logEvent('screen', 'ratePopup', {source: 'mainScreen'});
+          return RateThisApp({navigation: NavigationService, onSuccess: _onAppRateSuccess});
+        }, 1000);
+      }
     }
   }, []);
 

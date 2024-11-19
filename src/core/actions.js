@@ -24,10 +24,11 @@ export const actionMenuOpenedCount = reset => {
   };
 };
 
-export const actionAppRated = () => {
+export const actionAppRated = (reset = false) => {
   return dispatch => {
     dispatch({
       type: APP_ACTION_RATED,
+      payload: reset,
     });
   };
 };
