@@ -11,7 +11,6 @@ import {
   CLEAR_LOCAL_DEALER,
   DEALER__FAIL,
   DEALERS__REQUEST,
-  DEALERS__SUCCESS,
   ALL_DEALERS__SUCCESS,
   DEALERS__FAIL,
   BRANDS__REQUEST,
@@ -89,8 +88,8 @@ function listRussia(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'dealer.listRussia', []);
-    case DEALERS__SUCCESS:
-      return [...action.payload[RUSSIA]];
+    case ALL_DEALERS__SUCCESS:
+      return [...action.payload.dealersByRegions[RUSSIA]];
     case APP_STORE_UPDATED:
       return [];
     default:
@@ -102,8 +101,8 @@ function listBelarussia(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'dealer.listBelarussia', []);
-    case DEALERS__SUCCESS:
-      return [...action.payload[BELARUSSIA]];
+    case ALL_DEALERS__SUCCESS:
+      return [...action.payload.dealersByRegions[BELARUSSIA]];
     case APP_STORE_UPDATED:
       return [];
     default:
@@ -115,8 +114,8 @@ function listUkraine(state = [], action) {
   switch (action.type) {
     case REHYDRATE:
       return get(action.payload, 'dealer.listUkraine', []);
-    case DEALERS__SUCCESS:
-      return [...action.payload[UKRAINE]];
+    case ALL_DEALERS__SUCCESS:
+      return [...action.payload.dealersByRegions[UKRAINE]];
     case APP_STORE_UPDATED:
       return [];
     default:
@@ -155,7 +154,7 @@ function listDealers(state = {}, action) {
     case REHYDRATE:
       return get(action.payload, 'dealer.listDealers', {});
     case ALL_DEALERS__SUCCESS:
-      return action.payload;
+      return action.payload.allDealers;
     case APP_STORE_UPDATED:
       return {};
     default:
@@ -178,7 +177,7 @@ function isFetchDealersList(state = false, action) {
   switch (action.type) {
     case DEALERS__REQUEST:
       return true;
-    case DEALERS__SUCCESS:
+    case ALL_DEALERS__SUCCESS:
     case DEALERS__FAIL:
       return false;
     default:
@@ -240,7 +239,7 @@ const listRussiaByCities = (state = [], action) => {
   switch (action.type) {
     case REHYDRATE:
       return get(action, 'payload.dealer.listRussiaByCities', []);
-    case DEALERS__SUCCESS: // устанавливается при выборе дилера
+    case ALL_DEALERS__SUCCESS:
     case DEALERS_BY_CITIES__SET: // нужно для обновления 4.2.0
       return processListsByCities(action, RUSSIA);
     case APP_STORE_UPDATED:
@@ -254,7 +253,7 @@ const listBelarussiaByCities = (state = [], action) => {
   switch (action.type) {
     case REHYDRATE:
       return get(action, 'payload.dealer.listBelarussiaByCities', []);
-    case DEALERS__SUCCESS:
+    case ALL_DEALERS__SUCCESS:
     case DEALERS_BY_CITIES__SET:
       return processListsByCities(action, BELARUSSIA);
     case APP_STORE_UPDATED:
@@ -268,7 +267,7 @@ const listUkraineByCities = (state = [], action) => {
   switch (action.type) {
     case REHYDRATE:
       return get(action, 'payload.dealer.listUkraineByCities', []);
-    case DEALERS__SUCCESS:
+    case ALL_DEALERS__SUCCESS:
     case DEALERS_BY_CITIES__SET:
       return processListsByCities(action, BELARUSSIA);
     case APP_STORE_UPDATED:

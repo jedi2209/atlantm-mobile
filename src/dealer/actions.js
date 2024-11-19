@@ -2,7 +2,6 @@ import {
   DEALERS_ALL_UPDATED,
   DEALERS_REGION__SELECT,
   DEALERS__REQUEST,
-  DEALERS__SUCCESS,
   DEALERS__FAIL,
   DEALERS_BY_CITIES__SET,
   DEALER__REQUEST,
@@ -357,17 +356,19 @@ export const fetchDealers = isLocal => {
           allDealers[element.id] = element;
         });
 
-        dispatch({
+        return dispatch({
           type: ALL_DEALERS__SUCCESS,
-          payload: allDealers,
+          payload: {allDealers, dealersByRegions},
         });
 
         if (!isLocal) {
-          return dispatch({
-            type: DEALERS__SUCCESS,
-            payload: dealersByRegions,
-          });
+          console.log(9);
+          // return dispatch({
+          //   type: DEALERS__SUCCESS,
+          //   payload: dealersByRegions,
+          // });
         } else {
+          console.log(10);
           return dispatch({
             type: DEALER__SUCCESS__LOCAL,
             payload: dealersByRegions,

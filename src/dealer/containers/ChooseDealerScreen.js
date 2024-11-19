@@ -532,12 +532,12 @@ const ChooseDealerScreen = props => {
       setRefreshing(true);
       fetchDealers()
         .then(res => {
-          if (res.type === 'DEALERS__SUCCESS') {
+          if (res.type === 'ALL_DEALERS__SUCCESS') {
             const tabsDataLocal = makeLists({
               ...props,
-              listUkraine: get(res, 'payload.ua', []),
-              listRussia: get(res, 'payload.ru', []),
-              listBelarussia: get(res, 'payload.by', []),
+              listUkraine: get(res, 'payload.dealersByRegions.ua', []),
+              listRussia: get(res, 'payload.dealersByRegions.ru', []),
+              listBelarussia: get(res, 'payload.dealersByRegions.by', []),
               listAll,
               regions,
               isRefreshing,
@@ -624,6 +624,10 @@ const ChooseDealerScreen = props => {
   if (!tabsData || !renderSceneData || isRefreshing) {
     return _EmptyComponent();
   }
+
+  console.info('needToUpdate', needToUpdate);
+  console.info('tabsData', tabsData);
+  console.info('renderSceneData', renderSceneData);
 
   const renderScene = SceneMap(renderSceneData);
 
