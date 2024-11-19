@@ -86,6 +86,7 @@ import MapScreen from '../contacts/map/containers/MapScreen';
 
 import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 import SettingsScreen from '../settings/containers/SettingsScreen';
+import FeedbackScreen from '../settings/containers/FeedbackScreen';
 import NotificationsScreen from '../settings/containers/NotificationsScreen';
 
 import BonusScreenInfo from '../profile/bonus/containers/BonusInfoScreen';
@@ -331,6 +332,18 @@ export const Base = ({navigation, route}) => {
         <StackBase.Screen
           name="SettingsScreen"
           component={SettingsScreen}
+          options={BigCloseButton(navigation, route, {
+            ...TransitionPresets.ModalTransition,
+            headerTitle: '',
+            headerTitleStyle: [
+              stylesHeader.transparentHeaderTitle,
+              {color: '#222B45'},
+            ],
+          })}
+        />
+        <StackBase.Screen
+          name="FeedbackScreen"
+          component={FeedbackScreen}
           options={BigCloseButton(navigation, route, {
             ...TransitionPresets.ModalTransition,
             headerTitle: '',

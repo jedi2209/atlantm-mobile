@@ -78,6 +78,9 @@ const isAppRated = (state = false, action) => {
     case REHYDRATE:
       return get(action.payload, 'core.isAppRated', false);
     case APP_ACTION_RATED:
+      if (action.payload === false) {
+        return false;
+      }
       return true;
     default:
       return state;
