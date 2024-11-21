@@ -839,7 +839,7 @@ export default {
       'x-auth': await JWTToken(),
     });
 
-    // `${API_MAIN_URL}/orders/usedbuy/post/`,
+    // `${API_MAIN_URL[0]}/orders/usedbuy/post/`,
     return (async () => {
       const rawResponse = await RNFetchBlob.fetch(
         'POST',
@@ -1214,7 +1214,7 @@ export default {
   },
 
   async request(path, requestParams = baseRequestParams) {
-    const url = path.includes('https://') ? path : `${API_MAIN_URL}${path}`;
+    const url = path.includes('https://') ? path : `${API_MAIN_URL[0]}${path}`;
 
     // Если включен debug режим, добавляем в каждый запрос заголовок `Debug`
     if (window.atlantmDebug) {
