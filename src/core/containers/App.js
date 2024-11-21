@@ -315,7 +315,7 @@ const App = props => {
 
     if (!isAppRated) {
       console.info('isAppRated', isAppRated);
-      if (menuOpenedCount >= 2) {
+      if (menuOpenedCount >= 1) {
         rateAppTimeOut = setTimeout(() => {
           Analytics.logEvent('screen', 'ratePopup', {source: 'mainScreen'});
           return RateThisApp({navigation: NavigationService, onSuccess: _onAppRateSuccess});
