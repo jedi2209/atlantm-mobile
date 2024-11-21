@@ -6777,7 +6777,7 @@ ieee754@1.1.13:
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.13.tgz#ec168558e95aa181fd87d37f55c32bbcb6708b84"
   integrity sha512-4vf7I2LYV/HaWerSo3XmlMkp5eZ83i+/CDluXi/IGTs/O1sejBNhTtnxzmRZfvOUqj7lZjqHkeTvpgSFDlWZTg==
 
-ieee754@^1.1.13, ieee754@^1.1.4:
+ieee754@^1.1.13, ieee754@^1.1.4, ieee754@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.2.1.tgz#8eb7a10a63fff25d15a57b001586d177d1b0d352"
   integrity sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==
@@ -9289,6 +9289,14 @@ react-native-big-list@^1.6.1:
   dependencies:
     prop-types "^15.8.1"
 
+react-native-buffer@^6.0.3:
+  version "6.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-buffer/-/react-native-buffer-6.0.3.tgz#74af81e1ca5fc5e2d539f0242cf57df7e6a645c6"
+  integrity sha512-zZ0+TytQukFkdq7l9VQ8eypY83qQLMYNNVA+1skHQWcjXWRxsJvR6TAW4/HwD1FTLIySQt7cyvbNYSO30RuNvA==
+  dependencies:
+    ieee754 "^1.2.1"
+    react-native-fast-base64 "^0.1.1"
+
 react-native-calendars@^1.1305.0:
   version "1.1307.0"
   resolved "https://registry.yarnpkg.com/react-native-calendars/-/react-native-calendars-1.1307.0.tgz#2cb8c5abd322037e9b3ef5605afa86f25347068f"
@@ -9366,6 +9374,11 @@ react-native-easy-view-transformer@^1.2.1:
     prop-types "^15.6.2"
     react-native-easy-guesture-responder "^1.1.2"
     react-native-scrolling "^1.0.2"
+
+react-native-fast-base64@^0.1.1:
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-fast-base64/-/react-native-fast-base64-0.1.2.tgz#1f2c88a8b07b543b2f9057c98e1ed2f7e960444f"
+  integrity sha512-LBwGGdAQirfU++1r4DX1ufkWKUhY6wwVEbVhyH247YXeubW0jxl7+yl8xlOchz6W/J1KFzXrGTcMiHlv+OpIig==
 
 react-native-file-access@^3.1.0:
   version "3.1.1"

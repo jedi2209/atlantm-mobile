@@ -21,6 +21,7 @@ const secretKey = [
   DeviceInfo.getBundleId(),
   DeviceInfo.getVersion(),
 ].join('__');
+const Buffer = require('buffer/').Buffer;
 
 const JWTToken = async () => {
   const token = await JWTSign(
@@ -709,6 +710,25 @@ export default {
     });
 
     const url = isNewCar ? '/order/test-drive/' : null;
+
+    return this.request(url, requestParams);
+  },
+
+  orderFeedbackApp({firstName, email, text, additional}) {
+    const body = {
+      appFeedback: true,
+      f_FirstName: firstName,
+      f_Email: email,
+      f_Text: text + "\r\n\r\nИнформация о пользователе:\r\n" + Buffer.from(JSON.stringify(additional), 'binary').toString('base64'),
+      f_Source: SourceID,
+    };
+
+    const requestParams = _.merge({}, baseRequestParams, {
+      method: 'POST',
+      body: body,
+    });
+
+    const url = '/orders/feedback/post/';
 
     return this.request(url, requestParams);
   },
