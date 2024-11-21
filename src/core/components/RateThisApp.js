@@ -19,9 +19,10 @@ const rateInApp = onSuccess => {
   }
   InAppReview.RequestInAppReview()
   .then((hasFlowFinishedSuccessfully) => {
-      if (hasFlowFinishedSuccessfully) {
-          onSuccess && onSuccess();
+      if (!hasFlowFinishedSuccessfully) {
+        Linking.openURL(STORE_LINK[Platform.OS]);
       }
+      onSuccess && onSuccess();
   })
   .catch((error) => {
       console.log('InAppReview.RequestInAppReview ERROR', error);
