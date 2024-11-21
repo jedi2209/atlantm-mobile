@@ -25,6 +25,7 @@ import {actionSetPushActionSubscribe, actionAppRated} from '../../core/actions';
 import TransitionView from '../../core/components/TransitionView';
 
 // helpers
+import API from '../../utils/api';
 import Analytics from '../../utils/amplitude-analytics';
 import isInternet from '../../utils/internet';
 import UserData from '../../utils/user';
@@ -35,12 +36,13 @@ import {get, isNil} from 'lodash';
 
 const isAndroid = Platform.OS === 'android';
 
-const mapStateToProps = ({dealer, nav, core}) => {
+const mapStateToProps = ({profile}) => {
   return {
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
     lastName: UserData.get('LAST_NAME'),
     email: UserData.get('EMAIL'),
+    profile,
   };
 };
 
@@ -56,6 +58,7 @@ const FeedbackScreen = props => {
   const {
     actionAppRated,
     navigation,
+    profile,
   } = props;
 
   const {
@@ -91,11 +94,34 @@ const FeedbackScreen = props => {
       firstName: get(data, 'NAME', ''),
       email: get(data, 'EMAIL', ''),
       text: get(data, 'COMMENT', ''),
+      additional: {
+        ip: await DeviceInfo.getIpAddress(),
+        device: {
+          id: DeviceInfo.getDeviceId(),
+          brand: DeviceInfo.getBrand(),
+          model: DeviceInfo.getModel(),
+        },
+        system: {
+          name: DeviceInfo.getSystemName(),
+          version: DeviceInfo.getSystemVersion(),
+        },
+        app: {
+          version: DeviceInfo.getVersion(),
+          build: DeviceInfo.getBuildNumber(),
+          firstInstall: await DeviceInfo.getFirstInstallTime(),
+          lastUpdateTime: await DeviceInfo.getLastUpdateTime(),
+        },
+        user: {
+          id: get(profile, 'login.ID'),
+          sap: get(profile, 'login.SAP.ID'),
+        },
+      },
     };
 
-    let action = null;
+    const action = await API.orderFeedbackApp(dataToSend);
 
-    console.info('dataToSend', dataToSend);
+    // if (get(action, 'status') === 'success') {}
+
     setFormSendingStatus(true);
     setTimeout(() => {
       setFormSendingStatus(null);
@@ -103,39 +129,12 @@ const FeedbackScreen = props => {
       setTimeout(() => navigation.goBack(), 300);
     }, 500);
     return true;
-
-    // if (action && action.type) {
-    //   switch (action.type) {
-    //     case CREDIT_ORDER__SUCCESS:
-    //     case CATALOG_ORDER__SUCCESS:
-    //       setFormSendingStatus(true);
-    //       const path = isNewCar ? 'newcar' : 'usedcar';
-    //       Analytics.logEvent('order', `catalog/${path}`, {
-    //         brand_name: get(car, 'brand'),
-    //         model_name: modelName,
-    //       });
-    //       setTimeout(() => {
-    //         setFormSendingStatus(null);
-    //         setSendingForm(false);
-    //         setTimeout(() => navigation.goBack(), 300);
-    //       }, 500);
-    //       break;
-    //     case CREDIT_ORDER__FAIL:
-    //     case CATALOG_ORDER__FAIL:
-    //       setFormSendingStatus(false);
-    //       setTimeout(() => {
-    //         setFormSendingStatus(null);
-    //         setSendingForm(false);
-    //       }, 1000);
-    //       break;
-    //   }
-    // }
   };
 
   return (
     <ScrollView style={styleConst.safearea.default} paddingX={4}>
       <KeyboardAvoidingView behavior={'padding'} enabled={!isAndroid}>
-        <Text selectable={false} style={styleConst.text.bigHead}>
+        <Text selectable={false} style={[styleConst.text.bigHead, {fontSize: 24}]}>
           {strings.RateThisApp.titleBad}
         </Text>
         <TransitionView

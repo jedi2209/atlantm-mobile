@@ -243,7 +243,6 @@ const App = props => {
       console.error(error);
     }
   };
-  //props.actionAppRated(false);
 
   const _onAppRateSuccess = () => {
     props.actionMenuOpenedCount(0);
@@ -311,16 +310,6 @@ const App = props => {
 
     if (get(auth, 'login') === 'zteam') {
       window.atlantmDebug = true;
-    }
-
-    if (!isAppRated) {
-      console.info('isAppRated', isAppRated);
-      if (menuOpenedCount >= 1) {
-        rateAppTimeOut = setTimeout(() => {
-          Analytics.logEvent('screen', 'ratePopup', {source: 'mainScreen'});
-          return RateThisApp({navigation: NavigationService, onSuccess: _onAppRateSuccess});
-        }, 1000);
-      }
     }
   }, []);
 
@@ -395,6 +384,7 @@ const App = props => {
         <PaperProvider theme={paperTheme}>
           <BugsnagNavigationContainer ref={NavigationService.navigationRef}>
             <Nav.Base />
+            {!isAppRated && menuOpenedCount >= 1 ? <RateThisApp navigation={NavigationService} onSuccess={_onAppRateSuccess} /> : null}
           </BugsnagNavigationContainer>
         </PaperProvider>
       </NativeBaseProvider>
