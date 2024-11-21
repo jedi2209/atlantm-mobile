@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import {TouchableOpacity, StyleSheet, ActivityIndicator} from 'react-native';
 import {get} from 'lodash';
-import {CarCard} from './CarCard';
+import CarCard from './CarCard';
 import {Icon, Button, HStack, Text, View, ScrollView} from 'native-base';
 // import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,7 +14,7 @@ import {verticalScale} from '../../utils/scale';
 import styleConst from '../../core/style-const';
 import {strings} from '../../core/lang/const';
 
-const mapStateToProps = ({profile}) => {
+const mapStateToProps = ({profile, dealer}) => {
   return {
     cars: profile.cars,
   };
@@ -38,7 +38,37 @@ const styles = StyleSheet.create({
   },
 });
 
-let UserCars = ({activePanel = 'default', cars}) => {
+const _renderCarsItems = ({navigation, carsScrollView, carsData}) => {
+  return (
+    <ScrollView
+      showsHorizontalScrollIndicator={false}
+      horizontal
+      contentContainerStyle={{paddingLeft: 12, paddingRight: 5}}
+      ref={carsScrollView}>
+      {carsData.map(item => {
+        return (
+          <TouchableOpacity
+            activeOpacity={1}
+            key={item.vin}
+            onPress={() => {
+              navigation.navigate('CarInfoScreen', {car: item});
+              return;
+            }}>
+            <View
+              style={{
+                marginTop: 10,
+                marginBottom: 20,
+              }}>
+              <CarCard data={item} type="profile" />
+            </View>
+          </TouchableOpacity>
+        );
+      })}
+    </ScrollView>
+  );
+};
+
+let UserCars = ({activePanel = 'default', cars, brands}) => {
   const navigation = useNavigation();
   const [loading, setLoading] = useState(false);
   const [carsPanel, setActivePanel] = useState(activePanel);
@@ -98,36 +128,6 @@ let UserCars = ({activePanel = 'default', cars}) => {
         carsScrollView.current.scrollTo({x: 0, y: 0, animated: true});
     }, 2500);
   }, []);
-
-  const _renderCarsItems = ({carsData}) => {
-    return (
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        horizontal
-        contentContainerStyle={{paddingLeft: 12, paddingRight: 5}}
-        ref={carsScrollView}>
-        {carsData.map(item => {
-          return (
-            <TouchableOpacity
-              activeOpacity={1}
-              key={item.vin}
-              onPress={() => {
-                navigation.navigate('CarInfoScreen', {car: item});
-                return;
-              }}>
-              <View
-                style={{
-                  marginTop: 10,
-                  marginBottom: 20,
-                }}>
-                <CarCard data={item} type="profile" />
-              </View>
-            </TouchableOpacity>
-          );
-        })}
-      </ScrollView>
-    );
-  };
 
   return (
     <>
@@ -207,6 +207,8 @@ let UserCars = ({activePanel = 'default', cars}) => {
       ) : myCars[carsPanel].length > 0 ? (
         _renderCarsItems({
           carsData: myCars[carsPanel],
+          navigation,
+          carsScrollView,
         })
       ) : (
         <View

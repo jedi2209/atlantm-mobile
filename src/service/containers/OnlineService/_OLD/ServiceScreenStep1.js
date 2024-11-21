@@ -19,7 +19,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {CarCard} from '../../../../profile/components/CarCard';
+import CarCard from '../../../../profile/components/CarCard';
 import Form from '../../../../core/components/Form/Form';
 import UserData from '../../../../utils/user';
 import {showPrice} from '../../../../utils/price';

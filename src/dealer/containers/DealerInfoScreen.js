@@ -125,7 +125,6 @@ const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
     isFetchInfoList: info.meta.isFetchInfoList,
     nav,
     profile,
-    brands: dealer.listBrands,
     dealerSelected: dealer.selected,
     isСallMeRequest: contacts.isСallMeRequest,
     phones: dealer.selected.phones || [],
