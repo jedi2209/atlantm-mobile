@@ -384,7 +384,7 @@ export default {
     showFull: 'Показать полное описание...',
     showLess: 'Свернуть',
     creditCalculate: 'рассчитать\r\nкредит',
-    myPrice: 'предложить\r\nсвою цену',
+    myPrice: 'предложить свою цену',
   },
   UsedCarFilterScreen: {
     city: 'Город',

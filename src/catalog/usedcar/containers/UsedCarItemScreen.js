@@ -647,54 +647,6 @@ const UsedCarItemScreen = props => {
                   </>
                 ) : null}
               </View>
-              {carDetails.creditAvailable || carDetails.customPriceAvailable ? (
-                <View style={styles.bodyButtonsContainer}>
-                  {carDetails.creditAvailable ? (
-                    <Button
-                      variant="outline"
-                      activeOpacity={0.5}
-                      onPress={onPressCredit}
-                      style={[styles.bodyButton, styles.bodyButtonLeft]}
-                      leftIcon={
-                        <Icon
-                          as={Octicons}
-                          name="credit-card"
-                          size={6}
-                          color="red.600"
-                        />
-                      }
-                      _text={{
-                        fontSize: 'sm',
-                        lineHeight: '14',
-                        color: 'red.600',
-                      }}>
-                      {strings.UsedCarItemScreen.creditCalculate}
-                    </Button>
-                  ) : null}
-                  {carDetails.customPriceAvailable ? (
-                    <Button
-                      variant="outline"
-                      activeOpacity={0.5}
-                      onPress={onPressMyPrice}
-                      style={[styles.bodyButton, styles.bodyButtonRight]}
-                      rightIcon={
-                        <Icon
-                          as={Entypo}
-                          name="price-tag"
-                          size={6}
-                          color="blue.600"
-                        />
-                      }
-                      _text={{
-                        fontSize: 'sm',
-                        lineHeight: '14',
-                        color: 'blue.600',
-                      }}>
-                      {strings.UsedCarItemScreen.myPrice}
-                    </Button>
-                  ) : null}
-                </View>
-              ) : null}
             </View>
             <Accordion
               sections={[
@@ -927,6 +879,7 @@ const UsedCarItemScreen = props => {
           </View>
         </View>
         {renderCarCostBlock()}
+        {carDetails.creditAvailable ? (
         <CreditBanner
           onPress={() => {
               navigation.navigate('CreditCalcScreen', {
@@ -935,7 +888,34 @@ const UsedCarItemScreen = props => {
               isNewCar: false,
             });
           }}
-          carDetails={carDetails} />
+          carDetails={carDetails} />) : null}
+        {carDetails.customPriceAvailable ? (
+          <View style={styles.bodyButtonsContainer}>
+              <Button
+                variant={'outline'}
+                size={'md'}
+                mx="2%"
+                mt="1"
+                width="96%"
+                onPress={onPressMyPrice}
+                // style={{width: '100%', height:}}
+                leftIcon={
+                  <Icon
+                    as={Entypo}
+                    name="price-tag"
+                    size={6}
+                    color="blue.600"
+                  />
+                }
+                _text={{
+                  fontSize: 'sm',
+                  lineHeight: '14',
+                  color: 'blue.600',
+                }}>
+                {strings.UsedCarItemScreen.myPrice}
+              </Button>
+          </View>
+        ) : null}
         <View height={140} />
       </ScrollView>
       <VStack
