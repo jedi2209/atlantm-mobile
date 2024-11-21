@@ -6,6 +6,7 @@ import {
   Heading,
   VStack,
   FlatList,
+  Button,
 } from 'native-base';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import { CreditCardItem } from '../components/CreditCardItem';
@@ -363,7 +364,7 @@ const HeaderComponent = ({
   );
 };
 
-const CreditCardsItems = ({isNewCar, isLoading, carData, creditPrograms, listHeaderComponent, nav}) => {
+const CreditCardsItems = ({isNewCar, isPriceShow, isLoading, carData, creditPrograms, listHeaderComponent, nav, region}) => {
   return (
     <FlatList
       ListEmptyComponent={
@@ -374,7 +375,22 @@ const CreditCardsItems = ({isNewCar, isLoading, carData, creditPrograms, listHea
           />
         ) : (
           <View justifyContent={'center'} alignContent={'center'} justifyItems={'center'} alignItems={'center'}>
-            <Text fontFamily={styleConst.font.regular}>Ничего не найдено.{'\n'}Попробуйте изменить аванс или срок погашения.</Text>
+            <Button size={'lg'} onPress={() => nav.navigate('OrderCreditScreen', {
+                car: {
+                  id: get(carData, 'id.api'),
+                  brand: get(carData, 'brand.name', ''),
+                  model: get(carData, 'model', ''),
+                  complectation: get(carData, 'complectation.name'),
+                  year: get(carData, 'year'),
+                  price:
+                    get(carData, 'price.app.standart') || get(carData, 'price.app'),
+                },
+                region,
+                dealerId: get(carData, 'dealer.id'),
+                isNewCar,
+                isPriceShow,
+              })}
+            >{strings.UsedCarItemScreen.creditCalculate}</Button>
           </View>
         )
       }
@@ -424,11 +440,13 @@ const CreditCalcScreen = ({
   actionFetchCarCreditPrograms,
   route,
   navigation,
+  region,
 }) => {
   const [isLoading, setLoading] = useState(true);
   const carData = get(route, 'params.carData');
   const carID = get(route, 'params.carID');
-  const isNewCar = get(route, 'params.isNewCar');
+  const isNewCar = get(route, 'params.isNewCar', true);
+  const isPriceShow = get(route, 'params.isPriceShow', true);
 
   const [creditPrograms, setCreditPrograms] = useState({
     data: [],
@@ -490,7 +508,9 @@ const CreditCalcScreen = ({
         isLoading={isLoading}
         creditPrograms={creditPrograms}
         nav={navigation}
+        region={region}
         isNewCar={isNewCar}
+        isPriceShow={isPriceShow}
         listHeaderComponent={
           <HeaderComponent
             carData={carData}

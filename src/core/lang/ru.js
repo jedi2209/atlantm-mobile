@@ -383,7 +383,7 @@ export default {
   UsedCarItemScreen: {
     showFull: 'Показать полное описание...',
     showLess: 'Свернуть',
-    creditCalculate: 'рассчитать\r\nкредит',
+    creditCalculate: 'Рассчитать кредит',
     myPrice: 'предложить свою цену',
   },
   UsedCarFilterScreen: {
