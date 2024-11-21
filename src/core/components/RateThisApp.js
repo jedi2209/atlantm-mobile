@@ -6,6 +6,23 @@ import {STORE_LINK} from '../const';
 // import Rate, {AndroidMarket} from 'react-native-rate';
 import InAppReview from 'react-native-in-app-review';
 
+const rateInApp = onSuccess => {
+  if (!InAppReview.isAvailable()) {
+    Linking.openURL(STORE_LINK[Platform.OS]);
+    onSuccess && onSuccess();
+    return;
+  }
+  InAppReview.RequestInAppReview()
+  .then((hasFlowFinishedSuccessfully) => {
+      if (hasFlowFinishedSuccessfully) {
+          onSuccess && onSuccess();
+      }
+  })
+  .catch((error) => {
+      console.log('InAppReview.RequestInAppReview ERROR', error);
+  });
+};
+
 const RateThisApp = ({onSuccess, navigation}) => {
   let alert_buttons = {
     // такое задротство из-за разного положения кнопок на iOS / Android. Нужно, чтобы кнопки были одинаково расположены
@@ -24,41 +41,13 @@ const RateThisApp = ({onSuccess, navigation}) => {
       },
       {
         text: strings.RateThisApp.rate,
-        onPress: () => {
-          // StoreReview.requestReview();
-          if (!InAppReview.isAvailable()) {
-            Linking.openURL(STORE_LINK[Platform.OS]);
-            onSuccess && onSuccess();
-          }
-          InAppReview.RequestInAppReview()
-          .then((hasFlowFinishedSuccessfully) => {
-              if (hasFlowFinishedSuccessfully) {
-                  onSuccess && onSuccess();
-              }
-          })
-          .catch((error) => {
-              console.log('InAppReview.RequestInAppReview ERROR', error);
-          });
-        },
+        onPress: () => rateInApp(onSuccess),
       },
     ],
     ios: [
       {
         text: strings.RateThisApp.rate,
-        onPress: () => {
-          if (!InAppReview.isAvailable()) {
-              Linking.openURL(STORE_LINK[Platform.OS]);
-          }
-          InAppReview.RequestInAppReview()
-          .then((hasFlowFinishedSuccessfully) => {
-              if (hasFlowFinishedSuccessfully) {
-                  onSuccess && onSuccess();
-              }
-          })
-          .catch((error) => {
-              console.log('InAppReview.RequestInAppReview ERROR', error);
-          });
-        },
+        onPress: () => rateInApp(onSuccess),
         style: 'default',
       },
       {
