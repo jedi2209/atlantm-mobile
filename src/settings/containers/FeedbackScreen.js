@@ -142,7 +142,7 @@ const FeedbackScreen = props => {
           animation={styleConst.animation.zoomIn}
           duration={250}
           index={3}>
-          <GroupForm title={strings.Form.group.contacts}>
+          <GroupForm title={strings.Form.group.contacts2}>
             <Controller
               control={control}
               rules={{
@@ -166,26 +166,27 @@ const FeedbackScreen = props => {
                 />
               )}
             />
-
-            <Controller
-              control={control}
-              name="EMAIL"
-              render={({field: {onChange, onBlur, value}}) => (
-                <InputCustom
-                  type="email"
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                />
-              )}
-            />
+            </GroupForm>
+            <GroupForm title={strings.Form.group.emailFeedback}>
+              <Controller
+                control={control}
+                name="EMAIL"
+                render={({field: {onChange, onBlur, value}}) => (
+                  <InputCustom
+                    type="email"
+                    onBlur={onBlur}
+                    onChangeText={onChange}
+                    value={value}
+                  />
+                )}
+              />
           </GroupForm>
         </TransitionView>
         <TransitionView
           animation={styleConst.animation.zoomIn}
           duration={250}
           index={4}>
-          <GroupForm title={strings.Form.group.additional}>
+          <GroupForm title={strings.Form.group.textFeedback}>
             <Controller
                 control={control}
                 key="additional"
