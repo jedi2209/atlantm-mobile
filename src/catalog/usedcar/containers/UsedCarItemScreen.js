@@ -118,24 +118,6 @@ const UsedCarItemScreen = props => {
     });
   };
 
-  const onPressCredit = () => {
-    navigation.navigate('OrderCreditScreen', {
-      car: {
-        id: get(carDetails, 'id.api'),
-        brand: get(carDetails, 'brand.name', ''),
-        model: get(carDetails, 'model', ''),
-        complectation: get(carDetails, 'complectation.name'),
-        year: get(carDetails, 'year'),
-        price:
-          get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
-      },
-      region,
-      dealerId: get(carDetails, 'dealer.id'),
-      isNewCar: false,
-      isPriceShow: isPriceShow,
-    });
-  };
-
   const onPressTestDrive = () => {
     navigation.navigate('TestDriveScreen', {
       car: {
@@ -885,6 +867,7 @@ const UsedCarItemScreen = props => {
               navigation.navigate('CreditCalcScreen', {
               carID: carDetails.id.api,
               carData: carDetails,
+              isPriceShow,
               isNewCar: false,
             });
           }}
