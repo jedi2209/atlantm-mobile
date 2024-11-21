@@ -17,7 +17,7 @@ import {
   substractYears,
 } from '../../../utils/date';
 import UserData from '../../../utils/user';
-import {CarCard} from '../../../profile/components/CarCard';
+import CarCard from '../../../profile/components/CarCard';
 
 import Form from '../../../core/components/Form/Form';
 

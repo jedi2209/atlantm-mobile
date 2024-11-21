@@ -3,7 +3,7 @@ import React, {useState, useEffect, useMemo, useReducer} from 'react';
 import {StyleSheet, View, ScrollView, Platform} from 'react-native';
 import {useToast} from 'native-base';
 import RNBounceable from '@freakycoder/react-native-bounceable';
-import {CarCard} from '../../../profile/components/CarCard';
+import CarCard from '../../../profile/components/CarCard';
 
 import styleConst from '../../../core/style-const';
 import Form from '../../../core/components/Form/Form';

@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import {Icon, Button, useToast} from 'native-base';
 import Form from '../../core/components/Form/Form';
-import {CarCard} from '../../profile/components/CarCard';
+import CarCard from '../../profile/components/CarCard';
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 

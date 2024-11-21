@@ -1,6 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 /* eslint-disable react/react-in-jsx-scope */
 import React from 'react';
+import {connect} from 'react-redux';
+import BrandLogo from '../../core/components/BrandLogo';
 import styleConst from '../../core/style-const';
 import {Icon, Checkbox, View, Text, Box} from 'native-base';
 import {TouchableWithoutFeedback} from 'react-native-gesture-handler';
@@ -32,7 +34,13 @@ const styles = {
   },
 };
 
-export const CarCard = ({data, type, checked, onPress, disabled}) => {
+const mapStateToProps = ({dealer}) => {
+  return {
+    brands: dealer.listBrands,
+  };
+};
+
+const CarCard = ({data, type, checked, onPress, disabled, brands}) => {
   const {brand, model, number, owner, vin} = data;
   const carColor = get(data, 'carInfo.color.picker.codes.hex', false);
   let undefinedCar = false;
@@ -43,6 +51,7 @@ export const CarCard = ({data, type, checked, onPress, disabled}) => {
   if (typeof model === 'object') {
     modelName = model?.name;
   }
+  const brandID = get(data, 'carInfo.brand.id');
   return (
     <Box
       bg={{
@@ -61,7 +70,14 @@ export const CarCard = ({data, type, checked, onPress, disabled}) => {
       display={'flex'}
       flexDirection={'column'}>
       <View>
-        <Text
+        {brandID ? (
+          <View position={'absolute'} h={12} w={'1/2'} px={4} pb={1} alignSelf={'flex-end'} justifyContent={'center'} alignContent={'center'}>
+            <BrandLogo
+              brand={brandID}
+              key={'brandLogo' + brandID}
+            />
+          </View>
+        ) : <Text
           ellipsizeMode="tail"
           numberOfLines={1}
           selectable={false}
@@ -69,7 +85,7 @@ export const CarCard = ({data, type, checked, onPress, disabled}) => {
           ml={2}
           style={styles.textBrand}>
           {brand ? brand : '--'}
-        </Text>
+        </Text>}
         <Text
           ellipsizeMode="tail"
           numberOfLines={1}
@@ -118,3 +134,5 @@ export const CarCard = ({data, type, checked, onPress, disabled}) => {
     </Box>
   );
 };
+
+export default connect(mapStateToProps, {})(CarCard);
