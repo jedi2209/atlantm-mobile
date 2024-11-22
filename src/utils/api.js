@@ -17,7 +17,7 @@ import {getTimestampInSeconds} from './date';
 const isAndroid = Platform.OS === 'android';
 const SourceID = 3;
 const secretKey = [
-  API_MAIN_KEY[APP_REGION][Platform.OS],
+  API_MAIN_KEY,
   DeviceInfo.getBundleId(),
   DeviceInfo.getVersion(),
 ].join('__');
@@ -39,7 +39,7 @@ const JWTToken = async () => {
 const headers = {
   Accept: 'application/json',
   'Content-Type': 'application/json',
-  'x-api-key': `${API_MAIN_KEY[APP_REGION][Platform.OS]}`,
+  'x-api-key': `${API_MAIN_KEY}`,
   'App-Version': DeviceInfo.getVersion(),
   'App-Name': DeviceInfo.getApplicationName(),
 };
@@ -112,7 +112,7 @@ export default {
               style: 'default',
               onPress: () => {
                 BackHandler.exitApp();
-                Linking.openURL(STORE_LINK[Platform.OS]);
+                Linking.openURL(STORE_LINK.update);
               },
             },
           ],

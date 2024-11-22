@@ -2,7 +2,6 @@
 import {PureComponent, useState, useEffect} from 'react';
 import {
   ScrollView,
-  Alert,
   StyleSheet,
   Platform,
   Dimensions,
@@ -231,7 +230,7 @@ const SettingsScreen = props => {
               source: 'settings',
             });
             return RateThisApp({onSuccess: _onAppRateSuccess});
-            //return Linking.openURL(STORE_LINK[Platform.OS]);
+            //return Linking.openURL(STORE_LINK.review);
           }}>
           <Box
             borderWidth="1"
@@ -366,7 +365,7 @@ const SettingsScreen = props => {
           opacity={0.6}
           mb={4}
           onPress={() => {
-            return Linking.openURL(STORE_LINK[Platform.OS]);
+            return Linking.openURL(STORE_LINK.update);
           }}>
           <Text selectable={false} style={styles.TextVersionInfo}>
             {[

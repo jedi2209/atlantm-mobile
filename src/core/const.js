@@ -1,4 +1,5 @@
 import DeviceInfo from 'react-native-device-info';
+import {Platform} from 'react-native';
 
 const bundle = DeviceInfo.getBundleId();
 
@@ -157,8 +158,14 @@ export const AppleAppID = appleID;
 export const GooglePackageName = googleID;
 
 export const STORE_LINK = {
-  ios: `itms-apps://itunes.apple.com/app/id${AppleAppID}?action=update`,
-  android: `market://details?id=${GooglePackageName}`,
+  update: Platform.select({
+    ios: `itms-apps://itunes.apple.com/app/id${AppleAppID}?action=update`,
+    android: `market://details?id=${GooglePackageName}`,
+  }),
+  review: Platform.select({
+    ios: `itms-apps://apps.apple.com/app/id${AppleAppID}?action=write-review`,
+    android: `market://details?id=${GooglePackageName}`,
+  }),
 };
 
 export const API_MAIN_URL = [
@@ -218,13 +225,15 @@ export const AUTH_DATA = {
   },
 };
 
-export const API_MAIN_KEY = {
-  by: {
-    android: 'XXXX',
+const apiKey = {
+  by: Platform.select({
     ios: 'XXXX',
-  },
-  ua: {
     android: 'XXXX',
+  }),
+  ua: Platform.select({
     ios: 'XXXX',
-  },
+    android: 'XXXX',
+  }),
 };
+
+export const API_MAIN_KEY = apiKey[APP_REGION];
