@@ -1,4 +1,5 @@
 import DeviceInfo from 'react-native-device-info';
+import {Platform} from 'react-native';
 
 const bundle = DeviceInfo.getBundleId();
 
@@ -157,8 +158,14 @@ export const AppleAppID = appleID;
 export const GooglePackageName = googleID;
 
 export const STORE_LINK = {
-  ios: `itms-apps://itunes.apple.com/app/id${AppleAppID}?action=update`,
-  android: `market://details?id=${GooglePackageName}`,
+  update: Platform.select({
+    ios: `itms-apps://itunes.apple.com/app/id${AppleAppID}?action=update`,
+    android: `market://details?id=${GooglePackageName}`,
+  }),
+  review: Platform.select({
+    ios: `itms-apps://apps.apple.com/app/id${AppleAppID}?action=write-review`,
+    android: `market://details?id=${GooglePackageName}`,
+  }),
 };
 
 export const API_MAIN_URL = [
@@ -218,13 +225,15 @@ export const AUTH_DATA = {
   },
 };
 
-export const API_MAIN_KEY = {
-  by: {
-    android: 'M8ttryMRXs6aTqfH4zNFSPUC78eKoVr3bw5cRwDe',
+const apiKey = {
+  by: Platform.select({
     ios: 'kZJt475LBU3B7aL82j43l7IBab165xbiuIqIqcv9',
-  },
-  ua: {
-    android: 'r8dz07065z5vyddYaPx2C8K4FuHQRbsM13hPlX1O',
+    android: 'M8ttryMRXs6aTqfH4zNFSPUC78eKoVr3bw5cRwDe',
+  }),
+  ua: Platform.select({
     ios: 'HzKtwpq5Nd1KL4jMUKS2K5lz6sSGTS8X1dLZ5tgR',
-  },
+    android: 'r8dz07065z5vyddYaPx2C8K4FuHQRbsM13hPlX1O',
+  }),
 };
+
+export const API_MAIN_KEY = apiKey[APP_REGION];
