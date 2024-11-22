@@ -62,8 +62,8 @@ const menuOpenedCount = (state = 0, action) => {
     case REHYDRATE:
       return get(action, 'payload.core.menuOpenedCount', 0);
     case APP_MENU_OPENED_COUNTER:
-      if (action.payload === 0) {
-        return 0;
+      if ([0, 999].includes(parseInt(action.payload))) {
+        return action.payload;
       }
       return ++state;
     case APP_STORE_UPDATED:
@@ -82,6 +82,8 @@ const isAppRated = (state = false, action) => {
         return false;
       }
       return true;
+    case APP_STORE_UPDATED:
+      return false;
     default:
       return state;
   }

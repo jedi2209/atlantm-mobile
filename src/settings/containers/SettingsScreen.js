@@ -25,11 +25,10 @@ import * as NavigationService from '../../navigation/NavigationService';
 
 // redux
 import {connect} from 'react-redux';
-import {actionSetPushActionSubscribe, actionAppRated} from '../../core/actions';
+import {actionSetPushActionSubscribe, actionAppRated, actionMenuOpenedCount} from '../../core/actions';
 
 // components
 import PushNotifications from '../../core/components/PushNotifications';
-import RateThisApp from '../../core/components/RateThisApp';
 import FlagButton from '../../core/components/FlagButton';
 import TransitionView from '../../core/components/TransitionView';
 
@@ -95,6 +94,7 @@ const mapStateToProps = ({dealer, nav, core}) => {
 
 const mapDispatchToProps = {
   actionSetPushActionSubscribe,
+  actionMenuOpenedCount,
   actionAppRated,
 };
 
@@ -106,6 +106,7 @@ const SettingsScreen = props => {
     region,
     isAppRated,
     actionAppRated,
+    actionMenuOpenedCount,
     pushActionSubscribeState,
     navigation,
   } = props;
@@ -116,8 +117,9 @@ const SettingsScreen = props => {
     Analytics.logEvent('screen', 'settings');
   }, []);
 
-  const _onAppRateSuccess = () => {
-    !isAppRated && actionAppRated();
+  const openReviewInStore = () => {
+    actionAppRated(false);
+    actionMenuOpenedCount(999);
   };
 
   const _onSwitchActionSubscribe = async value => {
@@ -229,7 +231,8 @@ const SettingsScreen = props => {
             Analytics.logEvent('screen', 'ratePopup', {
               source: 'settings',
             });
-            return RateThisApp({onSuccess: _onAppRateSuccess});
+            openReviewInStore();
+            // return RateThisApp({visibleInitial: true, onSuccess: _onAppRateSuccess});
             //return Linking.openURL(STORE_LINK.review);
           }}>
           <Box
