@@ -24,8 +24,6 @@ import {connect} from 'react-redux';
 import {store} from '../store';
 import {
   actionSetPushActionSubscribe,
-  actionAppRated,
-  actionMenuOpenedCount,
   actionStoreUpdated,
   actionSettingsLoaded,
 } from '../actions';
@@ -51,13 +49,12 @@ import DeviceInfo from 'react-native-device-info';
 import * as Nav from '../../navigation/NavigationBase';
 import LogoTitle from '../components/LogoTitle';
 
-const mapStateToProps = ({core, dealer, modal}) => {
+const mapStateToProps = ({core, dealer}) => {
   return {
     menuOpenedCount: core.menuOpenedCount,
     isStoreUpdated: core.isStoreUpdated,
     isAppRated: core.isAppRated,
     dealersLastUpdateDate: dealer.meta.lastUpdateDate,
-    modal,
     currentLanguage: core.language.selected,
     dealerSelected: dealer.selected,
     region: dealer.region,
@@ -66,8 +63,6 @@ const mapStateToProps = ({core, dealer, modal}) => {
 
 const mapDispatchToProps = {
   actionSetPushActionSubscribe,
-  actionMenuOpenedCount,
-  actionAppRated,
   actionStoreUpdated,
   actionSettingsLoaded,
   fetchDealers,
@@ -108,7 +103,7 @@ const _awaitDealersToUpdate = async props => {
 };
 
 const _awaitStoreToUpdate = async props => {
-  const {actionSettingsLoaded, actionMenuOpenedCount, actionStoreUpdated, isStoreUpdated} =
+  const {actionSettingsLoaded, actionStoreUpdated, isStoreUpdated} =
     props;
 
   const storeData = store.getState();
@@ -136,7 +131,6 @@ const _awaitStoreToUpdate = async props => {
 
   try {
     // если мы ещё не очищали стор
-    actionMenuOpenedCount(0);
     await actionStoreUpdated(storeVersion);
     return true;
   } catch (error) {
@@ -173,8 +167,6 @@ const App = props => {
   const [isError, setError] = useState(false);
   const [isUpdateDownloading, setUpdateDownload] = useState(false);
   const [downloadPercent, setDownloadPercent] = useState(0);
-
-  let rateAppTimeOut = null;
 
   const opacityValue = new Animated.Value(0);
 
@@ -242,12 +234,6 @@ const App = props => {
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const _onAppRateSuccess = () => {
-    props.actionMenuOpenedCount(0);
-    props.actionAppRated(false);
-    //return !props.isAppRated && props.actionAppRated(true);
   };
 
   useEffect(() => {
@@ -384,7 +370,7 @@ const App = props => {
         <PaperProvider theme={paperTheme}>
           <BugsnagNavigationContainer ref={NavigationService.navigationRef}>
             <Nav.Base />
-            {!isAppRated && menuOpenedCount >= 1 ? <RateThisApp navigation={NavigationService} onSuccess={_onAppRateSuccess} /> : null}
+            <RateThisApp navigation={NavigationService} menuOpenedCount={menuOpenedCount} isAppRated={isAppRated}/>
           </BugsnagNavigationContainer>
         </PaperProvider>
       </NativeBaseProvider>
