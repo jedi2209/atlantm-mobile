@@ -1,41 +1,24 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import Form from '../../../core/components/Form/Form';
 
 // redux
 import {connect} from 'react-redux';
-import {actionAddReviewPlusFill, actionAddReviewMinusFill} from '../../actions';
-import {localDealerClear} from '../../../dealer/actions';
 
 // helpers
 import {strings} from '../../../core/lang/const';
 
-const mapStateToProps = ({dealer, eko, nav}) => {
+const mapStateToProps = ({dealer, nav}) => {
   return {
     nav,
     dealerSelectedLocal: dealer.selectedLocal,
-    messagePlus: eko.reviews.messagePlus,
-    messageMinus: eko.reviews.messageMinus,
   };
-};
-
-const mapDispatchToProps = {
-  actionAddReviewPlusFill,
-  actionAddReviewMinusFill,
-  localDealerClear,
 };
 
 const ReviewAddMessageStepScreen = ({
   navigation,
   dealerSelectedLocal,
   Text,
-  localDealerClear,
 }) => {
-  // useEffect(() => {
-  //   console.info('== ReviewAddMessageStepScreen ==');
-  //   return () => {
-  //     // localDealerClear();
-  //   };
-  // }, [localDealerClear]);
 
   const FormConfig = {
     groups: [
@@ -117,5 +100,5 @@ const ReviewAddMessageStepScreen = ({
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  null,
 )(ReviewAddMessageStepScreen);
