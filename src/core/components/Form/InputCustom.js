@@ -173,6 +173,8 @@ export const InputCustom = props => {
     placeholder,
     ...other
   } = props;
+  const [checked, setChecked] = useState(get(props, 'defaultIsChecked', false));
+
   switch (type.toLowerCase()) {
     case 'email':
       return (
@@ -204,6 +206,52 @@ export const InputCustom = props => {
         </View>
       );
 
+    case 'checkbox':
+      console.info('checked', checked);
+      return (
+        <HStack
+          mb={1}
+          justifyContent={'space-between'}
+          paddingY={2}
+          // paddingLeft={4}
+          rounded={4}>
+          <View width={isAndroid ? 9 : 8} height={10} borderRadius={1}>
+            <Checkbox
+              error={isValid !== true}
+              isChecked={checked ? true : false}
+              onPress={() => {
+                props?.onChange(!checked);
+                setChecked(!checked);
+              }}
+              status={checked ? 'checked' : 'unchecked'}
+              defaultIsChecked={get(props, 'defaultIsChecked', false)}
+              borderWidth={isAndroid ? 0 : 1}
+              borderTopLeftRadius={styleConst.borderRadius - 6}
+              borderTopRightRadius={styleConst.borderRadius - 6}
+              borderBottomLeftRadius={styleConst.borderRadius - 6}
+              borderBottomRightRadius={styleConst.borderRadius - 6}
+              paddingTop={isAndroid ? 5 : 0}
+              paddingBottom={2}
+              paddingLeft={isAndroid ? 5 : 4}
+              borderColor={
+                isValid === true
+                  ? styleConst.color.systemGray
+                  : styleConst.color.red
+              }
+              {...InputProps}
+              {...other} />
+          </View>
+          <Text
+            style={[{marginLeft: 10, flex: 1}]}
+            onPress={() => {
+              props?.onChange(!checked);
+              setChecked(!checked);
+            }}>
+            {get(props, 'aria-label')}
+          </Text>
+        </HStack>
+      );
+
     default:
       return (
         <View style={styles.container}>
@@ -227,8 +275,7 @@ export const AgreementCheckbox = props => {
     <HStack
       mb={1}
       justifyContent={'space-between'}
-      padding={2}
-      paddingLeft={4}
+      paddingY={2}
       rounded={4}>
       <View width={isAndroid ? 9 : 8} height={10} borderRadius={1}>
         <Checkbox

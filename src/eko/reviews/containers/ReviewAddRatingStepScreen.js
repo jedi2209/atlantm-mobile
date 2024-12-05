@@ -1,5 +1,14 @@
 import React, {useEffect, useState} from 'react';
-import {Alert} from 'react-native';
+import {Alert, Platform} from 'react-native';
+import {ScrollView, View, Checkbox, useToast} from 'native-base';
+import {Controller, useForm, useWatch} from 'react-hook-form';
+import {SubmitButton} from '../../../core/components/Form/SubmitCustom';
+import {
+  AgreementCheckbox,
+  GroupForm,
+  InputCustom,
+} from '../../../core/components/Form/InputCustom';
+import {KeyboardAvoidingView} from '../../../core/components/KeyboardAvoidingView';
 
 // redux
 import {connect} from 'react-redux';
@@ -10,14 +19,11 @@ import {
   actionSelectAddReviewRatingVariant,
 } from '../../actions';
 
-// components
-import {Checkbox, View, useToast} from 'native-base';
-
 // helpers
 import Analytics from '../../../utils/amplitude-analytics';
-import {get} from 'lodash';
+import {get, isNil} from 'lodash';
 
-import Form from '../../../core/components/Form/Form';
+import isInternet from '../../../utils/internet';
 import UserData from '../../../utils/user';
 import {
   REVIEW_ADD_RATING_5,
@@ -27,7 +33,6 @@ import {
   REVIEW_ADD_RATING_1,
 } from '../../constants';
 import {strings} from '../../../core/lang/const';
-import styleConst from '../../../core/style-const';
 import {ERROR_NETWORK} from '../../../core/const';
 
 const mapStateToProps = ({dealer, eko, nav, profile}) => {
@@ -56,8 +61,12 @@ const mapDispatchToProps = {
   actionSelectAddReviewRatingVariant,
 };
 
+const isAndroid = Platform.OS === 'android';
+
 const ReviewAddRatingStepScreen = props => {
   const [publicAgree, setPublicAgree] = useState(true);
+  const [sendingForm, setSendingForm] = useState(false);
+  const [sendingFormStatus, setFormSendingStatus] = useState(null);
 
   const toast = useToast();
 
@@ -67,20 +76,33 @@ const ReviewAddRatingStepScreen = props => {
     console.info('== ReviewAddRatingStepScreen ==');
   }, []);
 
-  const _onPressButton = async dataFromForm => {
-    const isInternet = require('../../../utils/internet').default;
+  const {
+    control,
+    handleSubmit,
+    formState: {errors, isValidating, isValid},
+  } = useForm({
+    defaultValues: {
+      NAME: get(props, 'firstName'),
+      SECOND_NAME: get(props, 'secondName'),
+      LAST_NAME: get(props, 'lastName'),
+      EMAIL: get(props, 'email'),
+      PHONE: get(props, 'phone'),
+      approvePublication: true,
+    },
+    mode: 'onBlur',
+  });
+
+  const onPressSubmit = async dataFromForm => {
+    const {navigation} = props;
+
+    setSendingForm(true);
+
     const isInternetExist = await isInternet();
+
     if (!isInternetExist) {
-      toast.show({
-        title: ERROR_NETWORK,
-        status: 'warning',
-        duration: 2000,
-        id: 'networkError',
-      });
+      setTimeout(() => Alert.alert(ERROR_NETWORK), 100);
       return;
     }
-
-    const {navigation} = props;
 
     const name = [
       dataFromForm.NAME,
@@ -104,42 +126,43 @@ const ReviewAddRatingStepScreen = props => {
       rating: get(dataFromForm, 'RATING', ''),
     };
 
+
     return props.actionReviewAdd(dataToSend).then(action => {
       if (action.type === REVIEW_ADD__SUCCESS) {
         Analytics.logEvent('order', 'eko/review_add');
 
+        setFormSendingStatus(true);
         setTimeout(() => {
-          Alert.alert(
-            strings.ReviewAddRatingStepScreen.Notifications.success.text,
-          );
-          navigation.navigate('ReviewsScreen');
-        }, 100);
+          setFormSendingStatus(null);
+          setSendingForm(false);
+          setTimeout(() => navigation.goBack(), 300);
+        }, 500);
+
+        // setTimeout(() => {
+        //   Alert.alert(
+        //     strings.ReviewAddRatingStepScreen.Notifications.success.text,
+        //   );
+        //   navigation.navigate('ReviewsScreen');
+        // }, 100);
       }
 
       if (action.type === REVIEW_ADD__FAIL) {
-        setTimeout(
-          () =>
-            Alert.alert(
-              strings.Notifications.error.title,
-              strings.Notifications.error.text,
-            ),
-          100,
-        );
+        setFormSendingStatus(false);
+        setTimeout(() => {
+          setFormSendingStatus(null);
+          setSendingForm(false);
+        }, 500);
+
+        // setTimeout(
+        //   () =>
+        //     Alert.alert(
+        //       strings.Notifications.error.title,
+        //       strings.Notifications.error.text,
+        //     ),
+        //   100,
+        // );
       }
     });
-  };
-
-  const _renderPublicAgree = isChecked => {
-    return (
-      <View py={5} backgroundColor={styleConst.color.white} px={3}>
-        <Checkbox
-          aria-label={strings.ReviewAddRatingStepScreen.approve}
-          isChecked={isChecked}
-          onChange={() => setPublicAgree(!isChecked)}>
-          {strings.ReviewAddRatingStepScreen.approve}
-        </Checkbox>
-      </View>
-    );
   };
 
   const FormConfig = {
@@ -247,20 +270,152 @@ const ReviewAddRatingStepScreen = props => {
   };
 
   return (
-    <View style={{marginTop: 10, flex: 1}}>
-      {_renderPublicAgree(publicAgree)}
-      <Form
-        contentContainerStyle={{
-          paddingHorizontal: 14,
-          marginTop: 20,
-        }}
-        key="ReviewAddRatingForm"
-        fields={FormConfig.fields}
-        barStyle={'light-content'}
-        SubmitButton={{text: strings.Form.button.send}}
-        onSubmit={_onPressButton}
-      />
-    </View>
+    <ScrollView paddingX={4}>
+      <KeyboardAvoidingView behavior={'padding'} enabled={!isAndroid}>
+        <GroupForm title={strings.Form.group.contacts}>
+            <Controller
+              control={control}
+              rules={{
+                minLength: {
+                  value: 3,
+                  message: [
+                    strings.Form.status.fieldRequired1,
+                    strings.Form.status.fieldRequired2,
+                  ].join(' '),
+                },
+              }}
+              name="NAME"
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputCustom
+                  placeholder={strings.Form.field.label.name}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  textContentType={'name'}
+                  value={value}
+                  isValid={isNil(get(errors, 'NAME'))}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="SECOND_NAME"
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputCustom
+                  placeholder={strings.Form.field.label.secondName}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  textContentType={'middleName'}
+                  value={value}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="LAST_NAME"
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputCustom
+                  placeholder={strings.Form.field.label.lastName}
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  textContentType={'familyName'}
+                  value={value}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              rules={{
+                minLength: {
+                  value: 12,
+                  message: [
+                    strings.Form.status.fieldRequired1,
+                    strings.Form.status.fieldRequired2,
+                  ].join(' '),
+                },
+              }}
+              name="PHONE"
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputCustom
+                  type="phone"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  isValid={isNil(get(errors, 'PHONE'))}
+                />
+              )}
+            />
+
+            <Controller
+              control={control}
+              name="EMAIL"
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputCustom
+                  type="email"
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                />
+              )}
+            />
+          </GroupForm>
+          <GroupForm title={strings.Form.group.additional}>
+            <Controller
+              control={control}
+              name="approvePublication"
+              render={({field: {onChange, onBlur, value}}) => (
+                <InputCustom
+                  aria-label={strings.ReviewAddRatingStepScreen.approve}
+                  key="inputApprovePublication"
+                  type="checkbox"
+                  defaultIsChecked={true}
+                  onBlur={onBlur}
+                  onChange={onChange}
+                  value={value}
+                  isValid={isNil(get(errors, 'agreementCheckbox'))}
+                />
+              )}
+            />
+          </GroupForm>
+          <Controller
+            control={control}
+            rules={{
+              required: [
+                strings.Form.status.fieldRequired1,
+                strings.Form.status.fieldRequired2,
+              ].join(' '),
+            }}
+            name="agreementCheckbox"
+            render={({field: {onChange, onBlur, value}}) => (
+              <AgreementCheckbox
+                onBlur={onBlur}
+                onChange={onChange}
+                value={value}
+                isValid={isNil(get(errors, 'agreementCheckbox'))}
+              />
+            )}
+          />
+          <SubmitButton
+            title={strings.Form.button.send}
+            onPress={handleSubmit(onPressSubmit)}
+            sendingStatus={sendingFormStatus}
+            sending={sendingForm}>
+          </SubmitButton>
+        {/* <Form
+          contentContainerStyle={{
+            paddingHorizontal: 14,
+            marginTop: 20,
+          }}
+          key="ReviewAddRatingForm"
+          fields={FormConfig.fields}
+          barStyle={'light-content'}
+          SubmitButton={{text: strings.Form.button.send}}
+          onSubmit={_onPressButton}
+        /> */}
+      </KeyboardAvoidingView>
+    </ScrollView>
   );
 };
 
