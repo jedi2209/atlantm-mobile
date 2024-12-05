@@ -3,7 +3,7 @@ import {StyleSheet, Platform} from 'react-native';
 
 import * as NavigationService from '../../../navigation/NavigationService';
 
-import {View, Box, Text, HStack} from 'native-base';
+import {View, Box, Text, HStack, Pressable} from 'native-base';
 import {TextInput, Checkbox} from 'react-native-paper';
 import PhoneInput from 'react-native-phone-input';
 
@@ -207,21 +207,19 @@ export const InputCustom = props => {
       );
 
     case 'checkbox':
-      console.info('checked', checked);
       return (
         <HStack
           mb={1}
-          justifyContent={'space-between'}
+          justifyContent={'flex-start'}
           paddingY={2}
-          // paddingLeft={4}
           rounded={4}>
           <View width={isAndroid ? 9 : 8} height={10} borderRadius={1}>
             <Checkbox
               error={isValid !== true}
               isChecked={checked ? true : false}
               onPress={() => {
-                props?.onChange(!checked);
                 setChecked(!checked);
+                props?.onChange(!checked);
               }}
               status={checked ? 'checked' : 'unchecked'}
               defaultIsChecked={get(props, 'defaultIsChecked', false)}
@@ -241,15 +239,30 @@ export const InputCustom = props => {
               {...InputProps}
               {...other} />
           </View>
-          <Text
+          {get(props, 'textComponent') ?
+          <Pressable onPress={() => {
+            setChecked(!checked);
+            props?.onChange(!checked);
+          }}>
+            {get(props, 'textComponent')}
+          </Pressable> : (
+            <Text
             style={[{marginLeft: 10, flex: 1}]}
             onPress={() => {
-              props?.onChange(!checked);
               setChecked(!checked);
+              props?.onChange(!checked);
             }}>
             {get(props, 'aria-label')}
           </Text>
+          )}
         </HStack>
+      );
+
+    case 'select':
+      return (
+        <View style={styles.container}>
+          {'text select'}
+        </View>
       );
 
     default:
@@ -272,47 +285,18 @@ export const AgreementCheckbox = props => {
   const {onChange, isValid} = props;
 
   return (
-    <HStack
-      mb={1}
-      justifyContent={'space-between'}
-      paddingY={2}
-      rounded={4}>
-      <View width={isAndroid ? 9 : 8} height={10} borderRadius={1}>
-        <Checkbox
-          aria-label={
-            strings.Form.agreement.first +
-            strings.Form.agreement.second +
-            strings.Form.agreement.third
-          }
-          onPress={() => {
-            onChange(!checked);
-            setChecked(!checked);
-          }}
-          status={checked ? 'checked' : 'unchecked'}
-          isChecked={checked ? true : false}
-          defaultIsChecked={false}
-          borderWidth={isAndroid ? 0 : 1}
-          borderTopLeftRadius={styleConst.borderRadius - 6}
-          borderTopRightRadius={styleConst.borderRadius - 6}
-          borderBottomLeftRadius={styleConst.borderRadius - 6}
-          borderBottomRightRadius={styleConst.borderRadius - 6}
-          paddingTop={isAndroid ? 5 : 0}
-          paddingBottom={2}
-          paddingLeft={isAndroid ? 5 : 4}
-          borderColor={
-            isValid === true
-              ? styleConst.color.systemGray
-              : styleConst.color.red
-          }
-          {...props}
-        />
-      </View>
-      <Text
-        style={[styles.userAgreementText, {marginLeft: 10, flex: 1}]}
-        onPress={() => {
-          onChange(!checked);
-          setChecked(!checked);
-        }}>
+    <InputCustom
+      type="checkbox"
+      isValid={isValid}
+      aria-label={
+        strings.Form.agreement.first +
+        strings.Form.agreement.second +
+        strings.Form.agreement.third
+      }
+      onChange={onChange}
+      textComponent={(
+        <Text
+        style={[styles.userAgreementText, {marginLeft: 10, flex: 1}]}>
         {strings.Form.agreement.first}{' '}
         <Text
           style={[styles.userAgreementText, styles.userAgreementLink]}
@@ -321,36 +305,7 @@ export const AgreementCheckbox = props => {
         </Text>{' '}
         {strings.Form.agreement.third}
       </Text>
-      {/* <Checkbox.Item
-        aria-label={
-          strings.Form.agreement.first +
-          strings.Form.agreement.second +
-          strings.Form.agreement.third
-        }
-        onChange={isSelected => setChecked(isSelected)}
-        onPress={() => setChecked(!checked)}
-        status={checked ? 'checked' : 'unchecked'}
-        isChecked={checked ? true : false}
-        defaultIsChecked={false}
-        color={styleConst.color.blue}
-        borderWidth={1}
-        borderTopLeftRadius={2}
-        borderTopRightRadius={2}
-        borderBottomLeftRadius={2}
-        borderBottomRightRadius={2}
-        paddingTop={0}
-        paddingBottom={3}
-        paddingLeft={4}
-        borderColor={styleConst.color.darkBg}
-        labelVariant="bodySmall"
-        position="leading"
-        label={[
-          strings.Form.agreement.first,
-          strings.Form.agreement.second,
-          strings.Form.agreement.third,
-        ].concat(' ')}
-        {...props}
-      /> */}
-    </HStack>
+      )}
+    />
   );
 };

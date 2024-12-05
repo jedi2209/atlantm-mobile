@@ -14,10 +14,6 @@ import {
   REVIEW_DEALER_RATING__FAIL,
   REVIEWS_RATING_FROM__SELECT,
   REVIEWS_RATING_TO__SELECT,
-  REVIEW_ADD_MESSAGE_PLUS__FILL,
-  REVIEW_ADD_MESSAGE_MINUS__FILL,
-  REVIEW_ADD_RATING_VALUE__SELECT,
-  REVIEW_ADD_RATING_VARIANT__SELECT,
   REVIEW_ADD__REQUEST,
   REVIEW_ADD__SUCCESS,
   REVIEW_ADD__FAIL,
@@ -185,50 +181,6 @@ function filterRatingTo(state = null, action) {
   }
 }
 
-function reviewAddRating(state = null, action) {
-  switch (action.type) {
-    case REVIEW_ADD__SUCCESS:
-      return null;
-    case REVIEW_ADD_RATING_VALUE__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-}
-
-function reviewAddRatingVariant(state = null, action) {
-  switch (action.type) {
-    case REVIEW_ADD__SUCCESS:
-      return null;
-    case REVIEW_ADD_RATING_VARIANT__SELECT:
-      return action.payload;
-    default:
-      return state;
-  }
-}
-
-function messagePlus(state = '', action) {
-  switch (action.type) {
-    case REVIEW_ADD__SUCCESS:
-      return '';
-    case REVIEW_ADD_MESSAGE_PLUS__FILL:
-      return action.payload;
-    default:
-      return state;
-  }
-}
-
-function messageMinus(state = '', action) {
-  switch (action.type) {
-    case REVIEW_ADD__SUCCESS:
-      return '';
-    case REVIEW_ADD_MESSAGE_MINUS__FILL:
-      return action.payload;
-    default:
-      return state;
-  }
-}
-
 function needFetchReviews(state = false, action) {
   switch (action.type) {
     case DEALER__SUCCESS:
@@ -292,10 +244,6 @@ export default combineReducers({
     filterDatePeriod,
     filterRatingFrom,
     filterRatingTo,
-    messagePlus,
-    messageMinus,
-    reviewAddRating,
-    reviewAddRatingVariant,
     publicAgree,
     meta: combineReducers({
       isFetchReviews,

@@ -14,7 +14,7 @@ export const SubmitButton = ({
   title = strings.ProfileSettingsScreen.save,
   children,
 }) => {
-  if (sendingStatus) {
+  if (sendingStatus !== null) {
     return (
       <TransitionView animation={'slideInLeft'} duration={300} index={1}>
         <View alignItems={'center'} mt={4} h={40}>

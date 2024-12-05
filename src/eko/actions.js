@@ -13,38 +13,15 @@ import {
   REVIEW_DEALER_RATING__FAIL,
   REVIEWS_RATING_FROM__SELECT,
   REVIEWS_RATING_TO__SELECT,
-  REVIEW_ADD_MESSAGE_PLUS__FILL,
-  REVIEW_ADD_MESSAGE_MINUS__FILL,
-  REVIEW_ADD_RATING_VALUE__SELECT,
-  REVIEW_ADD_RATING_VARIANT__SELECT,
   REVIEW_ADD__REQUEST,
   REVIEW_ADD__SUCCESS,
   REVIEW_ADD__FAIL,
-  REVIEW_ADD_PUBLIC_AGREE__SELECT,
   REVIEWS_ALL_FILTERS_CLEAR,
 } from './actionTypes';
 
 import {EVENT_LOAD_MORE} from '../core/actionTypes';
 
 import {strings} from '../core/lang/const';
-
-export const actionSelectAddReviewRating = rating => {
-  return dispatch => {
-    dispatch({
-      type: REVIEW_ADD_RATING_VALUE__SELECT,
-      payload: rating,
-    });
-  };
-};
-
-export const actionSelectAddReviewRatingVariant = rating => {
-  return dispatch => {
-    dispatch({
-      type: REVIEW_ADD_RATING_VARIANT__SELECT,
-      payload: rating,
-    });
-  };
-};
 
 export const actionReviewVisit = reviewId => {
   return dispatch => {
@@ -96,24 +73,6 @@ export const actionSelectFilterRatingTo = rating => {
     dispatch({
       type: REVIEWS_RATING_TO__SELECT,
       payload: rating,
-    });
-  };
-};
-
-export const actionAddReviewPlusFill = message => {
-  return dispatch => {
-    dispatch({
-      type: REVIEW_ADD_MESSAGE_PLUS__FILL,
-      payload: message,
-    });
-  };
-};
-
-export const actionAddReviewMinusFill = message => {
-  return dispatch => {
-    dispatch({
-      type: REVIEW_ADD_MESSAGE_MINUS__FILL,
-      payload: message,
     });
   };
 };
