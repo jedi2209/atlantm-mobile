@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useCallback, useMemo, useRef, memo} from 'react';
 import {StyleSheet, Image, TouchableOpacity, Dimensions} from 'react-native';
 
 // components
@@ -48,32 +48,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default class CarCostPhotos extends Component {
-  constructor(props) {
-    super(props);
+const getItemWidth = contentWidth => (contentWidth - 70) / 3;
 
-    this.state = {};
+const CarCostPhotos = memo(({photos, photosFill}) => {
+  const actionSheetRefs = useRef(Array(6).fill(null));
+  const itemWidth = useMemo(() => getItemWidth(width), []);
 
-    this.state.itemWidth = this.getItemWidth(width);
-
-    // генерируем хендлеры для actionSheet для каждого фото
-    [1, 2, 3, 4, 5, 6].map(photoIndex => {
-      this[`handlePhotoPress${photoIndex}`] = i => {
-        this.handlePhotoPress(i, photoIndex, props.photosFill);
-      };
-
-      this[`onPressPhoto${photoIndex}`] = () =>
-        this[`actionSheet${photoIndex}`].show();
-
-      this[`onPressRemovePhoto${photoIndex}`] = () => {
-        let newPhotos = {...this.props.photos};
-        delete newPhotos[photoIndex];
-        props.photosFill(newPhotos);
-      };
-    });
-  }
-
-  async handlePhotoPress(i, photoIndex, cb) {
+  const handlePhotoPress = useCallback(async (i, photoIndex) => {
     const action = {
       1: 'gallery',
       2: 'camera',
@@ -91,41 +72,45 @@ export default class CarCostPhotos extends Component {
       forceJpg: true,
     };
 
-    switch (action) {
-      case 'gallery':
-        const photoGallery = await ImagePicker.openPicker(settings);
-
-        if (photoGallery) {
-          cb({...this.props.photos, [photoIndex]: photoGallery});
+    try {
+      switch (action) {
+        case 'gallery': {
+          const photoGallery = await ImagePicker.openPicker(settings);
+          if (photoGallery) {
+            photosFill({...photos, [photoIndex]: photoGallery});
+          }
+          break;
         }
-
-        break;
-      case 'camera':
-        const photoCamera = await ImagePicker.openCamera(settings);
-
-        if (photoCamera) {
-          cb({...this.props.photos, [photoIndex]: photoCamera});
+        case 'camera': {
+          const photoCamera = await ImagePicker.openCamera(settings);
+          if (photoCamera) {
+            photosFill({...photos, [photoIndex]: photoCamera});
+          }
+          break;
         }
-
-        break;
-      default:
-        break;
+      }
+    } catch (error) {
+      console.warn('Photo selection error:', error);
     }
-  }
+  }, [photos, photosFill]);
 
-  renderItem = photoIndex => {
-    const {photos} = this.props;
+  const handleRemovePhoto = useCallback((photoIndex) => {
+    const newPhotos = {...photos};
+    delete newPhotos[photoIndex];
+    photosFill(newPhotos);
+  }, [photos, photosFill]);
+
+  const renderItem = useCallback((photoIndex) => {
     const photo = photos[photoIndex];
     const source = photo ? {uri: photo.path} : thumbs[photoIndex - 1];
-    const width = this.state.itemWidth;
-    const size = this.state.itemWidth / 1.4;
+    const size = itemWidth / 1.4;
 
     return (
-      <View key={photoIndex} style={{width: width}}>
-        {photo ? (
+      <View key={photoIndex} style={{width: itemWidth}}>
+        {photo && (
           <TouchableOpacity
             style={styles.removeIconContainer}
-            onPress={this[`onPressRemovePhoto${photoIndex}`]}>
+            onPress={() => handleRemovePhoto(photoIndex)}>
             <Icon
               name="close-circle"
               as={Ionicons}
@@ -133,19 +118,19 @@ export default class CarCostPhotos extends Component {
               color={styleConst.color.white}
             />
           </TouchableOpacity>
-        ) : null}
+        )}
         <TouchableOpacity
           activeOpacity={0.7}
-          style={[styles.item]}
-          onPress={this[`onPressPhoto${photoIndex}`]}>
-          {photo ? (
+          style={styles.item}
+          onPress={() => actionSheetRefs.current[photoIndex - 1]?.show()}>
+          {photo && (
             <View shadow={3} style={[styles.photoShadow, {height: size}]} />
-          ) : null}
+          )}
           <Image
             style={[
               styles.photo,
               {
-                width,
+                width: itemWidth,
                 height: size,
                 marginBottom: 15,
               },
@@ -155,43 +140,33 @@ export default class CarCostPhotos extends Component {
         </TouchableOpacity>
       </View>
     );
-  };
+  }, [photos, itemWidth, handleRemovePhoto]);
 
-  getItemWidth = contentWidth => (contentWidth - 70) / 3;
+  return (
+    <View style={styles.container}>
+      {[1, 2, 3, 4, 5, 6].map((photoIndex) => (
+        <ActionSheet
+          key={photoIndex}
+          cancelButtonIndex={0}
+          ref={ref => (actionSheetRefs.current[photoIndex - 1] = ref)}
+          title={strings.CarCostScreen.chooseFoto}
+          options={[strings.Base.cancel, 'Галерея', 'Камера']}
+          onPress={(i) => handlePhotoPress(i, photoIndex)}
+        />
+      ))}
 
-  shouldComponentUpdate(nextProps) {
-    return this.props.photos !== nextProps.photos;
-  }
+      <VStack style={styles.menu}>
+        <HStack justifyContent="space-around">
+          {[1, 2, 3].map(renderItem)}
+        </HStack>
+        <HStack justifyContent="space-around">
+          {[4, 5, 6].map(renderItem)}
+        </HStack>
+      </VStack>
+    </View>
+  );
+});
 
-  onLayout = e => {
-    return false;
-  };
+// CarCostPhotos.displayName = 'CarCostPhotos';
 
-  render() {
-    return (
-      <View style={styles.container} onLayout={this.onLayout}>
-        {[1, 2, 3, 4, 5, 6].map(photoIndex => {
-          return (
-            <ActionSheet
-              key={photoIndex}
-              cancelButtonIndex={0}
-              ref={component => (this[`actionSheet${photoIndex}`] = component)}
-              title={strings.CarCostScreen.chooseFoto}
-              options={[strings.Base.cancel, 'Галерея', 'Камера']}
-              onPress={this[`handlePhotoPress${photoIndex}`]}
-            />
-          );
-        })}
-
-        <VStack style={styles.menu}>
-          <HStack justifyContent="space-around">
-            {[1, 2, 3].map(this.renderItem)}
-          </HStack>
-          <HStack justifyContent="space-around">
-            {[4, 5, 6].map(this.renderItem)}
-          </HStack>
-        </VStack>
-      </View>
-    );
-  }
-}
+export default CarCostPhotos;
