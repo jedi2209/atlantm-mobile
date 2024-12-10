@@ -11,7 +11,6 @@ import {
   Pressable,
 } from 'react-native';
 import {View} from 'native-base';
-import LinearGradient from 'react-native-linear-gradient';
 import ImageCarousel from './ImageCarousel';
 
 // components

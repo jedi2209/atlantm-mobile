@@ -122,7 +122,7 @@ const CarCostScreen = ({
   actionCarCostOrder,
   localDealerClear,
 }) => {
-  const [carSelected, setCarData] = useState({
+  const [carSelected, setCarSelected] = useState({
     carBrand,
     carModel,
     carName,
@@ -138,7 +138,7 @@ const CarCostScreen = ({
 
   const [photos, setPhotos] = useState([]);
 
-  const [FormConfig, setFormConfig] = useState({});
+  const [formConfig, setFormConfig] = useState({});
 
   const dealer = get(route, 'params.dealerCustom', dealerSelectedLocal);
   const userTextFromNavigation = get(route, 'params.Text', '');
@@ -165,135 +165,133 @@ const CarCostScreen = ({
 
   useEffect(() => {
     setFormConfig({
-      fields: {
-        groups: [
-          {
-            name: strings.Form.group.dealer,
-            fields: [
-              {
-                name: 'DEALER',
-                type: 'dealerSelect',
-                label: strings.Form.field.label.dealer,
-                value: dealer,
-                props: {
-                  goBack: true,
-                  isLocal: true,
-                  required: true,
-                  showBrands: false,
-                  returnScreen: navigation.state?.routeName,
-                  readonly: get(route, 'params.dealerCustom') ? true : false,
-                  dealerFilter: {
-                    type: 'TI',
-                  },
+      groups: [
+        {
+          name: strings.Form.group.dealer,
+          fields: [
+            {
+              name: 'DEALER',
+              type: 'dealerSelect',
+              label: strings.Form.field.label.dealer,
+              value: dealer,
+              props: {
+                goBack: true,
+                isLocal: true,
+                required: true,
+                showBrands: false,
+                returnScreen: navigation.state?.routeName,
+                readonly: get(route, 'params.dealerCustom') ? true : false,
+                dealerFilter: {
+                  type: 'TI',
                 },
               },
-              {
-                name: 'DATE',
-                type: 'date',
-                label: strings.Form.field.label.date,
-                value: null,
-                props: {
-                  placeholder:
-                    strings.Form.field.placeholder.date +
-                    dayMonthYear(addDays(2)),
-                  required: true,
-                  minimumDate: new Date(addDays(2)),
-                  maximumDate: new Date(addDays(31)),
-                },
+            },
+            {
+              name: 'DATE',
+              type: 'date',
+              label: strings.Form.field.label.date,
+              value: null,
+              props: {
+                placeholder:
+                  strings.Form.field.placeholder.date +
+                  dayMonthYear(addDays(2)),
+                required: true,
+                minimumDate: new Date(addDays(2)),
+                maximumDate: new Date(addDays(31)),
               },
-            ],
-          },
-          {
-            name: strings.Form.group.car,
-            fields: _getCars(),
-          },
-          {
-            name: strings.Form.group.contacts,
-            fields: [
-              {
-                name: 'NAME',
-                type: 'input',
-                label: strings.Form.field.label.name,
-                value: firstName,
-                props: {
-                  required: true,
-                  textContentType: 'name',
-                },
+            },
+          ],
+        },
+        {
+          name: strings.Form.group.car,
+          fields: _getCars(),
+        },
+        {
+          name: strings.Form.group.contacts,
+          fields: [
+            {
+              name: 'NAME',
+              type: 'input',
+              label: strings.Form.field.label.name,
+              value: firstName,
+              props: {
+                required: true,
+                textContentType: 'name',
               },
-              {
-                name: 'SECOND_NAME',
-                type: 'input',
-                label: strings.Form.field.label.secondName,
-                value: secondName,
-                props: {
-                  textContentType: 'middleName',
-                },
+            },
+            {
+              name: 'SECOND_NAME',
+              type: 'input',
+              label: strings.Form.field.label.secondName,
+              value: secondName,
+              props: {
+                textContentType: 'middleName',
               },
-              {
-                name: 'LAST_NAME',
-                type: 'input',
-                label: strings.Form.field.label.lastName,
-                value: lastName,
-                props: {
-                  textContentType: 'familyName',
-                },
+            },
+            {
+              name: 'LAST_NAME',
+              type: 'input',
+              label: strings.Form.field.label.lastName,
+              value: lastName,
+              props: {
+                textContentType: 'familyName',
               },
-              {
-                name: 'PHONE',
-                type: 'phone',
-                label: strings.Form.field.label.phone,
-                value: phone,
-                props: {
-                  required: true,
-                },
+            },
+            {
+              name: 'PHONE',
+              type: 'phone',
+              label: strings.Form.field.label.phone,
+              value: phone,
+              props: {
+                required: true,
               },
-              {
-                name: 'EMAIL',
-                type: 'email',
-                label: strings.Form.field.label.email,
-                value: email,
+            },
+            {
+              name: 'EMAIL',
+              type: 'email',
+              label: strings.Form.field.label.email,
+              value: email,
+            },
+          ],
+        },
+        {
+          name: strings.Form.group.foto,
+          fields: [
+            {
+              name: 'FOTO',
+              type: 'component',
+              label: strings.Form.field.label.foto,
+              value: (
+                <CarCostPhotos
+                  photos={photos}
+                  photosFill={photos => {
+                    setPhotos(photos);
+                  }}
+                />
+              ),
+            },
+          ],
+        },
+        {
+          name: strings.Form.group.additional,
+          fields: [
+            {
+              name: 'COMMENT',
+              type: 'textarea',
+              label: strings.Form.field.label.comment,
+              value: userTextFromNavigation,
+              props: {
+                placeholder: strings.Form.field.placeholder.comment,
               },
-            ],
-          },
-          {
-            name: strings.Form.group.foto,
-            fields: [
-              {
-                name: 'FOTO',
-                type: 'component',
-                label: strings.Form.field.label.foto,
-                value: (
-                  <CarCostPhotos
-                    photos={photos}
-                    photosFill={photos => {
-                      setPhotos(photos);
-                    }}
-                  />
-                ),
-              },
-            ],
-          },
-          {
-            name: strings.Form.group.additional,
-            fields: [
-              {
-                name: 'COMMENT',
-                type: 'textarea',
-                label: strings.Form.field.label.comment,
-                value: userTextFromNavigation,
-                props: {
-                  placeholder: strings.Form.field.placeholder.comment,
-                },
-              },
-            ],
-          },
-        ],
-      },
+            },
+          ],
+        },
+      ],
     });
   }, [carSelected, photos, dealerSelectedLocal, dealer]);
 
   const _selectCar = item => {
-    setCarData({
+    setCarSelected({
       carBrand: get(item, 'brand'),
       carModel: get(item, 'model'),
       carNumber: get(item, 'number'),
@@ -702,7 +700,7 @@ const CarCostScreen = ({
     }
   };
 
-  if (!FormConfig || !FormConfig?.fields) {
+  if (!formConfig || !formConfig?.groups) {
     return <></>;
   }
 
@@ -712,7 +710,7 @@ const CarCostScreen = ({
         paddingHorizontal: 14,
       }}
       key="CarCostForm"
-      fields={FormConfig.fields}
+      fields={formConfig}
       barStyle={'light-content'}
       SubmitButton={{text: strings.Form.button.send}}
       onSubmit={_onPressOrder}

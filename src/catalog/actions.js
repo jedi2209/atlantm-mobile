@@ -143,15 +143,13 @@ export const actionFetchUsedCarFilterData = props => {
               url: `/stock/trade-in/cars/get/region/${props.region}/`,
             },
           });
-        } else {
-          if (props.city) {
-            dispatch({
-              type: SAVE_USEDCAR_FILTERS,
-              payload: {
-                url: `/stock/trade-in/cars/get/city/${props.city}/`,
-              },
-            });
-          }
+        } else if (props.city) {
+          dispatch({
+            type: SAVE_USEDCAR_FILTERS,
+            payload: {
+              url: `/stock/trade-in/cars/get/city/${props.city}/`,
+            },
+          });
         }
 
         return dispatch({
@@ -211,22 +209,12 @@ export const actionFetchNewCarByFilter = props => {
   let sortingRaw = {};
 
   if (props.filters) {
-    for (const [key, value] of Object.entries(props.filters)) {
-      if (value || value === 0) {
-        if (typeof value === 'object') {
-          continue;
-        }
-        if (value === true) {
-          urlParams.push(`${key}=1`);
-          filtersRaw[key] = 1;
-        } else {
-          if (value !== false && value !== 'false') {
-            urlParams.push(`${key}=${value}`);
-            filtersRaw[key] = value;
-          }
-        }
+    Object.entries(props.filters).forEach(([key, value]) => {
+      if (value !== false && value !== 'false' && value !== undefined) {
+        urlParams.push(`${key}=${value}`);
+        filtersRaw[key] = value;
       }
-    }
+    });
   }
 
   return dispatch => {
@@ -315,22 +303,15 @@ export const actionFetchUsedCarByFilter = props => {
   let sortingRaw = {};
 
   if (props.filters) {
-    for (const [key, value] of Object.entries(props.filters)) {
-      if (value || value === 0) {
+    Object.entries(props.filters).forEach(([key, value]) => {
+      if (value !== false && value !== 'false' && value !== undefined) {
         if (typeof value === 'object') {
-          continue;
+          return;
         }
-        if (value === true) {
-          urlParams.push(`${key}=1`);
-          filtersRaw[key] = 1;
-        } else {
-          if (value !== false && value !== 'false') {
-            urlParams.push(`${key}=${value}`);
-            filtersRaw[key] = value;
-          }
-        }
+        urlParams.push(`${key}=${value}`);
+        filtersRaw[key] = value;
       }
-    }
+    });
   }
 
   return dispatch => {
