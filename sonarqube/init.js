@@ -9,31 +9,30 @@ const checkServer = async () => {
   request(serverUrl, (error, response, body) => {
     if (error) {
       return false;
-    } else {
-      if (response.statusCode === 200) {
-        clearInterval(check);
-        setTimeout(() => {
-          sonarqubeScanner(
-            {
-              serverUrl: serverUrl,
-              token: token,
-              options: {
-                'sonar.projectKey': projectKey,
-                'sonar.projectBaseDir': '.',
-                'sonar.sources': '.',
-                'sonar.sourceEncoding': 'UTF-8',
-                'sonar.verbose': 'false',
-                'sonar.exclusions':
-                  './node_modules/*, ./ios/*, ./android/*, ./*.spec.t, ./sonarqube/*, **/*.java',
-              },
+    }
+    if (response.statusCode === 200) {
+      clearInterval(check);
+      setTimeout(() => {
+        sonarqubeScanner(
+          {
+            serverUrl: serverUrl,
+            token: token,
+            options: {
+              'sonar.projectKey': projectKey,
+              'sonar.projectBaseDir': '.',
+              'sonar.sources': '.',
+              'sonar.sourceEncoding': 'UTF-8',
+              'sonar.verbose': 'false',
+              'sonar.exclusions':
+                './node_modules/*, ./ios/*, ./android/*, ./*.spec.t, ./sonarqube/*, **/*.java',
             },
-            () => {
-              // callback
-            },
-          );
-        }, 30 * 1000);
-        return true;
-      }
+          },
+          () => {
+            // callback
+          },
+        );
+      }, 30 * 1000);
+      return true;
     }
   });
 };

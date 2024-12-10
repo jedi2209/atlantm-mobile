@@ -47,7 +47,6 @@ const CarList = props => {
   if (itemScreen === 'UsedCarItemScreen') {
     ITEM_HEIGHT = 320;
   }
-  const [isRefreshing, setRefreshing] = useState(false);
   const [loadingNextPage, setLoadingNextPage] = useState(false);
 
   useEffect(() => {
@@ -98,12 +97,6 @@ const CarList = props => {
         marginTop={15}
       />
     );
-  };
-
-  const _onRefresh = () => {
-    dataHandler(EVENT_REFRESH).then(() => {
-      setRefreshing(false);
-    });
   };
 
   const handleLoadMore = () => {
