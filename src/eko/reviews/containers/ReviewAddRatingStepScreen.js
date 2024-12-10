@@ -183,6 +183,10 @@ const ReviewAddRatingStepScreen = props => {
                   strings.Form.status.fieldRequired2,
                 ].join(' '),
               },
+              required: [
+                strings.Form.status.fieldRequired1,
+                strings.Form.status.fieldRequired2,
+              ].join(' '),
             }}
             name="NAME"
             render={({field: {onChange, onBlur, value}}) => (
@@ -251,6 +255,19 @@ const ReviewAddRatingStepScreen = props => {
           <Controller
             control={control}
             name="EMAIL"
+            rules={{
+              minLength: {
+                value: 3,
+                message: [
+                  strings.Form.status.fieldRequired1,
+                  strings.Form.status.fieldRequired2,
+                ].join(' '),
+              },
+              required: [
+                strings.Form.status.fieldRequired1,
+                strings.Form.status.fieldRequired2,
+              ].join(' '),
+            }}
             render={({field: {onChange, onBlur, value}}) => (
               <InputCustom
                 type="email"
