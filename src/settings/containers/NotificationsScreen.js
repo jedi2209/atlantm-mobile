@@ -1,13 +1,13 @@
 /* eslint-disable react-native/no-inline-styles */
-import {useEffect, useState} from 'react';
-import {Linking} from 'react-native';
-import {ScrollView, Text, View} from 'native-base';
+import React, { useEffect, useState } from 'react';
+import { Linking } from 'react-native';
+import { ScrollView, Text, View } from 'native-base';
+import { useSelector, useDispatch } from 'react-redux';
 
 import * as NavigationService from '../../navigation/NavigationService';
 
 // redux
-import {connect} from 'react-redux';
-import {actionGetNotifications, actionRemoveNotification} from '../actions';
+import { actionGetNotifications } from '../actions';
 
 // components
 import TransitionView from '../../core/components/TransitionView';
@@ -18,24 +18,8 @@ import LogoLoader from '../../core/components/LogoLoader';
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
-import {get} from 'lodash';
-import {getDateFromTimestamp, dayMonthYearTime2} from '../../utils/date';
-
-const mapStateToProps = ({settings, nav, profile}) => {
-  return {
-    nav,
-    notifications: {
-      remote: get(settings, 'notifications.remote.data', []),
-      local: get(settings, 'notifications.local.data', []),
-    },
-    login: profile.login,
-  };
-};
-
-const mapDispatchToProps = {
-  actionGetNotifications,
-  actionRemoveNotification,
-};
+import { get } from 'lodash';
+import { getDateFromTimestamp, dayMonthYearTime2 } from '../../utils/date';
 
 const types = {
   1: 'rgba(251, 77, 61, 0.1)', // общее
@@ -66,7 +50,7 @@ const isValidUrl = str => {
 };
 
 const parseURL = async item => {
-  const {url, type} = item;
+  const { url, type } = item;
 
   let supported = false;
 
@@ -94,7 +78,7 @@ const parseURL = async item => {
     // URL is not valid, do something else
     switch (get(type, 'id')) {
       case 2: // акция
-        return NavigationService.navigate('InfoPostScreen', {id: url});
+        return NavigationService.navigate('InfoPostScreen', { id: url });
       case 1: // общее
       case 3: // новости
       case 4: // ТВА
@@ -105,36 +89,25 @@ const parseURL = async item => {
   return;
 };
 
-const NotificationsScreen = props => {
-  const {notifications, login, navigation, actionGetNotifications} = props;
-  const [isLoading, setLoading] = useState(false);
+const NotificationsScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const login = useSelector(state => state.profile.login);
+
+  const [loading, setLoading] = useState(false);
   const [notificationsAll, setNotificationsAll] = useState([]);
 
   useEffect(() => {
     Analytics.logEvent('screen', 'notifications');
-    setLoading(true);
-    actionGetNotifications({userID: get(login, 'SAP.ID', null)}).then(data => {
-      let notificationsTmp = [];
-      [...get(data, 'payload.data'), ...notifications.local].forEach(el => {
-        notificationsTmp.push(el);
-      });
-      notificationsTmp.sort((a, b) => {
-        if (a.date.timestamp > b.date.timestamp) {
-          return -1;
-        }
-        return b.date.timestamp > a.date.timestamp ? 0 : -1;
-      });
-      setNotificationsAll(notificationsTmp);
-      setTimeout(() => {
-        navigation.setParams({
-          notificationsCount: get(notificationsTmp, 'length', 0),
-        });
-      }, 500);
+    const res = async () => {
+      setLoading(true);
+      const result = await dispatch(actionGetNotifications({ userID: get(login, 'SAP.ID', null) }));
+      setNotificationsAll(result?.all);
       setLoading(false);
-    });
-  }, []);
+    };
+    res();
+  }, [login]);
 
-  if (isLoading) {
+  if (loading) {
     return (
       <LogoLoader
         style={{
@@ -188,7 +161,4 @@ const NotificationsScreen = props => {
   );
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(NotificationsScreen);
+export default NotificationsScreen;
