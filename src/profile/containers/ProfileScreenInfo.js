@@ -323,6 +323,7 @@ const ProfileScreenInfo = props => {
                   {dayMonthYear(login?.CASHBACK?.DATE?.TO)}
                 </Text>
               </View>
+              <Text mt={2} color={styleConst.color.white} fontSize={12} lineHeight={12}>{strings.ProfileScreenInfo.cashback.belgee}</Text>
             </View>
             <View
               style={[
