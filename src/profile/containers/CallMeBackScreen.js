@@ -13,6 +13,7 @@ import Form from '../../core/components/Form/Form';
 
 import {get, isNil} from 'lodash';
 import {localDealerClear} from '../../dealer/actions';
+import dealerProcess from '../../utils/dealer-process';
 
 import {ERROR_NETWORK} from '../../core/const';
 import {strings} from '../../core/lang/const';
@@ -148,76 +149,85 @@ const CallMeBackScreen = ({
     }
   };
 
-  let dealerGroup = {};
-  if (listDealers) {
-    if (listDealers.length < 1) {
-      dealerGroup = {
-        name: strings.Form.group.dealer,
-        fields: [
-          {
-            name: 'DEALER',
-            type: 'dealerSelect',
-            label: strings.Form.group.dealer,
-            value: dealer,
-            props: {
-              required: true,
-              goBack: true,
-              isLocal: true,
-              showBrands: false,
-              readonly: isDealerHide,
-            },
-          },
-        ],
-      };
-    }
-    if (listDealers.length === 1) {
-      dealerGroup = {
-        name: strings.Form.group.dealer,
-        fields: [
-          {
-            name: 'DEALER',
-            type: 'dealerSelect',
-            label: strings.Form.group.dealer,
-            value: dealerSelectedLocal || allDealers[dealer] || dealer,
-            props: {
-              required: true,
-              goBack: true,
-              isLocal: true,
-              showBrands: false,
-              readonly: true,
-            },
-          },
-        ],
-      };
-    }
-    if (listDealers.length > 1) {
-      dealerGroup = {
-        name: strings.Form.group.dealer,
-        fields: [
-          {
-            name: 'DEALER',
-            type: 'select',
-            label: strings.Form.field.label.dealer,
-            value: null,
-            props: {
-              items: listDealers,
-              required: true,
-              placeholder: {
-                label: strings.Form.field.placeholder.dealer,
-                value: null,
-                color: '#9EA0A4',
-              },
-            },
-          },
-        ],
-      };
-    }
-  }
+  // let dealerGroup = {};
+  // if (listDealers) {
+  //   if (listDealers.length < 1) {
+  //     dealerGroup = {
+  //       name: strings.Form.group.dealer,
+  //       fields: [
+  //         {
+  //           name: 'DEALER',
+  //           type: 'dealerSelect',
+  //           label: strings.Form.group.dealer,
+  //           value: dealer,
+  //           props: {
+  //             required: true,
+  //             goBack: true,
+  //             isLocal: true,
+  //             showBrands: false,
+  //             readonly: isDealerHide,
+  //           },
+  //         },
+  //       ],
+  //     };
+  //   }
+  //   if (listDealers.length === 1) {
+  //     dealerGroup = {
+  //       name: strings.Form.group.dealer,
+  //       fields: [
+  //         {
+  //           name: 'DEALER',
+  //           type: 'dealerSelect',
+  //           label: strings.Form.group.dealer,
+  //           value: dealerSelectedLocal || allDealers[dealer] || dealer,
+  //           props: {
+  //             required: true,
+  //             goBack: true,
+  //             isLocal: true,
+  //             showBrands: false,
+  //             readonly: true,
+  //           },
+  //         },
+  //       ],
+  //     };
+  //   }
+  //   if (listDealers.length > 1) {
+  //     dealerGroup = {
+  //       name: strings.Form.group.dealer,
+  //       fields: [
+  //         {
+  //           name: 'DEALER',
+  //           type: 'select',
+  //           label: strings.Form.field.label.dealer,
+  //           value: null,
+  //           props: {
+  //             items: listDealers,
+  //             required: true,
+  //             placeholder: {
+  //               label: strings.Form.field.placeholder.dealer,
+  //               value: null,
+  //               color: '#9EA0A4',
+  //             },
+  //           },
+  //         },
+  //       ],
+  //     };
+  //   }
+  // }
 
   const FormConfig = {
     fields: {
       groups: [
-        dealerGroup,
+        {
+          name: strings.Form.group.dealer,
+          fields: [dealerProcess({
+            dealer,
+            listDealers,
+            dealerSelectedLocal,
+            allDealers,
+            route,
+          })],
+        },
         {
           name: strings.Form.group.contacts,
           fields: [
