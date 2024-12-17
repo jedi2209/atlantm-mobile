@@ -117,6 +117,9 @@ let UserCars = ({activePanel = 'default', cars, brands}) => {
   }, [myCars]);
 
   useEffect(() => {
+    if (get(myCars, 'default.length') <= 2) {
+      return;
+    }
     setTimeout(() => {
       carsScrollView &&
         carsScrollView.current &&

@@ -625,10 +625,6 @@ const ChooseDealerScreen = props => {
     return _EmptyComponent();
   }
 
-  console.info('needToUpdate', needToUpdate);
-  console.info('tabsData', tabsData);
-  console.info('renderSceneData', renderSceneData);
-
   const renderScene = SceneMap(renderSceneData);
 
   return (
