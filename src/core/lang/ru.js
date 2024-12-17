@@ -610,6 +610,7 @@ export default {
       title: 'Cashback',
       statusText: 'Текущий статус ',
       deadline: 'Действует до ',
+      belgee: 'Для клиентов Geely и BELGEE - кешбэк 1% без учета статуса.',
     },
     additionalPurchase: {
       title: 'Покупки',
