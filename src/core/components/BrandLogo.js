@@ -126,7 +126,7 @@ const brandsSVG = {
     4: (
       <Image
         source={require('../../../assets/brands/black/brand-4.svg')}
-        style={[styles.imageSVG, {width: '75%'}]}
+        style={[styles.imageSVG, {width: '70%'}]}
       />
     ),
     176: (
