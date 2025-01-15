@@ -15,6 +15,7 @@ import SplashScreenComponent from './SplashScreenComponent';
 // components
 import App from './App';
 import {LogBox} from 'react-native';
+import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated';
 
 import {SENTRY_DSN, APPSFLYER_SETTINGS, LOG_ROCKET_ID} from '../const';
 import styleConst from '../style-const';
@@ -24,11 +25,11 @@ const colorScheme = Appearance.getColorScheme();
 let sentryParams = {
   dsn: SENTRY_DSN,
   tracesSampleRate: 1.0,
-  integrations: [
-    new Sentry.ReactNativeTracing({
-      tracingOrigins: ['localhost', 'api.atlantm.com', 'cdn.atlantm.com'],
-    }),
-  ],
+  // integrations: [
+  //   new Sentry.ReactNativeTracing({
+  //     tracingOrigins: ['localhost', 'api.atlantm.com', 'cdn.atlantm.com'],
+  //   }),
+  // ],
   _experiments: {
     profilesSampleRate: 1.0,
   },
@@ -42,15 +43,20 @@ if (__DEV__) {
     "[react-native-gesture-handler] Seems like you're using an old API with gesture components, check out new Gestures system!",
     'If you do not provide children, you must specify an aria-label for accessibility',
   ]);
+  // This is the default configuration
+  configureReanimatedLogger({
+    level: ReanimatedLogLevel.warn,
+    strict: false, // Reanimated runs in strict mode by default
+  });
   sentryParams = {
     dsn: SENTRY_DSN,
     debug: true,
     tracesSampleRate: 1.0,
-    integrations: [
-      new Sentry.ReactNativeTracing({
-        tracingOrigins: ['localhost', 'api.atlantm.com', 'cdn.atlantm.com'],
-      }),
-    ],
+    // integrations: [
+    //   new Sentry.ReactNativeTracing({
+    //     tracingOrigins: ['localhost', 'api.atlantm.com', 'cdn.atlantm.com'],
+    //   }),
+    // ],
     _experiments: {
       profilesSampleRate: 1.0,
     },

@@ -18,6 +18,7 @@ import Analytics from '../../../utils/amplitude-analytics';
 import styleConst from '../../../core/style-const';
 import {strings} from '../../../core/lang/const';
 import RNBounceable from '@freakycoder/react-native-bounceable';
+import md5 from '../../../utils/md5';
 
 const styles = StyleSheet.create({
   mainContainer: {
@@ -147,22 +148,19 @@ class BonusScreen extends Component {
       .map((bonusYear, idx, yearsArray) => {
         const bonus = bonuses[bonusYear];
         const isLast = yearsArray.length - 1 === idx;
-        const hash = bonus.hash;
+        const hash = bonusYear + bonus.hash;
         const isActive = true; //this.isActiveLevel1(hash);
         const onPressHander = () => this.onPressLevel1(hash);
 
         return (
-          <View key={hash} style={styles.acc}>
+          <View key={'level1' + hash} style={styles.acc}>
             {this.renderItemHeader(
               bonusYear,
               bonus.total,
               bonus.curr,
               onPressHander,
               'itemLevel1',
-              isActive,
-              isLast,
-              false,
-              false,
+              'level1Header',
             )}
             {isActive ? (
               <View
@@ -170,7 +168,7 @@ class BonusScreen extends Component {
                 animation="slideInDown"
                 useNativeDriver={true}
                 duration={700}>
-                {this.renderLevel2(bonus.history)}
+                {this.renderLevel2(bonus.history, bonusYear)}
               </View>
             ) : null}
           </View>
@@ -178,32 +176,29 @@ class BonusScreen extends Component {
       });
   };
 
-  renderLevel2 = bonusesByMonth => {
+  renderLevel2 = (bonusesByMonth, bonusYear) => {
     return Object.keys(bonusesByMonth)
       .reverse()
       .map((bonusMonth, idx, monthArray) => {
         const bonus = bonusesByMonth[bonusMonth];
         const isLast = monthArray.length - 1 === idx;
-        const hash = bonus.hash;
+        const hash = bonusYear + bonusMonth + bonus.hash;
         const isActive = true; //this.isActiveLevel2(hash);
         const onPressHander = () => this.onPressLevel2(hash);
 
         return (
-          <View key={hash} style={styles.acc}>
+          <View key={'level2' + hash} style={styles.acc}>
             {this.renderItemHeader(
               strings.DatePickerCustom.month[bonusMonth],
               bonus.total,
               bonus.curr,
               onPressHander,
               'itemLevel2',
-              isActive,
-              isLast,
-              false,
-              false,
+              'level2Header',
             )}
             {isActive ? (
               <View animation="pulse" useNativeDriver={true} duration={700}>
-                {this.renderLevel3(bonus.history)}
+                {this.renderLevel3(bonus.history, hash, idx)}
               </View>
             ) : null}
           </View>
@@ -211,7 +206,7 @@ class BonusScreen extends Component {
       });
   };
 
-  renderLevel3 = history => {
+  renderLevel3 = (history, hash, number) => {
     return history.map((bonus, idx) => {
       return this.renderItemHeader(
         bonus.name,
@@ -219,7 +214,7 @@ class BonusScreen extends Component {
         bonus.curr,
         null,
         'itemLevel3',
-        bonus.hash,
+        md5(['lvl3', number, idx, bonus.hash, hash, bonus.name, bonus.summ].join('-')),
         bonus.date,
         bonus.dealer,
       );
@@ -232,9 +227,9 @@ class BonusScreen extends Component {
     curr,
     onPressHandler,
     theme,
-    key,
-    date,
-    dealer,
+    key = md5(Date.now()),
+    date = null,
+    dealer = null,
   ) => {
     const isLevel3 = theme === 'itemLevel3';
 
