@@ -10,7 +10,7 @@
 		"postinstall": "bash ./postinstall.sh",
 		"pod-update": "cd ios; bundle exec pod update; bundle exec pod install; cd ../",
 		"react": "watchman watch-del $(pwd); watchman watch-project $(pwd); npx react-native start --reset-cache",
-		"clean:android": "cd android && rm -rf ./app/build/ ./app/.cxx/ ./build/; ./gradlew --stop && ./gradlew clean && cd ../",
+		"clean:android": "cd android; ./gradlew --stop && ./gradlew clean && cd ../",
 		"clean:android:win": "cd ./android; ./gradlew --stop && ./gradlew clean; cd ../",
 		"clean:ios": "xattr -w com.apple.xcode.CreatedByBuildSystem true $(pwd)/ios/build; cd ios && xcodebuild clean && cd ../",
 		"iphone": "yarn react-native run-ios --simulator=\"iPhone 15\"",
@@ -31,7 +31,7 @@
 		"android-build": "yarn clean:android; bundle exec fastlane android internal",
 		"reinstall": "./reinstall.sh",
 		"sonar": "open -a iTerm ./sonarqube/docker-start.sh; node ./sonarqube/init.js",
-		"cleanTmp": "rm -rf $TMPDIR/react-*; rm -rf $TMPDIR/haste-*; rm -rf $TMPDIR/metro-*; watchman watch-del-all; rm -rf ios/build/ android/app/build/ android/build/ artifacts/ ios/atlantm.xcodeproj/xcuserdata/",
+		"cleanTmp": "rm -rf $TMPDIR/react-*; rm -rf $TMPDIR/haste-*; rm -rf $TMPDIR/metro-*; watchman watch-del-all; rm -rf ios/build/ android/app/build/ android/build/ android/app/.cxx/ artifacts/ ios/atlantm.xcodeproj/xcuserdata/",
 		"clean": "rm -rf ios/build/ ./ios/Podfile.lock ./ios/Pods ~/Library/Developer/Xcode/DerivedData/*; npx react-native-clean-project;",
 		"test": "jest",
 		"version": "./version.sh",
@@ -92,7 +92,7 @@
 		"native-base": "^3.4.25",
 		"promise": "^8.1.0",
 		"react": "18.3.1",
-		"react-devtools-core": "^4.24.1",
+		"react-devtools-core": "^6.0.1",
 		"react-hook-form": "^7.52.1",
 		"react-native": "0.76.6",
 		"react-native-animatable": "^1.3.3",
@@ -100,7 +100,7 @@
 		"react-native-awesome-gallery": "^0.4.2",
 		"react-native-big-list": "^1.6.1",
 		"react-native-buffer": "^6.0.3",
-		"react-native-calendars": "^1.1305.0",
+		"react-native-calendars": "^1.1308.0",
 		"react-native-circular-progress-indicator": "^4.4.2",
 		"react-native-codegen": "0.71.5",
 		"react-native-collapsible": "^1.6.0",
@@ -130,7 +130,7 @@
 		"react-native-picker-select": "^9.0.0",
 		"react-native-pure-jwt": "^3.0.1",
 		"react-native-read-more-text": "^1.1.2",
-		"react-native-reanimated": "^3.9.0-rc.1",
+		"react-native-reanimated": "^3.16.7",
 		"react-native-reanimated-carousel": "^3.5.1",
 		"react-native-responsive-image-view": "^2.1.0",
 		"react-native-restart": "^0.0.27",
@@ -184,8 +184,7 @@
 		"typescript": "5.0.4"
 	},
 	"engines": {
-		"node": ">=18",
-		"yarn": "^1.22.0"
+		"node": ">=18"
 	},
 	"os": [
 		"darwin",
