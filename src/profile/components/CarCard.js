@@ -61,9 +61,9 @@ const CarCard = ({data, type, checked, onPress, disabled, brands}) => {
           end: [1, 1],
         },
       }}
-      marginX={2}
-      marginY={4}
-      paddingTop={4}
+      marginX={'0.5'}
+      marginY={1}
+      paddingTop={1}
       rounded={'md'}
       justifyContent={'space-between'}
       width={48}
@@ -77,7 +77,8 @@ const CarCard = ({data, type, checked, onPress, disabled, brands}) => {
               key={'brandLogo' + brandID}
             />
           </View>
-        ) : <Text
+        ) : null}
+        <Text
           ellipsizeMode="tail"
           numberOfLines={1}
           selectable={false}
@@ -85,7 +86,7 @@ const CarCard = ({data, type, checked, onPress, disabled, brands}) => {
           ml={2}
           style={styles.textBrand}>
           {brand ? brand : '--'}
-        </Text>}
+        </Text>
         <Text
           ellipsizeMode="tail"
           numberOfLines={1}
@@ -110,6 +111,7 @@ const CarCard = ({data, type, checked, onPress, disabled, brands}) => {
         color={carColor ? carColor : styleConst.color.blue}
         mt={4}
         ml={2}
+        mb={4}
       />
       {type === 'check' && !disabled && (
         <TouchableWithoutFeedback containerStyle={styles.checkboxContainer}>
@@ -126,7 +128,7 @@ const CarCard = ({data, type, checked, onPress, disabled, brands}) => {
               isChecked={checked}
               defaultIsChecked={checked}
               color="#027aff"
-              style={{marginRight: 10}}
+              style={{marginRight: 2, marginBottom: 4}}
             />
           </View>
         </TouchableWithoutFeedback>

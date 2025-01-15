@@ -87,3 +87,6 @@ vendor/
 codesigndoc_exports/
 
 .vscode/
+
+# windsurf rules
+.windsurfrules

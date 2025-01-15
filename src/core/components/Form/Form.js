@@ -255,6 +255,7 @@ const pickerSelectStyles = StyleSheet.create({
     paddingTop: 24,
     paddingLeft: 1,
     color: '#222b45',
+    pointerEvents: 'none',
     paddingRight: 30, // to ensure the text is never behind the icon
   },
   inputAndroid: {
@@ -1045,9 +1046,9 @@ class Form extends Component {
                 right: 5,
               },
             }}
-            {...data.props}
             key={'rnYearPicker' + num + name}
             items={items}
+            {...data.props}
           />
         </View>
       );
@@ -1372,6 +1373,7 @@ class Form extends Component {
               key: 'rnpicker' + num + name,
               testID: 'Form.PickerInput.' + name,
             }}
+            key={'rnPickerSelect' + num + name}
             doneText={strings.Base.choose}
             onDonePress={() => {
               if (data.props.onChange && Platform.OS === 'ios') {

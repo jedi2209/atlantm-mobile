@@ -92,7 +92,7 @@ const sizeType = {
 
 const stylesTitle = StyleSheet.create({
   main: {
-    zIndex: 10,
+    zIndex: 15,
     color: styleConst.color.blueNew,
     fontFamily: styleConst.font.regular,
     position: 'absolute',
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
     backgroundColor: styleConst.color.white,
     position: 'absolute',
     opacity: 0.9,
-    zIndex: 5,
+    zIndex: 10,
   },
   titleBackgroundtop: {
     borderTopRightRadius: styleConst.borderRadius,
