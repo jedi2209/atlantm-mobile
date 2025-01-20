@@ -117,12 +117,7 @@ const Carousel = props => {
       {pagination ? (
         <View
           style={[
-            {
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: deviceWidth * 0.6,
-              alignSelf: 'center',
-            },
+            styleLocal.paginationView,
             paginationStyle,
           ]}>
           {data.map((el, index) => {
@@ -141,5 +136,14 @@ const Carousel = props => {
     </View>
   );
 };
+
+const styleLocal = StyleSheet.create({
+  paginationView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: deviceWidth * 0.6,
+    alignSelf: 'center',
+  },
+});
 
 export default Carousel;
