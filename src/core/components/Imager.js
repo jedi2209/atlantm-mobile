@@ -82,7 +82,8 @@ const Imager = ({
   }
 
   if (typeof source === 'number') {
-    return <Image testID={testID} source={imageUrl} style={mergedStyle} resizeMode={resizeMode} {...otherProps} />;
+    console.info('Imager typeof source === "number"', source);
+    return <Image testID={testID} source={source} style={mergedStyle} resizeMode={resizeMode} {...otherProps} />;
   }
 
   delete mergedStyle.resizeMode;

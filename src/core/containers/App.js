@@ -40,7 +40,6 @@ import API from '../../utils/api';
 import {get} from 'lodash';
 import {OneSignal} from 'react-native-onesignal';
 import moment from 'moment';
-// import AppMetrica from 'react-native-appmetrica';
 import PushNotifications from '../components/PushNotifications';
 import styleConst from '../style-const';
 
@@ -154,7 +153,6 @@ const BugsnagNavigationContainer =
 
 const App = props => {
   const {
-    auth,
     actionSetPushActionSubscribe,
     dealerSelected,
     menuOpenedCount,
@@ -266,10 +264,14 @@ const App = props => {
           if (!resDealers) {
             setError(true);
           } else {
-            setError(false);
+            if (isError) {
+              setError(false);
+            }
             setLoading(false);
           }
-          checkAppForUpdate(region);
+          if (!__DEV__) {
+            checkAppForUpdate(region);
+          }
         });
       })
       .catch(err => {
@@ -293,10 +295,6 @@ const App = props => {
     }
 
     strings.setLanguage(APP_LANG);
-
-    if (get(auth, 'login') === 'zteam') {
-      window.atlantmDebug = true;
-    }
   }, []);
 
   useEffect(() => {
