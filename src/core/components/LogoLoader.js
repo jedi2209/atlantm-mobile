@@ -648,7 +648,7 @@ const LogoLoader = ({
         },
         style,
       ]}
-      dataDetectorTypes="all"
+      dataDetectorTypes={['all']}
     />
   );
 };

@@ -1245,6 +1245,15 @@ export default {
     return await this.apiGetData(url, requestParams);
   },
 
+  isJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+  },
+
   async apiGetData(url, requestParams = baseRequestParams) {
     const method = requestParams.method.toString().toLowerCase();
     let body = requestParams?.body;
@@ -1304,8 +1313,12 @@ export default {
       })
         .fetch(method, url, requestParams?.headers, body)
         .then(res => {
-          let answer = '';
-          switch (res.info().respType) {
+          let answer = _.get(res, 'data');
+          let respType = _.get(res.info(), 'respType', 'text');
+          if (this.isJsonString(_.get(res, 'data'))) {
+            respType = 'json';
+          }
+          switch (respType) {
             case 'json':
               answer = res.json();
               if (__DEV__) {
@@ -1318,7 +1331,6 @@ export default {
               }
               break;
             case 'text':
-              answer = res?.data;
               if (__DEV__) {
                 console.info(
                   new Date().toString() + '\tapiGetData\tJSON text',
@@ -1329,12 +1341,9 @@ export default {
               }
               break;
             default:
-              if (res?.data) {
-                answer = res?.data;
-              }
               console.error(
                 new Date().toString() +
-                  '\tapiGetDataError res.info().respType: ' +
+                  '\tapiGetDataError res.info().respType ' + respType + ': ' +
                   url,
                 res,
               );
