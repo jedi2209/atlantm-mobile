@@ -40,7 +40,7 @@ import LogoLoader from '../components/LogoLoader';
 const {width} = Dimensions.get('screen');
 const isApple = Platform.OS === 'ios';
 const firstRowMarginTop = 1;
-const infoListHeight = width / 1.12;
+const infoListHeight = Math.round(width / 1.12);
 
 const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
   return {
@@ -71,8 +71,8 @@ const mapDispatchToProps = {
 const styles = StyleSheet.create({
   spinnerContainer: {
     flex: 1,
-    marginTop: infoListHeight / 2,
-    height: infoListHeight,
+    marginTop: Math.round(infoListHeight / 2),
+    height: Math.round(infoListHeight),
     backgroundColor: styleConst.color.bg,
   },
   VersionContainer: {
@@ -495,32 +495,32 @@ const MainScreen = props => {
               json={el}
               firstRow={rowFirst}
               lastRow={rowLast}
-              walkthroughData={walkthroughData}
-              setTooltipVisible={() => {
-                const newIndex = walkthroughVisibleIndex + 1;
-                const walkthroughLength = Object.keys(walkthroughData).length;
-                setWalkthroughVisibleIndex(newIndex);
-                if (walkthroughLength - 1 === newIndex) {
-                  setWalkthroughData({...walkthroughData, visible: null});
-                  scrollRef.current?.scrollToEnd({
-                    animated: true,
-                  });
-                  setTimeout(() => {
-                    setWalkthroughData({
-                      ...walkthroughData,
-                      visible: get(walkthroughData[newIndex], 'key', null),
-                    });
-                  }, 700);
-                } else {
-                  setWalkthroughData({
-                    ...walkthroughData,
-                    visible: get(walkthroughData[newIndex], 'key', null),
-                  });
-                }
-                if (!get(walkthroughData[newIndex], 'key', false)) {
-                  props.actionWalktroughVisible(true);
-                }
-              }}
+              // walkthroughData={walkthroughData}
+              // setTooltipVisible={() => {
+              //   const newIndex = walkthroughVisibleIndex + 1;
+              //   const walkthroughLength = Object.keys(walkthroughData).length;
+              //   setWalkthroughVisibleIndex(newIndex);
+              //   if (walkthroughLength - 1 === newIndex) {
+              //     setWalkthroughData({...walkthroughData, visible: null});
+              //     scrollRef.current?.scrollToEnd({
+              //       animated: true,
+              //     });
+              //     setTimeout(() => {
+              //       setWalkthroughData({
+              //         ...walkthroughData,
+              //         visible: get(walkthroughData[newIndex], 'key', null),
+              //       });
+              //     }, 700);
+              //   } else {
+              //     setWalkthroughData({
+              //       ...walkthroughData,
+              //       visible: get(walkthroughData[newIndex], 'key', null),
+              //     });
+              //   }
+              //   if (!get(walkthroughData[newIndex], 'key', false)) {
+              //     props.actionWalktroughVisible(true);
+              //   }
+              // }}
               {...props}
             />
           );

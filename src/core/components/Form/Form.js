@@ -81,9 +81,8 @@ const platformStyle = {
       height: 'auto',
     },
     select: {
-      height: 55,
-      paddingTop: 8,
-      paddingLeft: 23,
+      height: 60,
+      paddingLeft: 12,
     },
     textarea: {
       height: 'auto',
@@ -111,8 +110,8 @@ const styles = StyleSheet.create({
   },
   field: {
     paddingRight: 15,
-    paddingTop: 2,
-    paddingBottom: 1,
+    paddingTop: 8,
+    paddingBottom: 8,
   },
   fieldRequiredDefault: {
     borderLeftColor: styleConst.color.red,
@@ -195,7 +194,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   checkboxWrapper: {
-    marginVertical: 0,
+    marginBottom: 10,
   },
   switchText: {
     marginBottom: 10,

@@ -158,29 +158,23 @@ const _renderInfoList = params => {
     }
     return (
       <View
-        style={{
-          marginTop: 16,
-          paddingVertical: 0,
-        }}
+        mt={8}
+        paddingY={0}
         testID="ContactsScreen.currentActionsHeading">
         <View
-          style={{
-            paddingHorizontal: 20,
-            marginBottom: 20,
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
+          mb={1}
+          display={'flex'}
+          flexDirection={'row'}
+          justifyContent={'space-between'}
+          paddingX={4}>
           <Text style={{fontSize: 14, fontWeight: '500'}}>
             {strings.ContactsScreen.currentActions}
           </Text>
           <Text
             onPress={() => navigation.navigate('InfoList', {dealerID})}
-            style={{
-              color: styleConst.color.lightBlue,
-              fontSize: 14,
-              paddingLeft: 24,
-            }}>
+            color={styleConst.color.lightBlue}
+            fontSize={14}
+            paddingLeft={4}>
             {strings.Base.all}
           </Text>
         </View>
@@ -384,11 +378,9 @@ const DealerInfoScreen = ({
                 }}
               />
               <Text
-                style={{
-                  color: styleConst.color.white,
-                  fontSize: 10,
-                  lineHeight: 12,
-                }}>
+                color={styleConst.color.white}
+                fontSize={12}
+                lineHeight={14}>
                 {strings.ContactsScreen.timework}
               </Text>
             </Pressable>
@@ -758,7 +750,7 @@ const DealerInfoScreen = ({
               cache: 'web',
             }}
           />
-          <View mt={-20}>
+          <View mt={-20} zIndex={20}>
             {_renderAddress(addresses)}
             {_renderPlates({
               callAvailable,
