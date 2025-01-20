@@ -172,4 +172,4 @@ dependencies {
     // implementation 'com.google.firebase:firebase-perf'
 }
 
-apply plugin: "com.bugsnag.android.gradle"
+// apply plugin: "com.bugsnag.android.gradle"
