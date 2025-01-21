@@ -46,6 +46,7 @@ import {
   COORDS_DEFAULT,
   ERROR_NETWORK,
   UKRAINE,
+  APP_VERSION,
 } from '../../core/const';
 
 export const isAndroid = Platform.OS === 'android';
@@ -693,6 +694,11 @@ const LoginScreen = props => {
             </Animated.View>
           )}
         </VStack>
+      </View>
+      <View style={{alignItems: 'center'}}>
+        <Text style={{marginBottom: 120, color: styleConst.color.white}}>
+          {APP_VERSION}
+        </Text>
       </View>
     </View>
   );

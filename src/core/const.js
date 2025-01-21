@@ -29,6 +29,12 @@ export const RUSSIA = 'ru';
 export const BELARUSSIA = 'by';
 export const UKRAINE = 'ua';
 
+export const APP_VERSION = [
+  'ver',
+  ' ' + DeviceInfo.getVersion(),
+  DeviceInfo.getBuildNumber(),
+].join('.');
+
 switch (bundle) {
   case 'com.atlantm.app': // iOS BY
   case 'com.atlantm': // Android BY
