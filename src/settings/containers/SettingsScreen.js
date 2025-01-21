@@ -20,7 +20,6 @@ import {
   useToast,
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import DeviceInfo from 'react-native-device-info';
 import * as NavigationService from '../../navigation/NavigationService';
 
 // redux
@@ -35,7 +34,7 @@ import TransitionView from '../../core/components/TransitionView';
 // helpers
 import Analytics from '../../utils/amplitude-analytics';
 import styleConst from '../../core/style-const';
-import {APP_EMAIL, APP_REGION, STORE_LINK} from '../../core/const';
+import {APP_EMAIL, APP_REGION, STORE_LINK, APP_VERSION} from '../../core/const';
 import {strings} from '../../core/lang/const';
 import ToastAlert from '../../core/components/ToastAlert';
 
@@ -371,11 +370,7 @@ const SettingsScreen = props => {
             return Linking.openURL(STORE_LINK.update);
           }}>
           <Text selectable={false} style={styles.TextVersionInfo}>
-            {[
-              'ver',
-              ' ' + DeviceInfo.getVersion(),
-              DeviceInfo.getBuildNumber(),
-            ].join('.')}
+            {APP_VERSION}
           </Text>
         </Button>
       </TransitionView>
