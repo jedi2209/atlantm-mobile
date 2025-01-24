@@ -13,9 +13,6 @@ PODS:
   - AppAuth/Core (1.7.6)
   - AppAuth/ExternalUserAgent (1.7.6):
     - AppAuth/Core
-  - AppsFlyerFramework (6.15.3):
-    - AppsFlyerFramework/Main (= 6.15.3)
-  - AppsFlyerFramework/Main (6.15.3)
   - Base64 (1.1.2)
   - boost (1.84.0)
   - BugsnagReactNative (8.1.3):
@@ -1368,9 +1365,6 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-appsflyer (6.15.3):
-    - AppsFlyerFramework (= 6.15.3)
-    - React
   - react-native-date-picker (5.0.8):
     - DoubleConversion
     - glog
@@ -1994,7 +1988,7 @@ PODS:
     - Yoga
   - RNDeviceInfo (14.0.2):
     - React-Core
-  - RNGestureHandler (2.22.0):
+  - RNGestureHandler (2.22.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2340,7 +2334,6 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - React-Mapbuffer (from `../node_modules/react-native/ReactCommon`)
   - React-microtasksnativemodule (from `../node_modules/react-native/ReactCommon/react/nativemodule/microtasks`)
-  - react-native-appsflyer (from `../node_modules/react-native-appsflyer`)
   - react-native-date-picker (from `../node_modules/react-native-date-picker`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-in-app-review (from `../node_modules/react-native-in-app-review`)
@@ -2412,7 +2405,6 @@ SPEC REPOS:
     - AnalyticsConnector
     - APNGKit
     - AppAuth
-    - AppsFlyerFramework
     - Base64
     - Delegate
     - Gifu
@@ -2513,8 +2505,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon"
   React-microtasksnativemodule:
     :path: "../node_modules/react-native/ReactCommon/react/nativemodule/microtasks"
-  react-native-appsflyer:
-    :path: "../node_modules/react-native-appsflyer"
   react-native-date-picker:
     :path: "../node_modules/react-native-date-picker"
   react-native-google-maps:
@@ -2650,7 +2640,6 @@ SPEC CHECKSUMS:
   AnalyticsConnector: a53214d38ae22734c6266106c0492b37832633a9
   APNGKit: eb7e111277527cfd47636f797c9c8e7aab5d9601
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
-  AppsFlyerFramework: ad7ff0d22aa36c7f8cc4f71a5424e19b89ccb8ae
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   BugsnagReactNative: e31a500d73f2da755773a1da7a4d79c00026c0a5
@@ -2701,7 +2690,6 @@ SPEC CHECKSUMS:
   React-logger: d42a53754a7252cc7a851315f0da2e46b450ea92
   React-Mapbuffer: 89885d1518433a462fe64b68bf5e097997380090
   React-microtasksnativemodule: 36341e09dcd1df535503e6ed2ddf88f10da56d52
-  react-native-appsflyer: f6929760b13373fd33fd9f3ee6eb7e4d90e9c2c2
   react-native-date-picker: d668a2e77115cf64128c2e0106afd828470294bc
   react-native-google-maps: c4f5c5b2dda17e7cb2cb2b37a81f140b039b3e7e
   react-native-in-app-review: b3d1eed3d1596ebf6539804778272c4c65e4a400
@@ -2755,7 +2743,7 @@ SPEC CHECKSUMS:
   RNCPicker: c657bd58a82b164a957812f82a0b4bab4245de2e
   RNDateTimePicker: 9ec036a62ad0f5a2d04c1c7829338e87b4e423e7
   RNDeviceInfo: 801c18d0525e86580900e7b5f562dca0c8c05021
-  RNGestureHandler: 7afc0db05cd604c8530dba90d9b453d4d581deab
+  RNGestureHandler: b9cd1bda1d2a95d390de0a88e1e41140a5a68e82
   RNGoogleSignin: 6d8a0559ee6d3da693322963821a6ab5ba58243b
   RNImageCropPicker: d5387003612dd08d52fb062760136e0e473df186
   RNReanimated: a2692304a6568bc656c04c8ffea812887d37436e

@@ -2,7 +2,6 @@ import React, {useEffect} from 'react';
 import {StyleSheet, View, Text, Appearance, StatusBar} from 'react-native';
 import * as Sentry from '@sentry/react-native';
 import LogRocket from '@logrocket/react-native';
-import appsFlyer from 'react-native-appsflyer';
 
 // redux
 import {Provider} from 'react-redux';
@@ -17,7 +16,7 @@ import App from './App';
 import {LogBox} from 'react-native';
 import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated';
 
-import {SENTRY_DSN, APPSFLYER_SETTINGS, LOG_ROCKET_ID} from '../const';
+import {SENTRY_DSN, LOG_ROCKET_ID} from '../const';
 import styleConst from '../style-const';
 
 const colorScheme = Appearance.getColorScheme();
@@ -34,8 +33,6 @@ let sentryParams = {
     profilesSampleRate: 1.0,
   },
 };
-
-let appsFlyerSettings = Object.assign(APPSFLYER_SETTINGS, {isDebug: false});
 
 if (__DEV__) {
   LogBox.ignoreLogs([
@@ -61,7 +58,6 @@ if (__DEV__) {
       profilesSampleRate: 1.0,
     },
   };
-  appsFlyerSettings.isDebug = true;
 }
 
 const _defaultHandler = ErrorUtils.getGlobalHandler();
@@ -96,15 +92,6 @@ const Wrapper = () => {
         },
       },
     });
-    appsFlyer.initSdk(
-      appsFlyerSettings,
-      result => {
-        console.info('appsFlyer.initSdk result => ', result);
-      },
-      error => {
-        console.error('appsFlyer.initSdk error => ', error);
-      },
-    );
   }, []);
 
   return (
