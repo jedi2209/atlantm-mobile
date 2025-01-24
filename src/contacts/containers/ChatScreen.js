@@ -218,7 +218,6 @@ const ChatScreen = ({
         <KeyboardAvoidingView
           ref={mainRef}
           behavior={'padding'}
-          enabled={!isAndroid}
           style={[styles.mainView, route.params?.mainScrollViewStyle]}>
           <WebView
             nativeID={webViewID}
