@@ -36,7 +36,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - BugsnagReactNativePerformance (2.10.1):
+  - BugsnagReactNativePerformance (2.11.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1424,7 +1424,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-pure-jwt (3.0.2):
+  - react-native-pure-jwt (3.0.3):
     - JWT (= 3.0.0-beta.12)
     - React
   - react-native-restart (0.0.27):
@@ -2643,7 +2643,7 @@ SPEC CHECKSUMS:
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   BugsnagReactNative: e31a500d73f2da755773a1da7a4d79c00026c0a5
-  BugsnagReactNativePerformance: 5b9188c6f253cee262019be63b81f89a8d92cf80
+  BugsnagReactNativePerformance: 20a343900be273860e3ab8ac09d77620ef1abf10
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
   Delegate: 0ff4467868095239ff578ab531efd8af46e62881
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
@@ -2699,7 +2699,7 @@ SPEC CHECKSUMS:
   react-native-orientation-locker: cc6f357b289a2e0dd2210fea0c52cb8e0727fdaa
   react-native-otp-auto-fill: ac52a4437cd7e7f41dfa00db994df6898dcf744a
   react-native-pager-view: 4ad4883a8288c5207bd432dd3c98bf648b7bc7d7
-  react-native-pure-jwt: aadf68bd2da2fb8548744b6a0b7c52fadc5d90f7
+  react-native-pure-jwt: ddc75cb6ec8fe40c8efa6b5ca2cd41eadc914056
   react-native-restart: 0bc732f4461709022a742bb29bcccf6bbc5b4863
   react-native-safe-area-context: 0d8827b2420dfb4c8a8e27639585e61b912261be
   react-native-slider: d1a9121980fc81678c6d30b82f312c778fba563c
