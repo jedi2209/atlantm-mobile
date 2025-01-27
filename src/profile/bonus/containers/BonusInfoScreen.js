@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Dimensions} from 'react-native';
+import React, {useEffect} from 'react';
+import {StyleSheet} from 'react-native';
 import {View, ScrollView, Button} from 'native-base';
 
 // redux
@@ -16,8 +16,6 @@ import moment from 'moment';
 import styleConst from '../../../core/style-const';
 import Analytics from '../../../utils/amplitude-analytics';
 import {strings} from '../../../core/lang/const';
-
-const {width: screenWidth} = Dimensions.get('window');
 
 const styles = StyleSheet.create({
   safearea: {
@@ -78,7 +76,16 @@ const BonusInfoScreen = props => {
   }, []);
 
   if (isFetchBonusInfo) {
-    return <LogoLoader />;
+    return (
+      <>
+        <View style={[styles.safearea, {backgroundColor: styleConst.color.white}]}>
+          <LogoLoader />
+        </View>
+        <Button style={styles.submitButton} onPress={() => navigation.goBack()}>
+          {submitButton.text}
+        </Button>
+      </>
+    );
   }
 
   return (
