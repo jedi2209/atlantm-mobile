@@ -8,6 +8,7 @@ import {
 } from 'react-native';
 import WebView from 'react-native-webview';
 import LogRocket from '@logrocket/react-native';
+import LogoLoader from '../../core/components/LogoLoader';
 import styleConst from '../style-const';
 
 const isAndroid = Platform.OS === 'android';
@@ -26,15 +27,14 @@ const INJECTED_JAVASCRIPT = `
   var i = 0;
   function updateHeight() {
     if (wrapper.clientHeight) {
-      document.title = wrapper.clientHeight;
-      window.location.hash = ++i;
+      document.title = wrapper.clientHeight + 200;
+      // window.location.hash = ++i;
     }
   }
   updateHeight();
   window.addEventListener("load", function() {
       setTimeout(updateHeight, 200);
   });
-  window.addEventListener("resize", updateHeight);
   }());
 `;
 
@@ -160,6 +160,9 @@ const WebViewAutoHeight = ({
   };
 
   const _handleHeight = navState => {
+    if (navState.loading) {
+      return;
+    }
     if (navState.title) {
       setContentHeight(parseInt(navState.title, 10) || 0);
     } else {
@@ -187,14 +190,7 @@ const WebViewAutoHeight = ({
   }, [fetchURL, source.html, source?.uri]);
 
   if (isLoading || !sourceModified) {
-    return (
-      <View style={styles.spinnerContainer}>
-        <ActivityIndicator
-          color={styleConst.color.blue}
-          style={styleConst.spinner}
-        />
-      </View>
-    );
+    return <View style={styles.spinnerContainer}><LogoLoader /></View>;
   }
 
   const webViewID = 'webview_auto_height';
