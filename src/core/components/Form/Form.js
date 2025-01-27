@@ -224,6 +224,7 @@ const styles = StyleSheet.create({
   PhoneTextInputComponent: {
     height: 45,
     paddingHorizontal: 14,
+    paddingVertical: 0,
     fontSize: 16,
     letterSpacing: 2,
     width: '100%',
