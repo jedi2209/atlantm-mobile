@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, StyleSheet, Alert, Linking} from 'react-native';
 import {
   Icon,
@@ -17,7 +17,6 @@ import Accordion from 'react-native-collapsible/Accordion';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Octicons from 'react-native-vector-icons/Octicons';
 import Entypo from 'react-native-vector-icons/Entypo';
 
 // redux
@@ -250,20 +249,11 @@ const UsedCarItemScreen = props => {
   };
 
   const _renderAddress = () => {
-    let address;
-    const location_name = get(carDetails, 'location.address');
+    const locationName = get(carDetails, 'location.address', get(carDetails, 'dealer.name'));
     const cityID = get(carDetails, 'location.city.id');
-    let city_name = get(carDetails, 'location.city.name');
-    if (cityID && listCities[cityID]) {
-      city_name = listCities[cityID].name;
-    }
+    let cityName = get(listCities[cityID], 'name', get(carDetails, 'location.city.name'));
 
-    if (location_name) {
-      address = city_name + ', ' + location_name;
-    } else {
-      address = city_name + ', ' + get(carDetails, 'dealer.name');
-    }
-    return `${address}`;
+    return `${[cityName, locationName].join(', ')}`;
   };
 
   const _renderTruncatedFooter = handlePress => {
@@ -549,15 +539,17 @@ const UsedCarItemScreen = props => {
               </ScrollView>
               {carDetails.dealer && carDetails.dealer.name ? (
                 <Pressable onPress={onPressMap}>
-                  <VStack style={styles.mapCardContainer}>
-                    <Icon
-                      as={MaterialCommunityIcons}
-                      name="map-marker-outline"
-                      color="blue.100"
-                      size={12}
-                    />
-                    <View justifyContent="space-around">
-                      <Text style={styles.mapCardTitle}>
+                  <HStack style={styles.mapCardContainer}>
+                    <View>
+                      <Icon
+                        as={MaterialCommunityIcons}
+                        name="map-marker-outline"
+                        color="blue.100"
+                        size={12}
+                      />
+                    </View>
+                    <View justifyContent="space-around" w={'84%'}>
+                      <Text style={styles.mapCardTitle} ellipsizeMode={'tail'} numberOfLines={1}>
                         {strings.NewCarItemScreen.carLocation}
                       </Text>
                       <Text
@@ -567,7 +559,7 @@ const UsedCarItemScreen = props => {
                         {_renderAddress()}
                       </Text>
                     </View>
-                  </VStack>
+                  </HStack>
                 </Pressable>
               ) : null}
               <HStack
