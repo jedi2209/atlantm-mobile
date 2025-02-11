@@ -967,146 +967,148 @@ const CarsStock = ({navigation, route}) => {
           options={{headerShown: false}}
         />
       </SearchStack.Navigator>
-      <Actionsheet isOpen={isOpen} onClose={onClose}>
-        <Actionsheet.Content>
-          <View w="90%">
-            <Box h={60} justifyContent="center">
-              <Text
-                fontSize="xl"
-                color="gray.500"
-                _dark={{
-                  color: 'gray.300',
-                }}>
-                {strings.Sort.title}
-              </Text>
-            </Box>
-            <Box>
-              <VStack space={4}>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate('NewCarListScreen', {
-                      sortBy: 'price',
-                      sortDirection: 'asc',
-                    });
-                    onClose();
+      <View>
+        <Actionsheet isOpen={isOpen} onClose={onClose}>
+          <Actionsheet.Content>
+            <View w="90%">
+              <Box h={60} justifyContent="center">
+                <Text
+                  fontSize="xl"
+                  color="gray.500"
+                  _dark={{
+                    color: 'gray.300',
                   }}>
-                  <HStack justifyContent="space-between">
-                    <Icon
-                      style={[
-                        styles.sortingButtonIcon,
-                        isSorted === 'priceAsc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}
-                      as={FontAwesome5}
-                      size={5}
-                      name="sort-numeric-up"
-                    />
-                    <Text
-                      selectable={false}
-                      style={[
-                        styles.sortingButtonText,
-                        isSorted === 'priceAsc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}>
-                      {strings.Sort.price.asc}
-                    </Text>
-                    {isSorted === 'priceAsc' ? (
+                  {strings.Sort.title}
+                </Text>
+              </Box>
+              <Box>
+                <VStack space={4}>
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate('NewCarListScreen', {
+                        sortBy: 'price',
+                        sortDirection: 'asc',
+                      });
+                      onClose();
+                    }}>
+                    <HStack justifyContent="space-between">
                       <Icon
+                        style={[
+                          styles.sortingButtonIcon,
+                          isSorted === 'priceAsc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}
                         as={FontAwesome5}
-                        name="check"
                         size={5}
-                        style={styles.sortingColorSelected}
+                        name="sort-numeric-up"
                       />
-                    ) : null}
-                  </HStack>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate('NewCarListScreen', {
-                      sortBy: 'price',
-                      sortDirection: 'desc',
-                    });
-                    onClose();
-                  }}>
-                  <HStack justifyContent="space-between">
-                    <Icon
-                      style={[
-                        styles.sortingButtonIcon,
-                        isSorted === 'priceDesc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}
-                      as={FontAwesome5}
-                      size={5}
-                      name="sort-numeric-down-alt"
-                    />
-                    <Text
-                      selectable={false}
-                      style={[
-                        styles.sortingButtonText,
-                        isSorted === 'priceDesc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}>
-                      {strings.Sort.price.desc}
-                    </Text>
-                    {isSorted === 'priceDesc' ? (
+                      <Text
+                        selectable={false}
+                        style={[
+                          styles.sortingButtonText,
+                          isSorted === 'priceAsc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}>
+                        {strings.Sort.price.asc}
+                      </Text>
+                      {isSorted === 'priceAsc' ? (
+                        <Icon
+                          as={FontAwesome5}
+                          name="check"
+                          size={5}
+                          style={styles.sortingColorSelected}
+                        />
+                      ) : null}
+                    </HStack>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate('NewCarListScreen', {
+                        sortBy: 'price',
+                        sortDirection: 'desc',
+                      });
+                      onClose();
+                    }}>
+                    <HStack justifyContent="space-between">
                       <Icon
+                        style={[
+                          styles.sortingButtonIcon,
+                          isSorted === 'priceDesc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}
                         as={FontAwesome5}
-                        name="check"
                         size={5}
-                        style={styles.sortingColorSelected}
+                        name="sort-numeric-down-alt"
                       />
-                    ) : null}
-                  </HStack>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate('NewCarListScreen', {
-                      sortBy: 'created',
-                      sortDirection: 'desc',
-                    });
-                    onClose();
-                  }}>
-                  <HStack justifyContent="space-between">
-                    <Icon
-                      style={[
-                        styles.sortingButtonIcon,
-                        isSorted === 'createdDesc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}
-                      as={MaterialCommunityIcons}
-                      size={5}
-                      name="sort-clock-ascending"
-                    />
-                    <Text
-                      selectable={false}
-                      style={[
-                        styles.sortingButtonText,
-                        isSorted === 'createdDesc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}>
-                      {strings.Sort.date.desc}
-                    </Text>
-                    {isSorted === 'createdDesc' ? (
+                      <Text
+                        selectable={false}
+                        style={[
+                          styles.sortingButtonText,
+                          isSorted === 'priceDesc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}>
+                        {strings.Sort.price.desc}
+                      </Text>
+                      {isSorted === 'priceDesc' ? (
+                        <Icon
+                          as={FontAwesome5}
+                          name="check"
+                          size={5}
+                          style={styles.sortingColorSelected}
+                        />
+                      ) : null}
+                    </HStack>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate('NewCarListScreen', {
+                        sortBy: 'created',
+                        sortDirection: 'desc',
+                      });
+                      onClose();
+                    }}>
+                    <HStack justifyContent="space-between">
                       <Icon
-                        as={FontAwesome5}
-                        name="check"
+                        style={[
+                          styles.sortingButtonIcon,
+                          isSorted === 'createdDesc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}
+                        as={MaterialCommunityIcons}
                         size={5}
-                        style={styles.sortingColorSelected}
+                        name="sort-clock-ascending"
                       />
-                    ) : null}
-                  </HStack>
-                </Pressable>
-              </VStack>
-            </Box>
-          </View>
-        </Actionsheet.Content>
-      </Actionsheet>
+                      <Text
+                        selectable={false}
+                        style={[
+                          styles.sortingButtonText,
+                          isSorted === 'createdDesc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}>
+                        {strings.Sort.date.desc}
+                      </Text>
+                      {isSorted === 'createdDesc' ? (
+                        <Icon
+                          as={FontAwesome5}
+                          name="check"
+                          size={5}
+                          style={styles.sortingColorSelected}
+                        />
+                      ) : null}
+                    </HStack>
+                  </Pressable>
+                </VStack>
+              </Box>
+            </View>
+          </Actionsheet.Content>
+        </Actionsheet>
+      </View>
     </>
   );
 };
@@ -1196,284 +1198,286 @@ const UsedCars = ({navigation, route}) => {
         />
       </StackCatalogUsed.Navigator>
 
-      <Actionsheet isOpen={isOpen} onClose={onClose}>
-        <Actionsheet.Content>
-          <View w="90%">
-            <Box h={60} justifyContent="center">
-              <Text
-                fontSize="xl"
-                color="gray.500"
-                _dark={{
-                  color: 'gray.300',
-                }}>
-                {strings.Sort.title}
-              </Text>
-            </Box>
-            <Box>
-              <VStack space={4}>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate('UsedCarListScreenStack', {
-                      screen: 'UsedCarListScreen',
-                      params: {
-                        sortBy: 'price',
-                        sortDirection: 'asc',
-                      },
-                    });
-                    onClose();
+      <View>
+        <Actionsheet isOpen={isOpen} onClose={onClose}>
+          <Actionsheet.Content>
+            <View w="90%">
+              <Box h={60} justifyContent="center">
+                <Text
+                  fontSize="xl"
+                  color="gray.500"
+                  _dark={{
+                    color: 'gray.300',
                   }}>
-                  <HStack justifyContent="space-between">
-                    <Icon
-                      style={[
-                        styles.sortingButtonIcon,
-                        isSorted === 'priceAsc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}
-                      as={FontAwesome5}
-                      size={5}
-                      name="sort-numeric-up"
-                    />
-                    <Text
-                      selectable={false}
-                      style={[
-                        styles.sortingButtonText,
-                        isSorted === 'priceAsc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}>
-                      {strings.Sort.price.asc}
-                    </Text>
-                    {isSorted === 'priceAsc' ? (
+                  {strings.Sort.title}
+                </Text>
+              </Box>
+              <Box>
+                <VStack space={4}>
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate('UsedCarListScreenStack', {
+                        screen: 'UsedCarListScreen',
+                        params: {
+                          sortBy: 'price',
+                          sortDirection: 'asc',
+                        },
+                      });
+                      onClose();
+                    }}>
+                    <HStack justifyContent="space-between">
                       <Icon
+                        style={[
+                          styles.sortingButtonIcon,
+                          isSorted === 'priceAsc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}
                         as={FontAwesome5}
-                        name="check"
                         size={5}
-                        style={styles.sortingColorSelected}
+                        name="sort-numeric-up"
                       />
-                    ) : null}
-                  </HStack>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate('UsedCarListScreenStack', {
-                      screen: 'UsedCarListScreen',
-                      params: {
-                        sortBy: 'price',
-                        sortDirection: 'desc',
-                      },
-                    });
-                    onClose();
-                  }}>
-                  <HStack justifyContent="space-between">
-                    <Icon
-                      style={[
-                        styles.sortingButtonIcon,
-                        isSorted === 'priceDesc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}
-                      as={FontAwesome5}
-                      size={5}
-                      name="sort-numeric-down-alt"
-                    />
-                    <Text
-                      selectable={false}
-                      style={[
-                        styles.sortingButtonText,
-                        isSorted === 'priceDesc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}>
-                      {strings.Sort.price.desc}
-                    </Text>
-                    {isSorted === 'priceDesc' ? (
+                      <Text
+                        selectable={false}
+                        style={[
+                          styles.sortingButtonText,
+                          isSorted === 'priceAsc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}>
+                        {strings.Sort.price.asc}
+                      </Text>
+                      {isSorted === 'priceAsc' ? (
+                        <Icon
+                          as={FontAwesome5}
+                          name="check"
+                          size={5}
+                          style={styles.sortingColorSelected}
+                        />
+                      ) : null}
+                    </HStack>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate('UsedCarListScreenStack', {
+                        screen: 'UsedCarListScreen',
+                        params: {
+                          sortBy: 'price',
+                          sortDirection: 'desc',
+                        },
+                      });
+                      onClose();
+                    }}>
+                    <HStack justifyContent="space-between">
                       <Icon
+                        style={[
+                          styles.sortingButtonIcon,
+                          isSorted === 'priceDesc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}
                         as={FontAwesome5}
-                        name="check"
                         size={5}
-                        style={styles.sortingColorSelected}
+                        name="sort-numeric-down-alt"
                       />
-                    ) : null}
-                  </HStack>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate('UsedCarListScreenStack', {
-                      screen: 'UsedCarListScreen',
-                      params: {
-                        sortBy: 'created',
-                        sortDirection: 'desc',
-                      },
-                    });
-                    onClose();
-                  }}>
-                  <HStack justifyContent="space-between">
-                    <Icon
-                      style={[
-                        styles.sortingButtonIcon,
-                        isSorted === 'createdDesc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}
-                      as={MaterialCommunityIcons}
-                      size={5}
-                      name="sort-clock-ascending-outline"
-                    />
-                    <Text
-                      selectable={false}
-                      style={[
-                        styles.sortingButtonText,
-                        isSorted === 'createdDesc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}>
-                      {strings.Sort.date.desc}
-                    </Text>
-                    {isSorted === 'createdDesc' ? (
+                      <Text
+                        selectable={false}
+                        style={[
+                          styles.sortingButtonText,
+                          isSorted === 'priceDesc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}>
+                        {strings.Sort.price.desc}
+                      </Text>
+                      {isSorted === 'priceDesc' ? (
+                        <Icon
+                          as={FontAwesome5}
+                          name="check"
+                          size={5}
+                          style={styles.sortingColorSelected}
+                        />
+                      ) : null}
+                    </HStack>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate('UsedCarListScreenStack', {
+                        screen: 'UsedCarListScreen',
+                        params: {
+                          sortBy: 'created',
+                          sortDirection: 'desc',
+                        },
+                      });
+                      onClose();
+                    }}>
+                    <HStack justifyContent="space-between">
                       <Icon
-                        as={FontAwesome5}
-                        name="check"
+                        style={[
+                          styles.sortingButtonIcon,
+                          isSorted === 'createdDesc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}
+                        as={MaterialCommunityIcons}
                         size={5}
-                        style={styles.sortingColorSelected}
+                        name="sort-clock-ascending-outline"
                       />
-                    ) : null}
-                  </HStack>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate('UsedCarListScreenStack', {
-                      screen: 'UsedCarListScreen',
-                      params: {
-                        sortBy: 'year',
-                        sortDirection: 'desc',
-                      },
-                    });
-                    onClose();
-                  }}>
-                  <HStack justifyContent="space-between">
-                    <Icon
-                      style={[
-                        styles.sortingButtonIcon,
-                        isSorted === 'yearDesc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}
-                      as={MaterialCommunityIcons}
-                      size={5}
-                      name="sort-calendar-descending"
-                    />
-                    <Text
-                      selectable={false}
-                      style={[
-                        styles.sortingButtonText,
-                        isSorted === 'yearDesc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}>
-                      {strings.Sort.year.desc}
-                    </Text>
-                    {isSorted === 'yearDesc' ? (
+                      <Text
+                        selectable={false}
+                        style={[
+                          styles.sortingButtonText,
+                          isSorted === 'createdDesc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}>
+                        {strings.Sort.date.desc}
+                      </Text>
+                      {isSorted === 'createdDesc' ? (
+                        <Icon
+                          as={FontAwesome5}
+                          name="check"
+                          size={5}
+                          style={styles.sortingColorSelected}
+                        />
+                      ) : null}
+                    </HStack>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate('UsedCarListScreenStack', {
+                        screen: 'UsedCarListScreen',
+                        params: {
+                          sortBy: 'year',
+                          sortDirection: 'desc',
+                        },
+                      });
+                      onClose();
+                    }}>
+                    <HStack justifyContent="space-between">
                       <Icon
-                        as={FontAwesome5}
-                        name="check"
+                        style={[
+                          styles.sortingButtonIcon,
+                          isSorted === 'yearDesc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}
+                        as={MaterialCommunityIcons}
                         size={5}
-                        style={styles.sortingColorSelected}
+                        name="sort-calendar-descending"
                       />
-                    ) : null}
-                  </HStack>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate('UsedCarListScreenStack', {
-                      screen: 'UsedCarListScreen',
-                      params: {
-                        sortBy: 'year',
-                        sortDirection: 'asc',
-                      },
-                    });
-                    onClose();
-                  }}>
-                  <HStack justifyContent="space-between">
-                    <Icon
-                      style={[
-                        styles.sortingButtonIcon,
-                        isSorted === 'yearAsc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}
-                      as={MaterialCommunityIcons}
-                      size={5}
-                      name="sort-calendar-ascending"
-                    />
-                    <Text
-                      selectable={false}
-                      style={[
-                        styles.sortingButtonText,
-                        isSorted === 'yearAsc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}>
-                      {strings.Sort.year.asc}
-                    </Text>
-                    {isSorted === 'yearAsc' ? (
+                      <Text
+                        selectable={false}
+                        style={[
+                          styles.sortingButtonText,
+                          isSorted === 'yearDesc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}>
+                        {strings.Sort.year.desc}
+                      </Text>
+                      {isSorted === 'yearDesc' ? (
+                        <Icon
+                          as={FontAwesome5}
+                          name="check"
+                          size={5}
+                          style={styles.sortingColorSelected}
+                        />
+                      ) : null}
+                    </HStack>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate('UsedCarListScreenStack', {
+                        screen: 'UsedCarListScreen',
+                        params: {
+                          sortBy: 'year',
+                          sortDirection: 'asc',
+                        },
+                      });
+                      onClose();
+                    }}>
+                    <HStack justifyContent="space-between">
                       <Icon
-                        as={FontAwesome5}
-                        name="check"
+                        style={[
+                          styles.sortingButtonIcon,
+                          isSorted === 'yearAsc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}
+                        as={MaterialCommunityIcons}
                         size={5}
-                        style={styles.sortingColorSelected}
+                        name="sort-calendar-ascending"
                       />
-                    ) : null}
-                  </HStack>
-                </Pressable>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigate('UsedCarListScreenStack', {
-                      screen: 'UsedCarListScreen',
-                      params: {
-                        sortBy: 'mileage',
-                        sortDirection: 'asc',
-                      },
-                    });
-                    onClose();
-                  }}>
-                  <HStack justifyContent="space-between">
-                    <Icon
-                      style={[
-                        styles.sortingButtonIcon,
-                        isSorted === 'mileageAsc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}
-                      as={FontAwesome5}
-                      size={5}
-                      name="sort-amount-down-alt"
-                    />
-                    <Text
-                      selectable={false}
-                      style={[
-                        styles.sortingButtonText,
-                        isSorted === 'mileageAsc'
-                          ? styles.sortingColorSelected
-                          : null,
-                      ]}>
-                      {strings.Sort.mileage.asc}
-                    </Text>
-                    {isSorted === 'mileageAsc' ? (
+                      <Text
+                        selectable={false}
+                        style={[
+                          styles.sortingButtonText,
+                          isSorted === 'yearAsc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}>
+                        {strings.Sort.year.asc}
+                      </Text>
+                      {isSorted === 'yearAsc' ? (
+                        <Icon
+                          as={FontAwesome5}
+                          name="check"
+                          size={5}
+                          style={styles.sortingColorSelected}
+                        />
+                      ) : null}
+                    </HStack>
+                  </Pressable>
+                  <Pressable
+                    onPress={() => {
+                      navigation.navigate('UsedCarListScreenStack', {
+                        screen: 'UsedCarListScreen',
+                        params: {
+                          sortBy: 'mileage',
+                          sortDirection: 'asc',
+                        },
+                      });
+                      onClose();
+                    }}>
+                    <HStack justifyContent="space-between">
                       <Icon
+                        style={[
+                          styles.sortingButtonIcon,
+                          isSorted === 'mileageAsc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}
                         as={FontAwesome5}
-                        name="check"
                         size={5}
-                        style={styles.sortingColorSelected}
+                        name="sort-amount-down-alt"
                       />
-                    ) : null}
-                  </HStack>
-                </Pressable>
-              </VStack>
-            </Box>
-          </View>
-        </Actionsheet.Content>
-      </Actionsheet>
+                      <Text
+                        selectable={false}
+                        style={[
+                          styles.sortingButtonText,
+                          isSorted === 'mileageAsc'
+                            ? styles.sortingColorSelected
+                            : null,
+                        ]}>
+                        {strings.Sort.mileage.asc}
+                      </Text>
+                      {isSorted === 'mileageAsc' ? (
+                        <Icon
+                          as={FontAwesome5}
+                          name="check"
+                          size={5}
+                          style={styles.sortingColorSelected}
+                        />
+                      ) : null}
+                    </HStack>
+                  </Pressable>
+                </VStack>
+              </Box>
+            </View>
+          </Actionsheet.Content>
+        </Actionsheet>
+      </View>
     </>
   );
 };

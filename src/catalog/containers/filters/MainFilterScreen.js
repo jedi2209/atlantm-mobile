@@ -1337,19 +1337,26 @@ const MainFilterScreen = ({
                     <Text fontSize={'md'} color={styleConst.color.greyText5}>
                       {strings.CarsFilterScreen.filters.year.from}
                     </Text>
+                    <View>
                     <RNPickerSelect
                       key={'yearPickerFrom'}
                       placeholder={''}
                       touchableWrapperProps={{
                         testID: 'Form.YearSelectInput.YearFrom',
                       }}
-                      pickerProps={{testID: 'Form.YearPickerInput.YearFrom'}}
+                      pickerProps={{
+                        testID: 'Form.YearPickerInput.YearFrom',
+                        mode: 'dropdown',
+                      }}
                       doneText={strings.Base.choose}
                       onValueChange={itemValue => {
                         _onChangeFilter('year_from', itemValue);
                       }}
                       style={{
                         ...pickerSelectStyles,
+                      }}
+                      textInputProps={{
+                        pointerEvents: 'none',
                       }}
                       value={get(
                         stateFilters,
@@ -1361,6 +1368,7 @@ const MainFilterScreen = ({
                       reverse={true}
                       items={yearItems}
                     />
+                    </View>
                   </VStack>
                   <VStack alignItems="center">
                     <Text fontSize={'md'} color={styleConst.color.greyText5}>
@@ -1372,13 +1380,19 @@ const MainFilterScreen = ({
                       touchableWrapperProps={{
                         testID: 'Form.YearSelectInput.YearTo',
                       }}
-                      pickerProps={{testID: 'Form.YearPickerInput.YearTo'}}
+                      pickerProps={{
+                        testID: 'Form.YearPickerInput.YearTo',
+                        mode: 'dropdown',
+                      }}
                       doneText={strings.Base.choose}
                       onValueChange={itemValue => {
                         _onChangeFilter('year_to', itemValue);
                       }}
                       style={{
                         ...pickerSelectStyles,
+                      }}
+                      textInputProps={{
+                        pointerEvents: 'none',
                       }}
                       value={get(
                         stateFilters,

@@ -1031,7 +1031,13 @@ class Form extends Component {
           <RNPickerSelect
             ref={this.inputRefs[groupNum + 'Input' + num]}
             touchableWrapperProps={{testID: 'Form.YearSelectInput.' + name}}
-            pickerProps={{testID: 'Form.YearPickerInput.' + name}}
+            pickerProps={{
+              testID: 'Form.YearPickerInput.' + name,
+              mode: 'dropdown',
+            }}
+            textInputProps={{
+              pointerEvents: 'none',
+            }}
             doneText={strings.Base.choose}
             onDonePress={() => {
               this._nextInput(groupNum, num);
@@ -1372,6 +1378,10 @@ class Form extends Component {
             pickerProps={{
               key: 'rnpicker' + num + name,
               testID: 'Form.PickerInput.' + name,
+              mode: 'dropdown',
+            }}
+            textInputProps={{
+              pointerEvents: 'none',
             }}
             key={'rnPickerSelect' + num + name}
             doneText={strings.Base.choose}
