@@ -11,63 +11,65 @@ const ModalView = props => {
   if (!props.selfClosed) {
     // модалка с кнопкой закрытия
     return (
-      <Modal
-        style={[
-          styles.modalView,
-          props.type === 'bottom' ? styles.ModalViewBottom : null,
-          props?.stylesModal,
-        ]}
-        useNativeDriver={true}
-        isVisible={props.isModalVisible}
-        onSwipeComplete={props.onHide}
-        onBackButtonPress={props.onHide}
-        statusBarTranslucent={true}
-        swipeDirection={['up', 'down']}
-        {...props}>
-        <View
+      <View>
+        <Modal
           style={[
-            props.type !== 'bottom'
-              ? styles.modalWindow
-              : styles.modalWindowBottom,
-            styleConst.shadow.default,
-            props?.stylesWrapper,
-          ]}>
+            styles.modalView,
+            props.type === 'bottom' ? styles.ModalViewBottom : null,
+            props?.stylesModal,
+          ]}
+          useNativeDriver={true}
+          isVisible={props.isModalVisible}
+          onSwipeComplete={props.onHide}
+          onBackButtonPress={props.onHide}
+          statusBarTranslucent={true}
+          swipeDirection={['up', 'down']}
+          {...props}>
           <View
             style={[
-              props.type === 'bottom' ? {padding: 10} : null,
-              props?.stylesWrapperContent,
-            ]}>
-            {props.title ? (
-              <Text style={[styles.titleText, props?.titleTextStyle]}>
-                {props.title}
-              </Text>
-            ) : null}
-            {props.content ? props.content : props.children}
-          </View>
-          <Button
-            onPress={props.onHide}
-            _text={[styles.modalButtonText, props.modalButtonTextStyle]}
-            style={[
               props.type !== 'bottom'
-                ? styles.modalButton
-                : styles.modalButtonBottom,
+                ? styles.modalWindow
+                : styles.modalWindowBottom,
+              styleConst.shadow.default,
+              props?.stylesWrapper,
             ]}>
-            {props.confirmBtnText
-              ? props.confirmBtnText
-              : strings.ModalView.close}
-          </Button>
-          {props.cancelBtnText && (
+            <View
+              style={[
+                props.type === 'bottom' ? {padding: 10} : null,
+                props?.stylesWrapperContent,
+              ]}>
+              {props.title ? (
+                <Text style={[styles.titleText, props?.titleTextStyle]}>
+                  {props.title}
+                </Text>
+              ) : null}
+              {props.content ? props.content : props.children}
+            </View>
             <Button
-              title={
-                props.cancelBtnText
-                  ? props.cancelBtnText
-                  : strings.Base.cancel.toLowerCase()
-              }
               onPress={props.onHide}
-            />
-          )}
-        </View>
-      </Modal>
+              _text={[styles.modalButtonText, props.modalButtonTextStyle]}
+              style={[
+                props.type !== 'bottom'
+                  ? styles.modalButton
+                  : styles.modalButtonBottom,
+              ]}>
+              {props.confirmBtnText
+                ? props.confirmBtnText
+                : strings.ModalView.close}
+            </Button>
+            {props.cancelBtnText && (
+              <Button
+                title={
+                  props.cancelBtnText
+                    ? props.cancelBtnText
+                    : strings.Base.cancel.toLowerCase()
+                }
+                onPress={props.onHide}
+              />
+            )}
+          </View>
+        </Modal>
+      </View>
     );
   } else {
     // модалка самозакрывающаяся

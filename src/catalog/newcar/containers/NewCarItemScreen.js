@@ -962,15 +962,17 @@ const NewCarItemScreen = ({
               <Pressable
                 onPress={() => _onPressMap({carDetails, navigation})}
                 style={styles.mapCard}>
-                <VStack style={styles.mapCardContainer}>
-                  <Icon
-                    as={MaterialCommunityIcons}
-                    name="map-marker-outline"
-                    size={12}
-                    color={styleConst.color.blue}
-                  />
-                  <View justifyContent={'space-around'}>
-                    <Text style={styles.mapCardTitle}>
+                <HStack style={styles.mapCardContainer}>
+                  <View>
+                    <Icon
+                      as={MaterialCommunityIcons}
+                      name="map-marker-outline"
+                      size={12}
+                      color={styleConst.color.blue}
+                    />
+                  </View>
+                  <View justifyContent={'space-around'} w={'80%'}>
+                    <Text style={styles.mapCardTitle} ellipsizeMode={'tail'} numberOfLines={1}>
                       {strings.NewCarItemScreen.carLocation}
                     </Text>
                     <Text
@@ -983,7 +985,7 @@ const NewCarItemScreen = ({
                       ].join(', ')}
                     </Text>
                   </View>
-                </VStack>
+                </HStack>
               </Pressable>
             ) : null}
           </View>

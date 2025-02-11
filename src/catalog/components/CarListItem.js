@@ -429,6 +429,8 @@ const CarListItem = ({
             bgColor={get(grade, 'color.background', styleConst.color.greyText2)}
             name={get(grade, 'name')}
             textColor={get(grade, 'color.text', styleConst.color.white)}
+            textStyle={{paddingRight: 10}}
+            badgeContainerStyle={{height: 26}}
           />
         ) : null}
         {badge.map((item, index) => {
@@ -448,6 +450,8 @@ const CarListItem = ({
               bgColor={item.background}
               name={get(item, 'name')}
               textColor={item.textColor}
+              descriptionStyle={{lineHeight: 24}}
+              badgeContainerStyle={{height: 22, marginTop: 2}}
             />
           );
         })}
