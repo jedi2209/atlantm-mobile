@@ -10,7 +10,7 @@ import {DefaultTheme, PaperProvider, Button} from 'react-native-paper';
 
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
-import LogRocket from '@logrocket/react-native';
+// import LogRocket from '@logrocket/react-native';
 
 import SpInAppUpdates, {IAUUpdateKind} from 'sp-react-native-in-app-updates';
 import CircularProgress from 'react-native-circular-progress-indicator';
@@ -47,6 +47,8 @@ import styleConst from '../style-const';
 import DeviceInfo from 'react-native-device-info';
 import * as Nav from '../../navigation/NavigationBase';
 import LogoTitle from '../components/LogoTitle';
+
+const isAndroid = Platform.OS === 'android';
 
 const mapStateToProps = ({core, dealer}) => {
   return {
@@ -224,7 +226,7 @@ const App = props => {
             updateType: get(result, 'other.isFlexibleUpdateAllowed', false) ? IAUUpdateKind.FLEXIBLE : IAUUpdateKind.IMMEDIATE,
           },
         });
-        if (Platform.OS === 'android') {
+        if (isAndroid) {
           inAppUpdates.addStatusUpdateListener(onStatusUpdate);
           inAppUpdates.startUpdate(updateOptions);
         }
@@ -282,7 +284,7 @@ const App = props => {
 
     PushNotifications.init();
 
-    if (Platform.OS === 'ios') {
+    if (!isAndroid) {
       //Prompt for push on iOS
       OneSignal.Notifications.requestPermission().then(res => {
         if (PushNotifications.deviceState()) {
@@ -357,7 +359,7 @@ const App = props => {
   }
 
   return (
-    <GestureHandlerRootView style={{flex: 1}}>
+    <GestureHandlerRootView style={{flex: 1, paddingBottom: isAndroid ? 10 : 0}}>
       <NativeBaseProvider
         theme={theme}
         config={{
@@ -367,10 +369,8 @@ const App = props => {
         }}>
         <PaperProvider theme={paperTheme}>
           <NavigationContainer ref={NavigationService.navigationRef}>
-          {/* <BugsnagNavigationContainer ref={NavigationService.navigationRef}> */}
             <Nav.Base />
             <RateThisApp navigation={NavigationService} menuOpenedCount={menuOpenedCount} isAppRated={isAppRated}/>
-          {/* </BugsnagNavigationContainer> */}
           </NavigationContainer>
         </PaperProvider>
       </NativeBaseProvider>
