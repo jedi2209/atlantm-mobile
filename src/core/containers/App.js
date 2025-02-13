@@ -46,12 +46,15 @@ import LogoTitle from '../components/LogoTitle';
 
 const isAndroid = Platform.OS === 'android';
 let paddingBottomAndroid = 0;
-if(isAndroid && (Dimensions.get('screen').height - Dimensions.get('window').height) - StatusBar.currentHeight > 0) {
-  // don't have digital on-screen buttons
+if (isAndroid) {
   paddingBottomAndroid = 10;
-} else {
-  // have digital on-screen buttons
-  paddingBottomAndroid = 10;
+  // if ((Dimensions.get('screen').height - Dimensions.get('window').height) - StatusBar.currentHeight > 0) {
+  //   // don't have digital on-screen buttons
+  //   paddingBottomAndroid = 10;
+  // } else {
+  //   // have digital on-screen buttons
+  //   paddingBottomAndroid = 10;
+  // }
 }
 
 const mapStateToProps = ({core, dealer}) => {
