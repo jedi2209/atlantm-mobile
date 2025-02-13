@@ -46,23 +46,14 @@ const mapStateToProps = ({dealer, profile, catalog}) => {
 
   if (cars && typeof cars === 'object') {
     cars.map(item => {
-      if (!item.hidden) {
-        Cars.push(item);
-      }
+      Cars = Cars.concat(valuesIn(item, 'hidden') ? [] : [item]);
     });
-    if (Cars && Cars[0]) {
-      if (Cars[0].brand) {
-        carLocalBrand = Cars[0].brand;
-      }
-      if (Cars[0].model) {
-        carLocalModel = Cars[0].model;
-      }
-      if (Cars[0].number) {
-        carLocalNumber = Cars[0].number || '';
-      }
-      if (Cars[0].vin) {
-        carLocalVin = Cars[0].vin || '';
-      }
+    if (Cars.length > 0) {
+      const firstCar = get(Cars, '0', '');
+      carLocalBrand = get(firstCar, 'brand', '');
+      carLocalModel = get(firstCar, 'model', '');
+      carLocalNumber = get(firstCar, 'number', '');
+      carLocalVin = get(firstCar, 'vin', '');
     }
   }
 
@@ -101,6 +92,9 @@ const styles = StyleSheet.create({
     // Добавляем отрицательный оступ, для контейнера с карточками,
     // т.к. в карточках отступ снизу больше чем сверху из-за места использования.
     marginVertical: 0,
+  },
+  formContentContainerStyle: {
+    paddingHorizontal: 14,
   },
 });
 
@@ -408,107 +402,7 @@ const CarCostScreen = ({
   };
 
   const _getCars = () => {
-    if (cars && cars.length) {
-      return [
-        {
-          name: 'CARNAME',
-          type: 'component',
-          label: strings.Form.field.label.car2,
-          value:
-            cars && cars.length ? (
-              <ScrollView
-                showsHorizontalScrollIndicator={false}
-                horizontal
-                style={styles.carContainer}
-                contentContainerStyle={styles.carContainerContent}>
-                {(cars || []).map(item => {
-                  return (
-                    <TouchableWithoutFeedback
-                      activeOpacity={0.7}
-                      key={item.vin}
-                      onPress={() => {
-                        _selectCar(item);
-                      }}>
-                      <View>
-                        <CarCard
-                          key={item.vin}
-                          data={item}
-                          type="check"
-                          checked={carSelected.carVIN === item.vin}
-                          onPress={() => {
-                            return _selectCar(item);
-                          }}
-                        />
-                      </View>
-                    </TouchableWithoutFeedback>
-                  );
-                })}
-              </ScrollView>
-            ) : (
-              <View
-                style={[
-                  styles.scrollViewInner,
-                  {
-                    flex: 1,
-                    paddingLeft: 24,
-                    paddingRight: 5,
-                    marginVertical: 29.5,
-                    textAlign: 'center',
-                    alignContent: 'center',
-                    width: '100%',
-                    alignItems: 'center',
-                  },
-                ]}
-                useNativeDriver>
-                <Icon
-                  size={20}
-                  as={MaterialCommunityIcons}
-                  name="car-off"
-                  color="warmGray.50"
-                  _dark={{
-                    color: 'warmGray.50',
-                  }}
-                  style={styles.point}
-                />
-                <Text
-                  style={{
-                    marginTop: 5,
-                    marginLeft: 10,
-                    lineHeight: 20,
-                  }}>
-                  {strings.UserCars.empty.text + '\r\n'}
-                </Text>
-                <Button
-                  variant="outline"
-                  rounded={'lg'}
-                  _text={{padding: 1}}
-                  onPress={() => {
-                    navigation.navigateDeprecated('Profile', {
-                      screen: 'LoginScreen',
-                      activePanel: 'hidden',
-                    });
-                  }}>
-                  {strings.UserCars.archiveCheck}
-                </Button>
-              </View>
-            ),
-        },
-        {
-          name: 'CARMILEAGE',
-          type: 'input',
-          label: strings.Form.field.label.carMileage,
-          value: carSelected.carMileage,
-          props: {
-            keyboardType: 'numeric',
-            required: true,
-            placeholder: null,
-            onSubmitEditing: () => {},
-            returnKeyType: 'done',
-            blurOnSubmit: true,
-          },
-        },
-      ];
-    } else {
+    if (!cars || !cars.length) {
       return [
         {
           name: 'CARBRAND',
@@ -699,6 +593,105 @@ const CarCostScreen = ({
         },
       ];
     }
+    return [
+      {
+        name: 'CARNAME',
+        type: 'component',
+        label: strings.Form.field.label.car2,
+        value:
+          cars && cars.length ? (
+            <ScrollView
+              showsHorizontalScrollIndicator={false}
+              horizontal
+              style={styles.carContainer}
+              contentContainerStyle={styles.carContainerContent}>
+              {(cars || []).map(item => {
+                return (
+                  <TouchableWithoutFeedback
+                    activeOpacity={0.7}
+                    key={item.vin}
+                    onPress={() => {
+                      _selectCar(item);
+                    }}>
+                    <View>
+                      <CarCard
+                        key={item.vin}
+                        data={item}
+                        type="check"
+                        checked={carSelected.carVIN === item.vin}
+                        onPress={() => {
+                          return _selectCar(item);
+                        }}
+                      />
+                    </View>
+                  </TouchableWithoutFeedback>
+                );
+              })}
+            </ScrollView>
+          ) : (
+            <View
+              style={[
+                styles.scrollViewInner,
+                {
+                  flex: 1,
+                  paddingLeft: 24,
+                  paddingRight: 5,
+                  marginVertical: 29.5,
+                  textAlign: 'center',
+                  alignContent: 'center',
+                  width: '100%',
+                  alignItems: 'center',
+                },
+              ]}
+              useNativeDriver>
+              <Icon
+                size={20}
+                as={MaterialCommunityIcons}
+                name="car-off"
+                color="warmGray.50"
+                _dark={{
+                  color: 'warmGray.50',
+                }}
+                style={styles.point}
+              />
+              <Text
+                style={{
+                  marginTop: 5,
+                  marginLeft: 10,
+                  lineHeight: 20,
+                }}>
+                {strings.UserCars.empty.text + '\r\n'}
+              </Text>
+              <Button
+                variant="outline"
+                rounded={'lg'}
+                _text={{padding: 1}}
+                onPress={() => {
+                  navigation.navigateDeprecated('Profile', {
+                    screen: 'LoginScreen',
+                    activePanel: 'hidden',
+                  });
+                }}>
+                {strings.UserCars.archiveCheck}
+              </Button>
+            </View>
+          ),
+      },
+      {
+        name: 'CARMILEAGE',
+        type: 'input',
+        label: strings.Form.field.label.carMileage,
+        value: carSelected.carMileage,
+        props: {
+          keyboardType: 'numeric',
+          required: true,
+          placeholder: null,
+          onSubmitEditing: () => {},
+          returnKeyType: 'done',
+          blurOnSubmit: true,
+        },
+      },
+    ];
   };
 
   if (!formConfig || !formConfig?.groups) {
@@ -707,9 +700,7 @@ const CarCostScreen = ({
 
   return (
     <Form
-      contentContainerStyle={{
-        paddingHorizontal: 14,
-      }}
+      contentContainerStyle={styles.formContentContainerStyle}
       key="CarCostForm"
       fields={formConfig}
       barStyle={'light-content'}
