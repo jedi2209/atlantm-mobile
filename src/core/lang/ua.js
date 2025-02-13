@@ -8,7 +8,6 @@ export default {
       newcars: 'Нові авто',
       usedcars: 'Авто з пробігом',
       reviews: 'Відгуки',
-      indicators: 'Індикатори',
       settings: 'Налаштування',
       service: 'Сервіс',
       tva: 'Табло видачі авто',
@@ -495,12 +494,6 @@ export default {
     rating: {
       from: 'рейтинг від',
       to: 'рейтинг до',
-    },
-  },
-  IndicatorsScreen: {
-    title: 'Індикатори',
-    empty: {
-      text: 'Немає індикаторів для відображення',
     },
   },
   InfoListScreen: {

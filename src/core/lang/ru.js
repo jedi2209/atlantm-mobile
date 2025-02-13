@@ -13,7 +13,6 @@ export default {
       newcars: 'Новые авто',
       usedcars: 'Авто с пробегом',
       reviews: 'Отзывы',
-      indicators: 'Индикаторы',
       settings: 'Настройки',
       notifications: 'Уведомления',
       service: 'Сервис',
@@ -513,12 +512,6 @@ export default {
     rating: {
       from: 'от',
       to: 'до',
-    },
-  },
-  IndicatorsScreen: {
-    title: 'Индикаторы',
-    empty: {
-      text: 'Нет индикаторов для отображения',
     },
   },
   InfoListScreen: {

@@ -84,7 +84,6 @@ import CallMeBackScreen from '../profile/containers/CallMeBackScreen';
 
 import MapScreen from '../contacts/map/containers/MapScreen';
 
-import IndicatorsScreen from '../indicators/containers/IndicatorsScreen';
 import SettingsScreen from '../settings/containers/SettingsScreen';
 import FeedbackScreen from '../settings/containers/FeedbackScreen';
 import NotificationsScreen from '../settings/containers/NotificationsScreen';
@@ -317,17 +316,6 @@ export const Base = ({navigation, route}) => {
               },
             },
           )}
-        />
-        <StackBase.Screen
-          name="IndicatorsScreen"
-          component={IndicatorsScreen}
-          options={BigCloseButton(navigation, route, {
-            headerStyle: [
-              {
-                backgroundColor: styleConst.color.white,
-              },
-            ],
-          })}
         />
         <StackBase.Screen
           name="SettingsScreen"
