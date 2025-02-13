@@ -174,16 +174,6 @@ export default {
     return this.request(url, baseRequestParams);
   },
 
-  fetchIndicators(region) {
-    if (!region) {
-      return false;
-    }
-    return this.request(
-      `/info/indicator/get/?region=${region}`,
-      baseRequestParams,
-    );
-  },
-
   fetchBonus({token, userid, curr}) {
     if (!userid || !token) {
       return false;

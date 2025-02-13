@@ -10,7 +10,6 @@ import profile from '../profile/reducers';
 import service from '../service/reducers';
 import contacts from '../contacts/reducers';
 import catalog from '../catalog/reducers';
-import indicators from '../indicators/reducers';
 import language from './lang/reducers';
 import settings from '../settings/reducers';
 
@@ -181,7 +180,6 @@ const rootReducer = combineReducers({
   profile,
   catalog,
   contacts,
-  indicators,
   core: coreReducer,
   settings,
 });

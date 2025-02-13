@@ -7,7 +7,6 @@ import {DefaultTheme, PaperProvider, Button} from 'react-native-paper';
 
 import {NavigationContainer} from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
-// import LogRocket from '@logrocket/react-native';
 
 import SpInAppUpdates, {IAUUpdateKind} from 'sp-react-native-in-app-updates';
 import CircularProgress from 'react-native-circular-progress-indicator';
