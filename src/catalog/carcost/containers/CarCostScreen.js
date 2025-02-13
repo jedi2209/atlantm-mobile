@@ -34,6 +34,7 @@ import {ERROR_NETWORK} from '../../../core/const';
 
 import {strings} from '../../../core/lang/const';
 import ToastAlert from '../../../core/components/ToastAlert';
+import PropTypes from 'prop-types';
 
 const mapStateToProps = ({dealer, profile, catalog}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
@@ -716,6 +717,26 @@ const CarCostScreen = ({
       onSubmit={_onPressOrder}
     />
   );
+};
+
+CarCostScreen.propTypes = {
+  dealerSelectedLocal: PropTypes.any.isRequired,
+  firstName: PropTypes.string,
+  secondName: PropTypes.string,
+  lastName: PropTypes.string,
+  phone: PropTypes.string,
+  email: PropTypes.string,
+  carBrand: PropTypes.string,
+  carModel: PropTypes.string,
+  carName: PropTypes.string,
+  carNumber: PropTypes.string,
+  carVIN: PropTypes.string,
+  cars: PropTypes.array,
+  myCars: PropTypes.array,
+  navigation: PropTypes.object,
+  route: PropTypes.object,
+  actionCarCostOrder: PropTypes.func,
+  localDealerClear: PropTypes.func,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CarCostScreen);

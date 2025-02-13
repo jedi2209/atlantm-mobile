@@ -1,5 +1,6 @@
 import React, {useCallback, useMemo, useRef, memo} from 'react';
 import {StyleSheet, Image, TouchableOpacity, Dimensions} from 'react-native';
+import PropTypes from 'prop-types';
 
 // components
 import {HStack, VStack, Icon, View} from 'native-base';
@@ -167,6 +168,9 @@ const CarCostPhotos = memo(({photos, photosFill}) => {
   );
 });
 
-// CarCostPhotos.displayName = 'CarCostPhotos';
+CarCostPhotos.propTypes = {
+  photos: PropTypes.object.isRequired,
+  photosFill: PropTypes.func.isRequired,
+};
 
 export default CarCostPhotos;
