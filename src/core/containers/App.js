@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
 import React, {useState, useEffect} from 'react';
-import {Animated, StyleSheet, Platform, View, Text} from 'react-native';
+import {Animated, StyleSheet, Platform, View, Text, Dimensions, StatusBar} from 'react-native';
 import {NativeBaseProvider} from 'native-base';
 import {DefaultTheme, PaperProvider, Button} from 'react-native-paper';
 
@@ -45,6 +45,14 @@ import * as Nav from '../../navigation/NavigationBase';
 import LogoTitle from '../components/LogoTitle';
 
 const isAndroid = Platform.OS === 'android';
+let paddingBottomAndroid = 0;
+if(isAndroid && (Dimensions.get('screen').height - Dimensions.get('window').height) - StatusBar.currentHeight > 0) {
+  // don't have digital on-screen buttons
+  paddingBottomAndroid = 10;
+} else {
+  // have digital on-screen buttons
+  paddingBottomAndroid = 10;
+}
 
 const mapStateToProps = ({core, dealer}) => {
   return {
@@ -342,7 +350,7 @@ const App = props => {
   }
 
   return (
-    <GestureHandlerRootView style={{flex: 1, paddingBottom: isAndroid ? 10 : 0}}>
+    <GestureHandlerRootView style={{flex: 1, marginBottom: paddingBottomAndroid}}>
       <NativeBaseProvider
         theme={theme}
         config={{
@@ -351,7 +359,7 @@ const App = props => {
           },
         }}>
         <PaperProvider theme={paperTheme}>
-          <NavigationContainer ref={NavigationService.navigationRef}>
+          <NavigationContainer ref={NavigationService.navigationRef} navigationInChildEnabled>
             <Nav.Base />
             <RateThisApp navigation={NavigationService} menuOpenedCount={menuOpenedCount} isAppRated={isAppRated}/>
           </NavigationContainer>
