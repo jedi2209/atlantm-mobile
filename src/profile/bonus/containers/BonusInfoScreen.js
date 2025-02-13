@@ -37,9 +37,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({profile, dealer, nav}) => {
+const mapStateToProps = ({profile, dealer}) => {
   return {
-    nav,
     bonusInfo: profile.bonus.info,
     isFetchBonusInfo: profile.bonus.isFetchBonusInfo,
     region: dealer.region,

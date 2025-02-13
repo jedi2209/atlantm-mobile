@@ -121,9 +121,8 @@ import {dayMonthYear} from '../../utils/date';
 import LogoLoader from '../../core/components/LogoLoader';
 import RNBounceable from '@freakycoder/react-native-bounceable';
 
-const mapStateToProps = ({dealer, profile, nav, core}) => {
+const mapStateToProps = ({dealer, profile, core}) => {
   return {
-    nav,
     listRussia: dealer.listRussia,
     listUkraine: dealer.listUkraine,
     listBelarussia: dealer.listBelarussia,
@@ -356,11 +355,11 @@ const ProfileScreenInfo = props => {
       return (
         <RNBounceable
           style={styles.bonusButtonWrapper}
-          onPress={() => navigation.navigate('AdditionalPurchaseScreen')}>
+          onPress={() => navigation.navigateDeprecated('AdditionalPurchaseScreen')}>
           <View
             rounded={'lg'}
             style={[styleConst.shadow.default, styles.additionalPurchaseView]}
-            onPress={() => navigation.navigate('AdditionalPurchaseScreen')}>
+            onPress={() => navigation.navigateDeprecated('AdditionalPurchaseScreen')}>
             <View style={styles.additionalPurchaseButtonTextView}>
               <Icon as={Fontisto} name="shopping-bag-1" size={10} />
             </View>
@@ -433,11 +432,11 @@ const ProfileScreenInfo = props => {
           <>
             <RNBounceable
               style={styles.bonusButtonWrapper}
-              onPress={() => navigation.navigate('BonusScreen')}>
+              onPress={() => navigation.navigateDeprecated('BonusScreen')}>
               <View
                 rounded={'lg'}
                 style={[styleConst.shadow.default, styles.bonusButtonView]}
-                onPress={() => navigation.navigate('BonusScreen')}>
+                onPress={() => navigation.navigateDeprecated('BonusScreen')}>
                 <View style={styles.bonusButtonTextView}>
                   <Text
                     style={{
@@ -485,7 +484,7 @@ const ProfileScreenInfo = props => {
                           fontSize: 16,
                           fontWeight: '600',
                         }}
-                        onPress={() => navigation.navigate('BonusScreen')}>
+                        onPress={() => navigation.navigateDeprecated('BonusScreen')}>
                         {strings.ProfileScreenInfo.bonus.show}
                       </Text>
                     </View>
@@ -504,7 +503,7 @@ const ProfileScreenInfo = props => {
             </RNBounceable>
             <Button
               onPress={() => {
-                navigation.navigate('BonusScreenInfo', {
+                navigation.navigateDeprecated('BonusScreenInfo', {
                   refererScreen: 'LoginScreen',
                   returnScreen: 'LoginScreen',
                 });
@@ -529,7 +528,7 @@ const ProfileScreenInfo = props => {
         return (
           <TouchableWithoutFeedback
             onPress={() =>
-              navigation.navigate('BonusScreenInfo', {
+              navigation.navigateDeprecated('BonusScreenInfo', {
                 refererScreen: 'LoginScreen',
                 returnScreen: 'LoginScreen',
               })
@@ -649,7 +648,7 @@ const ProfileScreenInfo = props => {
         {_renderAdditionalPurchase()}
         <Button
           onPress={() => {
-            navigation.navigate('ProfileEditScreen');
+            navigation.navigateDeprecated('ProfileEditScreen');
           }}
           _text={styles.buttonPrimaryText}
           rounded={'lg'}
@@ -684,7 +683,7 @@ const ProfileScreenInfo = props => {
           size="sm"
           style={{backgroundColor: styleConst.new.blueHeader}}
           onPress={() =>
-            navigation.navigate('ChatScreen', {
+            navigation.navigateDeprecated('ChatScreen', {
               prevScreen: 'ЛКК -- главный',
             })
           }

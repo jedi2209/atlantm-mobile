@@ -54,9 +54,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({profile, nav}) => {
+const mapStateToProps = ({profile}) => {
   return {
-    nav,
     discounts: profile.discounts,
   };
 };

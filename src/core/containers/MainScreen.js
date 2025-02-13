@@ -42,11 +42,10 @@ const isApple = Platform.OS === 'ios';
 const firstRowMarginTop = 1;
 const infoListHeight = Math.round(width / 1.12);
 
-const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
+const mapStateToProps = ({dealer, profile, info, core}) => {
   return {
     infoList: info.list,
     isFetchInfoList: info.meta.isFetchInfoList,
-    nav,
     profile,
     region: dealer.region,
     listDealers: dealer.listDealers,
@@ -228,7 +227,7 @@ const _processRow = props => {
       onPressBlockButton = () => Linking.openURL(item?.link?.path);
     } else {
       const [link, linkParams] = _linkProcess(item.link, props);
-      onPressBlockButton = () => navigation.navigate(link, linkParams);
+      onPressBlockButton = () => navigation.navigateDeprecated(link, linkParams);
     }
 
     if (i === rowData.length) {
@@ -259,7 +258,7 @@ const _processRow = props => {
               size={'full'}
               type={'bottom'}
               onPress={() =>
-                navigation.navigate('ChooseDealerScreen', {
+                navigation.navigateDeprecated('ChooseDealerScreen', {
                   returnScreen: item?.link?.params?.returnScreen
                     ? item?.link?.params?.returnScreen
                     : route.name,
@@ -355,7 +354,7 @@ const _renderActions = params => {
             {strings.Menu.main.actions}
           </Text>
           <Text
-            onPress={() => navigation.navigate('InfoList')}
+            onPress={() => navigation.navigateDeprecated('InfoList')}
             color={styleConst.color.lightBlue}
             fontSize={16}>
             {strings.Base.all}

@@ -41,14 +41,13 @@ import styleConst from '../../../core/style-const';
 
 import {get} from 'lodash';
 
-const mapStateToProps = ({dealer, service, nav}) => {
+const mapStateToProps = ({dealer, service}) => {
   let carLocalBrand = '';
   let carLocalModel = '';
   let carLocalNumber = '';
   let carLocalVin = '';
 
   return {
-    nav,
     date: service.date,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
@@ -234,7 +233,7 @@ const ServiceStep4 = props => {
                 {
                   text: 'ОК',
                   onPress: () => {
-                    navigation.navigate('BottomTabNavigation', {
+                    navigation.navigateDeprecated('BottomTabNavigation', {
                       screen: 'ContactsScreen',
                     });
                   },
@@ -288,7 +287,7 @@ const ServiceStep4 = props => {
           [
             {
               text: 'ОК',
-              onPress: () => navigation.navigate('BottomTabNavigation'),
+              onPress: () => navigation.navigateDeprecated('BottomTabNavigation'),
             },
           ],
         );

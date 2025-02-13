@@ -56,7 +56,7 @@ const PhotoSlider = ({
       let onPress = onPressItem;
       if (photosFull) {
         onPress = () => {
-          navigation.navigate(fullScreen, {
+          navigation.navigateDeprecated(fullScreen, {
             images: photosFull,
             imageIndex: index,
             theme: themeFull,

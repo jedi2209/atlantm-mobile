@@ -51,7 +51,7 @@ const processDate = date => {
 };
 
 const _onPressCallMe = ({dealers, navigation, postID}) => {
-  navigation.navigate('CallMeBackScreen', {
+  navigation.navigateDeprecated('CallMeBackScreen', {
     actionID: postID,
     dealerCustom: dealers,
   });
@@ -157,7 +157,7 @@ const InfoPostScreen = ({
         });
       }
     });
-    navigation.navigate('OrderScreen', {
+    navigation.navigateDeprecated('OrderScreen', {
       car: {
         dealer: customDealersList,
       },
@@ -177,7 +177,7 @@ const InfoPostScreen = ({
         });
       }
     });
-    navigation.navigate('OrderPartsScreen', {
+    navigation.navigateDeprecated('OrderPartsScreen', {
       car: {
         dealer: customDealersList,
       },
@@ -199,7 +199,7 @@ const InfoPostScreen = ({
         });
       }
     });
-    navigation.navigate('ServiceScreen', {
+    navigation.navigateDeprecated('ServiceScreen', {
       car: {
         dealer: customDealersList,
       },

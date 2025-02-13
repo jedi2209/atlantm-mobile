@@ -46,9 +46,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({dealer, info, nav, core}) => {
+const mapStateToProps = ({dealer, info, core}) => {
   return {
-    nav,
     list: info.list,
     listDealer: info.listDealer,
     filters: info.filters,
@@ -270,7 +269,7 @@ const InfoListScreen = ({
           size="sm"
           style={{backgroundColor: styleConst.new.blueHeader}}
           onPress={() =>
-            navigation.navigate('ChatScreen', {
+            navigation.navigateDeprecated('ChatScreen', {
               prevScreen: 'Акции -- список',
             })
           }

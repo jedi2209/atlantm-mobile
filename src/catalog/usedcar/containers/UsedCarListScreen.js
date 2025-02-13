@@ -120,7 +120,7 @@ const UsedCarListScreen = ({
               style={{backgroundColor: styleConst.new.blueHeader}}
               shadow={2}
               onPress={() =>
-                navigation.navigate('ChatScreen', {
+                navigation.navigateDeprecated('ChatScreen', {
                   prevScreen: 'Список б/у авто',
                 })
               }

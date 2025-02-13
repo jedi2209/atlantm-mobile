@@ -82,7 +82,7 @@ const BigCloseButton = (navigation, route, options) => {
       },
     ],
     headerTitle: '',
-    headerBackTitleVisible: false,
+    headerBackButtonDisplayMode: 'minimal',
     headerBackVisible: false,
     headerTitleStyle: stylesHeader.transparentHeaderTitle,
     headerShadowVisible: false,

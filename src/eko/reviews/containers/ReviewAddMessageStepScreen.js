@@ -7,9 +7,8 @@ import {connect} from 'react-redux';
 // helpers
 import {strings} from '../../../core/lang/const';
 
-const mapStateToProps = ({dealer, nav}) => {
+const mapStateToProps = ({dealer}) => {
   return {
-    nav,
     dealerSelectedLocal: dealer.selectedLocal,
   };
 };
@@ -73,7 +72,7 @@ const ReviewAddMessageStepScreen = ({
 
   const _onPressOrder = async props => {
     const {COMMENT_MINUS, COMMENT_PLUS, DEALER} = props;
-    navigation.navigate('ReviewAddRatingStepScreen', {
+    navigation.navigateDeprecated('ReviewAddRatingStepScreen', {
       COMMENT_PLUS,
       COMMENT_MINUS,
       DEALER: dealerSelectedLocal || DEALER,

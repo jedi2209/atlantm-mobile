@@ -49,9 +49,8 @@ const styles = StyleSheet.create({
   TabsActiveTabStyle: {},
 });
 
-const mapStateToProps = ({dealer, nav, core}) => {
+const mapStateToProps = ({dealer, core}) => {
   return {
-    nav,
     isFetchDealersList: dealer.meta.isFetchDealersList,
     isFetchDealer: dealer.meta.isFetchDealer,
     settings: core.settings,
@@ -249,7 +248,7 @@ const _onPressDealerItem = async ({
         navigation.goBack();
       }
       returnState.prevScreen = 'ChooseDealerScreen';
-      return navigation.navigate(returnScreen, returnState);
+      return navigation.navigateDeprecated(returnScreen, returnState);
     } else {
       if (goBack) {
         return navigation.goBack();

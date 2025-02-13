@@ -246,7 +246,7 @@ const TvaResultsScreen = props => {
                 _text={styles.buttonText}
                 size="lg"
                 shadow={4}
-                onPress={() => navigation.navigate('BottomTabNavigation')}>
+                onPress={() => navigation.navigateDeprecated('BottomTabNavigation')}>
                 {strings.Navigation.back}
               </Button>
             </View>
@@ -288,7 +288,7 @@ const TvaResultsScreen = props => {
               _text={styles.buttonText}
               size="lg"
               shadow={4}
-              onPress={() => navigation.navigate('BottomTabNavigation')}>
+              onPress={() => navigation.navigateDeprecated('BottomTabNavigation')}>
               {strings.ModalView.close}
             </Button>
             {TVAMessagingEnabled ? (

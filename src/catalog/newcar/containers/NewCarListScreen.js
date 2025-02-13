@@ -119,7 +119,7 @@ const NewCarListScreen = ({
               size="sm"
               style={{backgroundColor: styleConst.new.blueHeader}}
               onPress={() =>
-                navigation.navigate('ChatScreen', {
+                navigation.navigateDeprecated('ChatScreen', {
                   prevScreen: 'Список новых авто',
                 })
               }

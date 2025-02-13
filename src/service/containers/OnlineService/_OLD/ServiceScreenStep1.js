@@ -32,7 +32,7 @@ import {strings} from '../../../../core/lang/const';
 import API from '../../../../utils/api';
 import {ERROR_NETWORK} from '../../../../core/const';
 
-const mapStateToProps = ({dealer, profile, nav}) => {
+const mapStateToProps = ({dealer, profile}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
 
   let carLocalBrand = '';
@@ -65,7 +65,6 @@ const mapStateToProps = ({dealer, profile, nav}) => {
 
   return {
     cars,
-    nav,
     carBrand: UserData.get('CARBRAND')
       ? UserData.get('CARBRAND')
       : carLocalBrand,
@@ -467,7 +466,7 @@ class ServiceScreenStep1 extends Component {
       },
     };
 
-    navigation.navigate('ServiceScreenStep2', data);
+    navigation.navigateDeprecated('ServiceScreenStep2', data);
     return true;
   };
 
@@ -666,7 +665,7 @@ class ServiceScreenStep1 extends Component {
                       rounded={'lg'}
                       _text={{padding: 1}}
                       onPress={() => {
-                        this.props.navigation.navigate('Profile', {
+                        this.props.navigation.navigateDeprecated('Profile', {
                           screen: 'LoginScreen',
                           activePanel: 'hidden',
                         });
@@ -725,7 +724,7 @@ class ServiceScreenStep1 extends Component {
                           flexDirection: 'row',
                         }}
                         onPress={() => {
-                          this.props.navigation.navigate('ServiceInfoModal', {
+                          this.props.navigation.navigateDeprecated('ServiceInfoModal', {
                             data: this.state.serviceInfo,
                             type: 'required',
                           });
@@ -770,7 +769,7 @@ class ServiceScreenStep1 extends Component {
                           flexDirection: 'row',
                         }}
                         onPress={() => {
-                          this.props.navigation.navigate('ServiceInfoModal', {
+                          this.props.navigation.navigateDeprecated('ServiceInfoModal', {
                             data: this.state.serviceInfo,
                             type: 'recommended',
                           });

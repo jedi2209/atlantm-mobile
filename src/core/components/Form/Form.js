@@ -237,9 +237,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({dealer, profile, nav, core}) => {
+const mapStateToProps = ({dealer, profile, core}) => {
   return {
-    nav,
     dealerSelected: dealer.selected,
     dealerSelectedLocal: dealer.selectedLocal,
     region: dealer.region,

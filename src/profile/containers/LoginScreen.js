@@ -51,9 +51,8 @@ import {
 
 export const isAndroid = Platform.OS === 'android';
 
-const mapStateToProps = ({dealer, profile, nav, core}) => {
+const mapStateToProps = ({dealer, profile, core}) => {
   return {
-    nav,
     listRussia: dealer.listRussia,
     listUkraine: dealer.listUkraine,
     listBelarussia: dealer.listBelarussia,
@@ -252,7 +251,7 @@ const LoginScreen = props => {
       .then(() => {
         setLoadingVerify(false);
         setCodeValue('');
-        navigation.navigate('LoginScreen');
+        navigation.navigateDeprecated('LoginScreen');
       })
       .catch(message => {
         setLoadingVerify(false);
@@ -341,12 +340,12 @@ const LoginScreen = props => {
           if (res.payload && res.payload.ID && res.payload.PHONE) {
             // нашли юзверя в CRM и у него есть телефон
             setLoading(false);
-            navigation.navigate('LoginScreen');
+            navigation.navigateDeprecated('LoginScreen');
           }
           break;
         case 'SAVE_PROFILE__NOPHONE':
           setLoading(false);
-          navigation.navigate('PhoneChangeScreen', {
+          navigation.navigateDeprecated('PhoneChangeScreen', {
             refererScreen: 'LoginScreen',
             returnScreen: 'LoginScreen',
             userSocialProfile: data,
@@ -359,7 +358,7 @@ const LoginScreen = props => {
               case 100: // Пользователь не зарегистрирован
                 delete data.update; // теперь будем регать пользователя по серьёзке
                 setLoading(false);
-                navigation.navigate('PhoneChangeScreen', {
+                navigation.navigateDeprecated('PhoneChangeScreen', {
                   refererScreen: 'LoginScreen',
                   returnScreen: 'LoginScreen',
                   userSocialProfile: data,
@@ -679,7 +678,7 @@ const LoginScreen = props => {
               }}>
               <Button
                 onPress={() => {
-                  navigation.navigate('BonusScreenInfo', {
+                  navigation.navigateDeprecated('BonusScreenInfo', {
                     refererScreen: 'LoginScreen',
                     returnScreen: 'LoginScreen',
                   });

@@ -209,9 +209,9 @@ const ProfileEditScreen = props => {
         setFormSendingStatus(true);
         setTimeout(() => {
           setFormSendingStatus(null);
-          navigation.navigate('LoginScreen');
+          navigation.navigateDeprecated('LoginScreen');
           setSendingForm(false);
-          setTimeout(() => navigation.navigate('LoginScreen'), 300);
+          setTimeout(() => navigation.navigateDeprecated('LoginScreen'), 300);
         }, 500);
         return response;
       })
@@ -244,7 +244,7 @@ const ProfileEditScreen = props => {
             style: 'default',
             onPress: () => {
               navigation.goBack(null);
-              navigation.navigate('LoginScreen');
+              navigation.navigateDeprecated('LoginScreen');
             },
           },
         ]);
@@ -333,7 +333,7 @@ const ProfileEditScreen = props => {
             iconColor={styleConst.color.blue}
             style={styles.iconPlus}
             onPress={() =>
-              navigation.navigate('Profile', {
+              navigation.navigateDeprecated('Profile', {
                 screen: 'PhoneChangeScreen',
                 params: {
                   refererScreen: 'ProfileEditScreen',
@@ -381,7 +381,7 @@ const ProfileEditScreen = props => {
             iconColor={styleConst.color.blue}
             style={styles.iconPlus}
             onPress={() =>
-              navigation.navigate('Profile', {
+              navigation.navigateDeprecated('Profile', {
                 screen: 'PhoneChangeScreen',
                 params: {
                   refererScreen: 'ProfileEditScreen',

@@ -1,9 +1,8 @@
 import React from 'react';
-import {StyleSheet, ActivityIndicator} from 'react-native';
+import {StyleSheet} from 'react-native';
 import Orientation, {
   OrientationLocker,
   PORTRAIT,
-  LANDSCAPE,
 } from 'react-native-orientation-locker';
 import {useSelector} from 'react-redux';
 import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
@@ -26,8 +25,6 @@ import {
 
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import {EVENT_REFRESH} from '../core/actionTypes';
 
 // EKO
 import ReviewsScreen from '../eko/reviews/containers/ReviewsScreen';
@@ -65,7 +62,6 @@ import BottomTabNavigation from '../menu/containers/BottomTabNavigation';
 
 // routes
 import IntroScreen from '../intro/containers/IntroScreen';
-import IntroScreenNew from '../intro/containers/IntroScreenNew';
 import ChooseDealerScreen from '../dealer/containers/ChooseDealerScreen';
 
 // orders
@@ -126,7 +122,7 @@ export const Base = ({navigation, route}) => {
   let initialRouteName = 'BottomTabNavigation';
 
   if (!regionSelected) {
-    initialRouteName = 'IntroScreenNew';
+    initialRouteName = 'IntroScreen';
   }
   return (
     <>
@@ -146,11 +142,6 @@ export const Base = ({navigation, route}) => {
         <StackBase.Screen
           name="IntroScreen"
           component={IntroScreen}
-          options={{headerShown: false}}
-        />
-        <StackBase.Screen
-          name="IntroScreenNew"
-          component={IntroScreenNew}
           options={{headerShown: false}}
         />
         <StackBase.Screen
@@ -221,7 +212,7 @@ export const Base = ({navigation, route}) => {
                 backgroundColor: styleConst.color.bg,
               },
             ],
-            headerBackTitleVisible: false,
+            headerBackButtonDisplayMode: 'minimal',
             headerBackVisible: false,
             headerShadowVisible: false,
             headerShown: true,
@@ -701,7 +692,7 @@ const EKO = ({navigation, route}) => {
               <IconButton
                 size={'sm'}
                 variant={'ghost'}
-                onPress={() => navigation.navigate('ReviewsFilter')}
+                onPress={() => navigation.navigateDeprecated('ReviewsFilter')}
                 style={{marginRight: 4}}
                 icon={
                   <Icon
@@ -973,7 +964,7 @@ const CarsStock = ({navigation, route}) => {
                 <VStack space={4}>
                   <Pressable
                     onPress={() => {
-                      navigation.navigate('NewCarListScreen', {
+                      navigation.navigateDeprecated('NewCarListScreen', {
                         sortBy: 'price',
                         sortDirection: 'asc',
                       });
@@ -1013,7 +1004,7 @@ const CarsStock = ({navigation, route}) => {
                   </Pressable>
                   <Pressable
                     onPress={() => {
-                      navigation.navigate('NewCarListScreen', {
+                      navigation.navigateDeprecated('NewCarListScreen', {
                         sortBy: 'price',
                         sortDirection: 'desc',
                       });
@@ -1053,7 +1044,7 @@ const CarsStock = ({navigation, route}) => {
                   </Pressable>
                   <Pressable
                     onPress={() => {
-                      navigation.navigate('NewCarListScreen', {
+                      navigation.navigateDeprecated('NewCarListScreen', {
                         sortBy: 'created',
                         sortDirection: 'desc',
                       });
@@ -1204,7 +1195,7 @@ const UsedCars = ({navigation, route}) => {
                 <VStack space={4}>
                   <Pressable
                     onPress={() => {
-                      navigation.navigate('UsedCarListScreenStack', {
+                      navigation.navigateDeprecated('UsedCarListScreenStack', {
                         screen: 'UsedCarListScreen',
                         params: {
                           sortBy: 'price',
@@ -1247,7 +1238,7 @@ const UsedCars = ({navigation, route}) => {
                   </Pressable>
                   <Pressable
                     onPress={() => {
-                      navigation.navigate('UsedCarListScreenStack', {
+                      navigation.navigateDeprecated('UsedCarListScreenStack', {
                         screen: 'UsedCarListScreen',
                         params: {
                           sortBy: 'price',
@@ -1290,7 +1281,7 @@ const UsedCars = ({navigation, route}) => {
                   </Pressable>
                   <Pressable
                     onPress={() => {
-                      navigation.navigate('UsedCarListScreenStack', {
+                      navigation.navigateDeprecated('UsedCarListScreenStack', {
                         screen: 'UsedCarListScreen',
                         params: {
                           sortBy: 'created',
@@ -1333,7 +1324,7 @@ const UsedCars = ({navigation, route}) => {
                   </Pressable>
                   <Pressable
                     onPress={() => {
-                      navigation.navigate('UsedCarListScreenStack', {
+                      navigation.navigateDeprecated('UsedCarListScreenStack', {
                         screen: 'UsedCarListScreen',
                         params: {
                           sortBy: 'year',
@@ -1376,7 +1367,7 @@ const UsedCars = ({navigation, route}) => {
                   </Pressable>
                   <Pressable
                     onPress={() => {
-                      navigation.navigate('UsedCarListScreenStack', {
+                      navigation.navigateDeprecated('UsedCarListScreenStack', {
                         screen: 'UsedCarListScreen',
                         params: {
                           sortBy: 'year',
@@ -1419,7 +1410,7 @@ const UsedCars = ({navigation, route}) => {
                   </Pressable>
                   <Pressable
                     onPress={() => {
-                      navigation.navigate('UsedCarListScreenStack', {
+                      navigation.navigateDeprecated('UsedCarListScreenStack', {
                         screen: 'UsedCarListScreen',
                         params: {
                           sortBy: 'mileage',

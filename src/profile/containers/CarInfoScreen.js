@@ -35,7 +35,7 @@ import orderFunctions from '../../utils/orders';
 import {actionToggleCar} from '../actions';
 import LogoLoader from '../../core/components/LogoLoader';
 
-const mapStateToProps = ({dealer, profile, nav, core}) => {
+const mapStateToProps = ({profile}) => {
   return {
     car: profile.car,
     carNumber: profile.carNumber,
@@ -329,7 +329,7 @@ const CarInfoScreen = props => {
                               }
                             }
                             setLoading(false);
-                            navigation.navigate('LoginScreen', {
+                            navigation.navigateDeprecated('LoginScreen', {
                               activePanel: 'default',
                             });
                           })
@@ -353,7 +353,7 @@ const CarInfoScreen = props => {
                       break;
                   }
                   if (el.navigate && el.navigate.screen) {
-                    navigation.navigate(
+                    navigation.navigateDeprecated(
                       el.navigate.screen,
                       el.navigate.params ? el.navigate.params : null,
                     );

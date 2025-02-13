@@ -375,7 +375,7 @@ const CreditCardsItems = ({isNewCar, isPriceShow, isLoading, carData, creditProg
           />
         ) : (
           <View justifyContent={'center'} alignContent={'center'} justifyItems={'center'} alignItems={'center'}>
-            <Button size={'lg'} onPress={() => nav.navigate('OrderCreditScreen', {
+            <Button size={'lg'} onPress={() => nav.navigateDeprecated('OrderCreditScreen', {
                 car: {
                   id: get(carData, 'id.api'),
                   brand: get(carData, 'brand.name', ''),
@@ -411,7 +411,7 @@ const CreditCardsItems = ({isNewCar, isPriceShow, isLoading, carData, creditProg
           index={index}
           separators={separators}
           creditPrograms={creditPrograms}
-          onPressOrder={() => nav.navigate('OrderCreditScreen', {
+          onPressOrder={() => nav.navigateDeprecated('OrderCreditScreen', {
               car: {
                 id: get(carData, 'id.api'),
                 brand: get(carData, 'brand.name', ''),

@@ -20,9 +20,8 @@ import {strings} from '../../core/lang/const';
 
 let callMe = require('../../contacts/actions').callMe;
 
-const mapStateToProps = ({dealer, profile, contacts, nav}) => {
+const mapStateToProps = ({dealer, profile, contacts}) => {
   return {
-    nav,
     dealerSelectedLocal: dealer.selectedLocal,
     allDealers: dealer.listDealers,
     firstName: profile.login.NAME

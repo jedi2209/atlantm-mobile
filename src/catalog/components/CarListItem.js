@@ -89,7 +89,7 @@ const CarListItem = ({
   let carImgReal = get(car, 'imgReal.thumb', false);
 
   const _onPress = () => {
-    navigation.navigate(itemScreen, {
+    navigation.navigateDeprecated(itemScreen, {
       carId: car.id.api,
       currency,
       code: prices.curr.code,
@@ -98,7 +98,7 @@ const CarListItem = ({
   };
 
   const _onPressOrder = () => {
-    navigation.navigate('OrderScreen', {
+    navigation.navigateDeprecated('OrderScreen', {
       car: {
         brand: get(car, 'brand.name', ''),
         model: get(car, 'model.name', ''),
@@ -202,7 +202,7 @@ const CarListItem = ({
         index: 99,
         name: 'newCar',
         onPressTD: () => {
-          navigation.navigate('TestDriveScreen', {
+          navigation.navigateDeprecated('TestDriveScreen', {
             car: {
               brand: get(car, 'brand.name'),
               model: get(car, 'model.name'),
@@ -259,7 +259,7 @@ const CarListItem = ({
                 {
                   text: strings.NewCarItemScreen.sendQuery,
                   onPress: () => {
-                    navigation.navigate('OrderScreen', {
+                    navigation.navigateDeprecated('OrderScreen', {
                       car: {
                         brand: get(car, 'brand.name'),
                         model: get(car, 'model.name'),
@@ -292,7 +292,7 @@ const CarListItem = ({
               },
             );
           } else {
-            navigation.navigate('OrderScreen', {
+            navigation.navigateDeprecated('OrderScreen', {
               car: {
                 brand: get(car, 'brand.name'),
                 model: get(car, 'model.name'),
@@ -316,7 +316,7 @@ const CarListItem = ({
         index: 99,
         name: 'usedCar',
         onPressCallMe: () => {
-          navigation.navigate('CallMeBackScreen', {
+          navigation.navigateDeprecated('CallMeBackScreen', {
             dealerCustom: dealerList[car.dealer.id],
             dealerHide: true,
             car: {
@@ -332,7 +332,7 @@ const CarListItem = ({
           });
         },
         onPressTD: () => {
-          navigation.navigate('TestDriveScreen', {
+          navigation.navigateDeprecated('TestDriveScreen', {
             car: {
               brand: get(car, 'brand.name', ''),
               model: get(car, 'model', ''),
@@ -362,7 +362,7 @@ const CarListItem = ({
           Linking.openURL('tel:' + phone.replace(/[^+\d]+/g, ''));
         },
         onPressWantACar: () => {
-          navigation.navigate('OrderScreen', {
+          navigation.navigateDeprecated('OrderScreen', {
             car: {
               brand: get(car, 'brand.name', ''),
               model: get(car, 'model', ''),

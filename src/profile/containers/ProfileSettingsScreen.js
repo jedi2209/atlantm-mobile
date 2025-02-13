@@ -243,7 +243,7 @@ const ProfileSettingsScreen = props => {
             {
               text: 'ОК',
               onPress: () => {
-                navigation.navigate('LoginScreen');
+                navigation.navigateDeprecated('LoginScreen');
               },
             },
           ],
@@ -276,7 +276,7 @@ const ProfileSettingsScreen = props => {
             style: 'default',
             onPress: () => {
               navigation.goBack(null);
-              navigation.navigate('LoginScreen');
+              navigation.navigateDeprecated('LoginScreen');
             },
           },
         ]);

@@ -112,9 +112,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({nav, profile}) => {
+const mapStateToProps = ({profile}) => {
   return {
-    nav,
     profile: profile.login,
     carHistory: profile.carHistory.data,
   };
@@ -187,7 +186,7 @@ const CarHistoryScreen = ({
       const workId = get(work, 'document.number');
       const workDealer = get(work, 'dealer.id');
       const onPressHandler = () => {
-        navigation.navigate('CarHistoryDetailsScreen', {
+        navigation.navigateDeprecated('CarHistoryDetailsScreen', {
           vin,
           workId,
           workDealer,

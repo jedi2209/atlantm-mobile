@@ -58,7 +58,7 @@ const ActionSheetMenu = props => {
                   onPress={() => {
                     onClose();
                     if (el.navigate) {
-                      navigation.navigate(el.navigate, el.navigateOptions);
+                      navigation.navigateDeprecated(el.navigate, el.navigateOptions);
                     } else {
                       if (el?.link) {
                         Linking.openURL(el.link);

@@ -2,7 +2,6 @@ import {combineReducers} from 'redux';
 import {REHYDRATE} from 'redux-persist/es/constants';
 import {get} from 'lodash';
 import dealer from '../dealer/reducers';
-import nav from '../navigation/reducers';
 import tva from '../tva/reducers';
 import eko from '../eko/reducers';
 import info from '../info/reducers';
@@ -171,7 +170,6 @@ const coreReducer = combineReducers({
 
 const rootReducer = combineReducers({
   modal,
-  nav,
   tva,
   eko,
   info,
