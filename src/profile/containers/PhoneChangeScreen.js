@@ -45,11 +45,12 @@ import UserData from '../../utils/user';
 import {APP_PHONE_RESTRICTED, ERROR_NETWORK} from '../../core/const';
 import {getTimestamp} from '../../utils/date';
 
+import { useNavigation } from '@react-navigation/native';
+
 export const isAndroid = Platform.OS === 'android';
 
-const mapStateToProps = ({dealer, profile, nav, core}) => {
+const mapStateToProps = ({profile, core}) => {
   return {
-    nav,
     name: profile.name,
     phone: UserData.get('PHONE')
       ? UserData.get('PHONE')
@@ -257,7 +258,7 @@ const PhoneChangeScreen = props => {
                     if (actionAddUser) {
                       if (actionAddUser.payload.ID) {
                         setLoadingVerify(false);
-                        props.navigation.navigate('LoginScreen');
+                        props.navigation.navigateDeprecated('LoginScreen');
                       } else {
                         toast.show({
                           render: ({id}) => {
@@ -324,14 +325,14 @@ const PhoneChangeScreen = props => {
                 })
                 .then(() => {
                   setLoadingVerify(false);
-                  props.navigation.navigate('LoginScreen', {
+                  props.navigation.navigateDeprecated('LoginScreen', {
                     verifyCode: false,
                   });
                 });
               break;
             case 'SAVE_PROFILE__UPDATE': // пользователя нашли
               setLoadingVerify(false);
-              props.navigation.navigate('LoginScreen', {
+              props.navigation.navigateDeprecated('LoginScreen', {
                 verifyCode: false,
               });
               break;
@@ -390,7 +391,7 @@ const PhoneChangeScreen = props => {
                   email: contactUser,
                 });
               }
-              props.navigation.navigate('ProfileEditScreen', {
+              props.navigation.navigateDeprecated('ProfileEditScreen', {
                 updateScreen: getTimestamp(),
               });
               break;

@@ -30,7 +30,7 @@ import {strings} from '../../core/lang/const';
 import LogoLoader from '../../core/components/LogoLoader';
 import dealerProcess from '../../utils/dealer-process';
 
-const mapStateToProps = ({dealer, profile, nav}) => {
+const mapStateToProps = ({dealer, profile}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
   let carLocalVin = '',
     carLocalBrand = '',
@@ -50,7 +50,6 @@ const mapStateToProps = ({dealer, profile, nav}) => {
 
   return {
     cars,
-    nav,
     dealerSelected: dealer.selected,
     allDealers: dealer.listDealers,
     dealerSelectedLocal: dealer.selectedLocal,
@@ -288,7 +287,7 @@ const OrderPartsScreen = props => {
                         rounded={'lg'}
                         _text={{padding: 1}}
                         onPress={() => {
-                          navigation.navigate('Profile', {
+                          navigation.navigateDeprecated('Profile', {
                             screen: 'LoginScreen',
                             activePanel: 'hidden',
                           });

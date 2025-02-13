@@ -17,7 +17,7 @@ const setTopLevelNavigator = navigatorRef => {
 const navigate = (name, params) => {
   if (_navigator?.isReady()) {
     // Perform navigation if the react navigation is ready to handle actions
-    _navigator.navigate(name, params);
+    _navigator.navigateDeprecated(name, params);
   } else {
     setTimeout(() => {
       navigate(name, params);

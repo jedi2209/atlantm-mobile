@@ -147,7 +147,7 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
                 </Heading>
                 <Pressable
                   onPress={() => {
-                    navigation.navigate('MapScreen', {
+                    navigation.navigateDeprecated('MapScreen', {
                       returnScreen: 'Home',
                       name: get(val, 'name'),
                       city: get(val, 'city.name'),

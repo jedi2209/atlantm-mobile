@@ -568,7 +568,7 @@ const MainFilterScreen = ({
   const _onSubmitButtonPress = ({showPrices}) => {
     switch (stockType) {
       case 'New':
-        navigation.navigate('NewCarListScreen', {
+        navigation.navigateDeprecated('NewCarListScreen', {
           sortBy: 'price',
           sortDirection: 'asc',
           total: {
@@ -578,7 +578,7 @@ const MainFilterScreen = ({
         });
         break;
       case 'Used':
-        navigation.navigate('UsedCarListScreenStack', {
+        navigation.navigateDeprecated('UsedCarListScreenStack', {
           screen: 'UsedCarListScreen',
           params: {
             sortBy: 'price',
@@ -831,7 +831,7 @@ const MainFilterScreen = ({
                 bg={styleConst.color.white}>
                 <FilterRow
                   onPress={() => {
-                    navigation.navigate('BrandModelFilterScreen', {
+                    navigation.navigateDeprecated('BrandModelFilterScreen', {
                       stockType,
                       data: accordionModels,
                     });
@@ -2451,7 +2451,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     width: '90%',
     marginHorizontal: '5%',
-    bottom: isAndroid ? 10 : 30,
+    bottom: isAndroid ? 40 : 30,
     alignItems: 'center',
     alignContent: 'center',
   },

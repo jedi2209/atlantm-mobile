@@ -327,7 +327,7 @@ export default StyleSheet.create({
   plateUsed: {
     borderRadius: 10,
     backgroundColor: styleConst.color.blue,
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     marginRight: 8,
     height: 52,
     display: 'flex',

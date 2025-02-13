@@ -82,9 +82,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({dealer, nav, core}) => {
+const mapStateToProps = ({dealer, core}) => {
   return {
-    nav,
     region: dealer.region,
     pushActionSubscribeState: core.pushActionSubscribeState,
     currentLang: core.language.selected || APP_REGION,
@@ -107,7 +106,6 @@ const SettingsScreen = props => {
     actionAppRated,
     actionMenuOpenedCount,
     pushActionSubscribeState,
-    navigation,
   } = props;
 
   const toast = useToast();
@@ -322,7 +320,7 @@ const SettingsScreen = props => {
         animation={styleConst.animation.zoomIn}
         duration={250}
         index={6}>
-        <Pressable onPress={() => navigation.navigate('IntroScreenNew')}>
+        <Pressable onPress={() => NavigationService.navigate('IntroScreen')}>
           <FlagButton
             style={[styles.block, {width: cardWidth}]}
             styleText={{
@@ -331,7 +329,7 @@ const SettingsScreen = props => {
               color: styleConst.color.lightBlue,
             }}
             shadow={null}
-            onPress={() => navigation.navigate('IntroScreenNew')}
+            onPress={() => NavigationService.navigate('IntroScreen')}
             country={region}
             type={'button'}
             variant={'outline'}

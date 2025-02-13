@@ -101,9 +101,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({dealer, profile, nav}) => {
+const mapStateToProps = ({dealer, profile}) => {
   return {
-    nav,
     bonus: profile.bonus.data,
     level1hash: profile.bonus.data.level1Hash,
     level2hash: profile.bonus.data.level2Hash,
@@ -117,7 +116,7 @@ const mapDispatchToProps = {
 };
 class BonusScreen extends Component {
   shouldComponentUpdate(nextProps) {
-    const nav = nextProps.nav.newState;
+    const nav = nextProps.navigation.newState;
     let isActiveScreen = false;
 
     if (nav) {
@@ -276,7 +275,7 @@ class BonusScreen extends Component {
   };
 
   onPressBonusInfo = () =>
-    this.props.navigation.navigate('BonusScreenInfo', {
+    this.props.navigation.navigateDeprecated('BonusScreenInfo', {
       refererScreen: 'profile/bonus',
       returnScreen: 'BonusScreen',
     });

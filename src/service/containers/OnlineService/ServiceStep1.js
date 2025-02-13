@@ -21,7 +21,7 @@ import Analytics from '../../../utils/amplitude-analytics';
 import API from '../../../utils/api';
 import ToastAlert from '../../../core/components/ToastAlert';
 
-const mapStateToProps = ({dealer, profile, nav}) => {
+const mapStateToProps = ({dealer, profile}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
 
   let carLocalBrand = undefined;
@@ -53,7 +53,6 @@ const mapStateToProps = ({dealer, profile, nav}) => {
   }
 
   return {
-    nav,
     allDealers: dealer.listDealers,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
@@ -583,7 +582,7 @@ const ServiceStep1 = props => {
       pushProps.SERVICETYPE = null;
     }
     const dataForNextScreen = {...serviceData, ...pushProps, ...extData};
-    navigation.navigate(nextScreen, dataForNextScreen);
+    navigation.navigateDeprecated(nextScreen, dataForNextScreen);
   };
 
   return (

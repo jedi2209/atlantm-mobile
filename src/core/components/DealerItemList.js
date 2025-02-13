@@ -38,7 +38,7 @@ const stylesDealerItemList = StyleSheet.create({
     letterSpacing: styleConst.ui.letterSpacing,
   },
   name: {
-    fontSize: 17,
+    fontSize: 14,
   },
 });
 
@@ -58,7 +58,7 @@ const _onPressDealer = props => {
     return;
   }
 
-  return navigation.navigate('ChooseDealerScreen', {
+  return navigation.navigateDeprecated('ChooseDealerScreen', {
     returnScreen,
     returnState,
     goBack,
@@ -194,7 +194,7 @@ const DealerItemList = props => {
           <Text
             style={stylesDealerItemList.name}
             ellipsizeMode="tail"
-            numberOfLines={2}>
+            numberOfLines={1}>
             {dealerPlaceholder}
           </Text>
           {false && dealer && dealer.city && !placeholder ? (

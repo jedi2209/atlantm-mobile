@@ -17,14 +17,13 @@ import {getHumanTime} from '../../../utils/date';
 import Analytics from '../../../utils/amplitude-analytics';
 import ToastAlert from '../../../core/components/ToastAlert';
 
-const mapStateToProps = ({dealer, service, nav}) => {
+const mapStateToProps = ({dealer, service}) => {
   let carLocalBrand = '';
   let carLocalModel = '';
   let carLocalNumber = '';
   let carLocalVin = '';
 
   return {
-    nav,
     allDealers: dealer.listDealers,
     date: service.date,
     firstName: UserData.get('NAME'),
@@ -120,7 +119,7 @@ const ServiceStep2 = props => {
           });
         } else {
           setServiceData({lead: true, loading: false, needUpdate: false});
-          return navigation.navigate('ServiceStep3', {
+          return navigation.navigateDeprecated('ServiceStep3', {
             ...orderData,
             ...serviceData,
           });
@@ -371,7 +370,7 @@ const ServiceStep2 = props => {
       pushProps.SERVICESecondFull = serviceData.itemFullSelected;
     }
     delete serviceData.itemFullSelected;
-    navigation.navigate('ServiceStep3', {
+    navigation.navigateDeprecated('ServiceStep3', {
       ...orderData,
       ...serviceData,
       ...pushProps,

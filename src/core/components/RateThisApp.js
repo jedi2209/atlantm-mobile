@@ -15,7 +15,7 @@ import {
   actionMenuOpenedCount,
 } from '../actions';
 
-const mapStateToProps = ({core, dealer}) => {
+const mapStateToProps = ({core}) => {
   return {
     menuOpenedCount: core.menuOpenedCount,
     isStoreUpdated: core.isStoreUpdated,
@@ -83,7 +83,7 @@ const RateThisApp = props => {
         </Dialog.Content>
         <Dialog.Actions>
           <Button textColor={styleConst.color.red} onPress={() => {
-            navigation.navigate('FeedbackScreen');
+            navigation.navigateDeprecated('FeedbackScreen');
             hideDialog();
           }}>{strings.RateThisApp.no}</Button>
           <Button onPress={() => hideDialog()} textColor={styleConst.color.darkBg}>{strings.Notifications.UpdatePopup.later}</Button>

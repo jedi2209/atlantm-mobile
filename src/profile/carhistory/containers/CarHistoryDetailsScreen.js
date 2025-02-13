@@ -97,9 +97,8 @@ const modalStyles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({nav, profile}) => {
+const mapStateToProps = ({profile}) => {
   return {
-    nav,
     profile: profile.login,
     details: profile.carHistory.details,
     isFetchCarHistoryDetails: profile.carHistory.meta.isFetchCarHistoryDetails,

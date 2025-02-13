@@ -42,9 +42,8 @@ import getStatusWorktime from '../../../utils/worktime-status';
 import styles from '../../CarStyles';
 import CreditBanner from '../../components/CreditBanner';
 
-const mapStateToProps = ({catalog, dealer, nav}) => {
+const mapStateToProps = ({catalog, dealer}) => {
   return {
-    nav,
     region: dealer.region,
     listCities: dealer.listCities,
     listDealers: dealer.listDealers,
@@ -88,7 +87,7 @@ const UsedCarItemScreen = props => {
   const isPriceShow = get(route, 'params.showPrice');
 
   const onPressOrder = () => {
-    navigation.navigate('OrderScreen', {
+    navigation.navigateDeprecated('OrderScreen', {
       car: {
         brand: get(carDetails, 'brand.name', ''),
         model: get(carDetails, 'model', ''),
@@ -103,7 +102,7 @@ const UsedCarItemScreen = props => {
   };
 
   const onPressMyPrice = () => {
-    navigation.navigate('OrderMyPriceScreen', {
+    navigation.navigateDeprecated('OrderMyPriceScreen', {
       car: {
         brand: get(carDetails, 'brand.name', ''),
         model: get(carDetails, 'model', ''),
@@ -118,7 +117,7 @@ const UsedCarItemScreen = props => {
   };
 
   const onPressTestDrive = () => {
-    navigation.navigate('TestDriveScreen', {
+    navigation.navigateDeprecated('TestDriveScreen', {
       car: {
         brand: get(carDetails, 'brand.name', ''),
         model: get(carDetails, 'model.name', get(carDetails, 'model', ''), ''),
@@ -145,7 +144,7 @@ const UsedCarItemScreen = props => {
           {
             text: strings.ContactsScreen.closedDealer.yes,
             onPress: () => {
-              navigation.navigate('CallMeBackScreen', {
+              navigation.navigateDeprecated('CallMeBackScreen', {
                 dealerCustom: listDealers[carDetails.dealer.id],
                 dealerHide: true,
                 carId: carDetails.id.api,
@@ -161,7 +160,7 @@ const UsedCarItemScreen = props => {
   };
 
   const onPressCallMe = () => {
-    navigation.navigate('CallMeBackScreen', {
+    navigation.navigateDeprecated('CallMeBackScreen', {
       dealerCustom: listDealers[carDetails.dealer.id],
       dealerHide: true,
       carId: carDetails.id.api,
@@ -192,7 +191,7 @@ const UsedCarItemScreen = props => {
     return (
       <Pressable
         onPress={() => {
-          navigation.navigate('CarCostScreen', {
+          navigation.navigateDeprecated('CarCostScreen', {
             Text:
               'Интересует обмен на ' +
               [
@@ -279,7 +278,7 @@ const UsedCarItemScreen = props => {
   };
 
   const onPressMap = () => {
-    navigation.navigate('MapScreen', {
+    navigation.navigateDeprecated('MapScreen', {
       name: get(carDetails, 'dealer.name'),
       city: get(carDetails, 'location.city.name'),
       address: get(carDetails, 'location.address'),
@@ -394,7 +393,7 @@ const UsedCarItemScreen = props => {
   });
 
   return (
-    <>
+    <View>
       <ScrollView
         backgroundColor={styleConst.color.white}
         testID="UsedCarItemScreen.Wrapper">
@@ -487,7 +486,7 @@ const UsedCarItemScreen = props => {
                 showsHorizontalScrollIndicator={false}
                 bounces={true}
                 testID="NewCarItemScreen.PlatesWrapper">
-                <HStack px="2%" mb="3">
+                <HStack px={'1%'} mb="3">
                   {get(carDetails, 'mileage') ? (
                     <OptionPlate
                       title={strings.NewCarItemScreen.plates.mileage}
@@ -856,7 +855,7 @@ const UsedCarItemScreen = props => {
         {carDetails.creditAvailable ? (
         <CreditBanner
           onPress={() => {
-              navigation.navigate('CreditCalcScreen', {
+              navigation.navigateDeprecated('CreditCalcScreen', {
               carID: carDetails.id.api,
               carData: carDetails,
               isPriceShow,
@@ -980,7 +979,7 @@ const UsedCarItemScreen = props => {
         }
         placement="bottom-right"
         onPress={() =>
-          navigation.navigate('ChatScreen', {
+          navigation.navigateDeprecated('ChatScreen', {
             prevScreen:
               'Поддержанное авто ' +
               [
@@ -996,7 +995,7 @@ const UsedCarItemScreen = props => {
           })
         }
       />
-    </>
+    </View>
   );
 };
 
@@ -1007,7 +1006,7 @@ const stylesFooter = StyleSheet.create({
     marginHorizontal: '5%',
     width: '90%',
     backgroundColor: 'rgba(0,0,0,0)',
-    marginBottom: 20,
+    marginBottom: 40,
     position: 'absolute',
     bottom: 0,
     flex: 1,

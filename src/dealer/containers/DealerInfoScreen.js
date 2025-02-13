@@ -119,11 +119,10 @@ const styles = StyleSheet.create({
 const deviceWidth = Number(Dimensions.get('window').width) || 350;
 const cardWidth = deviceWidth - 50;
 
-const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
+const mapStateToProps = ({dealer, profile, contacts, info, core}) => {
   return {
     infoList: info.listDealer,
     isFetchInfoList: info.meta.isFetchInfoList,
-    nav,
     profile,
     dealerSelected: dealer.selected,
     isСallMeRequest: contacts.isСallMeRequest,
@@ -171,7 +170,7 @@ const _renderInfoList = params => {
             {strings.ContactsScreen.currentActions}
           </Text>
           <Text
-            onPress={() => navigation.navigate('InfoList', {dealerID})}
+            onPress={() => navigation.navigateDeprecated('InfoList', {dealerID})}
             color={styleConst.color.lightBlue}
             fontSize={14}
             paddingLeft={4}>
@@ -440,7 +439,7 @@ const DealerInfoScreen = ({
                       {
                         text: strings.ContactsScreen.closedDealer.yes,
                         onPress: () => {
-                          navigation.navigate('CallMeBackScreen', {
+                          navigation.navigateDeprecated('CallMeBackScreen', {
                             dealerCustom: dealerSelected,
                           });
                         },
@@ -679,18 +678,18 @@ const DealerInfoScreen = ({
   };
 
   const onPressCallMe = async () => {
-    navigation.navigate('CallMeBackScreen', {
+    navigation.navigateDeprecated('CallMeBackScreen', {
       dealerCustom: dealerSelected,
       dealerHide: true,
     });
   };
 
   const onPressChat = () => {
-    navigation.navigate('ChatScreen', {prevScreen: 'Экран автоцентра'});
+    navigation.navigateDeprecated('ChatScreen', {prevScreen: 'Экран автоцентра'});
   };
 
   const onPressMap = addressData => {
-    navigation.navigate('MapScreen', {
+    navigation.navigateDeprecated('MapScreen', {
       returnScreen: 'DealerInfoScreen',
       name: get(addressData, 'text'),
       city: get(addressData, 'city.name'),
@@ -700,7 +699,7 @@ const DealerInfoScreen = ({
   };
 
   const onPressTime = () => {
-    navigation.navigate('WorkTimeScreen', {
+    navigation.navigateDeprecated('WorkTimeScreen', {
       returnScreen: 'DealerInfoScreen',
     });
   };

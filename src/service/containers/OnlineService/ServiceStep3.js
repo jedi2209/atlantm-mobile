@@ -32,9 +32,8 @@ import {strings} from '../../../core/lang/const';
 
 import styleConst from '../../../core/style-const';
 
-const mapStateToProps = ({dealer, service, nav}) => {
+const mapStateToProps = ({service}) => {
   return {
-    nav,
     date: service.date,
   };
 };
@@ -219,7 +218,7 @@ const ServiceStep3 = props => {
     ) {
       pushProps.lead = true;
     }
-    navigation.navigate('ServiceStep4', {
+    navigation.navigateDeprecated('ServiceStep4', {
       ...orderData,
       ...pushProps,
     });

@@ -29,9 +29,8 @@ import {strings} from '../../../core/lang/const';
 import {ERROR_NETWORK} from '../../../core/const';
 import styleConst from '../../../core/style-const';
 
-const mapStateToProps = ({dealer, eko, nav, profile}) => {
+const mapStateToProps = ({eko, profile}) => {
   return {
-    nav,
     login: profile.login,
     firstName: UserData.get('NAME'),
     secondName: UserData.get('SECOND_NAME'),
@@ -120,7 +119,7 @@ const ReviewAddRatingStepScreen = props => {
         Analytics.logEvent('order', 'eko/review_add');
         setSendingFormStatus(true);
         setTimeout(() => {
-          navigation.navigate('ReviewsScreenMain');
+          navigation.navigateDeprecated('ReviewsScreenMain');
         }, 500);
       }
 

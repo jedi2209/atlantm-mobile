@@ -51,7 +51,7 @@ const _renderCarsItems = ({navigation, carsScrollView, carsData}) => {
             activeOpacity={1}
             key={item.vin}
             onPress={() => {
-              navigation.navigate('CarInfoScreen', {car: item});
+              navigation.navigateDeprecated('CarInfoScreen', {car: item});
               return;
             }}>
             <View

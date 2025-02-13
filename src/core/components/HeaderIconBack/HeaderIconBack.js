@@ -20,7 +20,6 @@ const styles = StyleSheet.create({
     height: containerSize,
     justifyContent: 'center',
     alignItems: 'center',
-    flex: 1,
   },
   inner: {
     justifyContent: 'center',

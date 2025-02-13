@@ -42,9 +42,8 @@ import {
 import {strings} from '../../../core/lang/const';
 import styleConst from '../../../core/style-const';
 
-const mapStateToProps = ({eko, nav}) => {
+const mapStateToProps = ({eko}) => {
   return {
-    nav,
     filterDatePeriod: eko.reviews.filterDatePeriod,
     filterRatingFrom: eko.reviews.filterRatingFrom,
     filterRatingTo: eko.reviews.filterRatingTo,

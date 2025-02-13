@@ -195,7 +195,7 @@ export const CreditCardItem = ({item, onPressOrder, index, separators, hidePayme
                   mode="text"
                   compact={true}
                   iconColor={styleConst.color.blue}
-                  onPress={() => navigation.navigate('CreditPaymentsDetailScreen', {creditPayments: itemCalc})}>
+                  onPress={() => navigation.navigateDeprecated('CreditPaymentsDetailScreen', {creditPayments: itemCalc})}>
                   график платежей
                 </Button>
               ) : null}

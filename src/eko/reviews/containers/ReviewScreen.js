@@ -26,9 +26,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({dealer, eko, nav}) => {
+const mapStateToProps = ({dealer, eko}) => {
   return {
-    nav,
     reviewDealerRating: eko.reviews.reviewDealerRating,
     isFetchDealerRating: eko.reviews.meta.isFetchDealerRating,
     dealerSelectedLocal: dealer.selectedLocal,

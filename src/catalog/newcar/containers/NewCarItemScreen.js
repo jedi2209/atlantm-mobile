@@ -51,9 +51,8 @@ import CreditBanner from '../../components/CreditBanner';
 
 const {width: screenWidth} = Dimensions.get('window');
 
-const mapStateToProps = ({catalog, dealer, profile, nav}) => {
+const mapStateToProps = ({catalog, dealer, profile}) => {
   return {
-    nav,
     dealersList: {
       ru: dealer.listRussia,
       by: dealer.listBelarussia,
@@ -391,7 +390,7 @@ const _onPressMap = ({carDetails, navigation}) => {
   if (!coords) {
     coords = get(carDetails, 'coords');
   }
-  navigation.navigate('MapScreen', {
+  navigation.navigateDeprecated('MapScreen', {
     name: get(carDetails, 'dealer.name'),
     city: get(carDetails, 'city.name'),
     address: get(carDetails, 'dealer.name'),
@@ -436,7 +435,7 @@ const _onPressOrder = ({carDetails, profile, navigation, region}) => {
         {
           text: strings.NewCarItemScreen.sendQuery,
           onPress: () => {
-            navigation.navigate('OrderScreen', {
+            navigation.navigateDeprecated('OrderScreen', {
               car: {
                 brand: get(carDetails, 'brand.name'),
                 model: get(carDetails, 'model.name'),
@@ -467,7 +466,7 @@ const _onPressOrder = ({carDetails, profile, navigation, region}) => {
       {cancelable: true},
     );
   } else {
-    navigation.navigate('OrderScreen', {
+    navigation.navigateDeprecated('OrderScreen', {
       car: {
         brand: get(carDetails, 'brand.name'),
         model: get(carDetails, 'model.name'),
@@ -492,7 +491,7 @@ const _onPressTestDrive = ({carDetails, navigation, region}) => {
       get(carDetails, 'price.app.standart') || get(carDetails, 'price.app'),
   };
 
-  return navigation.navigate('TestDriveScreen', {
+  return navigation.navigateDeprecated('TestDriveScreen', {
     car: {
       brand: get(carDetails, 'brand.name'),
       model: get(carDetails, 'model.name'),
@@ -1032,7 +1031,7 @@ const NewCarItemScreen = ({
         </View>
         <CreditBanner
         onPress={() => {
-            navigation.navigate('CreditCalcScreen', {
+            navigation.navigateDeprecated('CreditCalcScreen', {
             carID: carDetails.id.api,
             carData: carDetails,
             isNewCar: true,
@@ -1117,7 +1116,7 @@ const NewCarItemScreen = ({
           }
           placement="bottom-right"
           onPress={() =>
-            navigation.navigate('ChatScreen', {
+            navigation.navigateDeprecated('ChatScreen', {
               prevScreen:
                 'Новое авто ' +
                 [

@@ -33,7 +33,7 @@ import ActionSheetMenu from '../../core/components/ActionSheetMenu';
 import {ClassicHeaderWhite, BigCloseButton} from '../../navigation/const';
 import {BELARUSSIA} from '../../core/const';
 
-const mapStateToProps = ({dealer, profile, contacts, nav, info, core}) => {
+const mapStateToProps = ({dealer}) => {
   return {
     region: dealer.region,
   };
@@ -175,7 +175,7 @@ const headerRight = ({navigation}) => {
   return (
     <View style={[stylesHeader.headerRightStyle, styles[headerRightStyle]]}>
       <RNBounceable
-        onPress={() => navigation.navigate('NotificationsScreen', {})}>
+        onPress={() => navigation.navigateDeprecated('NotificationsScreen', {})}>
         <Icon
           size={7}
           as={Ionicons}
@@ -317,7 +317,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             headerRight: () => headerRight({navigation}),
             headerBackButtonMenuEnabled: false,
             headerBackVisible: false,
-            headerBackTitleVisible: false,
+            headerBackButtonDisplayMode: 'minimal',
             tabBarLabel: strings.Menu.bottom.main,
             tabBarLabelStyle: {
               fontSize: 14,
@@ -332,7 +332,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
               },
               styles[headerStyle],
             ],
-            tabBarTestID: 'BottomMenu.Home',
+            tabBarButtonTestID: 'BottomMenu.Home',
             tabBarIcon: ({focused, color}) => (
               <Icon
                 size={focused ? iconSizeFocused : iconSize}
@@ -353,7 +353,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             tabPress: e => {
               e.preventDefault();
               Analytics.logEvent('click', 'bottomMenu/catalogSearch');
-              navigation.navigate('CarsStock');
+              navigation.navigateDeprecated('CarsStock');
             },
           }}
           options={{
@@ -362,7 +362,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             tabBarLabelStyle: {
               fontSize: 14,
             },
-            tabBarTestID: 'BottomMenu.NewCars',
+            tabBarButtonTestID: 'BottomMenu.NewCars',
             tabBarIcon: ({color, focused}) => (
               <Icon
                 size={focused ? iconSizeFocused : iconSize}
@@ -392,7 +392,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             tabBarLabelStyle: {
               fontSize: 14,
             },
-            tabBarTestID: 'BottomMenu.Profile',
+            tabBarButtonTestID: 'BottomMenu.Profile',
             tabBarIcon: ({color, focused}) => (
               <Icon
                 size={focused ? iconSizeFocused : iconSize}
@@ -422,7 +422,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
             tabBarLabelStyle: {
               fontSize: 14,
             },
-            tabBarTestID: 'BottomMenu.Orders',
+            tabBarButtonTestID: 'BottomMenu.Orders',
             tabBarIcon: ({color, focused}) => (
               <Icon
                 size={focused ? iconSizeFocused : iconSize}
@@ -445,7 +445,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
               tabPress: e => {
                 e.preventDefault();
                 Analytics.logEvent('click', 'bottomMenu/chat');
-                navigation.navigate('ChatScreen');
+                navigation.navigateDeprecated('ChatScreen');
               },
             }}
             options={{
@@ -454,7 +454,7 @@ const BottomTabNavigation = ({navigation, route, region}) => {
               tabBarLabelStyle: {
                 fontSize: 14,
               },
-              tabBarTestID: 'BottomMenu.Chat',
+              tabBarButtonTestID: 'BottomMenu.Chat',
               tabBarIcon: ({color, focused}) => (
                 <Icon
                   size={focused ? iconSizeFocused : iconSize}

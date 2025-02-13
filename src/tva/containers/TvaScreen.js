@@ -22,7 +22,7 @@ import {strings} from '../../core/lang/const';
 import styleConst from '../../core/style-const';
 import {BELARUSSIA, ERROR_NETWORK} from '../../core/const';
 
-const mapStateToProps = ({dealer, profile, tva, core}) => {
+const mapStateToProps = ({dealer, profile, tva}) => {
   return {
     region: dealer.region,
     isTvaRequest: tva.meta.isRequest,
@@ -205,7 +205,7 @@ const TvaScreen = props => {
           } else {
             PushNotifications.unsubscribeFromTopic('tva');
           }
-          navigation.navigate('TvaResultsScreen');
+          navigation.navigateDeprecated('TvaResultsScreen');
           break;
         case TVA__FAIL:
           toast.show({
@@ -266,7 +266,7 @@ const TvaScreen = props => {
           style={{backgroundColor: styleConst.new.blueHeader}}
           mb={8}
           onPress={() =>
-            navigation.navigate('ChatScreen', {
+            navigation.navigateDeprecated('ChatScreen', {
               prevScreen: carNumber ? 'ТВА -- ' + carNumber : 'ТВА',
             })
           }

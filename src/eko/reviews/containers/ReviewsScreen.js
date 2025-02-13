@@ -36,9 +36,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = ({dealer, nav, eko}) => {
+const mapStateToProps = ({dealer, eko}) => {
   return {
-    nav,
     dealerSelectedLocal: dealer.selectedLocal,
     reviews: eko.reviews.items,
     pages: eko.reviews.pages,
@@ -93,7 +92,7 @@ const ReviewsScreen = props => {
 
   useEffect(() => {
     if (!dealerSelectedLocal) {
-      navigation.navigate('ChooseDealerScreen', {
+      navigation.navigateDeprecated('ChooseDealerScreen', {
         returnScreen: route.name,
         goBack: true,
         isLocal: true,
@@ -109,7 +108,7 @@ const ReviewsScreen = props => {
   }, []);
 
   const _onPressItem = review => {
-    navigation.navigate('ReviewScreen', {
+    navigation.navigateDeprecated('ReviewScreen', {
       review,
       returnScreen: 'ReviewsScreen',
     });
@@ -183,7 +182,7 @@ const ReviewsScreen = props => {
           />
         }
         placement="bottom-right"
-        onPress={() => navigation.navigate('ReviewAddMessageStepScreen')}
+        onPress={() => navigation.navigateDeprecated('ReviewAddMessageStepScreen')}
       />
     </SafeAreaView>
   );

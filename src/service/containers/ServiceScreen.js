@@ -28,7 +28,7 @@ import {ERROR_NETWORK} from '../../core/const';
 import {SERVICE_ORDER__SUCCESS, SERVICE_ORDER__FAIL} from '../actionTypes';
 import {strings} from '../../core/lang/const';
 
-const mapStateToProps = ({dealer, profile, service, nav}) => {
+const mapStateToProps = ({dealer, profile, service}) => {
   const cars = orderBy(profile.cars, ['owner'], ['desc']);
   let carLocalVin = '',
     carLocalBrand = '',
@@ -48,7 +48,6 @@ const mapStateToProps = ({dealer, profile, service, nav}) => {
 
   return {
     cars,
-    nav,
     allDealers: dealer.listDealers,
     dealerSelectedLocal: dealer.selectedLocal,
     firstName: UserData.get('NAME'),
@@ -413,7 +412,7 @@ const ServiceScreen = props => {
                         rounded={'lg'}
                         _text={{padding: 1}}
                         onPress={() => {
-                          navigation.navigate('Profile', {
+                          navigation.navigateDeprecated('Profile', {
                             screen: 'LoginScreen',
                             activePanel: 'hidden',
                           });
