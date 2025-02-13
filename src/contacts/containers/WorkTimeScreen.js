@@ -134,101 +134,99 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
   const [actionSheetData, setActionSheetData] = useState({});
   const {isOpen, onOpen, onClose} = useDisclose();
 
-  const renderLocations = locations => {
-    return locations.map((val, num) => {
-      const phoneMobile = get(val, 'phoneMobile', []);
-      return (
-        <View key={'dealerLocation' + num}>
-          <Stack space={2} px={2} mt={2} mb={2}>
-            <HStack justifyContent={'space-between'}>
-              <VStack w={'87%'}>
-                <Heading size="md" ellipsizeMode="tail" numberOfLines={1}>
-                  {get(val, 'name')}
-                </Heading>
-                <Pressable
-                  onPress={() => {
-                    navigation.navigateDeprecated('MapScreen', {
-                      returnScreen: 'Home',
-                      name: get(val, 'name'),
-                      city: get(val, 'city.name'),
-                      address: get(val, 'address'),
-                      coords: get(val, 'coords'),
-                    });
-                  }}>
-                  <Text
-                    fontSize="sm"
-                    _light={{
-                      color: 'blue.500',
-                    }}
-                    _dark={{
-                      color: 'blue.400',
-                    }}
-                    fontWeight="500">
-                    {[get(val, 'city.name'), get(val, 'address')].join(', ')}
-                  </Text>
-                </Pressable>
-              </VStack>
+  const renderLocations = (val, num) => {
+    const phoneMobile = get(val, 'phoneMobile', []);
+    return (
+      <View key={'dealerLocation' + num}>
+        <Stack space={2} px={2} mt={2} mb={2}>
+          <HStack justifyContent={'space-between'}>
+            <VStack w={'87%'}>
+              <Heading size="md" ellipsizeMode="tail" numberOfLines={1}>
+                {get(val, 'name')}
+              </Heading>
               <Pressable
-                borderColor="blue.500"
-                borderWidth="1"
-                p={1}
-                rounded={'lg'}
                 onPress={() => {
-                  if (phoneMobile.length > 1) {
-                    phonesMobile = [];
-                    let i = 1;
-                    phoneMobile.map((phoneVal, phoneNum) => {
-                      phonesMobile.push({
-                        priority: i,
-                        id: 'phoneMobileLocation' + phoneNum,
-                        text: phoneVal,
-                        link: 'tel:' + phoneVal.replace(/[^+\d]+/g, ''),
-                      });
-                      i = i + 1;
-                    });
-                    setActionSheetData({
-                      options: phonesMobile.concat([
-                        {
-                          priority: phonesMobile.length + 1,
-                          id: 'cancel',
-                          text: strings.Base.cancel.toLowerCase(),
-                          icon: {
-                            name: 'close',
-                            color: '#f70707',
-                          },
-                        },
-                      ]),
-                      cancelButtonIndex: phonesMobile.length - 1,
-                      title: strings.ContactsScreen.call,
-                      destructiveButtonIndex: phonesMobile.length - 1 || null,
-                    });
-                    onOpen();
-                  } else {
-                    Linking.openURL(
-                      'tel:' + phoneMobile[0].replace(/[^+\d]+/g, ''),
-                    ).catch(
-                      console.error('phoneMobile[0] failed', phoneMobile),
-                    );
-                  }
+                  navigation.navigateDeprecated('MapScreen', {
+                    returnScreen: 'Home',
+                    name: get(val, 'name'),
+                    city: get(val, 'city.name'),
+                    address: get(val, 'address'),
+                    coords: get(val, 'coords'),
+                  });
                 }}>
-                <Icon
-                  size={8}
-                  as={MaterialIcons}
-                  name="phone"
-                  color="blue.500"
-                  _dark={{
+                <Text
+                  fontSize="sm"
+                  _light={{
                     color: 'blue.500',
                   }}
-                />
+                  _dark={{
+                    color: 'blue.400',
+                  }}
+                  fontWeight="500">
+                  {[get(val, 'city.name'), get(val, 'address')].join(', ')}
+                </Text>
               </Pressable>
-            </HStack>
-          </Stack>
-          <VStack space={3} px={2} mb={4}>
-            {_renderDivision(get(val, 'divisions', null))}
-          </VStack>
-        </View>
-      );
-    });
+            </VStack>
+            <Pressable
+              borderColor="blue.500"
+              borderWidth="1"
+              p={1}
+              rounded={'lg'}
+              onPress={() => {
+                if (phoneMobile.length > 1) {
+                  phonesMobile = [];
+                  let i = 1;
+                  phoneMobile.map((phoneVal, phoneNum) => {
+                    phonesMobile.push({
+                      priority: i,
+                      id: 'phoneMobileLocation' + phoneNum,
+                      text: phoneVal,
+                      link: 'tel:' + phoneVal.replace(/[^+\d]+/g, ''),
+                    });
+                    i = i + 1;
+                  });
+                  setActionSheetData({
+                    options: phonesMobile.concat([
+                      {
+                        priority: phonesMobile.length + 1,
+                        id: 'cancel',
+                        text: strings.Base.cancel.toLowerCase(),
+                        icon: {
+                          name: 'close',
+                          color: '#f70707',
+                        },
+                      },
+                    ]),
+                    cancelButtonIndex: phonesMobile.length - 1,
+                    title: strings.ContactsScreen.call,
+                    destructiveButtonIndex: phonesMobile.length - 1 || null,
+                  });
+                  onOpen();
+                } else {
+                  Linking.openURL(
+                    'tel:' + phoneMobile[0].replace(/[^+\d]+/g, ''),
+                  ).catch(
+                    console.error('phoneMobile[0] failed', phoneMobile),
+                  );
+                }
+              }}>
+              <Icon
+                size={8}
+                as={MaterialIcons}
+                name="phone"
+                color="blue.500"
+                _dark={{
+                  color: 'blue.500',
+                }}
+              />
+            </Pressable>
+          </HStack>
+        </Stack>
+        <VStack space={3} px={2} mb={4}>
+          {_renderDivision(get(val, 'divisions', null))}
+        </VStack>
+      </View>
+    );
   };
 
   return (
@@ -245,7 +243,9 @@ const WorkTimeScreen = ({dealerSelected, navigation, phonesMobile}) => {
             cache: 'web',
           }}
         />
-        <View>{renderLocations(dealerSelected.locations)}</View>
+        <View>{get(dealerSelected, 'locations', []).map((val, num) => {
+          renderLocations(val, num);
+        })}</View>
       </ScrollView>
       <ActionSheetMenu
         onOpen={onOpen}

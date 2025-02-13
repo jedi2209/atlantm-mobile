@@ -95,7 +95,7 @@ const yearItems = [];
 const minDate = new Date(substractYears(100)).getUTCFullYear();
 const maxDate = new Date().getUTCFullYear();
 if (minDate && maxDate) {
-  for (var i = minDate; i <= maxDate; i++) {
+  for (let i = minDate; i <= maxDate; i++) {
     yearItems.push({
       label: i.toString(),
       value: i,
