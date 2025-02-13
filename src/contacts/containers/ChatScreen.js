@@ -87,8 +87,7 @@ const ChatScreen = ({
   useEffect(() => {
     Orientation.lockToPortrait();
     console.info('== ChatScreen ==');
-    let userID = get(userTmp, 'id');
-    const oneSignalData = async () => {
+    const oneSignalData = async userID => {
       if (userID === null || userID === undefined) {
         const userDeviceTmp = await PushNotifications.getUserID();
         let senderIDNew = getUserID(userDeviceTmp);
@@ -101,6 +100,7 @@ const ChatScreen = ({
       }
     };
 
+    let userID = get(userTmp, 'id');
     oneSignalData(userID);
     loadCookies();
   }, []);

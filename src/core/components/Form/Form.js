@@ -44,8 +44,6 @@ import {
   APP_LOCALE,
   APP_COUNTRY_SETTINGS,
   APP_COUNTRY_LIST,
-  RUSSIA,
-  BELARUSSIA,
   UKRAINE,
 } from '../../const';
 
@@ -268,12 +266,6 @@ const pickerSelectStyles = StyleSheet.create({
 
 const isAndroid = Platform.OS === 'android';
 
-const MaskedPhone = {
-  ru: '+7 (9[00]) [000]-[00]-[00]',
-  by: '+375 ([00]) [000]-[00]-[00]',
-  ua: '+380 ([00]) [000]-[00]-[00]',
-};
-
 const _Wrapper = props => {
   if (props.scrollViewWrapperAvailable) {
     return (
@@ -407,16 +399,6 @@ class Form extends Component {
     this.state.required = requredFields;
     this.locale = APP_LOCALE[APP_REGION];
   }
-
-  // componentWillUnmount() {
-  //   this.state = {};
-  //   this.inputRefs = [];
-  //   this.inputRefsNav = [];
-  //   let requredFields = [];
-  //   this.allFields = [];
-  // }
-
-  _setFieldValue(field) {}
 
   _validate = () => {
     let requredLabels = [];
@@ -555,61 +537,6 @@ class Form extends Component {
       return false;
     }
     return true;
-  };
-
-  _validatePhone = ({value, id, name, data, groupNum, num, countriesCodes}) => {
-    const countryCode = PhoneDetect.getCountryCodeByMask(value);
-    if (id) {
-      this.setState(prevState => {
-        let copyField = Object.assign({}, prevState[name]); // creating copy of state variable jasper
-        copyField[id].value = value.replace(/[^\d.+]/g, ''); // update the name property, assign a new value
-        let maskLength = copyField[id].mask.replace(/[^0]/g, '');
-        // if (pureValue.length === maskLength.length) {
-        //   return {
-        //     [name]: copyField,
-        //     showSubmitButton: true,
-        //   };
-        // } else {
-        //   if (this.state.showSubmitButton) {
-        //     return {
-        //       showSubmitButton: false,
-        //     };
-        //   }
-        // }
-      });
-    } else {
-      if (!countriesCodes[countryCode]) {
-        var valueFull = null;
-      } else {
-        switch (countryCode) {
-          case RUSSIA:
-          case UKRAINE:
-            var valueFull = 16;
-            break;
-          case BELARUSSIA:
-            var valueFull = 17;
-            break;
-        }
-      }
-      if (value.length === valueFull) {
-        this.setState(
-          {
-            [name]: value.replace(/[^\d.+]/g, ''),
-            showSubmitButton: true,
-          },
-          () => {
-            this._showHideSubmitButton(true);
-            if (data.props.focusNextInput) {
-              this._nextInput(groupNum, num);
-            }
-          },
-        );
-      } else {
-        if (this.state.showSubmitButton && data.props && data.props.required) {
-          this._showHideSubmitButton(false);
-        }
-      }
-    }
   };
 
   _setActive = el => {
