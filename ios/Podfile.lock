@@ -15,27 +15,6 @@ PODS:
     - AppAuth/Core
   - Base64 (1.1.2)
   - boost (1.84.0)
-  - BugsnagReactNative (8.1.3):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
   - BugsnagReactNativePerformance (2.11.0):
     - DoubleConversion
     - glog
@@ -85,9 +64,9 @@ PODS:
   - hermes-engine/Pre-built (0.76.6)
   - JWT (3.0.0-beta.12):
     - Base64 (~> 1.1.2)
-  - LogRocket (1.47.4)
-  - logrocket-react-native (1.47.4):
-    - LogRocket (= 1.47.4)
+  - LogRocket (1.47.9)
+  - logrocket-react-native (1.47.9):
+    - LogRocket (= 1.47.9)
     - React
   - OneSignalXCFramework (5.1.6):
     - OneSignalXCFramework/OneSignalComplete (= 5.1.6)
@@ -1365,7 +1344,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-date-picker (5.0.8):
+  - react-native-date-picker (5.0.10):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1538,7 +1517,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-turbo-image (1.21.0):
+  - react-native-turbo-image (1.22.1):
     - APNGKit
     - DoubleConversion
     - Gifu
@@ -1565,7 +1544,7 @@ PODS:
   - react-native-vkontakte-login (1.0.1):
     - React
     - VK-ios-sdk
-  - react-native-webview (13.13.1):
+  - react-native-webview (13.13.2):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1881,7 +1860,7 @@ PODS:
     - React-Core
   - RNAppleAuthentication (2.4.0):
     - React-Core
-  - RNCAsyncStorage (2.1.0):
+  - RNCAsyncStorage (2.1.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1965,7 +1944,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNDateTimePicker (8.2.0):
+  - RNDateTimePicker (8.3.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1986,9 +1965,9 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNDeviceInfo (14.0.2):
+  - RNDeviceInfo (14.0.4):
     - React-Core
-  - RNGestureHandler (2.22.1):
+  - RNGestureHandler (2.23.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2127,7 +2106,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (4.5.0):
+  - RNScreens (4.6.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2148,9 +2127,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.5.0)
+    - RNScreens/common (= 4.6.0)
     - Yoga
-  - RNScreens/common (4.5.0):
+  - RNScreens/common (4.6.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2172,7 +2151,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNSentry (6.5.0):
+  - RNSentry (6.7.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2193,7 +2172,7 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - Sentry/HybridSDK (= 8.43.0)
+    - Sentry/HybridSDK (= 8.44.0)
     - Yoga
   - RNSha256 (1.4.10):
     - React-Core
@@ -2282,7 +2261,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - Sentry/HybridSDK (8.43.0)
+  - Sentry/HybridSDK (8.44.0)
   - SocketRocket (0.7.1)
   - SwiftSVG (2.3.2)
   - TOCropViewController (2.7.4)
@@ -2293,7 +2272,6 @@ PODS:
 DEPENDENCIES:
   - "amplitude-react-native (from `../node_modules/@amplitude/react-native`)"
   - boost (from `../node_modules/react-native/third-party-podspecs/boost.podspec`)
-  - "BugsnagReactNative (from `../node_modules/@bugsnag/react-native`)"
   - "BugsnagReactNativePerformance (from `../node_modules/@bugsnag/react-native-performance`)"
   - BVLinearGradient (from `../node_modules/react-native-linear-gradient`)
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
@@ -2428,8 +2406,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@amplitude/react-native"
   boost:
     :podspec: "../node_modules/react-native/third-party-podspecs/boost.podspec"
-  BugsnagReactNative:
-    :path: "../node_modules/@bugsnag/react-native"
   BugsnagReactNativePerformance:
     :path: "../node_modules/@bugsnag/react-native-performance"
   BVLinearGradient:
@@ -2642,7 +2618,6 @@ SPEC CHECKSUMS:
   AppAuth: d4f13a8fe0baf391b2108511793e4b479691fb73
   Base64: cecfb41a004124895a7bcee567a89bae5a89d49b
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
-  BugsnagReactNative: e31a500d73f2da755773a1da7a4d79c00026c0a5
   BugsnagReactNativePerformance: 20a343900be273860e3ab8ac09d77620ef1abf10
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
   Delegate: 0ff4467868095239ff578ab531efd8af46e62881
@@ -2658,8 +2633,8 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: 5aea5ba6bd522a239e236100971f10cb71b96ab6
   hermes-engine: 1949ca944b195a8bde7cbf6316b9068e19cf53c6
   JWT: 9b5c05abbcc1a0e69c3c91e1655b3387fc7e581d
-  LogRocket: 2b86160dafc96597a13bf9f374677a1ca929a525
-  logrocket-react-native: 19b0e1ebce3353400c9b61249ec6308639eea33f
+  LogRocket: c993711500cede9b6734794bf5b61f552b492d3c
+  logrocket-react-native: 4f8b70cdd718183e5477e3c9e9e997321456def9
   OneSignalXCFramework: f6533cc1f7a5ddded80ee5fe183901a99ad46f4f
   RCT-Folly: 84578c8756030547307e4572ab1947de1685c599
   RCTDeprecation: 063fc281b30b7dc944c98fe53a7e266dab1a8706
@@ -2690,7 +2665,7 @@ SPEC CHECKSUMS:
   React-logger: d42a53754a7252cc7a851315f0da2e46b450ea92
   React-Mapbuffer: 89885d1518433a462fe64b68bf5e097997380090
   React-microtasksnativemodule: 36341e09dcd1df535503e6ed2ddf88f10da56d52
-  react-native-date-picker: d668a2e77115cf64128c2e0106afd828470294bc
+  react-native-date-picker: 26cdb1a94ec72dbc9210c3379e57ff6ba8bc73f2
   react-native-google-maps: c4f5c5b2dda17e7cb2cb2b37a81f140b039b3e7e
   react-native-in-app-review: b3d1eed3d1596ebf6539804778272c4c65e4a400
   react-native-maps: 9febd31278b35cd21e4fad2cf6fa708993be5dab
@@ -2703,9 +2678,9 @@ SPEC CHECKSUMS:
   react-native-restart: 0bc732f4461709022a742bb29bcccf6bbc5b4863
   react-native-safe-area-context: 0d8827b2420dfb4c8a8e27639585e61b912261be
   react-native-slider: d1a9121980fc81678c6d30b82f312c778fba563c
-  react-native-turbo-image: e883764db7bf3f759b1df152a650dac0e9218417
+  react-native-turbo-image: 87d304ec0a6eeb01ca965ffcda49e0b3b3d98c78
   react-native-vkontakte-login: f3fdc297f56f08f80d7c1209fe76724a08575345
-  react-native-webview: 2da6a129c153ecbb72523f1f67cd43c84be7c42f
+  react-native-webview: dd55f7d3b8c0dcdf8835a44ffc5bd03303dffb30
   React-nativeconfig: 539ff4de6ce3b694e8e751080568c281c84903ce
   React-NativeModulesApple: 702246817c286d057e23fe4b1302019796e62521
   React-perflogger: f260e2de95f9dbd002035251559c13bf1f0643d4
@@ -2737,23 +2712,23 @@ SPEC CHECKSUMS:
   ReactNativeLocalization: 79b100588f6d7a68852b982ccbe57e329e8bb5a7
   rn-fetch-blob: 13834702ae4c003d643eaf5cca9857a4b50b6a7e
   RNAppleAuthentication: 8d313d93fe2238d6b7ff0a39c67ebcf298d96653
-  RNCAsyncStorage: 2edc69cf6db9299363a11477668b7f452f2cb4a6
+  RNCAsyncStorage: d40800ad5002f992f4ebe404055b744b3274b364
   RNCClipboard: bdad452a8a44c90098dab5468152a6f72cb689be
   RNCMaskedView: 8542667cb39fff458c1a1a3f9e70205042636129
   RNCPicker: c657bd58a82b164a957812f82a0b4bab4245de2e
-  RNDateTimePicker: 9ec036a62ad0f5a2d04c1c7829338e87b4e423e7
-  RNDeviceInfo: 801c18d0525e86580900e7b5f562dca0c8c05021
-  RNGestureHandler: b9cd1bda1d2a95d390de0a88e1e41140a5a68e82
+  RNDateTimePicker: cfde47eb14e5ee6b9744f2764bcd1085e6590d9b
+  RNDeviceInfo: d863506092aef7e7af3a1c350c913d867d795047
+  RNGestureHandler: ec23e4d1de3799e1c878f51ad23183fd4bf072d9
   RNGoogleSignin: 6d8a0559ee6d3da693322963821a6ab5ba58243b
   RNImageCropPicker: d5387003612dd08d52fb062760136e0e473df186
   RNReanimated: a2692304a6568bc656c04c8ffea812887d37436e
-  RNScreens: 4c7d5710e955dcf72c14a546e29744f9e591370b
-  RNSentry: a70bb556e187f9e6de6370488f062353351a1b1d
+  RNScreens: 771cbeddcd8e11d1d176f1b637e8846a2036390e
+  RNSentry: d15261b62867cebf0d4746f5359da553a876b9b9
   RNSha256: 4d35f112e967f58273d625a19376f4eafc72bd5c
   RNStoreReview: 304b8fcb0089cf48cf39bc467babfb4789c64a7a
   RNSVG: c50d29abf38abbf48ebfc50b6258f81099aeabae
   RNVectorIcons: a24016b773380b1aa37fca501ec6b94a951890a0
-  Sentry: 532b281a53b1b45a523fd592f608956fb36e577c
+  Sentry: 0f9bc9adfc0b960e7f3bb5ec67e9a3d8193f3bdb
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   SwiftSVG: ca7f64e403b8ea7ea8eba8c823b83ba4a059834c
   TOCropViewController: 80b8985ad794298fb69d3341de183f33d1853654
