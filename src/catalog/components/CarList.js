@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useEffect} from 'react';
 import BigList from 'react-native-big-list';
+import {View} from 'native-base';
 
 // redux
 import {
@@ -84,7 +85,7 @@ const CarList = props => {
 
   const _renderFooter = () => {
     if (!loadingNextPage) {
-      return null;
+      return <View mt={15} />;
     }
 
     return (
