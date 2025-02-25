@@ -135,7 +135,8 @@ platform :ios do
         notify_external_testers: true,
         changelog: lane_context[SharedValues::FL_CHANGELOG],
         groups: [
-          "Zavarka Team"
+          "Zavarka Team",
+          "Atlant-M"
         ],
         api_key: api_key
     )
