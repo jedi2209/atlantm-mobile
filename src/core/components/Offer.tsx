@@ -2,7 +2,7 @@
 import React from 'react';
 
 import {useSelector} from 'react-redux';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, StyleProp, ViewStyle, ImageStyle} from 'react-native';
 import {Pressable, View, Text, VStack} from 'native-base';
 import * as NavigationService from '../../navigation/NavigationService';
 
@@ -42,7 +42,14 @@ const styles = StyleSheet.create({
   },
 });
 
-const ImageWrapper = props => {
+interface ImageWrapperProps {
+  pressable?: boolean;
+  onPress?: () => void;
+  children: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
+}
+
+const ImageWrapper: React.FC<ImageWrapperProps> = props => {
   if (props.pressable) {
     return <RNBounceable {...props} />;
   } else {
@@ -50,7 +57,15 @@ const ImageWrapper = props => {
   }
 };
 
-const MainWrapper = props => {
+interface MainWrapperProps {
+  bounceable?: boolean;
+  onPress?: () => void;
+  children: React.ReactNode;
+  testID?: string;
+  style?: StyleProp<ViewStyle>;
+}
+
+const MainWrapper: React.FC<MainWrapperProps> = props => {
   if (props.bounceable) {
     return <RNBounceable {...props} />;
   } else {
@@ -58,7 +73,33 @@ const MainWrapper = props => {
   }
 };
 
-const Offer = ({
+interface OfferProps {
+  imagePressable?: boolean;
+  bounceable?: boolean;
+  dealerCustom?: any;
+  data: {
+    id: string;
+    date: string;
+    type?: {
+      badge?: {
+        background: string;
+        color: string;
+      };
+      name: Record<string, string>;
+    };
+    img: {
+      main?: string;
+    };
+    name: string;
+    announce?: string;
+  };
+  height: number;
+  cardWidth: number;
+  theme: 'round' | 'default';
+  imageStyle?: StyleProp<ImageStyle>;
+}
+
+const Offer: React.FC<OfferProps> = ({
   imagePressable = false,
   bounceable = false,
   dealerCustom = null,
@@ -68,7 +109,7 @@ const Offer = ({
   theme,
   imageStyle,
 }) => {
-  const currLang = useSelector(state => state.core.language.selected);
+  const currLang = useSelector((state: any) => state.core.language.selected);
 
   const params = {
     id: data.id,
@@ -76,6 +117,7 @@ const Offer = ({
     type: data?.type,
     dealerCustom,
   };
+
   return (
     <MainWrapper
       testID="OfferItemWrapper"
@@ -105,9 +147,7 @@ const Offer = ({
         </ImageWrapper>
       ) : null}
       <View backgroundColor={theme === 'round' ? 'none' : styleConst.color.bg}>
-        <VStack
-          numberOfLines={3}
-          paddingHorizontal={theme === 'round' ? 10 : 0}>
+        <VStack>
           <Text
             fontSize={20}
             fontWeight={'bold'}
@@ -123,9 +163,9 @@ const Offer = ({
                 id={params.id}
                 key={'badgeItem' + params.id}
                 index={0}
-                bgColor={params.type.badge?.background}
-                name={params.type.name[currLang]}
-                textColor={params.type.badge?.color}
+                bgColor={params.type?.badge?.background}
+                name={params.type?.name?.[currLang] || null}
+                textColor={params.type?.badge?.color}
               />
             </View>
           ) : null}

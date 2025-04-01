@@ -1,7 +1,7 @@
 import React from 'react';
-import {Dimensions, StyleSheet} from 'react-native';
-import WebView from 'react-native-webview';
-import {APP_REGION} from '../const';
+import { Dimensions, StyleSheet, ViewStyle } from 'react-native';
+import WebView, { WebViewProps } from 'react-native-webview';
+import { APP_REGION } from '../const';
 
 const deviceHeight = Dimensions.get('window').height;
 
@@ -10,15 +10,23 @@ const styleLocal = StyleSheet.create({
     width: '100%',
     flex: 1,
     transition: 'all .2s',
-  },
+  } as ViewStyle,
   absolute: {
     position: 'absolute',
     height: deviceHeight,
-  },
+  } as ViewStyle,
   relative: {
     position: 'relative',
     height: deviceHeight - 100,
-  },
+  } as ViewStyle,
+  showStyle: {
+    opacity: 1,
+    display: 'flex',
+  } as ViewStyle,
+  hideStyle: {
+    opacity: 0,
+    display: 'none',
+  } as ViewStyle,
 });
 
 const styleCSS = `
@@ -170,8 +178,8 @@ const styleCSS = `
   </style>
 `;
 
-const html = {
-  by: `<div class="Layout__Container-sc-mu29v-0 fgAUTt">
+const html: Record<string, string> = {
+    by: `<div class="Layout__Container-sc-mu29v-0 fgAUTt">
    <div class="Preloaderstyle__Overlay-sc-1k5et3h-2 FPyIS" data-preloader-overlay="true">
       <div class="Preloaderstyle__Inner-sc-1k5et3h-0 bUsuWC">
          <svg xmlns="http://www.w3.org/2000/svg"
@@ -553,7 +561,7 @@ const html = {
       </div>
    </div>
 </div>`,
-  ua: `<div class="Layout__Container-sc-mu29v-0 fgAUTt">
+    ua: `<div class="Layout__Container-sc-mu29v-0 fgAUTt">
   <div class="Preloaderstyle__Overlay-sc-1k5et3h-2 FPyIS" data-preloader-overlay="true">
      <div class="Preloaderstyle__Inner-sc-1k5et3h-0 bUsuWC"><svg viewBox="0 0 228.9 56.2" style="enable-background:new 0 0 228.9 56.2;" xml:space="preserve" version="1.1" xmlns="http://www.w3.org/2000/svg">
    <style type="text/css">
@@ -618,16 +626,19 @@ const html = {
        </g></svg></div></div></div>`,
 };
 
-const codeInject = html => {
-  if (!html || typeof html === 'undefined') {
+const codeInject = (htmlContent: string): string | false => {
+  if (!htmlContent || typeof htmlContent === 'undefined') {
     return false;
   }
-  html = `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">${styleCSS}</head><body>${html}</body></html>`;
-  return html;
+  return `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0">${styleCSS}</head><body>${htmlContent}</body></html>`;
 };
 
-const LogoLoader = ({
-  onNavigationStateChange,
+interface LogoLoaderProps extends WebViewProps {
+  mode?: 'absolute' | 'relative';
+  show?: boolean;
+}
+
+const LogoLoader: React.FC<LogoLoaderProps> = ({
   style,
   mode = 'absolute',
   show = true,
@@ -636,16 +647,13 @@ const LogoLoader = ({
   return (
     <WebView
       {...otherProps}
-      source={{html: codeInject(html[APP_REGION])}}
+      source={{ html: codeInject(html[APP_REGION || 'by']) || '' }}
       scrollEnabled={false}
       automaticallyAdjustContentInsets={false}
       style={[
         styleLocal.mainStyle,
         styleLocal[mode],
-        {
-          opacity: !show ? 0 : 1,
-          visibility: !show ? 'hidden' : 'visible',
-        },
+        styleLocal[show ? 'showStyle' : 'hideStyle'],
         style,
       ]}
       dataDetectorTypes={['all']}

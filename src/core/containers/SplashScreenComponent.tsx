@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Dimensions, ActivityIndicator, StyleSheet, Text} from 'react-native';
+import {Dimensions, ActivityIndicator, StyleSheet, Text, TextStyle, ViewStyle, ImageStyle} from 'react-native';
 
 import Modal from 'react-native-modal';
 
@@ -11,7 +11,14 @@ import styleConst from '../style-const';
 
 const {height} = Dimensions.get('window');
 
-const style = StyleSheet.create({
+interface Style {
+  modal: ViewStyle;
+  row: ViewStyle;
+  logo: ImageStyle;
+  text: TextStyle;
+}
+
+const style: Style = StyleSheet.create({
   modal: {
     flex: 1,
     width: '100%',
@@ -39,7 +46,12 @@ const style = StyleSheet.create({
 
 const duration = 350;
 
-const SplashScreenComponent = ({region = null, isAppLoaded = false}) => {
+interface Props {
+  region: string | null;
+  isAppLoaded: boolean;
+}
+
+const SplashScreenComponent: React.FC<Props> = ({region = null, isAppLoaded = false}) => {
   const [hasAnimationFinish, setAnimationFinish] = useState(false);
 
   const regionSelected = region !== null;
@@ -48,11 +60,12 @@ const SplashScreenComponent = ({region = null, isAppLoaded = false}) => {
 
   return (
     <Modal
-      visible={isModalVisible}
-      animationType={'fade'}
+      isVisible={isModalVisible}
+      animationIn="fadeIn"
+      animationOut="fadeOut"
       style={style.modal}
       statusBarTranslucent={true}>
-      <LogoTitle theme={'white'} styleImage={style.logo} />
+      <LogoTitle theme="white" styleImage={style.logo} />
       <TransitionView
         style={style.row}
         animation={styleConst.animation.opacityIn}
@@ -114,7 +127,16 @@ const SplashScreenComponent = ({region = null, isAppLoaded = false}) => {
   );
 };
 
-const mapStateToProps = ({core, dealer}) => ({
+interface State {
+  core: {
+    isAppLoaded: boolean;
+  };
+  dealer: {
+    region: string | null;
+  };
+}
+
+const mapStateToProps = ({core, dealer}: State) => ({
   isAppLoaded: core.isAppLoaded,
   region: dealer.region,
 });

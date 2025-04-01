@@ -1,4 +1,4 @@
-import React, {useRef, useState, forwardRef} from 'react';
+import React, {useState, forwardRef} from 'react';
 import {
   Alert,
   VStack,
@@ -6,9 +6,7 @@ import {
   Text,
   IconButton,
   CloseIcon,
-  useToast,
   Box,
-  Collapse,
 } from 'native-base';
 import {strings} from '../lang/const';
 
@@ -26,18 +24,10 @@ const ToastAlert = forwardRef(
     },
     ref,
   ) => {
-    // const toast = useToast();
-    // const toastRef = useRef();
     const [show, setShow] = useState(true);
 
     return (
       <Box w="100%" alignItems="center">
-        {/* <Collapse
-          key={'alert' + id}
-          isOpen={show}
-          variant={variant}
-          animateOpacity={true}
-          duration={duration / 10}> */}
         <Alert
           maxWidth="95%"
           alignSelf="center"
@@ -94,7 +84,6 @@ const ToastAlert = forwardRef(
             </Text>
           </VStack>
         </Alert>
-        {/* </Collapse> */}
       </Box>
     );
   },

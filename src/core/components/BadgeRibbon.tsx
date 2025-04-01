@@ -1,11 +1,10 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React from 'react';
 import {
   Text,
   View,
-  Dimensions,
-  Image,
-  Animated,
   StyleSheet,
+  TextStyle,
+  ViewStyle,
 } from 'react-native';
 import styleConst from '../style-const';
 
@@ -20,7 +19,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderTopRightRadius: 3,
     borderBottomRightRadius: 3,
-  },
+  } as ViewStyle,
   badgeName: {
     width: 0,
     height: 0,
@@ -31,11 +30,11 @@ const styles = StyleSheet.create({
     borderRightColor: 'transparent',
     borderTopColor: '#232F3B',
     transform: [{rotate: '90deg'}],
-  },
+  } as ViewStyle,
   textStyle: {
     color: styleConst.color.white,
     fontFamily: styleConst.font.regular,
-  },
+  } as TextStyle,
   banner: {
     position: 'absolute',
     right: -40,
@@ -47,10 +46,16 @@ const styles = StyleSheet.create({
     padding: 8,
     textAlign: 'center',
     zIndex: 1,
-  },
+  } as TextStyle,
 });
 
-const BadgeRibbon = ({text = null, containerStyle = {}, textStyle = {}}) => {
+interface BadgeRibbonProps {
+  text?: string | null;
+  containerStyle?: ViewStyle;
+  textStyle?: TextStyle;
+}
+
+const BadgeRibbon: React.FC<BadgeRibbonProps> = ({text = null, containerStyle = {}, textStyle = {}}) => {
   return (
     <View>
       <View style={[styles.badgeContainer, containerStyle]}>
@@ -63,7 +68,12 @@ const BadgeRibbon = ({text = null, containerStyle = {}, textStyle = {}}) => {
   );
 };
 
-const BadgeCorner = ({text = null, style = {}}) => {
+interface BadgeCornerProps {
+  text?: string | null;
+  style?: TextStyle;
+}
+
+const BadgeCorner: React.FC<BadgeCornerProps> = ({text = null, style = {}}) => {
   return <Text style={[styles.banner, style]}>{text}</Text>;
 };
 

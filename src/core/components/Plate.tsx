@@ -1,5 +1,11 @@
 import React from 'react';
-import {View, Text, StyleSheet, TouchableWithoutFeedback} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  TextStyle,
+} from 'react-native';
 import styleConst from '../../core/style-const';
 
 const styles = StyleSheet.create({
@@ -27,11 +33,10 @@ const styles = StyleSheet.create({
   },
 });
 
-const types = {
+const types: Record<string, string> = {
   default: '#15CBB6',
   danger: '#EB0A1E',
   primary: '#134D7C',
-  // red: '#EB1E4E',
   red: styleConst.color.red,
   orange: styleConst.color.orange,
   green: styleConst.color.green3,
@@ -39,12 +44,21 @@ const types = {
   orange2: styleConst.color.orange2,
 };
 
-const statusColors = {
+const statusColors: Record<string, string> = {
   enabled: '#43a451',
   disabled: '#d62828',
 };
 
-const Plate = ({
+interface PlateProps {
+  type?: keyof typeof types;
+  status?: keyof typeof statusColors;
+  onPress?: () => void;
+  titleStyle?: TextStyle;
+  title?: string;
+  subtitle?: string | string[];
+}
+
+const Plate: React.FC<PlateProps> = ({
   type = 'default',
   status = 'enabled',
   onPress = () => {},
@@ -78,19 +92,17 @@ const Plate = ({
             style={[styles.plateTitle, titleStyle]}>
             {title}
           </Text>
-          {typeof subtitle === 'object' ? (
-            subtitle.map((el, num) => {
-              return (
-                <Text
-                  key={'plateTextSubtitle' + num}
-                  selectable={false}
-                  ellipsizeMode="tail"
-                  numberOfLines={1}
-                  style={styles.plateSubTitle}>
-                  {el}
-                </Text>
-              );
-            })
+          {Array.isArray(subtitle) ? (
+            subtitle.map((el, num) => (
+              <Text
+                key={'plateTextSubtitle' + num}
+                selectable={false}
+                ellipsizeMode="tail"
+                numberOfLines={1}
+                style={styles.plateSubTitle}>
+                {el}
+              </Text>
+            ))
           ) : (
             <Text
               selectable={false}

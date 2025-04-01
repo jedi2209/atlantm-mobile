@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, StyleProp, TextStyle, ViewStyle} from 'react-native';
 import {Icon} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -9,10 +9,15 @@ import styleConst from '../style-const';
 const styles = StyleSheet.create({
   icon: {
     color: styleConst.color.blue,
-  },
+  } as ViewStyle,
 });
 
-const RadioIcon = ({selected = false, containerStyle = null}) => {
+interface RadioIconProps {
+  selected?: boolean;
+  containerStyle?: StyleProp<TextStyle>;
+}
+
+const RadioIcon: React.FC<RadioIconProps> = ({selected = false, containerStyle = null}) => {
   return (
     <Icon
       name={selected ? 'radio-button-on' : 'radio-button-off'}

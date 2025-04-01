@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-native/no-inline-styles */
-import React, {useState, useEffect} from 'react';
-import {Animated, StyleSheet, Platform, View, Text, Dimensions, StatusBar} from 'react-native';
-import {NativeBaseProvider} from 'native-base';
-import {DefaultTheme, PaperProvider, Button} from 'react-native-paper';
+import React, { useState, useEffect } from 'react';
+import { Animated, StyleSheet, Platform, Text} from 'react-native';
+import { NativeBaseProvider, View } from 'native-base';
+import { DefaultTheme, PaperProvider, Button } from 'react-native-paper';
 
-import {NavigationContainer} from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import * as NavigationService from '../../navigation/NavigationService';
 
-import SpInAppUpdates, {IAUUpdateKind} from 'sp-react-native-in-app-updates';
+import SpInAppUpdates, { IAUUpdateKind, StartUpdateOptions } from 'sp-react-native-in-app-updates';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import RNRestart from 'react-native-restart';
 import Analytics from '../../utils/amplitude-analytics';
@@ -16,25 +16,24 @@ import RateThisApp from '../components/RateThisApp';
 import TransitionView from '../components/TransitionView';
 
 // redux
-import {connect} from 'react-redux';
-import {store} from '../store';
+import { connect } from 'react-redux';
+import { store } from '../store';
 import {
   actionSetPushActionSubscribe,
   actionStoreUpdated,
   actionSettingsLoaded,
 } from '../actions';
-import {fetchDealers, actionDealersUpdated} from '../../dealer/actions';
-import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import { fetchDealers, actionDealersUpdated } from '../../dealer/actions';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import {APP_LANG} from '../const';
+import { APP_LANG } from '../const';
 
-import {strings} from '../lang/const';
-import {theme} from '../theme';
+import { strings } from '../lang/const';
+import { theme } from '../theme';
 
 // helpers
 import API from '../../utils/api';
-import {get} from 'lodash';
-import {OneSignal} from 'react-native-onesignal';
+import { get } from 'lodash';
 import moment from 'moment';
 import PushNotifications from '../components/PushNotifications';
 import styleConst from '../style-const';
@@ -44,20 +43,34 @@ import DeviceInfo from 'react-native-device-info';
 import * as Nav from '../../navigation/NavigationBase';
 import LogoTitle from '../components/LogoTitle';
 
-const isAndroid = Platform.OS === 'android';
-let paddingBottomAndroid = 0;
-if (isAndroid) {
-  paddingBottomAndroid = 10;
-  // if ((Dimensions.get('screen').height - Dimensions.get('window').height) - StatusBar.currentHeight > 0) {
-  //   // don't have digital on-screen buttons
-  //   paddingBottomAndroid = 10;
-  // } else {
-  //   // have digital on-screen buttons
-  //   paddingBottomAndroid = 10;
-  // }
+interface AppProps {
+  menuOpenedCount?: number;
+  isStoreUpdated?: string;
+  isAppRated?: boolean;
+  dealersLastUpdateDate?: string;
+  currentLanguage?: string;
+  dealerSelected?: any;
+  region?: string;
+  actionSetPushActionSubscribe: (value: any) => void;
+  actionStoreUpdated: (version: string) => Promise<any>;
+  actionSettingsLoaded: (settings: any) => void;
+  fetchDealers: (forceUpdate: boolean) => Promise<any>;
+  actionDealersUpdated: (date: string) => Promise<any>;
 }
 
-const mapStateToProps = ({core, dealer}) => {
+interface StatusInfo {
+  bytesDownloaded: number;
+  totalBytesToDownload: number;
+  status: number;
+}
+
+const isAndroid: boolean = Platform.OS === 'android';
+let paddingBottomAndroid: number = 0;
+if (isAndroid) {
+  paddingBottomAndroid = 10;
+}
+
+const mapStateToProps = ({ core, dealer }: any): Partial<AppProps> => {
   return {
     menuOpenedCount: core.menuOpenedCount,
     isStoreUpdated: core.isStoreUpdated,
@@ -83,17 +96,16 @@ const paperTheme = {
   colors: {
     ...DefaultTheme.colors,
     primary: styleConst.color.blue,
-    // primaryContainer: styleConst.color.white,
     surfaceVariant: styleConst.color.white,
   },
 };
 
-const mainScreen = 'BottomTabNavigation';
-const storeVersion = '2023-08-02';
-const currDate = moment().format('YYYY-MM-DD');
+const mainScreen: string = 'BottomTabNavigation';
+const storeVersion: string = '2023-08-02';
+const currDate: string = moment().format('YYYY-MM-DD');
 
-const _awaitDealersToUpdate = async props => {
-  const {fetchDealers, actionDealersUpdated, dealersLastUpdateDate} = props;
+const _awaitDealersToUpdate = async (props: AppProps): Promise<boolean> => {
+  const { fetchDealers, actionDealersUpdated, dealersLastUpdateDate } = props;
 
   console.info('dealersLastUpdateDate', dealersLastUpdateDate);
 
@@ -110,9 +122,8 @@ const _awaitDealersToUpdate = async props => {
   }
 };
 
-const _awaitStoreToUpdate = async props => {
-  const {actionSettingsLoaded, actionStoreUpdated, isStoreUpdated} =
-    props;
+const _awaitStoreToUpdate = async (props: AppProps): Promise<boolean | string> => {
+  const { actionSettingsLoaded, actionStoreUpdated, isStoreUpdated } = props;
 
   const storeData = store.getState();
 
@@ -125,7 +136,7 @@ const _awaitStoreToUpdate = async props => {
   console.info('isStoreUpdatedCurrent', isStoreUpdated);
 
   const currentVersion = DeviceInfo.getVersion();
-  const {settings} = await API.fetchVersion(currentVersion || null);
+  const { settings } = await API.fetchVersion(currentVersion || null);
   if (settings) {
     actionSettingsLoaded(settings);
   } else {
@@ -147,20 +158,16 @@ const _awaitStoreToUpdate = async props => {
   }
 };
 
-const App = props => {
+const App: React.FC<AppProps> = (props) => {
   const {
-    actionSetPushActionSubscribe,
-    dealerSelected,
     menuOpenedCount,
-    isStoreUpdated,
-    region,
     isAppRated,
   } = props;
 
-  const [isLoading, setLoading] = useState(true);
-  const [isError, setError] = useState(false);
-  const [isUpdateDownloading, setUpdateDownload] = useState(false);
-  const [downloadPercent, setDownloadPercent] = useState(0);
+  const [isLoading, setLoading] = useState<boolean>(true);
+  const [isError, setError] = useState<boolean>(false);
+  const [isUpdateDownloading, setUpdateDownload] = useState<boolean>(false);
+  const [downloadPercent, setDownloadPercent] = useState<number>(0);
 
   const opacityValue = new Animated.Value(0);
 
@@ -170,8 +177,8 @@ const App = props => {
 
   moment.locale(APP_LANG);
 
-  const onStatusUpdate = statusInfo => {
-    const {bytesDownloaded, totalBytesToDownload, status} = statusInfo;
+  const onStatusUpdate = (statusInfo: StatusInfo): void => {
+    const { bytesDownloaded, totalBytesToDownload, status } = statusInfo;
 
     const percent = Math.ceil((bytesDownloaded / totalBytesToDownload) * 100);
     // do something
@@ -202,13 +209,13 @@ const App = props => {
     }
   };
 
-  const checkAppForUpdate = async region => {
+  const checkAppForUpdate = async (): Promise<void> => {
     try {
       inAppUpdates.checkNeedsUpdate().then(async result => {
         if (!get(result, 'shouldUpdate', false)) {
           return;
         }
-        let updateOptions = Platform.select({
+        let updateOptions: StartUpdateOptions = Platform.select({
           ios: {
             title: strings.Notifications.UpdatePopup.title,
             message: strings.Notifications.UpdatePopup.text,
@@ -219,7 +226,7 @@ const App = props => {
           android: {
             updateType: get(result, 'other.isFlexibleUpdateAllowed', false) ? IAUUpdateKind.FLEXIBLE : IAUUpdateKind.IMMEDIATE,
           },
-        });
+        }) as StartUpdateOptions;
         if (isAndroid) {
           inAppUpdates.addStatusUpdateListener(onStatusUpdate);
           inAppUpdates.startUpdate(updateOptions);
@@ -244,13 +251,6 @@ const App = props => {
           moment().format('YYYY-MM-DD HH:mm:ss'),
           res,
         );
-        // if (!res) {
-        //   setError(true);
-        // } else {
-        //   setError(false);
-        //   setLoading(false);
-        // }
-        // checkAppForUpdate(region);
         _awaitDealersToUpdate(props).then(resDealers => {
           console.info(
             '_awaitDealersToUpdate\t\tfinish',
@@ -266,7 +266,7 @@ const App = props => {
             setLoading(false);
           }
           if (!__DEV__) {
-            checkAppForUpdate(region);
+            checkAppForUpdate();
           }
         });
       })
@@ -278,19 +278,7 @@ const App = props => {
 
     PushNotifications.init();
 
-    if (!isAndroid) {
-      //Prompt for push on iOS
-      OneSignal.Notifications.requestPermission().then(res => {
-        if (PushNotifications.deviceState()) {
-          OneSignal.User.pushSubscription.optIn();
-        } else {
-          PushNotifications.unsubscribeFromTopic(['actionsRegion', 'actions']);
-          OneSignal.User.pushSubscription.optOut();
-        }
-      });
-    }
-
-    strings.setLanguage(APP_LANG);
+    strings.setLanguage(APP_LANG || 'ru'); // Provide a default language fallback
   }, []);
 
   useEffect(() => {
@@ -363,7 +351,7 @@ const App = props => {
         }}>
         <PaperProvider theme={paperTheme}>
           <NavigationContainer ref={NavigationService.navigationRef} navigationInChildEnabled>
-            <Nav.Base />
+            <Nav.Base navigation={NavigationService} route={{}} />
             <RateThisApp navigation={NavigationService} menuOpenedCount={menuOpenedCount} isAppRated={isAppRated}/>
           </NavigationContainer>
         </PaperProvider>
